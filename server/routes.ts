@@ -1485,7 +1485,15 @@ export async function registerRoutes(
 
       // تحديث البريد
       const updates = { newEmail };
-      const updatedDonor = await updateDonor(currentEmail, updates);
+      let updatedDonor;
+      try {
+        updatedDonor = await updateDonor(currentEmail, updates);
+      } catch (updateError: any) {
+        logger.error("Error updating donor:", updateError);
+        return res.status(400).json({ 
+          message: updateError.message || "فشل تحديث البريد الإلكتروني"
+        });
+      }
 
       // حذف الـ token القديم من النظام
       const oldToken = req.headers.authorization?.split(' ')[1];

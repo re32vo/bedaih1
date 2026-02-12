@@ -1,10 +1,13 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const SERVER_DIR = path.dirname(fileURLToPath(import.meta.url));
 const OUTBOX_PATH = path.join(SERVER_DIR, "outgoing_emails.json");
+
+// إنشاء عميل Resend
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 /**
  * Escapes HTML special characters to prevent XSS attacks
@@ -34,9 +37,9 @@ export async function sendEmail(
       throw new Error("بريد إلكتروني غير صالح");
     }
 
-    // Check if SMTP configuration is available
-    if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
-      // In development, persist outgoing emails to a local outbox for inspection
+    // Check if Resend is configured
+    if (!resend) {
+      // Fallback: persist outgoing emails to a local outbox
       const isDev = process.env.NODE_ENV !== "production";
       const fallback = {
         to,
@@ -50,8 +53,7 @@ export async function sendEmail(
           const existing = JSON.parse(await fs.readFile(OUTBOX_PATH, "utf-8").catch(() => "[]"));
           existing.push(fallback);
           await fs.writeFile(OUTBOX_PATH, JSON.stringify(existing, null, 2), "utf-8");
-          console.warn("SMTP not configured — saved outgoing email to server/outgoing_emails.json");
-          // Also log a short plaintext preview for convenience (do not leak in production)
+          console.warn("Resend not configured — saved outgoing email to server/outgoing_emails.json");
           console.log(`Outgoing email (dev fallback) -> to: ${to}, subject: ${subject}`);
           return true;
         } catch (err) {
@@ -60,34 +62,24 @@ export async function sendEmail(
         }
       }
 
-      console.error("SMTP configuration is missing. Check your .env file");
+      console.error("Resend API key is missing. Check your .env file");
       throw new Error("خادم البريد الإلكتروني لم يتم تكوينه بشكل صحيح");
     }
 
-    // For Gmail, you need to:
-    // 1. Enable 2FA on your Gmail account
-    // 2. Generate an App Password
-    // 3. Use the App Password in SMTP_PASS
-    
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || "587"),
-      secure: process.env.SMTP_PORT === "465", // true for 465, false for other ports
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
-
-    const mailOptions = {
-      from: process.env.EMAIL_FROM || "noreply@charity.org",
+    // Send email using Resend
+    const response = await resend.emails.send({
+      from: "Bedaih <noreply@resend.dev>",
       to,
       subject,
       html: htmlContent,
-    };
+    });
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log("Email sent successfully to:", to);
+    if (response.error) {
+      console.error("Error sending email via Resend:", response.error);
+      return false;
+    }
+
+    console.log("Email sent successfully via Resend to:", to);
     return true;
   } catch (error) {
     console.error("Error sending email:", error instanceof Error ? error.message : error);

@@ -131,22 +131,33 @@ async function migrateBeneficiaries() {
   }
   
   for (const beneficiary of beneficiaries) {
+    // تجاهل السجلات التي ليس لها البيانات المطلوبة
+    const fullName = beneficiary.full_name || beneficiary.fullName || beneficiary.name;
+    const nationalId = beneficiary.national_id || beneficiary.nationalId;
+    
+    if (!fullName || !nationalId) {
+      console.log(`  ⚠️  تخطي سجل غير مكتمل: ${fullName || 'بدون اسم'}`);
+      continue;
+    }
+    
     const { error } = await supabase
       .from('beneficiaries')
       .insert({
-        full_name: beneficiary.full_name || beneficiary.fullName,
-        national_id: beneficiary.national_id || beneficiary.nationalId,
-        address: beneficiary.address,
-        phone: beneficiary.phone,
-        email: beneficiary.email,
-        assistance_type: beneficiary.assistance_type || beneficiary.assistanceType,
-        created_at: beneficiary.created_at,
+        full_name: fullName,
+        national_id: nationalId,
+        address: beneficiary.address || '',
+        phone: beneficiary.phone || '',
+        email: beneficiary.email || '',
+        assistance_type: beneficiary.assistance_type || beneficiary.assistanceType || '',
+        created_at: beneficiary.created_at || beneficiary.createdAt,
       });
       
     if (error && error.code !== '23505') { // تجاهل خطأ التكرار
-      console.error(`  ❌ خطأ في نقل المستفيد ${beneficiary.full_name}:`, error.message);
+      console.error(`  ❌ خطأ في نقل المستفيد ${fullName}:`, error.message);
+    } else if (error && error.code === '23505') {
+      console.log(`  ⚠️  المستفيد ${fullName} موجود مسبقاً`);
     } else {
-      console.log(`  ✅ تم نقل: ${beneficiary.full_name || beneficiary.fullName}`);
+      console.log(`  ✅ تم نقل: ${fullName}`);
     }
   }
 }
@@ -161,23 +172,32 @@ async function migrateJobApplications() {
   }
   
   for (const app of applications) {
+    const fullName = app.full_name || app.fullName;
+    
+    if (!fullName || !app.email || !app.phone || !app.experience || !app.qualifications || !app.skills) {
+      console.log(`  ⚠️  تخطي طلب غير مكتمل: ${fullName || 'بدون اسم'}`);
+      continue;
+    }
+    
     const { error } = await supabase
       .from('job_applications')
       .insert({
-        full_name: app.full_name || app.fullName,
+        full_name: fullName,
         email: app.email,
         phone: app.phone,
         experience: app.experience,
         qualifications: app.qualifications,
         skills: app.skills,
-        cv_url: app.cv_url || app.cvUrl,
+        cv_url: app.cv_url || app.cvUrl || '',
         created_at: app.created_at,
       });
       
     if (error && error.code !== '23505') {
-      console.error(`  ❌ خطأ في نقل طلب التوظيف ${app.full_name}:`, error.message);
+      console.error(`  ❌ خطأ في نقل طلب التوظيف ${fullName}:`, error.message);
+    } else if (error && error.code === '23505') {
+      console.log(`  ⚠️  الطلب ${fullName} موجود مسبقاً`);
     } else {
-      console.log(`  ✅ تم نقل: ${app.full_name || app.fullName}`);
+      console.log(`  ✅ تم نقل: ${fullName}`);
     }
   }
 }
@@ -192,6 +212,11 @@ async function migrateContactMessages() {
   }
   
   for (const msg of messages) {
+    if (!msg.name || !msg.email || !msg.phone || !msg.message) {
+      console.log(`  ⚠️  تخطي رسالة غير مكتملة من: ${msg.name || 'بدون اسم'}`);
+      continue;
+    }
+    
     const { error } = await supabase
       .from('contact_messages')
       .insert({
@@ -204,6 +229,8 @@ async function migrateContactMessages() {
       
     if (error && error.code !== '23505') {
       console.error(`  ❌ خطأ في نقل الرسالة من ${msg.name}:`, error.message);
+    } else if (error && error.code === '23505') {
+      console.log(`  ⚠️  الرسالة من ${msg.name} موجودة مسبقاً`);
     } else {
       console.log(`  ✅ تم نقل رسالة من: ${msg.name}`);
     }

@@ -130,23 +130,44 @@ export async function updateDonor(email: string, updates: { name?: string; phone
   if (updates.newEmail) {
     const newEmail = normalizeEmail(updates.newEmail);
     
+    // التحقق من أن البريد الجديد غير مستخدم
+    const { data: existing } = await supabase
+      .from('donors')
+      .select('id')
+      .eq('email', newEmail)
+      .single();
+      
+    if (existing) {
+      throw new Error('البريد الإلكتروني مستخدم بالفعل');
+    }
+    
     // Update donations emails
-    await supabase
+    const { error: donationsError } = await supabase
       .from('donations')
       .update({ email: newEmail })
       .eq('email', oldEmail);
+      
+    if (donationsError) {
+      console.error('Error updating donations:', donationsError);
+      throw new Error('فشل تحديث التبرعات: ' + donationsError.message);
+    }
       
     // Update donor email
     const updateData: any = { email: newEmail };
     if (updates.name !== undefined) updateData.name = updates.name;
     if (updates.phone !== undefined) updateData.phone = updates.phone;
     
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('donors')
       .update(updateData)
       .eq('email', oldEmail)
       .select()
       .single();
+      
+    if (error) {
+      console.error('Error updating donor:', error);
+      throw new Error('فشل تحديث البريد: ' + error.message);
+    }
       
     return data;
   }
@@ -155,12 +176,17 @@ export async function updateDonor(email: string, updates: { name?: string; phone
   if (updates.name !== undefined) updateData.name = updates.name;
   if (updates.phone !== undefined) updateData.phone = updates.phone;
   
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('donors')
     .update(updateData)
     .eq('email', oldEmail)
     .select()
     .single();
+    
+  if (error) {
+    console.error('Error updating donor profile:', error);
+    throw new Error('فشل تحديث البيانات: ' + error.message);
+  }
     
   return data;
 }
