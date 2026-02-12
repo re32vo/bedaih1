@@ -29,23 +29,7 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       output: {
-        manualChunks(id) {
-          if (id.includes("node_modules")) {
-            if (
-              id.includes("node_modules/react/") ||
-              id.includes("node_modules/react-dom/") ||
-              id.includes("node_modules/scheduler/") ||
-              id.includes("node_modules/react-is/")
-            ) {
-              return "vendor-react";
-            }
-            if (id.includes("framer-motion")) return "vendor-motion";
-            if (id.includes("recharts")) return "vendor-charts";
-            if (id.includes("@radix-ui")) return "vendor-radix";
-            if (id.includes("@tanstack")) return "vendor-query";
-            return "vendor";
-          }
-        },
+        inlineDynamicImports: true,
       },
     },
   },
