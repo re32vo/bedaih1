@@ -21,6 +21,7 @@ export default defineConfig({
       "@shared": path.resolve(import.meta.dirname, "shared"),
       "@assets": path.resolve(import.meta.dirname, "attached_assets"),
     },
+    dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],
   },
   root: path.resolve(import.meta.dirname, "client"),
   build: {
@@ -30,7 +31,14 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes("node_modules")) {
-            if (id.includes("react")) return "vendor-react";
+            if (
+              id.includes("node_modules/react/") ||
+              id.includes("node_modules/react-dom/") ||
+              id.includes("node_modules/scheduler/") ||
+              id.includes("node_modules/react-is/")
+            ) {
+              return "vendor-react";
+            }
             if (id.includes("framer-motion")) return "vendor-motion";
             if (id.includes("recharts")) return "vendor-charts";
             if (id.includes("@radix-ui")) return "vendor-radix";
