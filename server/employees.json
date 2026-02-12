@@ -1,0 +1,44 @@
+[
+  {
+    "id": "1737889200000-president",
+    "name": "مالك الجمعية",
+    "email": "bedaihsa@gmail.com",
+    "role": "president",
+    "active": true,
+    "permissions": [
+      "beneficiaries:view",
+      "jobs:view",
+      "contact:view",
+      "volunteers:view",
+      "analytics:view",
+      "employees:add",
+      "employees:remove",
+      "employees:edit",
+      "manage_donors",
+      "audit:view"
+    ],
+    "phone": "0533170903"
+  },
+  {
+    "id": "1770652674525-4qqc2a",
+    "email": "mhmed666q@gmail.com",
+    "name": "محمد",
+    "role": "موظف ",
+    "phone": "0541516078",
+    "notes": null,
+    "active": true,
+    "permissions": [
+      "beneficiaries:view",
+      "jobs:view",
+      "contact:view",
+      "volunteers:view",
+      "analytics:view",
+      "employees:add",
+      "employees:remove",
+      "employees:edit",
+      "manage_donors",
+      "audit:view"
+    ],
+    "created_at": "2026-02-09T15:57:54.527Z"
+  }
+]

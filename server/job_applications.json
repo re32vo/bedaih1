@@ -1,0 +1,76 @@
+[
+  {
+    "id": "5f792106-4702-4dcd-bd78-951cf9ee5056",
+    "full_name": "محمد",
+    "email": "re32vo@gmail.com",
+    "phone": "0533170903",
+    "experience": "ييييييييييييييييييييييييييييييي",
+    "qualifications": "ييييييييييييييييييييييييييي",
+    "cv_url": "",
+    "created_at": "2026-02-06T11:59:55.598Z"
+  },
+  {
+    "id": "5c7800ee-1429-4b74-918f-2852e4ad6a47",
+    "full_name": "محمد",
+    "email": "re32vo@gmail.comd",
+    "phone": "05331720903",
+    "experience": "ddddddddddddddddddddddddddddddddddddd",
+    "qualifications": "ddddddddddddddddd",
+    "cv_url": "",
+    "created_at": "2026-02-09T10:16:30.844Z"
+  },
+  {
+    "id": "b6f12fd4-c87b-417c-b891-27773fbef8c4",
+    "full_name": "محمد",
+    "email": "re32vo@gmail.com",
+    "phone": "0533170903",
+    "experience": "ffffffffffffffffffffffffff",
+    "qualifications": "fffffffffffffffffffffffffffffffffffff",
+    "cv_url": "",
+    "created_at": "2026-02-09T15:19:29.034Z"
+  },
+  {
+    "id": "c5cf3b8f-372d-4a37-bbfd-7b685c3e9e79",
+    "full_name": "محمد",
+    "email": "re32vo@gmail.com",
+    "phone": "0533170903",
+    "experience": "ببببببببببببببببببببببببببببببببببببب",
+    "qualifications": "دكتوراه",
+    "skills": "ببببببببببببببببببببببببببببببب",
+    "cv_url": "",
+    "created_at": "2026-02-09T15:28:48.285Z"
+  },
+  {
+    "id": "15dd2111-d893-43cc-b40b-f1d222a414d2",
+    "full_name": "محمد",
+    "email": "re32vo@gmail.com",
+    "phone": "0533170903",
+    "experience": "يييييييييييييييييييييي",
+    "qualifications": "ثانوي",
+    "skills": "يييييييييييييييييييييي",
+    "cv_url": "http://localhost:5000/jobs",
+    "created_at": "2026-02-09T15:29:34.887Z"
+  },
+  {
+    "id": "1ff72184-a261-4a9f-a651-b331c2ce4e42",
+    "full_name": "محمد",
+    "email": "re32vo@gmail.com",
+    "phone": "0533170903",
+    "experience": "سسسسسسسسسسسسسسسسسسسسسسسسسسسسسسسسسسس",
+    "qualifications": "ماجستير",
+    "skills": "سسسسسسسسسسسسسسسسسسسسسسسسسسسسسسسسس",
+    "cv_url": "https://cloud.digitalocean.com/login",
+    "created_at": "2026-02-09T15:30:43.253Z"
+  },
+  {
+    "id": "5194cc35-32e1-4263-8d66-f56b1e95d9f7",
+    "full_name": "محمد",
+    "email": "re32vo@gmail.com",
+    "phone": "0533170903",
+    "experience": "ffffffffffffffffffffffffffffffffffffff",
+    "qualifications": "دبلوم",
+    "skills": "fffffffffffffffffffffffffffffffffffffff",
+    "cv_url": "",
+    "created_at": "2026-02-10T16:56:56.093Z"
+  }
+]

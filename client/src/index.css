@@ -1,0 +1,255 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Tajawal:wght@300;400;500;700&display=swap');
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* متغيرات الألوان للوضع الفاتح */
+:root {
+  --background: 0 0% 100%; /* أبيض */
+  --foreground: 0 0% 0%;   /* أسود */
+  --border: 220 13% 91%;
+  --input: 220 13% 91%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 0%;
+  --card-border: 220 13% 91%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 0%;
+  --popover-border: 220 13% 91%;
+  --primary: 174 62% 47%;
+  --primary-foreground: 0 0% 100%;
+  --primary-border: 174 62% 47%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222 47% 11%;
+  --secondary-border: 210 40% 96%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 222 20% 50%;
+  --accent: 36 100% 50%;
+}
+
+/* متغيرات الألوان للوضع الداكن */
+.dark {
+  --background: 222 47% 11%;
+  --foreground: 0 0% 100%;
+  --border: 215 28% 17%;
+  --input: 215 28% 17%;
+  --card: 222 47% 13%;
+  --card-foreground: 0 0% 100%;
+  --card-border: 215 28% 17%;
+  --popover: 222 47% 13%;
+  --popover-foreground: 0 0% 100%;
+  --popover-border: 215 28% 17%;
+  --primary: 174 62% 47%;
+  --primary-foreground: 0 0% 100%;
+  --primary-border: 174 62% 47%;
+  --secondary: 215 28% 17%;
+  --secondary-foreground: 0 0% 100%;
+  --secondary-border: 215 28% 17%;
+  --muted: 215 28% 17%;
+  --muted-foreground: 222 20% 80%;
+  --accent: 36 100% 50%;
+}
+
+
+
+
+/* Global Styles */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Tajawal', 'Cairo', Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+  font-weight: 400;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: 'Tajawal', 'Cairo', Arial, sans-serif;
+  direction: rtl;
+  font-size: 16px;
+  background: #0f172a !important;
+  min-height: 100%;
+}
+
+body {
+  background: #0f172a !important;
+  color: #111 !important;
+  font-family: 'Tajawal', 'Cairo', Arial, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+h3 {
+  font-family: 'Cairo', Arial, sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+  margin-top: 1.2rem;
+}
+
+h4, h5, h6 {
+  font-family: 'Cairo', Arial, sans-serif;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  margin-top: 1rem;
+}
+
+/* Paragraph Spacing */
+p {
+  margin-bottom: 1rem;
+  line-height: 1.8;
+}
+
+
+/* Custom Components */
+@layer components {
+  /* Buttons - Professional Styling */
+  .btn-primary {
+    @apply text-white font-bold px-6 py-3 rounded-lg transition-all shadow-md hover:shadow-lg transform hover:-translate-y-1;
+    background-color: rgb(var(--primary));
+  }
+
+  .btn-primary:hover {
+    opacity: 0.9;
+  }
+
+  .btn-secondary {
+    @apply bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold px-6 py-3 rounded-lg transition-all;
+  }
+
+  .btn-accent {
+    @apply text-white font-bold px-6 py-3 rounded-lg transition-all;
+    background-color: rgb(var(--accent));
+  }
+
+  .btn-premium {
+    @apply text-white font-bold px-6 py-3 rounded-lg transition-all shadow-md hover:shadow-lg;
+    background: linear-gradient(to r, rgb(var(--primary)), rgb(var(--secondary)));
+  }
+
+  .btn-ultra-premium {
+    @apply text-white font-bold px-6 py-3 rounded-lg transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1;
+    background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--secondary)), rgb(var(--accent)));
+  }
+
+  /* Cards - Improved Spacing */
+  .card-base {
+    @apply bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all border;
+    border-color: rgb(var(--border));
+    row-gap: 1rem;
+  }
+
+  .card-elevated {
+    @apply bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all border;
+    border-color: rgb(var(--border));
+    row-gap: 1.5rem;
+  }
+
+  /* Badges */
+  .badge-primary {
+    @apply px-4 py-2 rounded-full text-sm font-semibold inline-flex items-center gap-2;
+    background-color: rgba(var(--primary), 0.1);
+    color: rgb(var(--primary));
+  }
+
+  .badge-accent {
+    @apply px-4 py-2 rounded-full text-sm font-semibold inline-flex items-center gap-2;
+    background-color: rgba(var(--accent), 0.1);
+    color: rgb(var(--accent));
+  }
+
+  /* Gradients */
+  .gradient-primary {
+    background: linear-gradient(to right, rgb(var(--primary)), rgb(var(--secondary)));
+    @apply text-white;
+  }
+
+  .text-gradient {
+    background: linear-gradient(to right, rgb(var(--primary)), rgb(var(--accent)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Text Styles */
+
+
+  /* Section Spacing */
+  .section-space {
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+  }
+
+  .section-lg {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  /* Animations */
+  .fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .slide-up {
+    animation: slideUp 0.5s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Utility Classes */
+  .container-padding {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-12 sm:py-20 md:py-28;
+  }
+
+  .heading-xl {
+    @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold;
+  }
+
+  .heading-lg {
+    @apply text-2xl sm:text-3xl md:text-4xl font-bold;
+  }
+
+  .text-muted {
+    @apply text-slate-600;
+  }
+
+  .divider {
+    @apply w-20 h-1.5 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full;
+  }
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+  h1 { @apply text-2xl; }
+  h2 { @apply text-xl; }
+  h3 { @apply text-lg; }
+}

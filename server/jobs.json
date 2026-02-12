@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "fullName": "خالد عبدالله",
+    "email": "khalid@example.com",
+    "phone": "0501234567",
+    "dateOfBirth": "1990-05-15",
+    "education": "بكالوريوس",
+    "experience": "5 سنوات في الإدارة",
+    "skills": "إدارة، تنظيم، قيادة فريق",
+    "availableFrom": "فوراً",
+    "createdAt": "2026-01-24T10:15:00.000Z"
+  }
+]
