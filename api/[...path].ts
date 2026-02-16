@@ -1,5 +1,4 @@
 import type { Express } from "express";
-import { createApp } from "../server/app";
 
 let cachedApp: Express | null = null;
 let appInitPromise: Promise<Express> | null = null;
@@ -10,10 +9,12 @@ async function getApp(): Promise<Express> {
   }
 
   if (!appInitPromise) {
-    appInitPromise = createApp({ serveClient: false }).then(({ app }) => {
+    appInitPromise = (async () => {
+      const { createApp } = await import("../server/app");
+      const { app } = await createApp({ serveClient: false });
       cachedApp = app;
       return app;
-    });
+    })();
   }
 
   return appInitPromise;
