@@ -55,17 +55,21 @@ export function logAuditEntry(entry: Omit<AuditEntry, "id" | "timestamp"> & { ti
 
   if (supabase) {
     void (async () => {
-      const { error } = await supabase
-        .from("audit_log")
-        .insert({
-          action: newEntry.action,
-          user_email: newEntry.actor,
-          details: newEntry.details || {},
-          created_at: newEntry.timestamp,
-        });
+      try {
+        const { error } = await supabase
+          .from("audit_log")
+          .insert({
+            action: newEntry.action,
+            user_email: newEntry.actor,
+            details: newEntry.details || {},
+            created_at: newEntry.timestamp,
+          });
 
-      if (error) {
-        console.error("Audit log insert failed:", error.message);
+        if (error) {
+          console.error("Audit log insert failed:", error.message);
+        }
+      } catch (error: any) {
+        console.error("Audit log insert exception:", error?.message || error);
       }
     })();
   }
