@@ -36,15 +36,16 @@ export default function Login() {
         body: JSON.stringify({ email: email.trim().toLowerCase() }),
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.message || "فشل إرسال الكود");
+        throw new Error(data.message || "فشل إرسال الكود");
       }
 
       setStage('verify');
       toast({
         title: "✅ تم إرسال الكود",
-        description: `تحقق من البريد الإلكتروني ${email}`,
+        description: `تحقق من البريد الإلكتروني المسجل ${email}`,
       });
     } catch (error) {
       toast({
@@ -214,7 +215,7 @@ export default function Login() {
                       value={verificationCode}
                       onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
                       className="text-center border-2 border-gray-300 focus:border-primary h-12 text-2xl tracking-widest font-mono bg-white text-black"
-                      maxLength="6"
+                      maxLength={6}
                     />
                   </div>
 

@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table } from "@/components/ui/table";
 import { useLocation } from "wouter";
 import { FileText, Filter, RefreshCw, ShieldCheck, AlertCircle } from "lucide-react";
+import logoImg from "@/assets/logo.png";
 
 interface AuditEntry {
   id: string;
@@ -232,10 +233,13 @@ export default function Logs() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+      <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-white">جاري التحميل...</p>
+          <img 
+            src={logoImg} 
+            alt="شعار جمعية بداية" 
+            className="w-32 h-32 object-contain mx-auto animate-logo-pulse" 
+          />
         </div>
       </div>
     );
@@ -245,14 +249,14 @@ export default function Logs() {
   const canViewAudit = isPresident || permissions.includes("audit:view");
   if (!canViewAudit) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950 p-4">
-        <Card className="max-w-md shadow-2xl bg-slate-900 border-slate-700">
+      <div className="min-h-screen flex items-center justify-center bg-white p-4">
+        <Card className="max-w-md shadow-2xl bg-white border-slate-300">
           <CardHeader className="text-center">
             <AlertCircle className="w-12 h-12 mx-auto text-amber-600 mb-4" />
-            <CardTitle className="text-white">صلاحية غير كافية</CardTitle>
+            <CardTitle className="text-black">صلاحية غير كافية</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-white/80 mb-4">هذه الصفحة تتطلب صلاحية عرض السجلات.</p>
+            <p className="text-black/80 mb-4">هذه الصفحة تتطلب صلاحية عرض السجلات.</p>
             <a href="/dashboard">
               <Button className="w-full" variant="outline">العودة للوحة التحكم</Button>
             </a>

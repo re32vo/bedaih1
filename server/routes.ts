@@ -599,11 +599,21 @@ export async function registerRoutes(
         </html>
       `;
 
-      await sendEmail(
+      const emailSent = await sendEmail(
         email,
         "🔐 كود التحقق - نظام إدارة الجمعية",
-        emailHtml
+        emailHtml,
+        { requireProviderDelivery: true }
       );
+
+      if (!emailSent) {
+        logger.error("Failed to deliver employee OTP via email", {
+          email,
+        } as any);
+        return res.status(502).json({
+          message: "تعذر إرسال كود التحقق إلى البريد الإلكتروني حالياً. يرجى المحاولة لاحقاً أو التواصل مع المسؤول للتأكد من إعدادات Gmail.",
+        });
+      }
 
       // تم إيقاف إشعارات البريد للمسؤول عند طلب الدخول لتقليل الإزعاج
 
@@ -1058,16 +1068,21 @@ export async function registerRoutes(
         </html>
       `;
 
-      // Send email (in dev mode it will be saved to outbox instead of sending)
-      try {
-        await sendEmail(
-          normalizedEmail,
-          `🔐 كود التحقق - ${isLogin ? 'تسجيل الدخول' : 'إنشاء حساب'}`,
-          emailHtml
-        );
-      } catch (emailError) {
-        logger.error("Failed to send OTP email", emailError);
-        // Continue anyway - don't fail the request due to email issues
+      const emailSent = await sendEmail(
+        normalizedEmail,
+        `🔐 كود التحقق - ${isLogin ? 'تسجيل الدخول' : 'إنشاء حساب'}`,
+        emailHtml,
+        { requireProviderDelivery: true }
+      );
+
+      if (!emailSent) {
+        logger.error("Failed to deliver donor OTP via email", {
+          email: normalizedEmail,
+          isLogin,
+        } as any);
+        return res.status(502).json({
+          message: "تعذر إرسال كود التحقق إلى البريد الإلكتروني حالياً. يرجى المحاولة لاحقاً أو التواصل مع المسؤول للتأكد من إعدادات Gmail.",
+        });
       }
 
       logAuditEntry({
@@ -1080,13 +1095,6 @@ export async function registerRoutes(
         message: "تم إرسال كود التحقق إلى بريدك الإلكتروني",
         expiresIn: `${isLogin ? '5' : '10'} دقائق`
       };
-
-      // For local testing or development, include the OTP code in the response
-      const isDev = process.env.NODE_ENV !== "production";
-      if (isDev) {
-        responsePayload.code = otp;
-        responsePayload.devNote = "في وضع التطوير - الكود معروض هنا مباشرة";
-      }
 
       res.json(responsePayload);
     } catch (err) {

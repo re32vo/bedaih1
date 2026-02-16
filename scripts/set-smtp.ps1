@@ -1,56 +1,45 @@
-# PowerShell helper: prompts for SMTP settings and writes them to .env
-# Usage: Open PowerShell in project root and run:
+# Write SMTP settings into .env
+# Run from project root:
 #   powershell -ExecutionPolicy Bypass -File .\scripts\set-smtp.ps1
 
 $envPath = Join-Path (Get-Location) ".env"
 
-function Read-Secret([string]$prompt) {
-    $secure = Read-Host -AsSecureString $prompt
-    $bstr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
-    $plain = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr)
-    [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr)
-    return $plain
+function Read-Input {
+    param([string]$PromptText)
+    Write-Host ($PromptText + ": ") -NoNewline
+    [Console]::ReadLine()
 }
 
-Write-Host "This script will add/update SMTP entries in $envPath" -ForegroundColor Cyan
+Write-Host "Configure SMTP values for .env" -ForegroundColor Cyan
 
-$host = Read-Host "SMTP_HOST (e.g. smtp.sendgrid.net or smtp.gmail.com)"
-$port = Read-Host "SMTP_PORT (587 or 465)"
-$user = Read-Host "SMTP_USER (your SMTP username or email)"
-$pass = Read-Secret "SMTP_PASS (app password or SMTP password)"
-$emailFrom = Read-Host "EMAIL_FROM (optional, e.g. \"جمعية بداية <no-reply@domain.com>\")"
+$smtpServer = Read-Input "SMTP_HOST (smtp.gmail.com)"
+$smtpPort = Read-Input "SMTP_PORT (587 or 465)"
+$smtpUser = Read-Input "SMTP_USER (your gmail)"
+$smtpPass = Read-Input "SMTP_PASS (google app password)"
+$emailFrom = Read-Input "EMAIL_FROM (optional)"
 
-# Read existing .env lines if present
-$existing = @()
-if (Test-Path $envPath) {
-    $existing = Get-Content $envPath -ErrorAction SilentlyContinue
-}
+$keys = @('SMTP_HOST','SMTP_PORT','SMTP_USER','SMTP_PASS','EMAIL_FROM')
+$existingLines = if (Test-Path $envPath) { Get-Content $envPath -ErrorAction SilentlyContinue } else { @() }
 
-# Keys to replace
-$keys = @("SMTP_HOST","SMTP_PORT","SMTP_USER","SMTP_PASS","EMAIL_FROM")
-
-# Filter out existing keys
-$filtered = @()
-foreach ($line in $existing) {
-    $skip = $false
-    foreach ($k in $keys) {
-        if ($line -match "^$k=") { $skip = $true; break }
+$filteredLines = foreach ($line in $existingLines) {
+    if ($line -notmatch '^(SMTP_HOST|SMTP_PORT|SMTP_USER|SMTP_PASS|EMAIL_FROM)=') {
+        $line
     }
-    if (-not $skip) { $filtered += $line }
 }
 
-# Prepare new lines
-$newLines = @()
-$newLines += "SMTP_HOST=$host"
-$newLines += "SMTP_PORT=$port"
-$newLines += "SMTP_USER=$user"
-$newLines += "SMTP_PASS=$pass"
-if ($emailFrom -and $emailFrom.Trim() -ne "") { $newLines += "EMAIL_FROM=$emailFrom" }
+$newLines = @(
+    "SMTP_HOST=$smtpServer",
+    "SMTP_PORT=$smtpPort",
+    "SMTP_USER=$smtpUser",
+    "SMTP_PASS=$smtpPass"
+)
 
-# Combine and write
-$final = $filtered + $newLines
-Set-Content -Path $envPath -Value $final -Encoding UTF8
+if ($emailFrom -and $emailFrom.Trim() -ne '') {
+    $newLines += "EMAIL_FROM=$emailFrom"
+}
 
-Write-Host "✅ SMTP settings written to $envPath" -ForegroundColor Green
-Write-Host "Reminder: do NOT commit the .env file to source control." -ForegroundColor Yellow
-Write-Host "Now restart the dev server: npm run dev" -ForegroundColor Cyan
+$finalLines = @($filteredLines) + $newLines
+Set-Content -Path $envPath -Value $finalLines -Encoding UTF8
+
+Write-Host "Done. SMTP values saved in $envPath" -ForegroundColor Green
+Write-Host "Restart server: npm run dev" -ForegroundColor Cyan

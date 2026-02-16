@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { LogOut, Users, Heart, Briefcase, Mail, CheckCircle, AlertCircle, Phone, MapPin, FileText, Calendar, RefreshCw, Search, Download, Bell, ChevronLeft, ChevronRight, Filter } from "lucide-react";
+import logoImg from "@/assets/logo.png";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -299,10 +300,13 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-500/10 via-blue-500/5 to-purple-500/10">
+      <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-emerald-500 border-t-blue-500 rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-black font-semibold">جاري التحميل...</p>
+          <img 
+            src={logoImg} 
+            alt="شعار جمعية بداية" 
+            className="w-32 h-32 object-contain mx-auto animate-logo-pulse" 
+          />
         </div>
       </div>
     );

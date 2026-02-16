@@ -1,4 +1,4 @@
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -6,8 +6,26 @@ import { fileURLToPath } from "url";
 const SERVER_DIR = path.dirname(fileURLToPath(import.meta.url));
 const OUTBOX_PATH = path.join(SERVER_DIR, "outgoing_emails.json");
 
-// إنشاء عميل Resend
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+function createSmtpTransport() {
+  const smtpHost = process.env.SMTP_HOST;
+  const smtpPort = Number(process.env.SMTP_PORT || 587);
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
+
+  if (!smtpHost || !smtpUser || !smtpPass) {
+    return null;
+  }
+
+  return nodemailer.createTransport({
+    host: smtpHost,
+    port: smtpPort,
+    secure: smtpPort === 465,
+    auth: {
+      user: smtpUser,
+      pass: smtpPass,
+    },
+  });
+}
 
 /**
  * Escapes HTML special characters to prevent XSS attacks
@@ -27,9 +45,15 @@ export function escapeHtml(text: string): string {
 export async function sendEmail(
   to: string,
   subject: string,
-  htmlContent: string
+  htmlContent: string,
+  options?: { requireProviderDelivery?: boolean }
 ) {
   try {
+    const requireProviderDelivery = options?.requireProviderDelivery === true;
+    const smtpUser = process.env.SMTP_USER;
+    const fromAddress = process.env.EMAIL_FROM || (smtpUser ? `Bedaih <${smtpUser}>` : "Bedaih <no-reply@localhost>");
+    const transporter = createSmtpTransport();
+
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(to)) {
@@ -37,8 +61,8 @@ export async function sendEmail(
       throw new Error("بريد إلكتروني غير صالح");
     }
 
-    // Check if Resend is configured
-    if (!resend) {
+    // Check if SMTP is configured
+    if (!transporter) {
       // Fallback: persist outgoing emails to a local outbox
       const isDev = process.env.NODE_ENV !== "production";
       const fallback = {
@@ -48,12 +72,12 @@ export async function sendEmail(
         timestamp: new Date().toISOString(),
       };
 
-      if (isDev) {
+      if (isDev && !requireProviderDelivery) {
         try {
           const existing = JSON.parse(await fs.readFile(OUTBOX_PATH, "utf-8").catch(() => "[]"));
           existing.push(fallback);
           await fs.writeFile(OUTBOX_PATH, JSON.stringify(existing, null, 2), "utf-8");
-          console.warn("Resend not configured — saved outgoing email to server/outgoing_emails.json");
+          console.warn("SMTP not configured — saved outgoing email to server/outgoing_emails.json");
           console.log(`Outgoing email (dev fallback) -> to: ${to}, subject: ${subject}`);
           return true;
         } catch (err) {
@@ -62,24 +86,19 @@ export async function sendEmail(
         }
       }
 
-      console.error("Resend API key is missing. Check your .env file");
-      throw new Error("خادم البريد الإلكتروني لم يتم تكوينه بشكل صحيح");
+      console.error("SMTP settings are missing. Check your .env file (SMTP_HOST/SMTP_PORT/SMTP_USER/SMTP_PASS)");
+      return false;
     }
 
-    // Send email using Resend
-    const response = await resend.emails.send({
-      from: "Bedaih <noreply@resend.dev>",
+    // Send email using SMTP (Gmail-compatible)
+    await transporter.sendMail({
+      from: fromAddress,
       to,
       subject,
       html: htmlContent,
     });
 
-    if (response.error) {
-      console.error("Error sending email via Resend:", response.error);
-      return false;
-    }
-
-    console.log("Email sent successfully via Resend to:", to);
+    console.log("Email sent successfully via SMTP to:", to);
     return true;
   } catch (error) {
     console.error("Error sending email:", error instanceof Error ? error.message : error);

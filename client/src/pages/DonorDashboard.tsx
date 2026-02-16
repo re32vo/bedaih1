@@ -279,10 +279,13 @@ export default function DonorDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-700">جاري تحميل البيانات...</p>
+          <img 
+            src={logoImg} 
+            alt="شعار جمعية بداية" 
+            className="w-32 h-32 object-contain mx-auto animate-logo-pulse" 
+          />
         </div>
       </div>
     );
