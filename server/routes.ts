@@ -2,7 +2,7 @@
 import type { Express } from "express";
 import type { Server } from "http";
 import { randomBytes } from "crypto";
-import { api } from "@shared/routes";
+import { api } from "../shared/routes";
 import { z } from "zod";
 import {
   sendEmail,
