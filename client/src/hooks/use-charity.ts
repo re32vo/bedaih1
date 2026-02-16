@@ -18,6 +18,16 @@ async function parseResponseBody(response: Response) {
   }
 }
 
+function getErrorMessage(body: any, response: Response, fallback: string) {
+  const bodyMessage = body?.message;
+  if (bodyMessage && typeof bodyMessage === "string" && bodyMessage.trim()) {
+    return bodyMessage;
+  }
+
+  const statusPart = `(${response.status}${response.statusText ? ` ${response.statusText}` : ""})`;
+  return `${fallback} ${statusPart}`;
+}
+
 export function useCreateBeneficiary() {
   const { toast } = useToast();
   return useMutation({
@@ -38,7 +48,7 @@ export function useCreateBeneficiary() {
       const body = await parseResponseBody(response);
 
       if (!response.ok) {
-        throw new Error(body?.message || "فشل إرسال البيانات");
+        throw new Error(getErrorMessage(body, response, "فشل إرسال البيانات"));
       }
 
       return body;
@@ -81,7 +91,7 @@ export function useApplyJob() {
       const body = await parseResponseBody(response);
 
       if (!response.ok) {
-        throw new Error(body?.message || "فشل إرسال الطلب");
+        throw new Error(getErrorMessage(body, response, "فشل إرسال الطلب"));
       }
 
       return body;
@@ -124,7 +134,7 @@ export function useContactMessage() {
       const body = await parseResponseBody(response);
 
       if (!response.ok) {
-        throw new Error(body?.message || "فشل إرسال الرسالة");
+        throw new Error(getErrorMessage(body, response, "فشل إرسال الرسالة"));
       }
 
       return body;
