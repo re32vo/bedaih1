@@ -7,6 +7,17 @@ type InsertBeneficiary = z.infer<typeof insertBeneficiarySchema>;
 type InsertJobApplication = z.infer<typeof insertJobApplicationSchema>;
 type InsertContactMessage = z.infer<typeof insertContactMessageSchema>;
 
+async function parseResponseBody(response: Response) {
+  const text = await response.text();
+  if (!text) return null;
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    return { message: text };
+  }
+}
+
 export function useCreateBeneficiary() {
   const { toast } = useToast();
   return useMutation({
@@ -24,12 +35,13 @@ export function useCreateBeneficiary() {
         body: JSON.stringify(data),
       });
 
+      const body = await parseResponseBody(response);
+
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "فشل إرسال البيانات");
+        throw new Error(body?.message || "فشل إرسال البيانات");
       }
 
-      return response.json();
+      return body;
     },
     onSuccess: () => {
       toast({
@@ -66,12 +78,13 @@ export function useApplyJob() {
         body: JSON.stringify(data),
       });
 
+      const body = await parseResponseBody(response);
+
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "فشل إرسال الطلب");
+        throw new Error(body?.message || "فشل إرسال الطلب");
       }
 
-      return response.json();
+      return body;
     },
     onSuccess: () => {
       toast({
@@ -108,12 +121,13 @@ export function useContactMessage() {
         body: JSON.stringify(data),
       });
 
+      const body = await parseResponseBody(response);
+
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "فشل إرسال الرسالة");
+        throw new Error(body?.message || "فشل إرسال الرسالة");
       }
 
-      return response.json();
+      return body;
     },
     onSuccess: () => {
       toast({

@@ -20,6 +20,17 @@ async function getApp(): Promise<Express> {
 }
 
 export default async function handler(req: any, res: any) {
-  const app = await getApp();
-  return app(req, res);
+  try {
+    const app = await getApp();
+    return app(req, res);
+  } catch (error: any) {
+    console.error("Vercel API handler initialization error:", error);
+
+    if (!res.headersSent) {
+      res.status(500).json({
+        success: false,
+        message: error?.message || "تعذر تهيئة الخادم",
+      });
+    }
+  }
 }
