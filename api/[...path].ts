@@ -10,10 +10,20 @@ async function getApp(): Promise<Express> {
 
   if (!appInitPromise) {
     appInitPromise = (async () => {
-      const { createApp } = await import("../server/app");
-      const { app } = await createApp({ serveClient: false });
-      cachedApp = app;
-      return app;
+      try {
+        // In Vercel, try to import from the compiled dist directory first
+        const { createApp } = await import("../dist/server/app.js").catch(async () => {
+          // Fallback to source for development
+          return await import("../server/app.js");
+        });
+        
+        const { app } = await createApp({ serveClient: false });
+        cachedApp = app;
+        return app;
+      } catch (importError) {
+        console.error("Failed to import createApp:", importError);
+        throw new Error("Failed to load server module: " + String(importError));
+      }
     })();
   }
 

@@ -46,12 +46,32 @@ async function buildAll() {
   ];
   const externals = allDeps.filter((dep) => !allowlist.includes(dep));
 
+  // Build server/index.ts for traditional server
   await esbuild({
     entryPoints: ["server/index.ts"],
     platform: "node",
     bundle: true,
     format: "esm",
     outfile: "dist/index.js",
+    banner: {
+      js: "import { createRequire } from \"module\";\nconst require = createRequire(import.meta.url);",
+    },
+    define: {
+      "process.env.NODE_ENV": '"production"',
+    },
+    minify: true,
+    external: externals,
+    logLevel: "info",
+  });
+
+  // Also build server/app.ts separately for Vercel serverless
+  console.log("building server/app for Vercel...");
+  await esbuild({
+    entryPoints: ["server/app.ts"],
+    platform: "node",
+    bundle: true,
+    format: "esm",
+    outfile: "dist/server/app.js",
     banner: {
       js: "import { createRequire } from \"module\";\nconst require = createRequire(import.meta.url);",
     },
