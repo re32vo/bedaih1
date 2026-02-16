@@ -54,12 +54,20 @@ export function logAuditEntry(entry: Omit<AuditEntry, "id" | "timestamp"> & { ti
   pushMemoryAudit(newEntry);
 
   if (supabase) {
-    void supabase.from("audit_log").insert({
-      action: newEntry.action,
-      user_email: newEntry.actor,
-      details: newEntry.details || {},
-      created_at: newEntry.timestamp,
-    });
+    void (async () => {
+      const { error } = await supabase
+        .from("audit_log")
+        .insert({
+          action: newEntry.action,
+          user_email: newEntry.actor,
+          details: newEntry.details || {},
+          created_at: newEntry.timestamp,
+        });
+
+      if (error) {
+        console.error("Audit log insert failed:", error.message);
+      }
+    })();
   }
 
   return newEntry;
