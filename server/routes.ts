@@ -94,12 +94,14 @@ export async function registerRoutes(
         getBeneficiaryConfirmationEmail(input.address)
       );
       
-      // Send notification to admin
-      await sendEmail(
-        process.env.ADMIN_EMAIL || "admin@charity.org",
-        "طلب مساعدة جديد",
-        getAdminNotificationEmail("beneficiary", input)
-      );
+      // Send notification to admin if configured
+      if (process.env.ADMIN_EMAIL) {
+        await sendEmail(
+          process.env.ADMIN_EMAIL,
+          "طلب مساعدة جديد",
+          getAdminNotificationEmail("beneficiary", input)
+        );
+      }
       
       res.status(201).json(beneficiary);
     } catch (err) {
@@ -138,12 +140,14 @@ export async function registerRoutes(
         getJobApplicationConfirmationEmail(input.fullName, "الوظيفة المتقدم لها")
       );
       
-      // Send notification to admin
-      await sendEmail(
-        process.env.ADMIN_EMAIL || "admin@charity.org",
-        "تطبيق وظيفة جديد",
-        getAdminNotificationEmail("job", input)
-      );
+      // Send notification to admin if configured
+      if (process.env.ADMIN_EMAIL) {
+        await sendEmail(
+          process.env.ADMIN_EMAIL,
+          "تطبيق وظيفة جديد",
+          getAdminNotificationEmail("job", input)
+        );
+      }
       
       res.status(201).json(application);
     } catch (err) {
@@ -181,12 +185,14 @@ export async function registerRoutes(
         getContactConfirmationEmail(input.name)
       );
       
-      // Send notification to admin
-      await sendEmail(
-        process.env.ADMIN_EMAIL || "admin@charity.org",
-        "رسالة تواصل جديدة من " + input.name,
-        getAdminNotificationEmail("contact", input)
-      );
+      // Send notification to admin if configured
+      if (process.env.ADMIN_EMAIL) {
+        await sendEmail(
+          process.env.ADMIN_EMAIL,
+          "رسالة تواصل جديدة من " + input.name,
+          getAdminNotificationEmail("contact", input)
+        );
+      }
       
       res.status(201).json(message);
     } catch (err) {
@@ -230,19 +236,21 @@ export async function registerRoutes(
         </div>`
       );
       
-      // Notify admin
-      await sendEmail(
-        process.env.ADMIN_EMAIL || "admin@charity.org",
-        "طلب تطوع جديد من " + input.name,
-        `<div style="font-family: Arial, sans-serif; direction: rtl;">
-          <h2>طلب تطوع جديد</h2>
-          <p><strong>الاسم:</strong> ${input.name}</p>
-          <p><strong>البريد:</strong> ${input.email}</p>
-          <p><strong>الجوال:</strong> ${input.phone}</p>
-          <p><strong>الخبرة:</strong> ${input.experience}</p>
-          <p><strong>الفرصة:</strong> ${input.opportunityTitle || "عامة"}</p>
-        </div>`
-      );
+      // Notify admin if configured
+      if (process.env.ADMIN_EMAIL) {
+        await sendEmail(
+          process.env.ADMIN_EMAIL,
+          "طلب تطوع جديد من " + input.name,
+          `<div style="font-family: Arial, sans-serif; direction: rtl;">
+            <h2>طلب تطوع جديد</h2>
+            <p><strong>الاسم:</strong> ${input.name}</p>
+            <p><strong>البريد:</strong> ${input.email}</p>
+            <p><strong>الجوال:</strong> ${input.phone}</p>
+            <p><strong>الخبرة:</strong> ${input.experience}</p>
+            <p><strong>الفرصة:</strong> ${input.opportunityTitle || "عامة"}</p>
+          </div>`
+        );
+      }
       
       res.status(201).json(volunteer);
     } catch (err) {
@@ -873,7 +881,7 @@ export async function registerRoutes(
       // Allow secret key override for ops
       if (headKey && provided === headKey) {
         const limit = Number(req.query.limit || 1000);
-        const raw = getAuditEntries(limit > 0 && limit <= 5000 ? limit : 1000);
+        const raw = await getAuditEntries(limit > 0 && limit <= 5000 ? limit : 1000);
 
         // Optional filters: action, from, to (ISO or parseable date)
         const action = (req.query.action as string | undefined)?.trim();
@@ -904,7 +912,7 @@ export async function registerRoutes(
       }
 
       const limit = Number(req.query.limit || 1000);
-      const raw = getAuditEntries(limit > 0 && limit <= 5000 ? limit : 1000);
+      const raw = await getAuditEntries(limit > 0 && limit <= 5000 ? limit : 1000);
 
       // Optional filters: action, from, to (ISO or parseable date)
       const action = (req.query.action as string | undefined)?.trim();

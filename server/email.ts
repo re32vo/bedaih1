@@ -1,10 +1,4 @@
 import nodemailer from "nodemailer";
-import fs from "fs/promises";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const SERVER_DIR = path.dirname(fileURLToPath(import.meta.url));
-const OUTBOX_PATH = path.join(SERVER_DIR, "outgoing_emails.json");
 
 function createSmtpTransport() {
   const smtpHost = process.env.SMTP_HOST;
@@ -63,29 +57,9 @@ export async function sendEmail(
 
     // Check if SMTP is configured
     if (!transporter) {
-      // Fallback: persist outgoing emails to a local outbox
-      const isDev = process.env.NODE_ENV !== "production";
-      const fallback = {
-        to,
-        subject,
-        html: htmlContent,
-        timestamp: new Date().toISOString(),
-      };
-
-      if (isDev && !requireProviderDelivery) {
-        try {
-          const existing = JSON.parse(await fs.readFile(OUTBOX_PATH, "utf-8").catch(() => "[]"));
-          existing.push(fallback);
-          await fs.writeFile(OUTBOX_PATH, JSON.stringify(existing, null, 2), "utf-8");
-          console.warn("SMTP not configured — saved outgoing email to server/outgoing_emails.json");
-          console.log(`Outgoing email (dev fallback) -> to: ${to}, subject: ${subject}`);
-          return true;
-        } catch (err) {
-          console.error("Failed to write outgoing email fallback:", err);
-          throw new Error("خادم البريد الإلكتروني لم يتم تكوينه بشكل صحيح");
-        }
+      if (!requireProviderDelivery) {
+        console.warn("SMTP not configured. Email was not sent.");
       }
-
       console.error("SMTP settings are missing. Check your .env file (SMTP_HOST/SMTP_PORT/SMTP_USER/SMTP_PASS)");
       return false;
     }

@@ -26,9 +26,30 @@ declare module "http" {
 }
 
 // CORS Configuration
-const corsOrigin = process.env.CORS_ORIGIN || "http://localhost:5173";
+const corsOrigins = (process.env.CORS_ORIGIN || "http://localhost:5173")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+function isAllowedOrigin(origin: string): boolean {
+  return corsOrigins.some((allowed) => {
+    if (allowed === "*") return true;
+    if (allowed.startsWith("*.")) {
+      const suffix = allowed.slice(1);
+      return origin.endsWith(suffix);
+    }
+    return allowed === origin;
+  });
+}
+
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", corsOrigin);
+  const requestOrigin = req.headers.origin;
+
+  if (requestOrigin && isAllowedOrigin(requestOrigin)) {
+    res.header("Access-Control-Allow-Origin", requestOrigin);
+    res.header("Vary", "Origin");
+  }
+
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.header("Access-Control-Allow-Credentials", "true");

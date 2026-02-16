@@ -3,7 +3,7 @@ import { randomUUID } from "crypto";
 
 // إنشاء Supabase client
 const supabaseUrl = process.env.SUPABASE_URL || '';
-const supabaseKey = process.env.SUPABASE_ANON_KEY || '';
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || '';
 
 const supabase = supabaseUrl && supabaseKey 
   ? createClient(supabaseUrl, supabaseKey)
@@ -265,9 +265,11 @@ export async function logAuditToSupabase(entry: { actor: string; action: string;
 }
 
 export async function createBeneficiary(beneficiary: any) {
-  if (!supabase) return null;
+  if (!supabase) {
+    throw new Error('Supabase غير مهيأ - تحقق من SUPABASE_URL و SUPABASE_SERVICE_ROLE_KEY');
+  }
   
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('beneficiaries')
     .insert({
       full_name: beneficiary.fullName,
@@ -279,6 +281,13 @@ export async function createBeneficiary(beneficiary: any) {
     })
     .select()
     .single();
+
+  if (error) {
+    throw new Error(`فشل حفظ طلب المستفيد: ${error.message}`);
+  }
+  if (!data) {
+    throw new Error('فشل حفظ طلب المستفيد: لم يتم إرجاع بيانات من قاعدة البيانات');
+  }
     
   return data;
 }
@@ -323,9 +332,11 @@ export async function getRecentBeneficiaries(limit = 10) {
 }
 
 export async function createJobApplication(application: any) {
-  if (!supabase) return null;
+  if (!supabase) {
+    throw new Error('Supabase غير مهيأ - تحقق من SUPABASE_URL و SUPABASE_SERVICE_ROLE_KEY');
+  }
   
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('job_applications')
     .insert({
       full_name: application.fullName,
@@ -338,6 +349,13 @@ export async function createJobApplication(application: any) {
     })
     .select()
     .single();
+
+  if (error) {
+    throw new Error(`فشل حفظ الطلب الوظيفي: ${error.message}`);
+  }
+  if (!data) {
+    throw new Error('فشل حفظ الطلب الوظيفي: لم يتم إرجاع بيانات من قاعدة البيانات');
+  }
     
   return data;
 }
@@ -383,9 +401,11 @@ export async function getRecentJobApplications(limit = 10) {
 }
 
 export async function createContactMessage(message: any) {
-  if (!supabase) return null;
+  if (!supabase) {
+    throw new Error('Supabase غير مهيأ - تحقق من SUPABASE_URL و SUPABASE_SERVICE_ROLE_KEY');
+  }
   
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('contact_messages')
     .insert({
       name: message.name,
@@ -395,6 +415,13 @@ export async function createContactMessage(message: any) {
     })
     .select()
     .single();
+
+  if (error) {
+    throw new Error(`فشل حفظ رسالة التواصل: ${error.message}`);
+  }
+  if (!data) {
+    throw new Error('فشل حفظ رسالة التواصل: لم يتم إرجاع بيانات من قاعدة البيانات');
+  }
     
   return data;
 }
@@ -437,9 +464,11 @@ export async function getRecentContactMessages(limit = 10) {
 }
 
 export async function createVolunteer(volunteer: any) {
-  if (!supabase) return null;
+  if (!supabase) {
+    throw new Error('Supabase غير مهيأ - تحقق من SUPABASE_URL و SUPABASE_SERVICE_ROLE_KEY');
+  }
   
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('volunteers')
     .insert({
       full_name: volunteer.name,
@@ -450,6 +479,13 @@ export async function createVolunteer(volunteer: any) {
     })
     .select()
     .single();
+
+  if (error) {
+    throw new Error(`فشل حفظ طلب التطوع: ${error.message}`);
+  }
+  if (!data) {
+    throw new Error('فشل حفظ طلب التطوع: لم يتم إرجاع بيانات من قاعدة البيانات');
+  }
     
   return data;
 }

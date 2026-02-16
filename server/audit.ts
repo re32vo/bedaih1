@@ -1,5 +1,4 @@
-import fs from "fs";
-import path from "path";
+import { createClient } from "@supabase/supabase-js";
 
 export type AuditEntry = {
   id: string;
@@ -9,29 +8,41 @@ export type AuditEntry = {
   timestamp: string;
 };
 
-type AuditDB = { entries: AuditEntry[] };
+const supabaseUrl = process.env.SUPABASE_URL || "";
+const supabaseKey = process.env.SUPABASE_ANON_KEY || "";
+const supabase =
+  supabaseUrl && supabaseKey
+    ? createClient(supabaseUrl, supabaseKey)
+    : null;
 
-const filePath = path.join(process.cwd(), "server", "audit-log.json");
+type AuditRow = {
+  id: string;
+  user_email: string;
+  action: string;
+  details: Record<string, unknown> | null;
+  created_at: string;
+};
 
-function ensureFile() {
-  if (!fs.existsSync(filePath)) {
-    fs.mkdirSync(path.dirname(filePath), { recursive: true });
-    fs.writeFileSync(filePath, JSON.stringify({ entries: [] }, null, 2), "utf8");
+function normalizeAuditRow(row: AuditRow): AuditEntry {
+  return {
+    id: String(row.id),
+    actor: row.user_email || "system",
+    action: row.action,
+    details: row.details || undefined,
+    timestamp: row.created_at,
+  };
+}
+
+const memoryAudit: AuditEntry[] = [];
+
+function pushMemoryAudit(entry: AuditEntry) {
+  memoryAudit.unshift(entry);
+  if (memoryAudit.length > 500) {
+    memoryAudit.length = 500;
   }
 }
 
-function readDb(): AuditDB {
-  ensureFile();
-  const raw = fs.readFileSync(filePath, "utf8");
-  return JSON.parse(raw) as AuditDB;
-}
-
-function writeDb(db: AuditDB) {
-  fs.writeFileSync(filePath, JSON.stringify(db, null, 2), "utf8");
-}
-
 export function logAuditEntry(entry: Omit<AuditEntry, "id" | "timestamp"> & { timestamp?: string }) {
-  const db = readDb();
   const newEntry: AuditEntry = {
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     timestamp: entry.timestamp || new Date().toISOString(),
@@ -39,14 +50,37 @@ export function logAuditEntry(entry: Omit<AuditEntry, "id" | "timestamp"> & { ti
     action: entry.action,
     details: entry.details,
   };
-  db.entries.unshift(newEntry); // latest first
-  // keep log reasonable
-  if (db.entries.length > 500) db.entries = db.entries.slice(0, 500);
-  writeDb(db);
+
+  pushMemoryAudit(newEntry);
+
+  if (supabase) {
+    void supabase.from("audit_log").insert({
+      action: newEntry.action,
+      user_email: newEntry.actor,
+      details: newEntry.details || {},
+      created_at: newEntry.timestamp,
+    });
+  }
+
   return newEntry;
 }
 
-export function getAuditEntries(limit = 100): AuditEntry[] {
-  const db = readDb();
-  return db.entries.slice(0, limit);
+export async function getAuditEntries(limit = 100): Promise<AuditEntry[]> {
+  const bounded = Number.isFinite(limit) ? Math.max(1, Math.min(limit, 5000)) : 100;
+
+  if (!supabase) {
+    return memoryAudit.slice(0, bounded);
+  }
+
+  const { data, error } = await supabase
+    .from("audit_log")
+    .select("id,user_email,action,details,created_at")
+    .order("created_at", { ascending: false })
+    .limit(bounded);
+
+  if (error || !data) {
+    return memoryAudit.slice(0, bounded);
+  }
+
+  return (data as AuditRow[]).map(normalizeAuditRow);
 }

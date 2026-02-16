@@ -1,6 +1,3 @@
-import fs from "fs";
-import path from "path";
-
 // In-memory OTP storage (will be cleared on server restart - this is intentional for security)
 type OTPRecord = {
   email: string;
@@ -25,29 +22,8 @@ const OTP_LOCK_TIME = 15 * 60 * 1000; // 15 minutes
 // Track OTP request attempts
 const otpRequestTracker = new Map<string, number[]>();
 
-// Persistent token storage
-const tokensPath = path.join(process.cwd(), "server", "tokens.json");
-
-function ensureTokensFile() {
-  if (!fs.existsSync(tokensPath)) {
-    fs.mkdirSync(path.dirname(tokensPath), { recursive: true });
-    fs.writeFileSync(tokensPath, JSON.stringify({ tokens: {} }, null, 2), "utf8");
-  }
-}
-
-function readTokens(): Record<string, TokenRecord> {
-  ensureTokensFile();
-  const raw = fs.readFileSync(tokensPath, "utf8");
-  const parsed = JSON.parse(raw);
-  return parsed.tokens || {};
-}
-
-function writeTokens(tokens: Record<string, TokenRecord>) {
-  ensureTokensFile();
-  fs.writeFileSync(tokensPath, JSON.stringify({ tokens }, null, 2), "utf8");
-}
-
 const otpMap = new Map<string, OTPRecord>();
+const tokenMap = new Map<string, TokenRecord>();
 
 export function generateOTP(): string {
   return Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit code
@@ -127,14 +103,11 @@ export function invalidateOTP(email: string) {
 
 // Token management with persistent storage
 export function storeToken(token: string, email: string) {
-  const tokens = readTokens();
-  tokens[token] = { email, createdAt: Date.now() };
-  writeTokens(tokens);
+  tokenMap.set(token, { email, createdAt: Date.now() });
 }
 
 export function verifyToken(token: string): string | null {
-  const tokens = readTokens();
-  const record = tokens[token];
+  const record = tokenMap.get(token);
   if (!record) return null;
   
   // Token expires after 24 hours
@@ -148,7 +121,5 @@ export function verifyToken(token: string): string | null {
 }
 
 export function invalidateToken(token: string) {
-  const tokens = readTokens();
-  delete tokens[token];
-  writeTokens(tokens);
+  tokenMap.delete(token);
 }
