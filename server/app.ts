@@ -73,22 +73,8 @@ function setupRateLimits(app: Express) {
     },
   });
 
-  const formLimiter = rateLimit({
-    windowMs: 60 * 60 * 1000,
-    max: 5,
-    message: "Too many form submissions, please try again later.",
-    skipSuccessfulRequests: false,
-    handler: (_req, res) => {
-      res.status(429).json({
-        message: "طلبات كثيرة جداً، الرجاء المحاولة بعد ساعة.",
-      });
-    },
-  });
-
+  // No rate limiting for form submissions - allow unlimited
   app.use("/api/", apiLimiter);
-  app.use("/api/contact", formLimiter);
-  app.use("/api/beneficiaries", formLimiter);
-  app.use("/api/jobs/apply", formLimiter);
 }
 
 function setupBodyParsers(app: Express) {
