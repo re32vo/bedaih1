@@ -4,10 +4,10 @@ import { config } from "dotenv";
 config();
 
 const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
-  console.error("❌ Missing SUPABASE_URL or SUPABASE_KEY in .env file");
+  console.error("❌ Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in .env file");
   process.exit(1);
 }
 
@@ -93,7 +93,6 @@ async function setupOwner() {
           role: "president",
           permissions: allPermissions,
           active: true,
-          updated_at: new Date().toISOString(),
         })
         .eq("email", ownerEmail);
 
