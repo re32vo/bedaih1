@@ -265,7 +265,7 @@ export function createLoggingMiddleware() {
 
     // تسجيل الطلب الوارد
     if (req.path.startsWith('/api')) {
-      appLogger.debug(`📥 طلب وارد: ${req.method} ${req.path}`, { requestId });
+      appLogger.debug(`📥 طلب وارد: [${req.method}] ${req.path}`, { requestId });
     }
 
     // تسجيل الرد عند إرساله
@@ -276,9 +276,9 @@ export function createLoggingMiddleware() {
 
       if (req.path.startsWith('/api')) {
         if (status >= 400) {
-          appLogger.warn(`📤 رد خطأ: ${status} ${req.method} ${req.path}`, { duration, requestId });
+          appLogger.warn(`📤 رد خطأ: [${status}] [${req.method}] ${req.path}`, { duration, requestId });
         } else {
-          appLogger.debug(`📤 رد: ${status} ${req.method} ${req.path}`, { duration, requestId });
+          appLogger.debug(`📤 رد: [${status}] [${req.method}] ${req.path}`, { duration, requestId });
         }
       }
 

@@ -28,7 +28,7 @@ export function requestLoggingMiddleware(
   req.headers['x-request-id'] = requestId;
 
   // تسجيل الطلب
-  logger.info(`${req.method} ${req.path}`, {
+  logger.info(`[${req.method}] ${req.path}`, {
     method: req.method,
     path: req.path,
     ip: req.ip,
@@ -40,7 +40,7 @@ export function requestLoggingMiddleware(
   res.json = function (data: any) {
     const duration = Date.now() - startTime;
     
-    logger.logPerformance(`${req.method} ${req.path}`, duration, requestId);
+    logger.logPerformance(`[${req.method}] ${req.path}`, duration, requestId);
 
     return originalJson.call(this, data);
   };
@@ -61,7 +61,7 @@ export function errorHandlingMiddleware(
   const userAgent = req.headers['user-agent'] || 'unknown';
   const requestId = req.headers['x-request-id'] as string;
 
-  logger.error(`Error in ${req.method} ${req.path}`, err);
+  logger.error(`Error in [${req.method}] ${req.path}`, err);
 
   // تحويل الخطأ إلى ApiError
   const apiError = normalizeError(err);
@@ -395,7 +395,7 @@ export function slowRequestDetectionMiddleware(
     const duration = Date.now() - startTime;
 
     if (duration > 5000) {
-      logger.warn(`Slow request detected: ${req.method} ${req.path} (${duration}ms)`, {
+      logger.warn(`Slow request detected: [${req.method}] ${req.path} (${duration}ms)`, {
         path: req.path,
         method: req.method,
         duration,
