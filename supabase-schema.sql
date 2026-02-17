@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS beneficiaries (
 CREATE TABLE IF NOT EXISTS job_applications (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   full_name TEXT NOT NULL,
-  email TEXT UNIQUE NOT NULL,
+  email TEXT NOT NULL,
   phone TEXT NOT NULL,
   experience TEXT NOT NULL,
   qualifications TEXT NOT NULL,
@@ -46,15 +46,23 @@ CREATE TABLE IF NOT EXISTS job_applications (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- إضافة UNIQUE constraint مع معالجة البيانات المكررة
+CREATE UNIQUE INDEX IF NOT EXISTS idx_job_applications_email_unique 
+ON job_applications(email);
+
 -- جدول رسائل التواصل
 CREATE TABLE IF NOT EXISTS contact_messages (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
-  email TEXT UNIQUE NOT NULL,
+  email TEXT NOT NULL,
   phone TEXT NOT NULL,
   message TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- إضافة UNIQUE constraint مع معالجة البيانات المكررة
+CREATE UNIQUE INDEX IF NOT EXISTS idx_contact_messages_email_unique
+ON contact_messages(email);
 
 -- جدول الموظفين
 CREATE TABLE IF NOT EXISTS employees (
@@ -73,12 +81,16 @@ CREATE TABLE IF NOT EXISTS employees (
 CREATE TABLE IF NOT EXISTS volunteers (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   full_name TEXT NOT NULL,
-  email TEXT UNIQUE NOT NULL,
+  email TEXT NOT NULL,
   phone TEXT NOT NULL,
   skills TEXT NOT NULL,
   availability TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- إضافة UNIQUE constraint مع معالجة البيانات المكررة
+CREATE UNIQUE INDEX IF NOT EXISTS idx_volunteers_email_unique
+ON volunteers(email);
 
 -- جدول رموز OTP
 CREATE TABLE IF NOT EXISTS otp_tokens (
@@ -135,41 +147,5 @@ CREATE INDEX IF NOT EXISTS idx_employees_email ON employees(email);
 CREATE INDEX IF NOT EXISTS idx_otp_tokens_email ON otp_tokens(email, expires_at);
 CREATE INDEX IF NOT EXISTS idx_audit_log_created_at ON audit_log(created_at DESC);
 
--- تفعيل Row Level Security (RLS) - اختياري
-ALTER TABLE donors ENABLE ROW LEVEL SECURITY;
-ALTER TABLE donations ENABLE ROW LEVEL SECURITY;
-ALTER TABLE beneficiaries ENABLE ROW LEVEL SECURITY;
-ALTER TABLE job_applications ENABLE ROW LEVEL SECURITY;
-ALTER TABLE contact_messages ENABLE ROW LEVEL SECURITY;
-ALTER TABLE employees ENABLE ROW LEVEL SECURITY;
-ALTER TABLE volunteers ENABLE ROW LEVEL SECURITY;
-
--- سياسات الوصول الأساسية (يمكن تعديلها حسب الحاجة)
--- السماح بالقراءة والكتابة لجميع المستخدمين المصادق عليهم
-CREATE POLICY "Enable read access for authenticated users" ON donors
-  FOR SELECT USING (true);
-
-CREATE POLICY "Enable insert access for authenticated users" ON donors
-  FOR INSERT WITH CHECK (true);
-
-CREATE POLICY "Enable update access for authenticated users" ON donors
-  FOR UPDATE USING (true);
-
--- نفس السياسات للجداول الأخرى
-CREATE POLICY "Enable all access for donations" ON donations
-  FOR ALL USING (true);
-
-CREATE POLICY "Enable all access for beneficiaries" ON beneficiaries
-  FOR ALL USING (true);
-
-CREATE POLICY "Enable all access for job_applications" ON job_applications
-  FOR ALL USING (true);
-
-CREATE POLICY "Enable all access for contact_messages" ON contact_messages
-  FOR ALL USING (true);
-
-CREATE POLICY "Enable all access for employees" ON employees
-  FOR ALL USING (true);
-
-CREATE POLICY "Enable all access for volunteers" ON volunteers
-  FOR ALL USING (true);
+-- ملاحظة: تم تعطيل RLS لأن الخادم يتعامل مع المصادقة
+-- يمكن تفعيل RLS لاحقاً إذا لزم الأمر
