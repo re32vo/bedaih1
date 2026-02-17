@@ -69,12 +69,12 @@ html {
   font-family: 'Tajawal', 'Cairo', Arial, sans-serif;
   direction: rtl;
   font-size: 16px;
-  background: #0f172a !important;
+  background: #ffffff !important;
   min-height: 100%;
 }
 
 body {
-  background: #0f172a !important;
+  background: #ffffff !important;
   color: #111 !important;
   font-family: 'Tajawal', 'Cairo', Arial, sans-serif;
   line-height: 1.6;
