@@ -275,7 +275,7 @@ export async function createBeneficiary(beneficiary: any) {
       .from('beneficiaries')
       .select('id')
       .eq('national_id', beneficiary.nationalId)
-      .single();
+      .maybeSingle();
     
     if (existing) {
       throw new Error('الرقم الوطني مسجل بالفعل في النظام');
@@ -355,7 +355,7 @@ export async function createJobApplication(application: any) {
       .from('job_applications')
       .select('id')
       .eq('email', application.email.toLowerCase())
-      .single();
+      .maybeSingle();
     
     if (existing) {
       throw new Error('تم استقبال طلب وظيفي من هذا البريد الإلكتروني مسبقاً');
@@ -437,7 +437,7 @@ export async function createContactMessage(message: any) {
       .from('contact_messages')
       .select('id')
       .eq('email', message.email.toLowerCase())
-      .single();
+      .maybeSingle();
     
     if (existing) {
       throw new Error('تم استقبال رسالتك مسبقاً من هذا البريد الإلكتروني');
@@ -513,7 +513,7 @@ export async function createVolunteer(volunteer: any) {
       .from('volunteers')
       .select('id')
       .eq('email', volunteer.email.toLowerCase())
-      .single();
+      .maybeSingle();
     
     if (existing) {
       throw new Error('تم استقبال طلب التطوع من هذا البريد الإلكتروني مسبقاً');
