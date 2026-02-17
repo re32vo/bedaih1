@@ -20,6 +20,7 @@ async function getApp(): Promise<Express> {
         // In Vercel, try to import from the compiled dist directory first
         let createApp;
         try {
+          // @ts-expect-error - Importing compiled JavaScript from dist
           const module = await import("../dist/server/app.js");
           createApp = module.createApp;
           console.log("[API] Successfully loaded from dist/server/app.js");
