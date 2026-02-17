@@ -15,7 +15,7 @@ import {
 } from "./email";
 import { logAuditEntry, getAuditEntries } from "./audit";
 import { sendSMS } from "./sms";
-import { generateOTP, storeToken, verifyToken, isOTPRequestRateLimited, trackOTPRequest, storeOTP, verifyOTP, invalidateToken } from "./otp";
+import { generateOTP, storeToken, verifyToken, verifyTokenAsync, isOTPRequestRateLimited, trackOTPRequest, storeOTP, verifyOTP, invalidateToken } from "./otp";
 import { Logger } from "./logger";
 import {
   upsertDonor,
@@ -765,8 +765,12 @@ export async function registerRoutes(
         return res.status(401).json({ message: "رابط غير صحيح" });
       }
 
-      // Verify token and get email
-      const email = verifyToken(token);
+      // Verify token and get email (check async for cold start recovery)
+      let email = verifyToken(token);
+      if (!email) {
+        // Try async version for database fallback (e.g., after Vercel cold start)
+        email = await verifyTokenAsync(token);
+      }
       console.log(`[/api/auth/verify-token] Email from token: ${email}`);
       
       if (!email) {
@@ -783,12 +787,27 @@ export async function registerRoutes(
       }
       
       console.log(`[/api/auth/verify-token] Success for ${employee.email}`);
+      
+      // Ensure permissions is always an array
+      let permissions = employee.permissions || [];
+      if (typeof permissions === 'string') {
+        try {
+          permissions = JSON.parse(permissions);
+        } catch (e) {
+          permissions = [];
+        }
+      }
+      if (!Array.isArray(permissions)) {
+        permissions = [];
+      }
+      
+      console.log(`[/api/auth/verify-token] Returning permissions:`, permissions);
       res.json({ 
         success: true,
         email: employee.email,
         name: employee.name,
         role: employee.role,
-        permissions: employee.permissions || [],
+        permissions: permissions,
         message: "تم التحقق بنجاح"
       });
     } catch (err) {

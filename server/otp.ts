@@ -13,6 +13,15 @@ type TokenRecord = {
   createdAt: number;
 };
 
+// Supabase client for token persistence
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.SUPABASE_URL || '';
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || '';
+const supabase = supabaseUrl && supabaseKey 
+  ? createClient(supabaseUrl, supabaseKey)
+  : null;
+
 // Rate limiting configuration
 const RATE_LIMIT_WINDOW = 60000; // 1 minute
 const MAX_OTP_REQUESTS_PER_WINDOW = 3;
@@ -101,23 +110,83 @@ export function invalidateOTP(email: string) {
   otpMap.delete(email);
 }
 
-// Token management with persistent storage
+// Token management with persistent storage in Supabase
 export function storeToken(token: string, email: string) {
+  // Store in memory for immediate access
   tokenMap.set(token, { email, createdAt: Date.now() });
+  
+  // Also store in database for persistence across restarts (non-blocking)
+  if (supabase) {
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+    supabase
+      .from('tokens')
+      .insert({
+        token,
+        email: email.toLowerCase(),
+        expires_at: expiresAt,
+        created_at: new Date().toISOString(),
+      })
+      .select()
+      .catch(err => {
+        console.error('[storeToken] Database error:', err);
+        // Continue anyway, we have in-memory fallback
+      });
+  }
 }
 
 export function verifyToken(token: string): string | null {
+  // First check in-memory cache
   const record = tokenMap.get(token);
-  if (!record) return null;
-  
-  // Token expires after 24 hours
-  const twentyFourHours = 24 * 60 * 60 * 1000;
-  if (Date.now() - record.createdAt > twentyFourHours) {
-    invalidateToken(token);
-    return null;
+  if (record) {
+    // Token expires after 24 hours
+    const twentyFourHours = 24 * 60 * 60 * 1000;
+    if (Date.now() - record.createdAt > twentyFourHours) {
+      invalidateToken(token);
+      return null;
+    }
+    return record.email;
   }
   
-  return record.email;
+  return null;
+}
+
+// Async version for when we need to check database after cold start
+export async function verifyTokenAsync(token: string): Promise<string | null> {
+  // First check in-memory cache
+  const record = tokenMap.get(token);
+  if (record) {
+    // Token expires after 24 hours
+    const twentyFourHours = 24 * 60 * 60 * 1000;
+    if (Date.now() - record.createdAt > twentyFourHours) {
+      invalidateToken(token);
+      return null;
+    }
+    return record.email;
+  }
+  
+  // If not in memory, check database (e.g., after cold start)
+  if (supabase) {
+    try {
+      const { data } = await supabase
+        .from('tokens')
+        .select('email, expires_at')
+        .eq('token', token)
+        .maybeSingle();
+      
+      if (data && data.expires_at) {
+        const expiresAt = new Date(data.expires_at).getTime();
+        if (Date.now() < expiresAt) {
+          // Cache it in memory for performance
+          tokenMap.set(token, { email: data.email, createdAt: Date.now() });
+          return data.email;
+        }
+      }
+    } catch (err) {
+      console.error('[verifyTokenAsync] Database error:', err);
+    }
+  }
+  
+  return null;
 }
 
 export function invalidateToken(token: string) {
