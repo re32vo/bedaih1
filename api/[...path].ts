@@ -1,4 +1,10 @@
 import type { Express } from "express";
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+
+export const config = {
+  runtime: "nodejs20.x",
+  maxDuration: 60,
+};
 
 let cachedApp: Express | null = null;
 let appInitPromise: Promise<Express> | null = null;
@@ -30,7 +36,7 @@ async function getApp(): Promise<Express> {
   return appInitPromise;
 }
 
-export default async function handler(req: any, res: any) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const app = await getApp();
     return app(req, res);
