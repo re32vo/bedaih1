@@ -65,7 +65,7 @@ export async function getDonorByEmail(email: string) {
     .from('donors')
     .select('*')
     .eq('email', normalizeEmail(email))
-    .single();
+    .maybeSingle();
     
   return data;
 }
@@ -79,7 +79,7 @@ export async function upsertDonor(donor: { email: string; name?: string; phone?:
     .from('donors')
     .select('*')
     .eq('email', email)
-    .single();
+    .maybeSingle();
 
   if (existing) {
     const updates: any = {};
@@ -91,10 +91,9 @@ export async function upsertDonor(donor: { email: string; name?: string; phone?:
       .from('donors')
       .update(updates)
       .eq('email', email)
-      .select()
-      .single();
+      .select();
       
-    return data;
+    return data?.[0] || null;
   }
 
   const { data } = await supabase
@@ -105,10 +104,9 @@ export async function upsertDonor(donor: { email: string; name?: string; phone?:
       phone: donor.phone || null,
       last_login_at: donor.lastLogin ? new Date().toISOString() : null,
     })
-    .select()
-    .single();
+    .select();
     
-  return data;
+  return data?.[0] || null;
 }
 
 export async function getAllDonors() {
@@ -135,7 +133,7 @@ export async function updateDonor(email: string, updates: { name?: string; phone
       .from('donors')
       .select('id')
       .eq('email', newEmail)
-      .single();
+      .maybeSingle();
       
     if (existing) {
       throw new Error('البريد الإلكتروني مستخدم بالفعل');
@@ -161,15 +159,14 @@ export async function updateDonor(email: string, updates: { name?: string; phone
       .from('donors')
       .update(updateData)
       .eq('email', oldEmail)
-      .select()
-      .single();
+      .select();
       
     if (error) {
       console.error('Error updating donor:', error);
       throw new Error('فشل تحديث البريد: ' + error.message);
     }
       
-    return data;
+    return data?.[0] || null;
   }
   
   const updateData: any = {};
@@ -180,15 +177,14 @@ export async function updateDonor(email: string, updates: { name?: string; phone
     .from('donors')
     .update(updateData)
     .eq('email', oldEmail)
-    .select()
-    .single();
+    .select();
     
   if (error) {
     console.error('Error updating donor profile:', error);
     throw new Error('فشل تحديث البيانات: ' + error.message);
   }
     
-  return data;
+  return data?.[0] || null;
 }
 
 export async function deleteDonor(email: string) {
@@ -222,10 +218,9 @@ export async function createDonation(donation: { email: string; amount: number; 
       method: donation.method,
       code: donation.code || null,
     })
-    .select()
-    .single();
+    .select();
     
-  return data;
+  return data?.[0] || null;
 }
 
 export async function getDonationsByEmail(email: string, limit = 20) {
@@ -258,10 +253,9 @@ export async function logAuditToSupabase(entry: { actor: string; action: string;
       user_email: entry.actor,
       details: entry.details || {},
     })
-    .select()
-    .single();
+    .select();
     
-  return data;
+  return data?.[0] || null;
 }
 
 export async function createBeneficiary(beneficiary: any) {
@@ -292,17 +286,16 @@ export async function createBeneficiary(beneficiary: any) {
       email: beneficiary.email,
       assistance_type: beneficiary.assistanceType,
     })
-    .select()
-    .single();
+    .select();
 
   if (error) {
     throw new Error(`فشل حفظ طلب المستفيد: ${error.message}`);
   }
-  if (!data) {
+  if (!data || data.length === 0) {
     throw new Error('فشل حفظ طلب المستفيد: لم يتم إرجاع بيانات من قاعدة البيانات');
   }
     
-  return data;
+  return data[0];
 }
 
 export async function getBeneficiariesCount() {
@@ -373,17 +366,16 @@ export async function createJobApplication(application: any) {
       skills: application.skills,
       cv_url: application.cvUrl || null,
     })
-    .select()
-    .single();
+    .select();
 
   if (error) {
     throw new Error(`فشل حفظ الطلب الوظيفي: ${error.message}`);
   }
-  if (!data) {
+  if (!data || data.length === 0) {
     throw new Error('فشل حفظ الطلب الوظيفي: لم يتم إرجاع بيانات من قاعدة البيانات');
   }
     
-  return data;
+  return data[0];
 }
 
 export async function getJobApplicationsCount() {
@@ -452,17 +444,16 @@ export async function createContactMessage(message: any) {
       phone: message.phone,
       message: message.message,
     })
-    .select()
-    .single();
+    .select();
 
   if (error) {
     throw new Error(`فشل حفظ رسالة التواصل: ${error.message}`);
   }
-  if (!data) {
+  if (!data || data.length === 0) {
     throw new Error('فشل حفظ رسالة التواصل: لم يتم إرجاع بيانات من قاعدة البيانات');
   }
     
-  return data;
+  return data[0];
 }
 
 export async function getContactMessagesCount() {
@@ -529,17 +520,16 @@ export async function createVolunteer(volunteer: any) {
       skills: volunteer.experience || '',
       availability: volunteer.opportunityTitle || '',
     })
-    .select()
-    .single();
+    .select();
 
   if (error) {
     throw new Error(`فشل حفظ طلب التطوع: ${error.message}`);
   }
-  if (!data) {
+  if (!data || data.length === 0) {
     throw new Error('فشل حفظ طلب التطوع: لم يتم إرجاع بيانات من قاعدة البيانات');
   }
     
-  return data;
+  return data[0];
 }
 
 export async function getVolunteersCount() {
@@ -594,7 +584,7 @@ export async function getEmployeeByEmail(email: string) {
     .from('employees')
     .select('*')
     .eq('email', normalized)
-    .single();
+    .maybeSingle();
     
   return data;
 }
@@ -625,10 +615,9 @@ export async function createEmployee(employee: any) {
       active: employee.active !== false,
       permissions: employee.permissions || [],
     })
-    .select()
-    .single();
+    .select();
     
-  return data;
+  return data?.[0] || null;
 }
 
 export async function updateEmployee(id: string, updates: any) {
@@ -638,10 +627,9 @@ export async function updateEmployee(id: string, updates: any) {
     .from('employees')
     .update(updates)
     .eq('id', id)
-    .select()
-    .single();
+    .select();
     
-  return data;
+  return data?.[0] || null;
 }
 
 export async function deleteEmployee(id: string) {
@@ -667,10 +655,9 @@ export async function storeOTPToken(email: string, code: string, expiresAt: Date
   const { data } = await supabase
     .from('otp_tokens')
     .insert(insertData)
-    .select()
-    .single();
+    .select();
     
-  return data;
+  return data?.[0] || null;
 }
 
 export async function verifyOTPToken(email: string, code: string) {
