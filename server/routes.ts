@@ -1221,6 +1221,63 @@ export async function registerRoutes(
     }
   });
 
+  // Create donor account directly (for admin/initial setup)
+  app.post("/api/donors/create-account", async (req, res) => {
+    try {
+      const headKey = process.env.HEAD_KEY;
+      const provided = req.headers["x-head-key"];
+      
+      // Allow secret key override for admin only
+      if (!headKey || provided !== headKey) {
+        return res.status(403).json({ message: "غير مصرح" });
+      }
+
+      const { email, name, phone } = req.body;
+      
+      if (!email || typeof email !== "string") {
+        return res.status(400).json({ message: "البريد الإلكتروني مطلوب" });
+      }
+
+      const normalizedEmail = email.trim().toLowerCase();
+
+      // Check if donor exists
+      const existingDonor = await getDonorByEmail(normalizedEmail);
+      if (existingDonor) {
+        return res.status(409).json({ 
+          message: "الحساب موجود مسبقاً",
+          donor: existingDonor 
+        });
+      }
+
+      // Create new donor account
+      const donor = await upsertDonor({
+        email: normalizedEmail,
+        name: name || "متبرع",
+        phone: phone || "",
+        lastLogin: true
+      });
+
+      logAuditEntry({
+        actor: "Administrator",
+        action: "create_donor_account",
+        details: {
+          email: normalizedEmail,
+          name: donor?.name,
+          phone: donor?.phone,
+        }
+      });
+
+      res.status(201).json({ 
+        success: true,
+        message: "تم إنشاء حساب المتبرع بنجاح",
+        donor
+      });
+    } catch (err) {
+      logger.error("Error creating donor account", err);
+      res.status(500).json({ message: "خطأ في إنشاء الحساب" });
+    }
+  });
+
   app.post("/api/donors/register", async (req, res) => {
     try {
       const { email, name, phone } = req.body;
