@@ -1,6 +1,13 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist/public",
+  "crons": [{
+    "path": "/api/cron/cleanup",
+    "schedule": "0 0 * * *"
+  }],
+  "env": {
+    "NODE_ENV": "production"
+  },
   "rewrites": [
     {
       "source": "/api/(.*)",
@@ -10,5 +17,11 @@
       "source": "/((?!api|_next/static|_next/image|favicon.ico).*)",
       "destination": "/index.html"
     }
-  ]
+  ],
+  "functions": {
+    "api/[...path].ts": {
+      "maxDuration": 60,
+      "memory": 1024
+    }
+  }
 }

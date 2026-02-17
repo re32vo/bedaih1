@@ -61,6 +61,8 @@ async function buildAll() {
     },
     minify: true,
     external: externals,
+    treeShaking: true,
+    sourcemap: false,
     logLevel: "info",
   });
 
@@ -79,6 +81,8 @@ async function buildAll() {
       "process.env.NODE_ENV": '"production"',
     },
     minify: true,
+    treeShaking: true,
+    sourcemap: false,
     // Only mark actual npm packages as external, not internal server files
     external: externals.filter(dep => !dep.startsWith("server") && !dep.startsWith(".")),
     logLevel: "info",
