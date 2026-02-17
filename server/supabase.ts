@@ -269,6 +269,19 @@ export async function createBeneficiary(beneficiary: any) {
     throw new Error('Supabase غير مهيأ - تحقق من SUPABASE_URL و SUPABASE_SERVICE_ROLE_KEY');
   }
   
+  // التحقق من وجود الرقم الوطني مسبقاً
+  if (beneficiary.nationalId) {
+    const { data: existing, error: checkError } = await supabase
+      .from('beneficiaries')
+      .select('id')
+      .eq('national_id', beneficiary.nationalId)
+      .single();
+    
+    if (existing) {
+      throw new Error('الرقم الوطني مسجل بالفعل في النظام');
+    }
+  }
+  
   const { data, error } = await supabase
     .from('beneficiaries')
     .insert({
