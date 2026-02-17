@@ -342,19 +342,6 @@ export async function createJobApplication(application: any) {
     throw new Error('Supabase غير مهيأ - تحقق من SUPABASE_URL و SUPABASE_SERVICE_ROLE_KEY');
   }
   
-  // التحقق من وجود البريد الإلكتروني مسبقاً
-  if (application.email) {
-    const { data: existing, error: checkError } = await supabase
-      .from('job_applications')
-      .select('id')
-      .eq('email', application.email.toLowerCase())
-      .maybeSingle();
-    
-    if (existing) {
-      throw new Error('تم استقبال طلب وظيفي من هذا البريد الإلكتروني مسبقاً');
-    }
-  }
-  
   const { data, error } = await supabase
     .from('job_applications')
     .insert({
@@ -423,19 +410,6 @@ export async function createContactMessage(message: any) {
     throw new Error('Supabase غير مهيأ - تحقق من SUPABASE_URL و SUPABASE_SERVICE_ROLE_KEY');
   }
   
-  // التحقق من وجود البريد الإلكتروني مسبقاً
-  if (message.email) {
-    const { data: existing, error: checkError } = await supabase
-      .from('contact_messages')
-      .select('id')
-      .eq('email', message.email.toLowerCase())
-      .maybeSingle();
-    
-    if (existing) {
-      throw new Error('تم استقبال رسالتك مسبقاً من هذا البريد الإلكتروني');
-    }
-  }
-  
   const { data, error } = await supabase
     .from('contact_messages')
     .insert({
@@ -496,19 +470,6 @@ export async function getRecentContactMessages(limit = 10) {
 export async function createVolunteer(volunteer: any) {
   if (!supabase) {
     throw new Error('Supabase غير مهيأ - تحقق من SUPABASE_URL و SUPABASE_SERVICE_ROLE_KEY');
-  }
-  
-  // التحقق من وجود البريد الإلكتروني مسبقاً
-  if (volunteer.email) {
-    const { data: existing, error: checkError } = await supabase
-      .from('volunteers')
-      .select('id')
-      .eq('email', volunteer.email.toLowerCase())
-      .maybeSingle();
-    
-    if (existing) {
-      throw new Error('تم استقبال طلب التطوع من هذا البريد الإلكتروني مسبقاً');
-    }
   }
   
   const { data, error } = await supabase

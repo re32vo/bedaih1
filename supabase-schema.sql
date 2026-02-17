@@ -46,10 +46,6 @@ CREATE TABLE IF NOT EXISTS job_applications (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- إضافة UNIQUE constraint مع معالجة البيانات المكررة
-CREATE UNIQUE INDEX IF NOT EXISTS idx_job_applications_email_unique 
-ON job_applications(email);
-
 -- جدول رسائل التواصل
 CREATE TABLE IF NOT EXISTS contact_messages (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -59,10 +55,6 @@ CREATE TABLE IF NOT EXISTS contact_messages (
   message TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
--- إضافة UNIQUE constraint مع معالجة البيانات المكررة
-CREATE UNIQUE INDEX IF NOT EXISTS idx_contact_messages_email_unique
-ON contact_messages(email);
 
 -- جدول الموظفين
 CREATE TABLE IF NOT EXISTS employees (
@@ -87,10 +79,6 @@ CREATE TABLE IF NOT EXISTS volunteers (
   availability TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
--- إضافة UNIQUE constraint مع معالجة البيانات المكررة
-CREATE UNIQUE INDEX IF NOT EXISTS idx_volunteers_email_unique
-ON volunteers(email);
 
 -- جدول رموز OTP
 CREATE TABLE IF NOT EXISTS otp_tokens (
