@@ -1,5 +1,4 @@
 import type { Express } from "express";
-import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 export const config = {
   runtime: "nodejs20.x",
@@ -17,17 +16,25 @@ async function getApp(): Promise<Express> {
   if (!appInitPromise) {
     appInitPromise = (async () => {
       try {
+        console.log("[API] Loading app from compiled dist or source...");
         // In Vercel, try to import from the compiled dist directory first
-        const { createApp } = await import("../dist/server/app.js").catch(async () => {
-          // Fallback to source for development
-          return await import("../server/app.js");
-        });
+        let createApp;
+        try {
+          const module = await import("../dist/server/app.js");
+          createApp = module.createApp;
+          console.log("[API] Successfully loaded from dist/server/app.js");
+        } catch (distError) {
+          console.warn("[API] Failed to load from dist, using source:", distError);
+          const module = await import("../server/app.ts");
+          createApp = module.createApp;
+        }
         
         const { app } = await createApp({ serveClient: false });
+        console.log("[API] App created successfully");
         cachedApp = app;
         return app;
       } catch (importError) {
-        console.error("Failed to import createApp:", importError);
+        console.error("[API] Failed to import createApp:", importError);
         throw new Error("Failed to load server module: " + String(importError));
       }
     })();
@@ -36,17 +43,19 @@ async function getApp(): Promise<Express> {
   return appInitPromise;
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: any, res: any) {
   try {
+    console.log(`[API] Incoming ${req.method} request to ${req.url}`);
     const app = await getApp();
     return app(req, res);
   } catch (error: any) {
-    console.error("Vercel API handler initialization error:", error);
+    console.error("[API] Handler error:", error);
 
     if (!res.headersSent) {
       res.status(500).json({
         success: false,
         message: error?.message || "تعذر تهيئة الخادم",
+        error: process.env.NODE_ENV === "development" ? error.stack : undefined,
       });
     }
   }
