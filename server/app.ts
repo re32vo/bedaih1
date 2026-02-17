@@ -5,6 +5,16 @@ import { serveStatic } from "./static";
 import { createServer, type Server } from "http";
 import rateLimit from "express-rate-limit";
 import { Logger, handleError, validateEnvironment } from "./logger";
+import {
+  requestLoggingMiddleware,
+  errorHandlingMiddleware,
+  inputSanitizationMiddleware,
+  attackDetectionMiddleware,
+  performanceMonitoringMiddleware,
+  securityHeadersMiddleware,
+  slowRequestDetectionMiddleware,
+} from "./middleware";
+import { AdvancedLogger } from "./advanced-logger";
 
 const logger = new Logger("Server");
 
@@ -51,12 +61,7 @@ function setupCors(app: Express) {
 }
 
 function setupSecurityHeaders(app: Express) {
-  app.use((req, res, next) => {
-    res.header("X-Content-Type-Options", "nosniff");
-    res.header("X-Frame-Options", "DENY");
-    res.header("X-XSS-Protection", "1; mode=block");
-    next();
-  });
+  app.use(securityHeadersMiddleware);
 }
 
 function setupRateLimits(app: Express) {
@@ -101,51 +106,13 @@ export function log(message: string, source = "express") {
 }
 
 function setupRequestLogging(app: Express) {
-  app.use((req, res, next) => {
-    const start = Date.now();
-    const path = req.path;
-    let capturedJsonResponse: Record<string, any> | undefined = undefined;
-
-    const originalResJson = res.json;
-    res.json = function (bodyJson, ...args) {
-      capturedJsonResponse = bodyJson;
-      return originalResJson.apply(res, [bodyJson, ...args]);
-    };
-
-    res.on("finish", () => {
-      const duration = Date.now() - start;
-      if (path.startsWith("/api")) {
-        let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
-        if (capturedJsonResponse) {
-          logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
-        }
-
-        log(logLine);
-      }
-    });
-
-    next();
-  });
+  app.use(requestLoggingMiddleware);
+  app.use(performanceMonitoringMiddleware);
+  app.use(slowRequestDetectionMiddleware);
 }
 
 function setupErrorHandler(app: Express) {
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    const appError = handleError(err);
-    const status = appError.statusCode || 500;
-    const message = appError.message || "Internal Server Error";
-
-    logger.error(`[${status}] ${message}`, appError.details);
-
-    if (res.headersSent) {
-      return;
-    }
-
-    return res.status(status).json({
-      success: false,
-      message,
-      ...(process.env.NODE_ENV === "development" && { details: appError.details }),
-    });
-  });
+  app.use(errorHandlingMiddleware);
 }
 
 export async function createApp(options?: { serveClient?: boolean }): Promise<{ app: Express; httpServer: Server }> {
@@ -156,6 +123,11 @@ export async function createApp(options?: { serveClient?: boolean }): Promise<{ 
 
   setupCors(app);
   setupSecurityHeaders(app);
+  
+  // تطبيق middleware الأمان والتنقية
+  app.use(inputSanitizationMiddleware);
+  app.use(attackDetectionMiddleware);
+  
   setupRateLimits(app);
   setupBodyParsers(app);
   setupRequestLogging(app);

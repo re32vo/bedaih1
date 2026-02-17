@@ -47,6 +47,10 @@ import {
   verifyOTPToken,
   ensurePresidentExists,
 } from "./supabase";
+import { activityMonitor } from "./activity-monitor";
+import { appLogger } from "./advanced-logger";
+import { Validator, EnhancedSchemas } from "./validation";
+import { SecurityManager } from "./security";
 
 // Extend global type for email OTP storage
 declare global {
@@ -560,10 +564,18 @@ export async function registerRoutes(
         return res.status(403).json({ message: "البريد الإلكتروني غير مسجل كموظف" });
       }
 
-      // Generate OTP code
-      const otp = generateOTP();
-      const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
-      await storeOTPToken(email, otp, expiresAt);
+      // Generate OTP code with error handling
+      let otp;
+      try {
+        console.log(`[/api/auth/send-otp] Generating OTP for ${email}`);
+        otp = generateOTP();
+        const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
+        await storeOTPToken(email, otp, expiresAt);
+        console.log(`[/api/auth/send-otp] OTP stored successfully`);
+      } catch (storeError) {
+        console.error("[/api/auth/send-otp] Error storing OTP token:", storeError);
+        return res.status(500).json({ message: "خطأ في حفظ كود التحقق - الرجاء المحاولة لاحقاً" });
+      }
 
       const emailHtml = `
         <!DOCTYPE html>
@@ -615,6 +627,7 @@ export async function registerRoutes(
       );
 
       if (!emailSent) {
+        console.error("[/api/auth/send-otp] Failed to deliver employee OTP via email");
         logger.error("Failed to deliver employee OTP via email", {
           email,
         } as any);
@@ -625,17 +638,24 @@ export async function registerRoutes(
 
       // تم إيقاف إشعارات البريد للمسؤول عند طلب الدخول لتقليل الإزعاج
 
-      logAuditEntry({
-        actor: employee.email,
-        action: "send_otp",
-        details: { expiresIn: "5 دقائق" },
-      });
+      try {
+        logAuditEntry({
+          actor: employee.email,
+          action: "send_otp",
+          details: { expiresIn: "5 دقائق" },
+        });
+      } catch (auditError) {
+        console.error("[/api/auth/send-otp] Error logging audit entry:", auditError);
+        // Don't fail the entire request if audit logging fails
+      }
 
+      console.log(`[/api/auth/send-otp] OTP sent successfully to ${email}`);
       res.json({ 
         message: "تم إرسال كود التحقق إلى بريدك الإلكتروني",
         expiresIn: "5 دقائق"
       });
     } catch (err) {
+      console.error("[/api/auth/send-otp] Unhandled error:", err);
       logger.error("OTP error", err);
       res.status(500).json({ message: "حدث خطأ أثناء إرسال كود التحقق" });
     }
@@ -644,26 +664,53 @@ export async function registerRoutes(
   // Employee Login - Verify OTP and login
   app.post("/api/auth/verify-otp", async (req, res) => {
     try {
+      console.log("[/api/auth/verify-otp] Request received");
+      
       if (otpLoginDisabled) {
+        console.log("[/api/auth/verify-otp] OTP login disabled");
         return res.status(403).json({ message: "تم تعطيل تسجيل الدخول المؤقت حالياً" });
       }
+      
       const rawEmail = req.body.email;
       const email = typeof rawEmail === "string" ? rawEmail.trim().toLowerCase() : rawEmail;
       const code = req.body.code;
 
+      console.log(`[/api/auth/verify-otp] Email: ${email}, Code length: ${code ? code.length : 0}`);
+
       if (!email || !code) {
+        console.log("[/api/auth/verify-otp] Missing email or code");
         return res.status(400).json({ message: "البريد الإلكتروني والكود مطلوبان" });
       }
 
-      // Verify OTP
-      const otpToken = await verifyOTPToken(email, code);
+      // Verify OTP with error handling
+      let otpToken;
+      try {
+        console.log("[/api/auth/verify-otp] Calling verifyOTPToken...");
+        otpToken = await verifyOTPToken(email, code);
+        console.log(`[/api/auth/verify-otp] OTP verification result: ${!!otpToken}`);
+      } catch (otpError) {
+        console.error("[/api/auth/verify-otp] Error verifying OTP token:", otpError);
+        return res.status(500).json({ message: "خطأ في التحقق من الكود - الرجاء المحاولة لاحقاً" });
+      }
+
       if (!otpToken) {
+        console.log("[/api/auth/verify-otp] OTP token invalid or expired");
         return res.status(401).json({ message: "كود التحقق غير صحيح أو انتهى" });
       }
 
-      const employee = await getEmployeeByEmail(email);
+      // Get employee with error handling
+      let employee;
+      try {
+        console.log("[/api/auth/verify-otp] Fetching employee...");
+        employee = await getEmployeeByEmail(email);
+        console.log(`[/api/auth/verify-otp] Employee found: ${!!employee}, active: ${employee?.active}`);
+      } catch (empError) {
+        console.error("[/api/auth/verify-otp] Error fetching employee:", empError);
+        return res.status(500).json({ message: "خطأ في البحث عن الموظف - الرجاء المحاولة لاحقاً" });
+      }
+
       if (!employee || !employee.active) {
-        console.warn(`OTP verify attempted for unregistered/inactive employee: ${email}`);
+        console.warn(`[/api/auth/verify-otp] OTP verify attempted for unregistered/inactive employee: ${email}`);
         return res.status(403).json({ message: "الموظف غير مفعّل" });
       }
 
@@ -672,6 +719,7 @@ export async function registerRoutes(
 
       // Store token with email mapping
       storeToken(token, email);
+      console.log("[/api/auth/verify-otp] Token stored");
 
       const emailHtml = `
         <!DOCTYPE html>
@@ -696,26 +744,41 @@ export async function registerRoutes(
         </html>
       `;
 
-      await sendEmail(
-        email,
-        "✓ تم التحقق بنجاح - نظام إدارة الجمعية",
-        emailHtml
-      );
+      // Send verification email with error handling (non-blocking)
+      try {
+        console.log("[/api/auth/verify-otp] Sending verification email...");
+        const emailSent = await sendEmail(
+          email,
+          "✓ تم التحقق بنجاح - نظام إدارة الجمعية",
+          emailHtml
+        );
+        console.log(`[/api/auth/verify-otp] Email sent result: ${emailSent}`);
+      } catch (emailError) {
+        console.error("[/api/auth/verify-otp] Error sending email (non-blocking):", emailError);
+        // Don't fail the entire request if email fails
+      }
 
       // تم إيقاف إشعارات البريد للمسؤول عند التحقق من الدخول لتقليل الإزعاج
 
-      logAuditEntry({
-        actor: employee.email,
-        action: "otp_verified",
-        details: { token },
-      });
+      try {
+        logAuditEntry({
+          actor: employee.email,
+          action: "otp_verified",
+          details: { token },
+        });
+      } catch (auditError) {
+        console.error("[/api/auth/verify-otp] Error logging audit entry:", auditError);
+        // Don't fail the entire request if audit logging fails
+      }
 
+      console.log("[/api/auth/verify-otp] OTP verification successful");
       res.json({ 
         success: true,
         token,
         message: "تم التحقق بنجاح"
       });
     } catch (err) {
+      console.error("[/api/auth/verify-otp] Unhandled error:", err);
       logger.error("Verify OTP error", err);
       res.status(500).json({ message: "حدث خطأ أثناء التحقق" });
     }
@@ -1042,13 +1105,21 @@ export async function registerRoutes(
 
       trackOTPRequest(normalizedEmail);
 
-      // Generate OTP code
-      const otp = generateOTP();
-      
-      // Store OTP token in persistent storage (same behavior as employee OTP)
-      const expiresAt = new Date(Date.now() + (isLogin ? 5 : 10) * 60 * 1000);
-      const metadata = !isLogin ? { name: name ? name.trim() : "", phone: phone ? phone.trim() : "", isRegistration: true } : undefined;
-      await storeOTPToken(normalizedEmail, otp, expiresAt, metadata);
+      // Generate OTP code with error handling
+      let otp;
+      try {
+        console.log(`[/api/donors/send-otp] Generating OTP for ${normalizedEmail}`);
+        otp = generateOTP();
+        
+        // Store OTP token in persistent storage (same behavior as employee OTP)
+        const expiresAt = new Date(Date.now() + (isLogin ? 5 : 10) * 60 * 1000);
+        const metadata = !isLogin ? { name: name ? name.trim() : "", phone: phone ? phone.trim() : "", isRegistration: true } : undefined;
+        await storeOTPToken(normalizedEmail, otp, expiresAt, metadata);
+        console.log(`[/api/donors/send-otp] OTP stored successfully for ${normalizedEmail}`);
+      } catch (storeError) {
+        console.error("[/api/donors/send-otp] Error storing OTP token:", storeError);
+        return res.status(500).json({ message: "خطأ في حفظ كود التحقق - الرجاء المحاولة لاحقاً" });
+      }
 
       const safeName = escapeHtml(name || 'عزيزنا المتبرع');
       const emailHtml = `
@@ -1140,7 +1211,18 @@ export async function registerRoutes(
       }
 
       const normalizedEmail = email.trim().toLowerCase();
-      const tokenRecord = await verifyOTPToken(normalizedEmail, code);
+      
+      // Verify OTP token with error handling
+      let tokenRecord;
+      try {
+        console.log(`[/api/donors/verify-otp] Verifying OTP for ${normalizedEmail}`);
+        tokenRecord = await verifyOTPToken(normalizedEmail, code);
+        console.log(`[/api/donors/verify-otp] OTP verification result: ${!!tokenRecord}`);
+      } catch (otpError) {
+        console.error("[/api/donors/verify-otp] Error verifying OTP token:", otpError);
+        return res.status(500).json({ message: "خطأ في التحقق من الكود - الرجاء المحاولة لاحقاً" });
+      }
+
       if (!tokenRecord) {
         return res.status(401).json({ message: "كود التحقق غير صحيح أو انتهى" });
       }
@@ -1158,36 +1240,51 @@ export async function registerRoutes(
         donorData.phone = (tokenRecord as any)?.metadata?.phone || "";
       }
       
-      // Save to database
-      const donor = await upsertDonor(donorData);
+      // Save to database with error handling
+      let donor;
+      try {
+        console.log(`[/api/donors/verify-otp] Saving donor data...`);
+        donor = await upsertDonor(donorData);
+        console.log(`[/api/donors/verify-otp] Donor saved successfully`);
+      } catch (dbError) {
+        console.error("[/api/donors/verify-otp] Error saving donor:", dbError);
+        return res.status(500).json({ message: "خطأ في حفظ البيانات - الرجاء المحاولة لاحقاً" });
+      }
 
       // If this is registration, create the account now
-      if (isRegistration) {
-        logAuditEntry({
-          actor: `متبرع: ${normalizedEmail}`,
-          action: "تسجيل حساب متبرع جديد",
-          details: {
-            email: donor.email,
-            name: donor.name,
-            phone: donor.phone,
-            type: "donor_registration"
-          }
-        });
-      } else {
-        logAuditEntry({
-          actor: `متبرع: ${normalizedEmail}`,
-          action: "تسجيل دخول متبرع",
-          details: {
-            email: donor.email,
-            name: donor.name,
-            phone: donor.phone,
-            type: "donor_login"
-          }
-        });
+      try {
+        if (isRegistration) {
+          logAuditEntry({
+            actor: `متبرع: ${normalizedEmail}`,
+            action: "تسجيل حساب متبرع جديد",
+            details: {
+              email: donor.email,
+              name: donor.name,
+              phone: donor.phone,
+              type: "donor_registration"
+            }
+          });
+        } else {
+          logAuditEntry({
+            actor: `متبرع: ${normalizedEmail}`,
+            action: "تسجيل دخول متبرع",
+            details: {
+              email: donor.email,
+              name: donor.name,
+              phone: donor.phone,
+              type: "donor_login"
+            }
+          });
+        }
+      } catch (auditError) {
+        console.error("[/api/donors/verify-otp] Error logging audit entry:", auditError);
+        // Don't fail the entire request if audit logging fails
       }
 
       const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
       storeToken(token, normalizedEmail);
+      
+      console.log(`[/api/donors/verify-otp] Token generated and stored for ${normalizedEmail}`);
 
       res.json({ 
         success: true,
@@ -1195,6 +1292,7 @@ export async function registerRoutes(
         token
       });
     } catch (err) {
+      console.error("[/api/donors/verify-otp] Unhandled error:", err);
       logger.error("Donor verify OTP error", err);
       res.status(500).json({ message: "حدث خطأ أثناء التحقق" });
     }

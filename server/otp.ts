@@ -118,19 +118,22 @@ export function storeToken(token: string, email: string) {
   // Also store in database for persistence across restarts (non-blocking)
   if (supabase) {
     const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
-    supabase
-      .from('tokens')
-      .insert({
-        token,
-        email: email.toLowerCase(),
-        expires_at: expiresAt,
-        created_at: new Date().toISOString(),
-      })
-      .select()
-      .catch(err => {
+    (async () => {
+      try {
+        await supabase
+          .from('tokens')
+          .insert({
+            token,
+            email: email.toLowerCase(),
+            expires_at: expiresAt,
+            created_at: new Date().toISOString(),
+          })
+          .select();
+      } catch (err) {
         console.error('[storeToken] Database error:', err);
         // Continue anyway, we have in-memory fallback
-      });
+      }
+    })();
   }
 }
 

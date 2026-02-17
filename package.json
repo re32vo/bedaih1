@@ -13,7 +13,11 @@
     "build:analyze": "cross-env ANALYZE=true NODE_ENV=production tsx script/build.ts",
     "start": "NODE_ENV=production node dist/index.js",
     "check": "tsc",
-    "setup:owner": "tsx setup-owner.ts"
+    "setup:owner": "tsx setup-owner.ts",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage",
+    "test:performance": "vitest run server/tests.spec.ts -t 'Performance'"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -103,7 +107,8 @@
     "@types/ws": "^8.5.13",
     "cross-env": "^10.1.0",
     "rollup-plugin-visualizer": "^5.9.1",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vitest": "^4.0.18"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8"

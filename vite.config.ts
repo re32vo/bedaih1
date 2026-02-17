@@ -2,18 +2,9 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 
-// optional analyzer plugin will be imported when ANALYZE=true
-
 export default defineConfig({
   plugins: [
     react(),
-    ...(process.env.ANALYZE === "true"
-      ? [
-          await import("rollup-plugin-visualizer").then((m) =>
-            m.visualizer({ filename: "dist/public/bundle-report.html", open: false })
-          ),
-        ]
-      : []),
   ],
   resolve: {
     alias: {

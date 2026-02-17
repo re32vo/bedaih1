@@ -554,7 +554,7 @@ export default function DonorDashboard() {
                           onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
                           placeholder="أدخل الرمز 6 أرقام"
                           className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-center text-2xl tracking-widest bg-white text-slate-900"
-                          maxLength="6"
+                          maxLength={6}
                         />
                       </div>
                       <div className="flex gap-2 pt-2">

@@ -145,7 +145,7 @@ export default function Dashboard() {
 
 
   const getFilteredItems = () => {
-    let items = [];
+    let items: any[] = [];
     if (activeView === 'all') {
       // Combine all items and sort by date - only include items user has permission to view
       const all = [
@@ -197,7 +197,7 @@ export default function Dashboard() {
     const items = getFilteredItems();
     
     // Build CSV with proper escaping for Arabic text
-    const csvRows = [];
+    const csvRows: any[] = [];
     
     // Headers
     csvRows.push(['النوع', 'الاسم الكامل', 'البريد الإلكتروني', 'رقم الهاتف', 'العنوان', 'نوع الطلب', 'التاريخ والوقت']);
