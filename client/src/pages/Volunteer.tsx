@@ -98,7 +98,9 @@ export default function Volunteer() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to submit volunteer application");
+        const errorData = await response.json().catch(() => ({}));
+        const errorMessage = errorData?.message || "فشل في إرسال طلب التطوع";
+        throw new Error(errorMessage);
       }
 
       toast({
@@ -108,9 +110,10 @@ export default function Volunteer() {
       reset();
       setIsDialogOpen(false);
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "حدث خطأ أثناء إرسال الطلب";
       toast({
         title: "خطأ",
-        description: "حدث خطأ أثناء إرسال الطلب",
+        description: errorMessage,
         variant: "destructive",
       });
     }
