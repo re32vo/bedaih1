@@ -390,16 +390,16 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <div className="flex flex-col lg:flex-row justify-between items-start gap-4 mb-3">
+          <div className="flex flex-col lg:flex-row justify-between items-center lg:items-start gap-4 mb-3 text-center lg:text-right">
             <div>
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-2">لوحة التحكم</h1>
               <p className="text-sm sm:text-base text-black/80">مرحباً بك في نظام إدارة الجمعية</p>
             </div>
-            <div className="flex flex-wrap gap-2 w-full lg:w-auto">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:flex lg:flex-wrap gap-2 w-full lg:w-auto">
               <Button
                 onClick={refreshData}
                 disabled={refreshing}
-                className="bg-black text-white hover:bg-gray-800 flex items-center gap-2 flex-1 sm:flex-none text-xs sm:text-sm h-10 sm:h-auto"
+                className="w-full lg:w-auto bg-black text-white hover:bg-gray-800 flex items-center gap-2 text-xs sm:text-sm h-10 sm:h-auto"
               >
                 <RefreshCw className={`w-3 h-3 sm:w-4 sm:h-4 ${refreshing ? 'animate-spin' : ''}`} />
                 <span className="hidden sm:inline">تحديث البيانات</span>
@@ -407,7 +407,7 @@ export default function Dashboard() {
               </Button>
               <Button
                 onClick={handleExportData}
-                className="bg-black text-white hover:bg-gray-800 flex items-center gap-2 flex-1 sm:flex-none text-xs sm:text-sm h-10 sm:h-auto"
+                className="w-full lg:w-auto bg-black text-white hover:bg-gray-800 flex items-center gap-2 text-xs sm:text-sm h-10 sm:h-auto"
               >
                 <Download className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span className="hidden sm:inline">تصدير البيانات</span>
@@ -416,7 +416,7 @@ export default function Dashboard() {
               {(userRole === 'president' || userPermissions.some(p => p.startsWith('employees:'))) && (
                 <Button
                   onClick={() => window.location.href = "/admin"}
-                  className="bg-black text-white hover:bg-gray-800 flex items-center gap-2 flex-1 sm:flex-none text-xs sm:text-sm h-10 sm:h-auto"
+                  className="w-full lg:w-auto bg-black text-white hover:bg-gray-800 flex items-center gap-2 text-xs sm:text-sm h-10 sm:h-auto"
                 >
                   <Users className="w-3 h-3 sm:w-4 sm:h-4" />
                   <span className="hidden sm:inline">إدارة الموظفين</span>
@@ -425,7 +425,7 @@ export default function Dashboard() {
               )}              {(isPresident || hasPermission("manage_donors")) && (
                 <Button
                   onClick={() => window.location.href = "/donors-management"}
-                  className="bg-black text-white hover:bg-gray-800 flex items-center gap-2 flex-1 sm:flex-none text-xs sm:text-sm h-10 sm:h-auto"
+                  className="w-full lg:w-auto bg-black text-white hover:bg-gray-800 flex items-center gap-2 text-xs sm:text-sm h-10 sm:h-auto"
                 >
                   <Users className="w-3 h-3 sm:w-4 sm:h-4" />
                   <span className="hidden sm:inline">إدارة المتبرعين</span>
@@ -434,7 +434,7 @@ export default function Dashboard() {
               )}              {(userRole === 'president' || userPermissions.includes('audit:view')) && (
                 <Button
                   onClick={() => window.location.href = "/logs"}
-                  className="bg-black text-white hover:bg-gray-800 flex items-center gap-2 flex-1 sm:flex-none text-xs sm:text-sm h-10 sm:h-auto"
+                  className="w-full lg:w-auto bg-black text-white hover:bg-gray-800 flex items-center gap-2 text-xs sm:text-sm h-10 sm:h-auto"
                 >
                   <FileText className="w-3 h-3 sm:w-4 sm:h-4" />
                   <span className="hidden sm:inline">سجلات النظام</span>
@@ -443,7 +443,7 @@ export default function Dashboard() {
               )}
               <Button
                 onClick={handleLogout}
-                className="bg-black text-white hover:bg-gray-800 flex items-center gap-2 flex-1 sm:flex-none text-xs sm:text-sm h-10 sm:h-auto"
+                className="w-full lg:w-auto bg-black text-white hover:bg-gray-800 flex items-center gap-2 text-xs sm:text-sm h-10 sm:h-auto"
               >
                 <LogOut className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span className="hidden sm:inline">تسجيل الخروج</span>
