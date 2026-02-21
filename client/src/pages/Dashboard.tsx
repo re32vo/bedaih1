@@ -383,7 +383,7 @@ export default function Dashboard() {
   ].filter(card => !card.permission || hasPermission(card.permission));
 
   return (
-    <div className="min-h-screen bg-white text-black py-4">
+    <div className="min-h-screen bg-white text-black py-4 overflow-x-hidden">
       <div className="container mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
         {/* Header */}
         <motion.div

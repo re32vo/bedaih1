@@ -41,7 +41,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   if (isEmployeePage || isDonorPage) return <div className="min-h-screen font-body rtl" dir="rtl">{children}</div>;
 
   return (
-    <div className="min-h-screen font-body flex flex-col rtl bg-slate-900" dir="rtl">
+    <div className="min-h-screen font-body flex flex-col rtl bg-slate-900 overflow-x-hidden" dir="rtl">
       <header className="sticky top-0 z-40 bg-white dark:bg-slate-900 shadow-sm border-b border-slate-200 dark:border-slate-800">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <Link href="/">
