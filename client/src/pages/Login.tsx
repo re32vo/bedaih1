@@ -230,7 +230,7 @@ export default function Login() {
                         جاري التحقق...
                       </span>
                     ) : (
-                      <span className="flex items-center gap-2">
+                      <span className="flex w-full items-center justify-center gap-2">
                         <CheckCircle2 className="w-5 h-5" />
                         تأكيد الدخول
                         <ArrowRight className="w-5 h-5" />
