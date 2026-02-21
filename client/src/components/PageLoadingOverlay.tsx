@@ -21,29 +21,39 @@ export function PageLoadingOverlay() {
     const bodyElement = document.body;
 
     if (isVisible) {
-      // إخفاء overflow وتطبيق تنسيقات مهمة
+      // منع الـ address bar من الظهور
       htmlElement.style.overflow = 'hidden !important';
-      htmlElement.style.height = '100vh';
-      htmlElement.style.margin = '0';
-      htmlElement.style.padding = '0';
+      htmlElement.style.height = '100vh !important';
+      htmlElement.style.margin = '0 !important';
+      htmlElement.style.padding = '0 !important';
+      htmlElement.style.position = 'fixed !important';
+      htmlElement.style.width = '100% !important';
       
       bodyElement.style.overflow = 'hidden !important';
-      bodyElement.style.height = '100vh';
-      bodyElement.style.margin = '0';
-      bodyElement.style.padding = '0';
-      bodyElement.style.width = '100%';
+      bodyElement.style.height = '100vh !important';
+      bodyElement.style.margin = '0 !important';
+      bodyElement.style.padding = '0 !important';
+      bodyElement.style.width = '100vw !important';
+      bodyElement.style.position = 'fixed !important';
+      bodyElement.style.top = '0 !important';
+      bodyElement.style.left = '0 !important';
     } else {
       // استعادة الحالة الطبيعية
       htmlElement.style.overflow = '';
       htmlElement.style.height = '';
       htmlElement.style.margin = '';
       htmlElement.style.padding = '';
+      htmlElement.style.position = '';
+      htmlElement.style.width = '';
       
       bodyElement.style.overflow = '';
       bodyElement.style.height = '';
       bodyElement.style.margin = '';
       bodyElement.style.padding = '';
       bodyElement.style.width = '';
+      bodyElement.style.position = '';
+      bodyElement.style.top = '';
+      bodyElement.style.left = '';
     }
 
     return () => {
@@ -51,12 +61,17 @@ export function PageLoadingOverlay() {
       htmlElement.style.height = '';
       htmlElement.style.margin = '';
       htmlElement.style.padding = '';
+      htmlElement.style.position = '';
+      htmlElement.style.width = '';
       
       bodyElement.style.overflow = '';
       bodyElement.style.height = '';
       bodyElement.style.margin = '';
       bodyElement.style.padding = '';
       bodyElement.style.width = '';
+      bodyElement.style.position = '';
+      bodyElement.style.top = '';
+      bodyElement.style.left = '';
     };
   }, [isVisible]);
 
@@ -75,8 +90,8 @@ export function PageLoadingOverlay() {
         left: 0,
         right: 0,
         bottom: 0,
-        width: '100vw',
-        height: '100vh',
+        width: '100vw !important' as any,
+        height: '100vh !important' as any,
         minHeight: '100vh !important' as any,
         maxHeight: '100vh !important' as any,
         minWidth: '100vw !important' as any,
@@ -88,7 +103,9 @@ export function PageLoadingOverlay() {
         pointerEvents: 'auto',
         opacity: 1,
         backgroundColor: '#ffffff !important' as any,
-        display: 'flex !important' as any
+        display: 'flex !important' as any,
+        inset: 0,
+        viewTransitionName: 'loader'
       }}
     >
       {/* Glow Effect Background */}
