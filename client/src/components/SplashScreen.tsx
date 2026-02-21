@@ -31,7 +31,7 @@ export function SplashScreen({ isVisible, onComplete }: { isVisible: boolean; on
       initial={{ opacity: 1 }}
       animate={{ opacity: isAnimating ? 1 : 0 }}
       transition={{ duration: 0.5 }}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-white to-slate-50"
       dir="rtl"
     >
       {/* Glow Effect Background */}
@@ -72,7 +72,7 @@ export function SplashScreen({ isVisible, onComplete }: { isVisible: boolean; on
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.6 }}
-            className="text-2xl sm:text-3xl font-bold text-white"
+            className="text-2xl sm:text-3xl font-bold text-slate-900"
           >
             جمعية بداية
           </motion.h1>
@@ -81,7 +81,7 @@ export function SplashScreen({ isVisible, onComplete }: { isVisible: boolean; on
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.6 }}
-            className="text-sm sm:text-base text-emerald-200"
+            className="text-sm sm:text-base text-emerald-600"
           >
             جمعية خيرية موثوقة
           </motion.p>
