@@ -15,7 +15,7 @@ export function PageLoadingOverlay() {
     return () => clearTimeout(timer);
   }, []);
 
-  // منع التمرير وإخفاء العناصر الأخرى عندما يكون الـ overlay مرئياً
+  // منع التمرير وإخفاء العناصر الأخرى عندما يكون الـ overlay مرئياً + منع أي تفاعل من المستخدم
   useEffect(() => {
     const htmlElement = document.documentElement;
     const bodyElement = document.body;
@@ -37,6 +37,8 @@ export function PageLoadingOverlay() {
       bodyElement.style.position = 'fixed !important';
       bodyElement.style.top = '0 !important';
       bodyElement.style.left = '0 !important';
+      bodyElement.style.touchAction = 'none !important';
+      bodyElement.style.userSelect = 'none !important';
     } else {
       // استعادة الحالة الطبيعية
       htmlElement.style.overflow = '';
@@ -54,6 +56,8 @@ export function PageLoadingOverlay() {
       bodyElement.style.position = '';
       bodyElement.style.top = '';
       bodyElement.style.left = '';
+      bodyElement.style.touchAction = '';
+      bodyElement.style.userSelect = '';
     }
 
     return () => {
@@ -72,6 +76,45 @@ export function PageLoadingOverlay() {
       bodyElement.style.position = '';
       bodyElement.style.top = '';
       bodyElement.style.left = '';
+      bodyElement.style.touchAction = '';
+      bodyElement.style.userSelect = '';
+    };
+  }, [isVisible]);
+
+  // منع جميع التفاعلات: click، scroll، keyboard، touch
+  useEffect(() => {
+    if (!isVisible) return;
+
+    const preventInteraction = (e: Event) => {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+    };
+
+    const preventScroll = (e: WheelEvent | TouchEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+    };
+
+    document.addEventListener('click', preventInteraction, true);
+    document.addEventListener('pointermove', preventInteraction, true);
+    document.addEventListener('wheel', preventScroll as any, { passive: false, capture: true });
+    document.addEventListener('touchmove', preventScroll as any, { passive: false, capture: true });
+    document.addEventListener('contextmenu', preventInteraction, true);
+    document.addEventListener('keydown', preventInteraction, true);
+    document.addEventListener('keyup', preventInteraction, true);
+    document.addEventListener('input', preventInteraction, true);
+
+    return () => {
+      document.removeEventListener('click', preventInteraction, true);
+      document.removeEventListener('pointermove', preventInteraction, true);
+      document.removeEventListener('wheel', preventScroll as any, true);
+      document.removeEventListener('touchmove', preventScroll as any, true);
+      document.removeEventListener('contextmenu', preventInteraction, true);
+      document.removeEventListener('keydown', preventInteraction, true);
+      document.removeEventListener('keyup', preventInteraction, true);
+      document.removeEventListener('input', preventInteraction, true);
     };
   }, [isVisible]);
 
@@ -105,7 +148,12 @@ export function PageLoadingOverlay() {
         backgroundColor: '#ffffff !important' as any,
         display: 'flex !important' as any,
         inset: 0,
-        viewTransitionName: 'loader'
+        viewTransitionName: 'loader',
+        touchAction: 'none !important' as any,
+        userSelect: 'none !important' as any,
+        WebkitUserSelect: 'none !important' as any,
+        MozUserSelect: 'none !important' as any,
+        cursor: 'not-allowed'
       }}
     >
       {/* Glow Effect Background */}

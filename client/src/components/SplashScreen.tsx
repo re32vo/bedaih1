@@ -24,6 +24,56 @@ export function SplashScreen({ isVisible, onComplete }: { isVisible: boolean; on
     }
   }, [isAnimating, isVisible, onComplete]);
 
+  // منع جميع التفاعلات عندما تكون شاشة الانتظار مرئية
+  useEffect(() => {
+    if (!isVisible) return;
+
+    const htmlElement = document.documentElement;
+    const bodyElement = document.body;
+
+    htmlElement.style.overflow = 'hidden !important';
+    bodyElement.style.overflow = 'hidden !important';
+    bodyElement.style.touchAction = 'none !important';
+    bodyElement.style.userSelect = 'none !important';
+
+    const preventInteraction = (e: Event) => {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+    };
+
+    const preventScroll = (e: WheelEvent | TouchEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+    };
+
+    document.addEventListener('click', preventInteraction, true);
+    document.addEventListener('pointermove', preventInteraction, true);
+    document.addEventListener('wheel', preventScroll as any, { passive: false, capture: true });
+    document.addEventListener('touchmove', preventScroll as any, { passive: false, capture: true });
+    document.addEventListener('contextmenu', preventInteraction, true);
+    document.addEventListener('keydown', preventInteraction, true);
+    document.addEventListener('keyup', preventInteraction, true);
+    document.addEventListener('input', preventInteraction, true);
+
+    return () => {
+      htmlElement.style.overflow = '';
+      bodyElement.style.overflow = '';
+      bodyElement.style.touchAction = '';
+      bodyElement.style.userSelect = '';
+
+      document.removeEventListener('click', preventInteraction, true);
+      document.removeEventListener('pointermove', preventInteraction, true);
+      document.removeEventListener('wheel', preventScroll as any, true);
+      document.removeEventListener('touchmove', preventScroll as any, true);
+      document.removeEventListener('contextmenu', preventInteraction, true);
+      document.removeEventListener('keydown', preventInteraction, true);
+      document.removeEventListener('keyup', preventInteraction, true);
+      document.removeEventListener('input', preventInteraction, true);
+    };
+  }, [isVisible]);
+
   if (!isVisible) return null;
 
   return (
@@ -33,6 +83,13 @@ export function SplashScreen({ isVisible, onComplete }: { isVisible: boolean; on
       transition={{ duration: 0.5 }}
       className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-white to-slate-50"
       dir="rtl"
+      style={{
+        touchAction: 'none !important' as any,
+        userSelect: 'none !important' as any,
+        WebkitUserSelect: 'none !important' as any,
+        MozUserSelect: 'none !important' as any,
+        cursor: 'not-allowed'
+      }}
     >
       {/* Glow Effect Background */}
       <motion.div
