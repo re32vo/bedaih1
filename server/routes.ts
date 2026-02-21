@@ -1507,9 +1507,14 @@ export async function registerRoutes(
         return res.status(401).json({ message: "غير مصرح" });
       }
 
-      const email = verifyToken(token);
+      let email = verifyToken(token);
+      
+      // Fallback to async verification from database
       if (!email) {
-        return res.status(401).json({ message: "رمز غير صالح" });
+        email = await verifyTokenAsync(token);
+        if (!email) {
+          return res.status(401).json({ message: "رمز غير صالح" });
+        }
       }
 
       const donor = await getDonorByEmail(email);
@@ -1553,9 +1558,14 @@ export async function registerRoutes(
         return res.status(401).json({ success: false, message: "غير مصرح" });
       }
 
-      const email = verifyToken(token);
+      let email = verifyToken(token);
+      
+      // Fallback to async verification from database
       if (!email) {
-        return res.status(401).json({ success: false, message: "رمز غير صالح" });
+        email = await verifyTokenAsync(token);
+        if (!email) {
+          return res.status(401).json({ success: false, message: "رمز غير صالح" });
+        }
       }
 
       const donor = await getDonorByEmail(email);
@@ -1584,9 +1594,14 @@ export async function registerRoutes(
         return res.status(401).json({ message: "غير مصرح" });
       }
 
-      const currentEmail = verifyToken(token);
+      let currentEmail = verifyToken(token);
+      
+      // Fallback to async verification from database
       if (!currentEmail) {
-        return res.status(401).json({ message: "رمز غير صالح" });
+        currentEmail = await verifyTokenAsync(token);
+        if (!currentEmail) {
+          return res.status(401).json({ message: "رمز غير صالح" });
+        }
       }
 
       const donor = await getDonorByEmail(currentEmail);
@@ -1752,9 +1767,14 @@ export async function registerRoutes(
         return res.status(401).json({ message: "غير مصرح" });
       }
 
-      const email = verifyToken(token);
+      let email = verifyToken(token);
+      
+      // Fallback to async verification from database
       if (!email) {
-        return res.status(401).json({ message: "صلاحية غير صحيحة أو منتهية" });
+        email = await verifyTokenAsync(token);
+        if (!email) {
+          return res.status(401).json({ message: "صلاحية غير صحيحة أو منتهية" });
+        }
       }
 
       const { name, phone } = req.body;
