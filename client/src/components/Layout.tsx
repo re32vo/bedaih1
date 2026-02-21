@@ -45,11 +45,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-40 bg-white dark:bg-slate-900 shadow-sm border-b border-slate-200 dark:border-slate-800">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <Link href="/">
-            <div className="flex items-center gap-3 cursor-pointer">
-              <img src={logoImg} alt="شعار جمعية بداية" className="w-12 h-12 object-contain" />
-              <div className="hidden sm:block">
-                <h1 className="text-lg font-bold text-slate-900 dark:text-white">جمعية بداية</h1>
-                <p className="text-xs text-slate-700 dark:text-white">جمعية خيرية موثوقة</p>
+            <div className="flex items-center gap-2 sm:gap-3 cursor-pointer">
+              <img src={logoImg} alt="شعار جمعية بداية" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
+              <div className="flex flex-col">
+                <h1 className="text-sm sm:text-lg font-bold text-slate-900 dark:text-white">جمعية بداية</h1>
+                <p className="text-xs sm:text-xs text-slate-600 dark:text-slate-300">جمعية خيرية موثوقة</p>
               </div>
             </div>
           </Link>
