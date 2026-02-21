@@ -65,27 +65,30 @@ export function PageLoadingOverlay() {
   const overlayContent = (
     <motion.div
       initial={{ opacity: 1 }}
-      animate={{ opacity: isVisible ? 1 : 0 }}
-      transition={{ duration: 0.5 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0 }}
       className="fixed inset-0 flex flex-col items-center justify-center bg-white"
       dir="rtl"
       style={{ 
-        position: 'fixed',
+        position: 'fixed !important' as any,
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
         width: '100vw',
         height: '100vh',
-        minHeight: '100vh',
-        maxHeight: '100vh',
-        minWidth: '100vw',
-        maxWidth: '100vw',
+        minHeight: '100vh !important' as any,
+        maxHeight: '100vh !important' as any,
+        minWidth: '100vw !important' as any,
+        maxWidth: '100vw !important' as any,
         margin: 0,
         padding: 0,
-        overflow: 'hidden',
+        overflow: 'hidden !important' as any,
         zIndex: 999999,
-        pointerEvents: isVisible ? 'auto' : 'none'
+        pointerEvents: 'auto',
+        opacity: 1,
+        backgroundColor: '#ffffff !important' as any,
+        display: 'flex !important' as any
       }}
     >
       {/* Glow Effect Background */}
@@ -95,11 +98,12 @@ export function PageLoadingOverlay() {
           scale: [1, 1.1, 1],
         }}
         transition={{ duration: 2, repeat: Infinity }}
-        className="absolute w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl"
+        className="absolute w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"
+        style={{ mixBlendMode: 'multiply' }}
       />
 
       {/* Content Container */}
-      <div className="relative z-10 flex flex-col items-center justify-center gap-6 px-4" style={{ minHeight: '100vh', minWidth: '100%' }}>
+      <div className="relative flex flex-col items-center justify-center gap-6 px-4" style={{ minHeight: '100vh', minWidth: '100%', zIndex: 10, position: 'relative' }}>
         {/* Logo */}
         <motion.div
           animate={{
@@ -154,16 +158,6 @@ export function PageLoadingOverlay() {
             />
           ))}
         </motion.div>
-
-        {/* Loading Text */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          className="text-xs sm:text-sm text-slate-600 mt-4"
-        >
-          جاري التحميل...
-        </motion.p>
       </div>
     </motion.div>
   );
