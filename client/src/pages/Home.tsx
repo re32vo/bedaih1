@@ -169,12 +169,6 @@ export default function Home() {
                 alt="Charity Projects" 
                 className="relative rounded-2xl shadow-2xl border-2 border-emerald-500/30 w-full h-[300px] sm:h-[350px] md:h-[450px] lg:h-[500px] object-cover"
               />
-              <div className="absolute -bottom-4 -left-8 bg-white rounded-2xl shadow-2xl max-w-xs hidden md:block p-6 border-l-4 border-emerald-500">
-                <p className="font-bold text-lg text-slate-900 mb-2">"من أحياها فكأنما أحيا الناس جميعاً"</p>
-                <div className="flex gap-1 text-yellow-400">
-                  {[1,2,3,4,5].map(s => <span key={s}>★</span>)}
-                </div>
-              </div>
             </motion.div>
           </div>
         </div>
