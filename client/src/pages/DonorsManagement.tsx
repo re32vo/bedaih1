@@ -316,9 +316,9 @@ export default function DonorsManagement() {
           <h1 className="text-3xl font-bold text-slate-900">إدارة المتبرعين</h1>
         </div>
         <p className="text-slate-600">عرض وتعديل وحذف حسابات المتبرعين</p>
-        <div className="mt-4">
+        <div className="mt-4 w-full lg:w-auto">
           <Button
-            className="bg-black hover:bg-gray-800 text-white"
+            className="bg-black hover:bg-gray-800 text-white w-full lg:w-auto"
             onClick={() => { window.location.href = "/dashboard"; }}
           >
             عودة للوحة الموظفين

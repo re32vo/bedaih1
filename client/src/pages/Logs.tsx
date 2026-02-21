@@ -274,8 +274,8 @@ export default function Logs() {
             <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-1 sm:mb-2">سجلات النظام</h1>
             <p className="text-xs sm:text-sm md:text-base text-black/80">عرض ومتابعة نشاط النظام حسب النوع والزمن</p>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={() => navigate("/dashboard")} className="text-xs sm:text-sm text-black border-slate-200 hover:bg-slate-100">عودة للوحة التحكم</Button>
+          <div className="w-full lg:w-auto">
+            <Button variant="outline" onClick={() => navigate("/dashboard")} className="w-full lg:w-auto text-xs sm:text-sm text-black border-slate-200 hover:bg-slate-100">عودة للوحة التحكم</Button>
           </div>
         </div>
 
@@ -324,7 +324,7 @@ export default function Logs() {
                 </Button>
               </div>
             </div>
-            <div className="flex flex-wrap gap-2 mt-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 mt-4">
               {quickFilters.map((q) => (
                 <Button
                   key={q.value}
@@ -334,7 +334,7 @@ export default function Logs() {
                     setAction(q.value);
                     setTimeout(fetchLogs, 0);
                   }}
-                  className={action === q.value ? "bg-blue-600 text-white border-blue-600" : "text-black border-slate-300 hover:bg-slate-100"}
+                  className={action === q.value ? "bg-blue-600 text-white border-blue-600 w-full" : "text-black border-slate-300 hover:bg-slate-100 w-full"}
                 >
                   {q.label}
                 </Button>

@@ -298,11 +298,11 @@ export default function Admin() {
               <h1 className="text-3xl sm:text-4xl font-bold mb-2 text-black">إدارة الموظفين</h1>
               <p className="text-black">مرحباً {currentUser.name} • {employees.length} موظف</p>
             </div>
-            <div className="flex flex-wrap gap-2 sm:gap-3">
-              <Button variant="outline" onClick={() => window.location.href = "/dashboard"} className="text-black hover:text-black">
+            <div className="w-full lg:w-auto grid grid-cols-2 sm:grid-cols-2 lg:flex gap-2 sm:gap-3">
+              <Button variant="outline" onClick={() => window.location.href = "/dashboard"} className="w-full lg:w-auto text-black hover:text-black">
                 <Home className="w-4 h-4 ml-2" />لوحة التحكم
               </Button>
-              <Button variant="outline" onClick={() => { sessionStorage.removeItem("authToken"); window.location.href = "/login"; }} className="text-black hover:text-black">
+              <Button variant="outline" onClick={() => { sessionStorage.removeItem("authToken"); window.location.href = "/login"; }} className="w-full lg:w-auto text-black hover:text-black">
                 <LogOut className="w-4 h-4 ml-2" />تسجيل الخروج
               </Button>
             </div>
