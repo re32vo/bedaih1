@@ -888,7 +888,10 @@ export async function registerRoutes(
       }
 
       const token = authHeader.substring(7);
-      const email = verifyToken(token);
+      let email = verifyToken(token);
+      if (!email) {
+        email = await verifyTokenAsync(token);
+      }
       if (!email) {
         return res.status(401).json({ message: "التوكين غير صحيح" });
       }
@@ -926,7 +929,10 @@ export async function registerRoutes(
       }
 
       const token = authHeader.substring(7);
-      const email = verifyToken(token);
+      let email = verifyToken(token);
+      if (!email) {
+        email = await verifyTokenAsync(token);
+      }
       if (!email) {
         return res.status(401).json({ message: "التوكين غير صحيح" });
       }
