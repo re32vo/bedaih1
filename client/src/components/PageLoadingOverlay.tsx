@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { MapPin, Phone, Mail, Globe } from "lucide-react";
 import logoImg from "@/assets/logo.png";
 
 export function PageLoadingOverlay() {
@@ -22,8 +21,9 @@ export function PageLoadingOverlay() {
       initial={{ opacity: 1 }}
       animate={{ opacity: isVisible ? 1 : 0 }}
       transition={{ duration: 0.5 }}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white overflow-y-auto"
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white"
       dir="rtl"
+      style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
     >
       {/* Glow Effect Background */}
       <motion.div
@@ -66,54 +66,6 @@ export function PageLoadingOverlay() {
         >
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">جمعية بداية</h1>
           <p className="text-sm sm:text-base text-emerald-600 font-medium">جمعية خيرية موثوقة</p>
-        </motion.div>
-
-        {/* Contact Information - On Mobile */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.6 }}
-          className="w-full max-w-sm space-y-4 mt-8"
-        >
-          {/* Location */}
-          <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
-            <MapPin className="w-5 h-5 text-emerald-600 shrink-0" />
-            <div>
-              <p className="text-xs text-slate-500">الموقع</p>
-              <p className="text-sm font-medium text-slate-900">المملكة العربية السعودية، الرياض</p>
-            </div>
-          </div>
-
-          {/* Phone */}
-          <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
-            <Phone className="w-5 h-5 text-emerald-600 shrink-0" />
-            <div>
-              <p className="text-xs text-slate-500">الهاتف</p>
-              <a href="tel:+966-555-0000" className="text-sm font-medium text-slate-900 hover:text-emerald-600">
-                +966-555-0000
-              </a>
-            </div>
-          </div>
-
-          {/* Email */}
-          <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
-            <Mail className="w-5 h-5 text-emerald-600 shrink-0" />
-            <div>
-              <p className="text-xs text-slate-500">البريد الإلكتروني</p>
-              <a href="mailto:info@bedaya.org" className="text-sm font-medium text-slate-900 hover:text-emerald-600">
-                info@bedaya.org
-              </a>
-            </div>
-          </div>
-
-          {/* Website */}
-          <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
-            <Globe className="w-5 h-5 text-emerald-600 shrink-0" />
-            <div>
-              <p className="text-xs text-slate-500">الموقع الإلكتروني</p>
-              <p className="text-sm font-medium text-slate-900">bedaih1.vercel.app</p>
-            </div>
-          </div>
         </motion.div>
 
         {/* Loading Dots */}
