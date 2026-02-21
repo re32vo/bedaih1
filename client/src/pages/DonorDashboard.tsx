@@ -296,22 +296,22 @@ export default function DonorDashboard() {
       {/* Header */}
       <div className="bg-gradient-to-r from-white to-emerald-50 shadow-lg border-b border-slate-200">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-4">
+          <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:justify-between mb-8 text-center sm:text-right">
+            <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-center sm:gap-4">
               <img 
                 src={logoImg}
                 alt="شعار جمعية بداية"
                 className="w-24 h-24 object-contain"
               />
-              <div>
+              <div className="text-center sm:text-right">
                 <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">لوحة المتبرعين</h1>
                 <p className="text-slate-600 text-sm">مرحباً بك {profileData.name}</p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-end">
               <Button
                 onClick={handleBrowseSite}
-                className="bg-emerald-500 hover:bg-emerald-600 text-white"
+                className="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-600 text-white"
               >
                 <Home className="w-4 h-4 ml-2" />
                 تصفح الموقع
@@ -319,7 +319,7 @@ export default function DonorDashboard() {
               <Button
                 onClick={handleLogout}
                 variant="outline"
-                className="bg-white hover:bg-red-50 text-red-500 border-2 border-red-500"
+                className="w-full sm:w-auto bg-white hover:bg-red-50 text-red-500 border-2 border-red-500"
               >
                 <LogOut className="w-4 h-4 ml-2" />
                 تسجيل الخروج
