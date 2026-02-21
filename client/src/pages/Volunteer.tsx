@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
+import { PageLoadingOverlay } from "@/components/PageLoadingOverlay";
 
 const volunteerSchema = z.object({
   name: z.string().min(2, "الاسم مطلوب"),
@@ -120,7 +121,9 @@ export default function Volunteer() {
   };
 
   return (
-    <div className="min-h-screen bg-white pt-16 sm:pt-20 pb-10 sm:pb-16 md:pb-20">
+    <>
+      <PageLoadingOverlay />
+      <div className="min-h-screen bg-white pt-16 sm:pt-20 pb-10 sm:pb-16 md:pb-20">
       {/* Hero Section */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center mb-10 sm:mb-14 md:mb-16 lg:mb-20">
         <motion.div
@@ -285,7 +288,8 @@ export default function Volunteer() {
           </CardContent>
         </Card>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 

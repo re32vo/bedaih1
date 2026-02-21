@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { PageLoadingOverlay } from "@/components/PageLoadingOverlay";
 
 export default function Beneficiaries() {
   const mutation = useCreateBeneficiary();
@@ -34,7 +35,9 @@ export default function Beneficiaries() {
   };
 
   return (
-    <div className="min-h-screen bg-white py-8 sm:py-12 md:py-16 lg:py-20">
+    <>
+      <PageLoadingOverlay />
+      <div className="min-h-screen bg-white py-8 sm:py-12 md:py-16 lg:py-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-8 sm:mb-10 md:mb-12 lg:mb-16">
@@ -164,7 +167,8 @@ export default function Beneficiaries() {
           </motion.div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 

@@ -1,9 +1,12 @@
 import { motion } from "framer-motion";
 import { Heart, Target, Users, Lightbulb, CheckCircle, Globe, Award, Handshake, TrendingUp } from "lucide-react";
+import { PageLoadingOverlay } from "@/components/PageLoadingOverlay";
 
 export default function About() {
   return (
-    <div className="min-h-screen bg-white">
+    <>
+      <PageLoadingOverlay />
+      <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative pt-0 pb-0 bg-white">
         {/* Banner Image */}
@@ -259,7 +262,8 @@ export default function About() {
           </motion.div>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 }
 
