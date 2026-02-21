@@ -14,6 +14,22 @@ export function PageLoadingOverlay() {
     return () => clearTimeout(timer);
   }, []);
 
+  // منع التمرير عندما يكون الـ overlay مرئياً
+  useEffect(() => {
+    if (isVisible) {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    };
+  }, [isVisible]);
+
   if (!isVisible) return null;
 
   return (
@@ -21,9 +37,19 @@ export function PageLoadingOverlay() {
       initial={{ opacity: 1 }}
       animate={{ opacity: isVisible ? 1 : 0 }}
       transition={{ duration: 0.5 }}
-      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white"
+      className="fixed inset-0 h-screen w-screen max-h-screen max-w-screen overflow-hidden z-[9999] flex flex-col items-center justify-center bg-white"
       dir="rtl"
-      style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
+      style={{ 
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: '100vw',
+        height: '100vh',
+        overflow: 'hidden',
+        pointerEvents: isVisible ? 'auto' : 'none'
+      }}
     >
       {/* Glow Effect Background */}
       <motion.div
@@ -36,7 +62,7 @@ export function PageLoadingOverlay() {
       />
 
       {/* Content Container */}
-      <div className="relative z-10 flex flex-col items-center gap-8 px-4 py-16 sm:py-20">
+      <div className="relative z-10 flex flex-col items-center justify-center gap-6 px-4 max-h-screen overflow-hidden w-full">
         {/* Logo */}
         <motion.div
           animate={{
