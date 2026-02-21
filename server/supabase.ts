@@ -17,6 +17,7 @@ const ALL_EMPLOYEE_PERMISSIONS = [
   "beneficiaries:view",
   "jobs:view",
   "contact:view",
+  "volunteers:view",
   "analytics:view",
   "employees:add",
   "employees:remove",
@@ -27,6 +28,23 @@ const ALL_EMPLOYEE_PERMISSIONS = [
 
 function getOwnerEmail() {
   return normalizeEmail(process.env.PRESIDENT_EMAIL || process.env.HEAD_EMAIL || "bedaihsa@gmail.com");
+}
+
+function normalizePermissions(value: any): string[] {
+  if (Array.isArray(value)) {
+    return value.filter((perm) => typeof perm === "string");
+  }
+
+  if (typeof value === "string") {
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed.filter((perm) => typeof perm === "string") : [];
+    } catch {
+      return [];
+    }
+  }
+
+  return [];
 }
 
 async function ensureOwnerFullPermissions() {
@@ -43,8 +61,9 @@ async function ensureOwnerFullPermissions() {
   if (!employees || employees.length === 0) return;
 
   const primary = employees[0];
+  const currentPermissions = normalizePermissions(primary.permissions);
   const mergedPermissions = Array.from(
-    new Set([...(primary.permissions || []), ...ALL_EMPLOYEE_PERMISSIONS])
+    new Set([...currentPermissions, ...ALL_EMPLOYEE_PERMISSIONS])
   );
 
   await supabase
