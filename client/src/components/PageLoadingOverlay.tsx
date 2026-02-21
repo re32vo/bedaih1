@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { createPortal } from "react-dom";
 import logoImg from "@/assets/logo.png";
 
 export function PageLoadingOverlay() {
@@ -14,30 +15,59 @@ export function PageLoadingOverlay() {
     return () => clearTimeout(timer);
   }, []);
 
-  // منع التمرير عندما يكون الـ overlay مرئياً
+  // منع التمرير وإخفاء العناصر الأخرى عندما يكون الـ overlay مرئياً
   useEffect(() => {
+    const htmlElement = document.documentElement;
+    const bodyElement = document.body;
+
     if (isVisible) {
-      document.body.style.overflow = 'hidden';
-      document.documentElement.style.overflow = 'hidden';
+      // إخفاء overflow وتطبيق تنسيقات مهمة
+      htmlElement.style.overflow = 'hidden !important';
+      htmlElement.style.height = '100vh';
+      htmlElement.style.margin = '0';
+      htmlElement.style.padding = '0';
+      
+      bodyElement.style.overflow = 'hidden !important';
+      bodyElement.style.height = '100vh';
+      bodyElement.style.margin = '0';
+      bodyElement.style.padding = '0';
+      bodyElement.style.width = '100%';
     } else {
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
+      // استعادة الحالة الطبيعية
+      htmlElement.style.overflow = '';
+      htmlElement.style.height = '';
+      htmlElement.style.margin = '';
+      htmlElement.style.padding = '';
+      
+      bodyElement.style.overflow = '';
+      bodyElement.style.height = '';
+      bodyElement.style.margin = '';
+      bodyElement.style.padding = '';
+      bodyElement.style.width = '';
     }
 
     return () => {
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
+      htmlElement.style.overflow = '';
+      htmlElement.style.height = '';
+      htmlElement.style.margin = '';
+      htmlElement.style.padding = '';
+      
+      bodyElement.style.overflow = '';
+      bodyElement.style.height = '';
+      bodyElement.style.margin = '';
+      bodyElement.style.padding = '';
+      bodyElement.style.width = '';
     };
   }, [isVisible]);
 
   if (!isVisible) return null;
 
-  return (
+  const overlayContent = (
     <motion.div
       initial={{ opacity: 1 }}
       animate={{ opacity: isVisible ? 1 : 0 }}
       transition={{ duration: 0.5 }}
-      className="fixed inset-0 h-screen w-screen max-h-screen max-w-screen overflow-hidden z-[9999] flex flex-col items-center justify-center bg-white"
+      className="fixed inset-0 flex flex-col items-center justify-center bg-white"
       dir="rtl"
       style={{ 
         position: 'fixed',
@@ -47,7 +77,14 @@ export function PageLoadingOverlay() {
         bottom: 0,
         width: '100vw',
         height: '100vh',
+        minHeight: '100vh',
+        maxHeight: '100vh',
+        minWidth: '100vw',
+        maxWidth: '100vw',
+        margin: 0,
+        padding: 0,
         overflow: 'hidden',
+        zIndex: 999999,
         pointerEvents: isVisible ? 'auto' : 'none'
       }}
     >
@@ -62,7 +99,7 @@ export function PageLoadingOverlay() {
       />
 
       {/* Content Container */}
-      <div className="relative z-10 flex flex-col items-center justify-center gap-6 px-4 max-h-screen overflow-hidden w-full">
+      <div className="relative z-10 flex flex-col items-center justify-center gap-6 px-4" style={{ minHeight: '100vh', minWidth: '100%' }}>
         {/* Logo */}
         <motion.div
           animate={{
@@ -130,4 +167,6 @@ export function PageLoadingOverlay() {
       </div>
     </motion.div>
   );
+
+  return createPortal(overlayContent, document.body);
 }
