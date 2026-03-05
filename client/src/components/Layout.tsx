@@ -26,10 +26,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const navLinks = [
     { href: "/", label: "الرئيسية" },
     { href: "/about", label: "من نحن" },
-    { href: "/beneficiary", label: "تسجيل مستفيد" },
     { href: "/jobs", label: "التوظيف" },
     { href: "/volunteer", label: "تطوع معنا" },
     { href: "/contact", label: "اتصل بنا" },
+  ];
+
+  const programsLinks = [
+    { href: "/programs/treatment", label: "البرامج العلاجية" },
+    { href: "/programs/awareness", label: "البرامج التوعوية" },
   ];
 
   const moreLinks = [
@@ -49,6 +53,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   const [isMoreOpen, setIsMoreOpen] = useState(false);
   const [isMobileMoreOpen, setIsMobileMoreOpen] = useState(false);
+  const [isProgramsOpen, setIsProgramsOpen] = useState(false);
+  const [isMobileProgramsOpen, setIsMobileProgramsOpen] = useState(false);
 
   if (isEmployeePage || isDonorPage) return <div className="min-h-screen font-body rtl" dir="rtl">{children}</div>;
 
@@ -74,6 +80,34 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 </span>
               </Link>
             ))}
+
+            {/* programs dropdown trigger */}
+            <div className="relative">
+              <button
+                onClick={() => setIsProgramsOpen(!isProgramsOpen)}
+                className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
+              >
+                برامجنا <ChevronDown className="w-4 h-4 mr-1" />
+              </button>
+              {isProgramsOpen && (
+                <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-lg z-50">
+                  {programsLinks.map((link) => (
+                    <Link key={link.href} href={link.href}>
+                      <span
+                        className={`block px-4 py-2 text-sm cursor-pointer transition-colors ${
+                          location === link.href
+                            ? "bg-emerald-500 text-white"
+                            : "text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
+                        }`}
+                        onClick={() => setIsProgramsOpen(false)}
+                      >
+                        {link.label}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* more dropdown trigger */}
             <div className="relative">
@@ -145,6 +179,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   </span>
                 </Link>
               ))}
+
+              {/* mobile programs section */}
+              <button
+                className="flex items-center px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
+                onClick={() => setIsMobileProgramsOpen(!isMobileProgramsOpen)}
+              >
+                برامجنا {isMobileProgramsOpen ? <ChevronUp className="w-4 h-4 mr-1" /> : <ChevronDown className="w-4 h-4 mr-1" />}
+              </button>
+              {isMobileProgramsOpen && (
+                <div className="flex flex-col gap-1 mt-1">
+                  {programsLinks.map((link) => (
+                    <Link key={link.href} href={link.href}>
+                      <span className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10" onClick={() => setIsMenuOpen(false)}>
+                        {link.label}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              )}
 
               {/* mobile more section */}
               <button
