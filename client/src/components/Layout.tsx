@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Heart, Menu, X, Phone, MapPin, Mail, LogIn, User } from "lucide-react";
+import { Heart, Menu, X, Phone, MapPin, Mail, LogIn, User, ChevronDown, ChevronUp } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
@@ -32,11 +32,23 @@ export function Layout({ children }: { children: React.ReactNode }) {
     { href: "/contact", label: "اتصل بنا" },
   ];
 
+  const moreLinks = [
+    { href: "/members", label: "أعضاء الجمعية" },
+    { href: "/governance", label: "الحوكمة" },
+    { href: "/awards", label: "الجوائز" },
+    { href: "/director-contact", label: "بيانات التواصل مع المدير" },
+    { href: "/donation-methods", label: "طرق التبرع" },
+    { href: "/bank-accounts", label: "الحسابات البنكية" },
+  ];
+
   const handleDonateClick = () => {
     const el = document.getElementById("donate-section");
     if (el) el.scrollIntoView({ behavior: "smooth" });
     else window.location.href = "/#donate-section";
   };
+
+  const [isMoreOpen, setIsMoreOpen] = useState(false);
+  const [isMobileMoreOpen, setIsMobileMoreOpen] = useState(false);
 
   if (isEmployeePage || isDonorPage) return <div className="min-h-screen font-body rtl" dir="rtl">{children}</div>;
 
@@ -54,7 +66,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-2">
+          <nav className="hidden md:flex items-center gap-2 relative">
             {navLinks.map((link) => (
               <Link key={link.href} href={link.href}>
                 <span className={`px-3 py-2 rounded-lg text-sm font-medium cursor-pointer transition-all ${location === link.href ? "font-semibold bg-emerald-500 text-white dark:bg-emerald-600" : "text-slate-700 dark:text-white hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/10 dark:hover:text-white"}`}>
@@ -62,6 +74,34 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 </span>
               </Link>
             ))}
+
+            {/* more dropdown trigger */}
+            <div className="relative">
+              <button
+                onClick={() => setIsMoreOpen(!isMoreOpen)}
+                className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
+              >
+                المزيد <ChevronDown className="w-4 h-4 mr-1" />
+              </button>
+              {isMoreOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-lg z-50">
+                  {moreLinks.map((link) => (
+                    <Link key={link.href} href={link.href}>
+                      <span
+                        className={`block px-4 py-2 text-sm cursor-pointer transition-colors ${
+                          location === link.href
+                            ? "bg-emerald-500 text-white"
+                            : "text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
+                        }`}
+                        onClick={() => setIsMoreOpen(false)}
+                      >
+                        {link.label}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -105,6 +145,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   </span>
                 </Link>
               ))}
+
+              {/* mobile more section */}
+              <button
+                className="flex items-center px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
+                onClick={() => setIsMobileMoreOpen(!isMobileMoreOpen)}
+              >
+                المزيد {isMobileMoreOpen ? <ChevronUp className="w-4 h-4 mr-1" /> : <ChevronDown className="w-4 h-4 mr-1" />}
+              </button>
+              {isMobileMoreOpen && (
+                <div className="flex flex-col gap-1 mt-1">
+                  {moreLinks.map((link) => (
+                    <Link key={link.href} href={link.href}>
+                      <span className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10" onClick={() => setIsMenuOpen(false)}>
+                        {link.label}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              )
 
               <Link href={isDonorLoggedIn ? "/donor-dashboard" : "/donor-login"}>
                 <Button className="w-full mt-2 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-full flex items-center justify-center gap-2">
