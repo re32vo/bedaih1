@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Heart, Menu, X, Phone, MapPin, Mail, LogIn, User, ChevronDown, ChevronUp } from "lucide-react";
+import { Heart, Menu, X, Phone, MapPin, Mail, LogIn, User, ChevronDown, ChevronUp, MessageCircle } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
@@ -405,6 +405,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
       <main className="flex-grow bg-white">{children}</main>
 
+      {/* WhatsApp Floating Button */}
+      <a
+        href="https://wa.me/966533170903"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-110 flex items-center justify-center group"
+        aria-label="تواصل عبر واتساب"
+      >
+        <MessageCircle className="w-6 h-6" />
+        <span className="absolute right-full mr-3 bg-slate-900 text-white px-3 py-1 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          تواصل معنا
+        </span>
+      </a>
+
       <footer className="bg-slate-900 text-slate-200 mt-0">
         <div className="container mx-auto px-4 py-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -445,6 +459,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <li className="flex items-center gap-2"><MapPin className="w-5 h-5" /> المملكة العربية السعودية، الرياض</li>
                 <li className="flex items-center gap-2"><Phone className="w-5 h-5" /> <a href="tel:+966-555-0000" className="text-white">+966-555-0000</a></li>
                 <li className="flex items-center gap-2"><Mail className="w-5 h-5" /> <a href="mailto:info@bedaya.org" className="text-white">info@bedaya.org</a></li>
+                <li className="flex items-center gap-2"><MessageCircle className="w-5 h-5" /> <a href="https://wa.me/966533170903" target="_blank" rel="noopener noreferrer" className="text-white hover:text-green-400 transition">واتساب</a></li>
               </ul>
             </div>
           </div>
