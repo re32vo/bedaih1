@@ -35,7 +35,7 @@ export default function News() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">الأخبار والتحديثات</h1>
-          <p className="text-xl text-slate-600 المستجدات من جمعية بداية</p>
+          <p className="text-xl text-slate-600">تابع المستجدات من جمعية بداية</p>
         </div>
 
         {/* News List */}

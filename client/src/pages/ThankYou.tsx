@@ -68,13 +68,13 @@ export default function ThankYou() {
               <div className="card-base text-right">
                 <div className="text-3xl mb-3">📧</div>
                 <h3 className="font-bold text-slate-900 mb-2">سنرسل لك إيصالاً</h3>
-                <p className="text-sm text-slate-600 إيصال تبرعك سيصلك عبر البريد الإلكتروني قريباً</p>
+                <p className="text-sm text-slate-600">إيصال تبرعك سيصلك عبر البريد الإلكتروني قريباً</p>
               </div>
               
               <div className="card-base text-right">
                 <div className="text-3xl mb-3">📊</div>
                 <h3 className="font-bold text-slate-900 mb-2">تابع تأثيرك</h3>
-                <p className="text-sm text-slate-600 سنشاركك تقارير عن كيفية استخدام تبرعك</p>
+                <p className="text-sm text-slate-600">سنشاركك تقارير عن كيفية استخدام تبرعك</p>
               </div>
             </div>
           </motion.div>

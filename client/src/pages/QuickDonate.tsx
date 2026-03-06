@@ -10,7 +10,7 @@ export default function QuickDonate() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">التبرع السريع</h1>
-          <p className="text-xl text-slate-600 الآن بسرعة وسهولة</p>
+          <p className="text-xl text-slate-600">تبرع الآن بسرعة وسهولة</p>
         </div>
 
         {/* Quick Donate */}
@@ -54,7 +54,7 @@ export default function QuickDonate() {
               <CardTitle>سريع وآمن</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-600 تبرعك في ثوانٍ معدودة عبر طرق دفع آمنة</p>
+              <p className="text-slate-600">تبرعك في ثوانٍ معدودة عبر طرق دفع آمنة</p>
             </CardContent>
           </Card>
           <Card>
@@ -63,7 +63,7 @@ export default function QuickDonate() {
               <CardTitle>بدون حد أدنى</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-600 تحديد حد أدنى للتبرع، اختر ما يناسبك</p>
+              <p className="text-slate-600">لا يوجد حد أدنى للتبرع، اختر ما يناسبك</p>
             </CardContent>
           </Card>
           <Card>
@@ -72,7 +72,7 @@ export default function QuickDonate() {
               <CardTitle>إيصال فوري</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-600 على إيصال رسمي فوراً على بريدك الإلكتروني</p>
+              <p className="text-slate-600">احصل على إيصال رسمي فوراً على بريدك الإلكتروني</p>
             </CardContent>
           </Card>
         </div>
