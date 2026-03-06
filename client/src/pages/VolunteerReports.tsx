@@ -9,12 +9,12 @@ export default function VolunteerReports() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" dir="rtl">
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">التقارير التطوعية</h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300">تقارير تفصيلية عن نشاطاتنا التطوعية</p>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">التقارير التطوعية</h1>
+          <p className="text-xl text-slate-600 تفصيلية عن نشاطاتنا التطوعية</p>
         </div>
 
         {/* Current Stats */}
@@ -25,8 +25,7 @@ export default function VolunteerReports() {
               <CardTitle className="text-lg">متطوع نشط</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900 dark:text-white">500+</p>
-            </CardContent>
+              <p className="text-3xl font-bold text-slate-900            </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-3">
@@ -34,8 +33,7 @@ export default function VolunteerReports() {
               <CardTitle className="text-lg">ساعات في الشهر</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900 dark:text-white">1,800</p>
-            </CardContent>
+              <p className="text-3xl font-bold text-slate-900            </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-3">
@@ -43,8 +41,7 @@ export default function VolunteerReports() {
               <CardTitle className="text-lg">مشروع</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900 dark:text-white">12</p>
-            </CardContent>
+              <p className="text-3xl font-bold text-slate-900            </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-3">
@@ -52,14 +49,13 @@ export default function VolunteerReports() {
               <CardTitle className="text-lg">معدل الرضا</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900 dark:text-white">98%</p>
-            </CardContent>
+              <p className="text-3xl font-bold text-slate-900            </CardContent>
           </Card>
         </div>
 
         {/* Monthly Reports */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">التقارير الشهرية</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-6">التقارير الشهرية</h2>
           <div className="space-y-4">
             {reports.map((report, index) => (
               <Card key={index}>
@@ -72,17 +68,14 @@ export default function VolunteerReports() {
                 <CardContent>
                   <div className="grid grid-cols-3 gap-6">
                     <div>
-                      <p className="text-slate-600 dark:text-slate-400 text-sm mb-1">عدد المتطوعين</p>
-                      <p className="text-2xl font-bold text-slate-900 dark:text-white">{report.volunteers}</p>
-                    </div>
+                      <p className="text-slate-600 text-sm mb-1">عدد المتطوعين</p>
+                      <p className="text-2xl font-bold text-slate-900                    </div>
                     <div>
-                      <p className="text-slate-600 dark:text-slate-400 text-sm mb-1">ساعات العمل</p>
-                      <p className="text-2xl font-bold text-slate-900 dark:text-white">{report.hours}</p>
-                    </div>
+                      <p className="text-slate-600 text-sm mb-1">ساعات العمل</p>
+                      <p className="text-2xl font-bold text-slate-900                    </div>
                     <div>
-                      <p className="text-slate-600 dark:text-slate-400 text-sm mb-1">عدد المشاريع</p>
-                      <p className="text-2xl font-bold text-slate-900 dark:text-white">{report.projects}</p>
-                    </div>
+                      <p className="text-slate-600 text-sm mb-1">عدد المشاريع</p>
+                      <p className="text-2xl font-bold text-slate-900                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -99,7 +92,7 @@ export default function VolunteerReports() {
             </div>
           </CardHeader>
           <CardContent>
-            <p className="text-slate-700 dark:text-slate-300 mb-4">
+            <p className="text-slate-700 mb-4">
               يمكنك تحميل التقارير الشاملة بصيغة PDF للاطلاع على التفاصيل الكاملة لأنشطتنا التطوعية.
             </p>
             <div className="space-y-2">
@@ -116,3 +109,9 @@ export default function VolunteerReports() {
     </div>
   );
 }
+
+
+
+
+
+

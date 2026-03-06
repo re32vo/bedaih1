@@ -10,12 +10,12 @@ export default function CampaignDonate() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" dir="rtl">
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">أطلق حملتك</h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300">حول حلمك إلى واقع بدعم الجميع</p>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">أطلق حملتك</h1>
+          <p className="text-xl text-slate-600 حول حلمك إلى واقع بدعم الجميع</p>
         </div>
 
         {/* Stats */}
@@ -26,7 +26,7 @@ export default function CampaignDonate() {
               <CardTitle>حملة نشطة</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900 dark:text-white">100+</p>
+              <p className="text-3xl font-bold text-slate-900">100+</p>
             </CardContent>
           </Card>
           <Card>
@@ -35,7 +35,7 @@ export default function CampaignDonate() {
               <CardTitle>أموال مجموعة</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900 dark:text-white">+10M</p>
+              <p className="text-3xl font-bold text-slate-900">+10M</p>
             </CardContent>
           </Card>
           <Card>
@@ -44,14 +44,14 @@ export default function CampaignDonate() {
               <CardTitle>حملات أنجزت</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900 dark:text-white">75+</p>
+              <p className="text-3xl font-bold text-slate-900">75+</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Steps */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">كيفية إطلاق حملتك</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-6">كيفية إطلاق حملتك</h2>
           <div className="space-y-4">
             {steps.map((step, index) => (
               <Card key={index}>
@@ -59,8 +59,8 @@ export default function CampaignDonate() {
                   <div className="flex gap-4">
                     <div className="flex-shrink-0 w-10 h-10 bg-emerald-500 text-white rounded-full flex items-center justify-center font-bold">{index + 1}</div>
                     <div>
-                      <p className="font-semibold text-slate-900 dark:text-white text-lg">{step.title}</p>
-                      <p className="text-slate-600 dark:text-slate-300 mt-1">{step.description}</p>
+                      <p className="font-semibold text-slate-900 text-lg">{step.title}</p>
+                      <p className="text-slate-600 mt-1">{step.description}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -78,7 +78,7 @@ export default function CampaignDonate() {
             </div>
           </CardHeader>
           <CardContent>
-            <ul className="list-disc list-inside space-y-2 text-slate-700 dark:text-slate-300">
+            <ul className="list-disc list-inside space-y-2 text-slate-700 
               <li>منصة موثوقة وآمنة لجمع الأموال</li>
               <li>دعم متكامل من فريق جمعية بداية</li>
               <li>وصول لآلاف المتبرعين المحتملين</li>
@@ -95,7 +95,7 @@ export default function CampaignDonate() {
             <CardTitle>هل أنت مستعد لتغيير العالم؟</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-slate-700 dark:text-slate-300">
+            <p className="text-slate-700 
               ابدأ حملتك اليوم وكن جزءاً من الحركة الاجتماعية التي تغير حياة الناس.
             </p>
             <button className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 rounded-lg transition">
@@ -108,4 +108,10 @@ export default function CampaignDonate() {
     </div>
   );
 }
+
+
+
+
+
+
 

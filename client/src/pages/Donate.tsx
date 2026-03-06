@@ -197,7 +197,7 @@ export default function Donate() {
           >
             <div>
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4">اختر مبلغ التبرع</h2>
-              <p className="text-slate-700">ادخل المبلغ الذي تود التبرع به</p>
+              <p className="text-slate-700 ادخل المبلغ الذي تود التبرع به</p>
             </div>
 
             {/* Quick Amount Buttons */}
@@ -273,7 +273,7 @@ export default function Donate() {
           >
             <div className="text-center">
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-2">اختر طريقة الدفع</h2>
-              <p className="text-slate-700">تبرع: <span className="font-bold text-emerald-600">ر.س {finalAmount}</span></p>
+              <p className="text-slate-700 تبرع: <span className="font-bold text-emerald-600">ر.س {finalAmount}</span></p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-4 max-w-4xl mx-auto">
@@ -302,7 +302,7 @@ export default function Donate() {
                     </div>
                   )}
                   <h3 className="font-bold text-slate-900 mb-1">{method.title}</h3>
-                  <p className="text-xs text-slate-700">{method.description}</p>
+                  <p className="text-xs text-slate-700 {method.description}</p>
                 </motion.button>
               ))}
             </div>
@@ -495,4 +495,10 @@ export default function Donate() {
     </div>
   );
 }
+
+
+
+
+
+
 

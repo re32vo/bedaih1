@@ -10,12 +10,12 @@ export default function Members() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" dir="rtl">
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">أعضاء الجمعية</h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300">فريق متخصص مكرس لخدمة المجتمع</p>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">أعضاء الجمعية</h1>
+          <p className="text-xl text-slate-600 متخصص مكرس لخدمة المجتمع</p>
         </div>
 
         {/* Stats */}
@@ -58,7 +58,7 @@ export default function Members() {
                 <CardDescription>{member.position}</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-600 dark:text-slate-300">القسم: {member.department}</p>
+                <p className="text-slate-600 {member.department}</p>
               </CardContent>
             </Card>
           ))}
@@ -69,8 +69,7 @@ export default function Members() {
           <CardHeader>
             <CardTitle>عن الفريق</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 text-slate-700 dark:text-slate-300">
-            <p>
+          <CardContent className="space-y-4 text-slate-700            <p>
               يتكون فريق جمعية بداية من متخصصين في مجالات متعددة، مكرسين لتقديم أفضل الخدمات الخيرية للمجتمع. نعمل بروح الفريق الواحد لتحقيق أهدافنا المشتركة.
             </p>
             <p>
@@ -82,3 +81,9 @@ export default function Members() {
     </div>
   );
 }
+
+
+
+
+
+

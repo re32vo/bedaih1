@@ -12,12 +12,12 @@ export default function MediaReports() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" dir="rtl">
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">التقارير الدورية</h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300">تقارير شاملة عن إنجازاتنا وأثرنا المجتمعي</p>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">التقارير الدورية</h1>
+          <p className="text-xl text-slate-600 شاملة عن إنجازاتنا وأثرنا المجتمعي</p>
         </div>
 
         {/* Reports Grid */}
@@ -28,7 +28,7 @@ export default function MediaReports() {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <CardTitle className="text-lg">{report.title}</CardTitle>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">{report.date}</p>
+                    <p className="text-sm text-slate-600 mt-1">{report.date}</p>
                   </div>
                   <FileText className="w-6 h-6 text-blue-500 flex-shrink-0" />
                 </div>
@@ -36,10 +36,9 @@ export default function MediaReports() {
               <CardContent>
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
-                    <p className="text-sm text-slate-600 dark:text-slate-400">{report.pages} صفحة</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">{report.size}</p>
-                  </div>
-                  <button className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition">
+                    <p className="text-sm text-slate-600 صفحة</p>
+                    <p className="text-sm text-slate-600                  </div>
+                  <button className="p-2 hover:bg-slate-100 rounded-lg transition">
                     <Download className="w-5 h-5 text-emerald-500" />
                   </button>
                 </div>
@@ -56,8 +55,7 @@ export default function MediaReports() {
               <CardTitle>النمو السنوي</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900 dark:text-white">25%</p>
-              <p className="text-sm text-slate-600 dark:text-slate-300 mt-2">زيادة في البرامج والخدمات</p>
+              <p className="text-3xl font-bold text-slate-900              <p className="text-sm text-slate-600 mt-2">زيادة في البرامج والخدمات</p>
             </CardContent>
           </Card>
           <Card>
@@ -66,8 +64,7 @@ export default function MediaReports() {
               <CardTitle>الاستثمار في المجتمع</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900 dark:text-white">+50M</p>
-              <p className="text-sm text-slate-600 dark:text-slate-300 mt-2">ر.س استثمر في البرامج</p>
+              <p className="text-3xl font-bold text-slate-900              <p className="text-sm text-slate-600 mt-2">ر.س استثمر في البرامج</p>
             </CardContent>
           </Card>
           <Card>
@@ -76,8 +73,7 @@ export default function MediaReports() {
               <CardTitle>أعداد التقارير</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900 dark:text-white">24+</p>
-              <p className="text-sm text-slate-600 dark:text-slate-300 mt-2">تقرير دوري منشور</p>
+              <p className="text-3xl font-bold text-slate-900              <p className="text-sm text-slate-600 mt-2">تقرير دوري منشور</p>
             </CardContent>
           </Card>
         </div>
@@ -87,8 +83,7 @@ export default function MediaReports() {
           <CardHeader>
             <CardTitle>اعرف المزيد عن التقارير</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 text-slate-700 dark:text-slate-300">
-            <p>
+          <CardContent className="space-y-4 text-slate-700            <p>
               تنشر جمعية بداية تقارير شاملة بشكل دوري لتعكس شفافيتها وتقدمها في تحقيق أهدافها.
             </p>
             <ul className="list-disc list-inside space-y-2">
@@ -104,3 +99,9 @@ export default function MediaReports() {
     </div>
   );
 }
+
+
+
+
+
+

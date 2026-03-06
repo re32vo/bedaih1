@@ -10,12 +10,12 @@ export default function ProgramsAwareness() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" dir="rtl">
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">البرامج التوعوية</h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300">نشر الوعي والمعرفة في المجتمع</p>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">البرامج التوعوية</h1>
+          <p className="text-xl text-slate-600 تعزيز الوعي والمعرفة في المجتمع</p>
         </div>
 
         {/* Activities */}
@@ -29,8 +29,7 @@ export default function ProgramsAwareness() {
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-600 dark:text-slate-300">{activity.description}</p>
-              </CardContent>
+                <p className="text-slate-600              </CardContent>
             </Card>
           ))}
         </div>
@@ -53,8 +52,8 @@ export default function ProgramsAwareness() {
                 "حقوق الطفل",
                 "تمكين المرأة",
               ].map((topic, index) => (
-                <div key={index} className="bg-gradient-to-br from-emerald-100 to-blue-100 dark:from-emerald-900 dark:to-blue-900 p-3 rounded-lg text-center">
-                  <p className="text-slate-900 dark:text-white font-semibold">{topic}</p>
+                <div key={index} className="bg-gradient-to-br from-emerald-100 to-blue-100 p-3 rounded-lg text-center">
+                  <p className="text-slate-900 font-semibold">{topic}</p>
                 </div>
               ))}
             </div>
@@ -66,8 +65,7 @@ export default function ProgramsAwareness() {
           <CardHeader>
             <CardTitle>عن البرامج التوعوية</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 text-slate-700 dark:text-slate-300">
-            <p>
+          <CardContent className="space-y-4 text-slate-700            <p>
               تؤمن جمعية بداية بأن التوعية والتثقيف هما أساس التطور المجتمعي والاستدامة. نعمل على نشر الوعي من خلال برامج متنوعة وفعالة.
             </p>
             <p>
@@ -85,3 +83,9 @@ export default function ProgramsAwareness() {
     </div>
   );
 }
+
+
+
+
+
+

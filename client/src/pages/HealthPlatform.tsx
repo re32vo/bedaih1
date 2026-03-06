@@ -10,12 +10,12 @@ export default function HealthPlatform() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" dir="rtl">
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">منصة التطوع الصحي</h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300">رعاية صحية متطوعة لكل مجتمع</p>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">منصة التطوع الصحي</h1>
+          <p className="text-xl text-slate-600 صحية متطوعة لكل مجتمع</p>
         </div>
 
         {/* Services */}
@@ -29,8 +29,7 @@ export default function HealthPlatform() {
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-600 dark:text-slate-300">{service.description}</p>
-              </CardContent>
+                <p className="text-slate-600              </CardContent>
             </Card>
           ))}
         </div>
@@ -44,8 +43,7 @@ export default function HealthPlatform() {
                 <CardTitle>متطوعونا الطبيون</CardTitle>
               </div>
             </CardHeader>
-            <CardContent className="space-y-2 text-slate-700 dark:text-slate-300">
-              <p>أطباء وممرضون متطوعون</p>
+            <CardContent className="space-y-2 text-slate-700              <p>أطباء وممرضون متطوعون</p>
               <p>متخصصون في مجالات مختلفة</p>
               <p>مكرسون لخدمة المجتمع</p>
             </CardContent>
@@ -57,8 +55,7 @@ export default function HealthPlatform() {
                 <CardTitle>الفئات المستهدفة</CardTitle>
               </div>
             </CardHeader>
-            <CardContent className="space-y-2 text-slate-700 dark:text-slate-300">
-              <p>الأطفال والأمهات</p>
+            <CardContent className="space-y-2 text-slate-700              <p>الأطفال والأمهات</p>
               <p>كبار السن</p>
               <p>الأسر المحتاجة</p>
             </CardContent>
@@ -73,8 +70,7 @@ export default function HealthPlatform() {
               <CardTitle>كيفية الانضمام</CardTitle>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4 text-slate-700 dark:text-slate-300">
-            <p>إذا كنت متخصصاً صحياً وترغب في التطوع:</p>
+          <CardContent className="space-y-4 text-slate-700            <p>إذا كنت متخصصاً صحياً وترغب في التطوع:</p>
             <ol className="list-decimal list-inside space-y-2">
               <li>تواصل معنا على health@bedaya.org</li>
               <li>أرسل سيرتك الذاتية والشهادات</li>
@@ -87,3 +83,9 @@ export default function HealthPlatform() {
     </div>
   );
 }
+
+
+
+
+
+

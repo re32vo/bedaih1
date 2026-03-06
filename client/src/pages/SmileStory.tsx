@@ -30,12 +30,12 @@ export default function SmileStory() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" dir="rtl">
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">قصة ابتسامة</h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300">قصص نجاح حقيقية من الأشخاص الذين ساعدناهم</p>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">قصة ابتسامة</h1>
+          <p className="text-xl text-slate-600 نجاح حقيقية من الأشخاص الذين ساعدناهم</p>
         </div>
 
         {/* Stories Grid */}
@@ -54,7 +54,7 @@ export default function SmileStory() {
                 </div>
               </CardHeader>
               <CardContent className="pt-6">
-                <p className="text-slate-700 dark:text-slate-300 leading-relaxed">{item.story}</p>
+                <p className="text-slate-700 leading-relaxed">{item.story}</p>
               </CardContent>
             </Card>
           ))}
@@ -68,8 +68,7 @@ export default function SmileStory() {
               <CardTitle>حياة تحسنت</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900 dark:text-white">50,000+</p>
-            </CardContent>
+              <p className="text-3xl font-bold text-slate-900            </CardContent>
           </Card>
           <Card>
             <CardHeader>
@@ -77,8 +76,7 @@ export default function SmileStory() {
               <CardTitle>ابتسامة عادت</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900 dark:text-white">100%</p>
-            </CardContent>
+              <p className="text-3xl font-bold text-slate-900            </CardContent>
           </Card>
           <Card>
             <CardHeader>
@@ -86,8 +84,7 @@ export default function SmileStory() {
               <CardTitle>أحلام تحققت</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900 dark:text-white">10,000+</p>
-            </CardContent>
+              <p className="text-3xl font-bold text-slate-900            </CardContent>
           </Card>
         </div>
 
@@ -97,8 +94,7 @@ export default function SmileStory() {
             <CardTitle>كن جزءاً من هذه القصص</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-slate-700 dark:text-slate-300">
-              كل تبرع يساهم في تغيير حياة شخص ما. شارك في صنع قصة ابتسامة جديدة اليوم.
+            <p className="text-slate-700              كل تبرع يساهم في تغيير حياة شخص ما. شارك في صنع قصة ابتسامة جديدة اليوم.
             </p>
             <div className="flex gap-3 flex-col sm:flex-row">
               <button className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-lg transition">
@@ -114,3 +110,9 @@ export default function SmileStory() {
     </div>
   );
 }
+
+
+
+
+
+

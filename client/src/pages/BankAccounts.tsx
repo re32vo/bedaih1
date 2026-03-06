@@ -29,12 +29,12 @@ export default function BankAccounts() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" dir="rtl">
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">الحسابات البنكية</h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300">تحويل آمن وسريع لدعم أعمالنا الخيرية</p>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">الحسابات البنكية</h1>
+          <p className="text-xl text-slate-600 آمن وسريع لدعم أعمالنا الخيرية</p>
         </div>
 
         {/* Bank Accounts */}
@@ -49,30 +49,29 @@ export default function BankAccounts() {
               </CardHeader>
               <CardContent className="pt-6 space-y-4">
                 <div>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm font-semibold mb-1">اسم الحساب</p>
-                  <p className="text-slate-900 dark:text-white">{account.accountName}</p>
-                </div>
+                  <p className="text-slate-600 text-sm font-semibold mb-1">اسم الحساب</p>
+                  <p className="text-slate-900                </div>
                 <div>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm font-semibold mb-1">رقم الحساب</p>
-                  <div className="flex items-center justify-between bg-slate-100 dark:bg-slate-800 p-3 rounded-lg">
-                    <p className="text-slate-900 dark:text-white font-mono">{account.accountNumber}</p>
+                  <p className="text-slate-600 text-sm font-semibold mb-1">رقم الحساب</p>
+                  <div className="flex items-center justify-between bg-slate-100 p-3 rounded-lg">
+                    <p className="text-slate-900 font-mono">{account.accountNumber}</p>
                     <button
                       onClick={() => copyToClipboard(account.accountNumber)}
-                      className="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded transition"
+                      className="p-2 hover:bg-slate-200 rounded transition"
                     >
-                      <Copy className="w-4 h-4 text-slate-600 dark:text-slate-300" />
+                      <Copy className="w-4 h-4 text-slate-600 />
                     </button>
                   </div>
                 </div>
                 <div>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm font-semibold mb-1">IBAN</p>
-                  <div className="flex items-center justify-between bg-slate-100 dark:bg-slate-800 p-3 rounded-lg">
-                    <p className="text-slate-900 dark:text-white font-mono text-sm">{account.iban}</p>
+                  <p className="text-slate-600 text-sm font-semibold mb-1">IBAN</p>
+                  <div className="flex items-center justify-between bg-slate-100 p-3 rounded-lg">
+                    <p className="text-slate-900 font-mono text-sm">{account.iban}</p>
                     <button
                       onClick={() => copyToClipboard(account.iban)}
-                      className="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded transition"
+                      className="p-2 hover:bg-slate-200 rounded transition"
                     >
-                      <Copy className="w-4 h-4 text-slate-600 dark:text-slate-300" />
+                      <Copy className="w-4 h-4 text-slate-600 />
                     </button>
                   </div>
                 </div>
@@ -86,8 +85,7 @@ export default function BankAccounts() {
           <CardHeader>
             <CardTitle>ملاحظات مهمة</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 text-slate-700 dark:text-slate-300">
-            <ul className="list-disc list-inside space-y-2">
+          <CardContent className="space-y-4 text-slate-700            <ul className="list-disc list-inside space-y-2">
               <li>تأكد من صحة بيانات الحساب قبل التحويل</li>
               <li>تحويلاتك معفاة من الرسوم البنكية</li>
               <li>ستتلقى إيصال رسمي عند استقبال المبلغ</li>
@@ -100,3 +98,9 @@ export default function BankAccounts() {
     </div>
   );
 }
+
+
+
+
+
+

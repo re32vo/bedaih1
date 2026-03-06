@@ -27,12 +27,12 @@ export default function RecurringDonate() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" dir="rtl">
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">التبرع الدوري</h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300">التزم بدعم مستمر لأجل أكبر</p>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">التبرع الدوري</h1>
+          <p className="text-xl text-slate-600 بدعم مستمر لأجل أكبر</p>
         </div>
 
         {/* Plans */}
@@ -45,10 +45,9 @@ export default function RecurringDonate() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-bold text-slate-900 dark:text-white">{plan.amount}</span>
-                  <span className="text-slate-600 dark:text-slate-400">ر.س / {plan.frequency}</span>
+                  <span className="text-3xl font-bold text-slate-900                  <span className="text-slate-600 / {plan.frequency}</span>
                 </div>
-                <p className="text-slate-600 dark:text-slate-300 text-sm">{plan.description}</p>
+                <p className="text-slate-600 text-sm">{plan.description}</p>
                 <ul className="space-y-2">
                   {plan.benefits.map((benefit, i) => (
                     <li key={i} className="flex items-center gap-2 text-sm">
@@ -78,29 +77,29 @@ export default function RecurringDonate() {
               <div className="flex gap-3">
                 <TrendingUp className="w-6 h-6 text-emerald-500 flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-slate-900 dark:text-white">تأثير مستدام</p>
-                  <p className="text-sm text-slate-600 dark:text-slate-300">دعم مستمر يسمح لنا بتخطيط برامج طويلة الأجل</p>
+                  <p className="font-semibold text-slate-900 مستدام</p>
+                  <p className="text-sm text-slate-600 مستمر يسمح لنا بتخطيط برامج طويلة الأجل</p>
                 </div>
               </div>
               <div className="flex gap-3">
                 <Calendar className="w-6 h-6 text-blue-500 flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-slate-900 dark:text-white">مرونة كاملة</p>
-                  <p className="text-sm text-slate-600 dark:text-slate-300">يمكنك تعديل أو إيقاف الخطة في أي وقت</p>
+                  <p className="font-semibold text-slate-900 كاملة</p>
+                  <p className="text-sm text-slate-600 تعديل أو إيقاف الخطة في أي وقت</p>
                 </div>
               </div>
               <div className="flex gap-3">
                 <CheckCircle2 className="w-6 h-6 text-purple-500 flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-slate-900 dark:text-white">متابعة شاملة</p>
-                  <p className="text-sm text-slate-600 dark:text-slate-300">تقارير منتظمة عن أثر تبرعك</p>
+                  <p className="font-semibold text-slate-900 شاملة</p>
+                  <p className="text-sm text-slate-600 منتظمة عن أثر تبرعك</p>
                 </div>
               </div>
               <div className="flex gap-3">
                 <Heart className="w-6 h-6 text-red-500 flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-slate-900 dark:text-white">شعور بالفرق</p>
-                  <p className="text-sm text-slate-600 dark:text-slate-300">شاهد تأثيرك المباشر على حياة الناس</p>
+                  <p className="font-semibold text-slate-900 بالفرق</p>
+                  <p className="text-sm text-slate-600 تأثيرك المباشر على حياة الناس</p>
                 </div>
               </div>
             </div>
@@ -114,16 +113,16 @@ export default function RecurringDonate() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <p className="font-semibold text-slate-900 dark:text-white mb-2">هل يمكنني تغيير مبلغ التبرع؟</p>
-              <p className="text-slate-600 dark:text-slate-300 text-sm">نعم، يمكنك تغيير المبلغ في أي وقت من خلال حسابك</p>
+              <p className="font-semibold text-slate-900 mb-2">هل يمكنني تغيير مبلغ التبرع؟</p>
+              <p className="text-slate-600 text-sm">نعم، يمكنك تغيير المبلغ في أي وقت من خلال حسابك</p>
             </div>
             <div>
-              <p className="font-semibold text-slate-900 dark:text-white mb-2">هل هناك رسوم إضافية؟</p>
-              <p className="text-slate-600 dark:text-slate-300 text-sm">لا، بدون أي رسوم إضافية، 100% من تبرعك يذهب للبرامج</p>
+              <p className="font-semibold text-slate-900 mb-2">هل هناك رسوم إضافية؟</p>
+              <p className="text-slate-600 text-sm">لا، بدون أي رسوم إضافية، 100% من تبرعك يذهب للبرامج</p>
             </div>
             <div>
-              <p className="font-semibold text-slate-900 dark:text-white mb-2">كم مدة الالتزام؟</p>
-              <p className="text-slate-600 dark:text-slate-300 text-sm">لا توجد مدة التزام، يمكنك الإيقاف في أي وقت</p>
+              <p className="font-semibold text-slate-900 mb-2">كم مدة الالتزام؟</p>
+              <p className="text-slate-600 text-sm">لا توجد مدة التزام، يمكنك الإيقاف في أي وقت</p>
             </div>
           </CardContent>
         </Card>
@@ -131,3 +130,9 @@ export default function RecurringDonate() {
     </div>
   );
 }
+
+
+
+
+
+

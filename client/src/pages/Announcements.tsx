@@ -42,21 +42,21 @@ export default function Announcements() {
   ];
 
   const typeColors: any = {
-    تسجيل: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
-    إشعار: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
-    حملة: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
-    ورشة: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
-    تحديث: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200",
-    فرصة: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+    تسجيل: "bg-blue-100 text-blue-800",
+    إشعار: "bg-orange-100 text-orange-800",
+    حملة: "bg-red-100 text-red-800",
+    ورشة: "bg-purple-100 text-purple-800",
+    تحديث: "bg-emerald-100 text-emerald-800",
+    فرصة: "bg-yellow-100 text-yellow-800",
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" dir="rtl">
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">الإعلانات والإخطارات</h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300">أحدث الإعلانات والفرص من جمعية بداية</p>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">الإعلانات والإخطارات</h1>
+          <p className="text-xl text-slate-600 الإعلانات والفرص من جمعية بداية</p>
         </div>
 
         {/* Announcements List */}
@@ -67,19 +67,17 @@ export default function Announcements() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                        <Calendar className="w-4 h-4" />
+                      <div className="flex items-center gap-2 text-sm text-slate-600                        <Calendar className="w-4 h-4" />
                         {announcement.date}
                       </div>
                       <span className={`text-xs font-semibold px-3 py-1 rounded-full ${typeColors[announcement.type]}`}>
                         {announcement.type}
                       </span>
                     </div>
-                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+                    <h3 className="text-lg font-semibold text-slate-900 mb-2">
                       {announcement.title}
                     </h3>
-                    <p className="text-slate-600 dark:text-slate-300">{announcement.description}</p>
-                  </div>
+                    <p className="text-slate-600                  </div>
                   <Megaphone className="w-6 h-6 text-emerald-500 flex-shrink-0" />
                 </div>
               </CardContent>
@@ -93,7 +91,7 @@ export default function Announcements() {
             <CardTitle>المتابعة والتنبيهات</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-slate-700 dark:text-slate-300 mb-4">
+            <p className="text-slate-700 mb-4">
               تفعيل التنبيهات لتلقي آخر الإعلانات والفرص مباشرة
             </p>
             <button className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-lg transition">
@@ -105,3 +103,9 @@ export default function Announcements() {
     </div>
   );
 }
+
+
+
+
+
+

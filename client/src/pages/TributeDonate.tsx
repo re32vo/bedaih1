@@ -12,12 +12,12 @@ export default function TributeDonate() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" dir="rtl">
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">إهداء التبرع</h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300">شارك مناسباتك بالعطاء للآخرين</p>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">إهداء التبرع</h1>
+          <p className="text-xl text-slate-600 مناسباتك بالعطاء للآخرين</p>
         </div>
 
         {/* Occasions */}
@@ -29,7 +29,7 @@ export default function TributeDonate() {
                 <CardTitle className="text-lg">{occasion.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-600 dark:text-slate-300 text-center text-sm mb-4">{occasion.description}</p>
+                <p className="text-slate-600 text-center text-sm mb-4">{occasion.description}</p>
                 <button className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 rounded-lg transition">
                   اختر هذه المناسبة
                 </button>
@@ -48,29 +48,29 @@ export default function TributeDonate() {
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 bg-emerald-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
                 <div>
-                  <p className="font-semibold text-slate-900 dark:text-white">اختر المناسبة</p>
-                  <p className="text-slate-600 dark:text-slate-300 text-sm">حدد المناسبة التي تود الإهداء بها</p>
+                  <p className="font-semibold text-slate-900 المناسبة</p>
+                  <p className="text-slate-600 text-sm">حدد المناسبة التي تود الإهداء بها</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
                 <div>
-                  <p className="font-semibold text-slate-900 dark:text-white">أدخل البيانات</p>
-                  <p className="text-slate-600 dark:text-slate-300 text-sm">اسم المهدى إليه والرسالة (اختيارية)</p>
+                  <p className="font-semibold text-slate-900 البيانات</p>
+                  <p className="text-slate-600 text-sm">اسم المهدى إليه والرسالة (اختيارية)</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
                 <div>
-                  <p className="font-semibold text-slate-900 dark:text-white">تبرع وأهد</p>
-                  <p className="text-slate-600 dark:text-slate-300 text-sm">أكمل عملية التبرع وأرسل الإهداء</p>
+                  <p className="font-semibold text-slate-900 وأهد</p>
+                  <p className="text-slate-600 text-sm">أكمل عملية التبرع وأرسل الإهداء</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center font-bold">4</div>
                 <div>
-                  <p className="font-semibold text-slate-900 dark:text-white">تصريح شهادة</p>
-                  <p className="text-slate-600 dark:text-slate-300 text-sm">استقبل شهادة رسمية للإهداء</p>
+                  <p className="font-semibold text-slate-900 شهادة</p>
+                  <p className="text-slate-600 text-sm">استقبل شهادة رسمية للإهداء</p>
                 </div>
               </div>
             </div>
@@ -85,8 +85,8 @@ export default function TributeDonate() {
               <CardTitle>مثال على رسالة الإهداء</CardTitle>
             </div>
           </CardHeader>
-          <CardContent className="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
-            <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+          <CardContent className="bg-slate-50 p-4 rounded-lg">
+            <p className="text-slate-700 text-sm leading-relaxed">
               \"بسم الله الرحمن الرحيم، تم إهداء هذا التبرع إلى روح عزيزنا [الاسم] الذي غادرنا، تبرع أهداه [اسم المهدي] حفظه الله. اللهم اجعله له صدقة جارية. نسأل الله أن تنفع به المحتاجين.\"
             </p>
           </CardContent>
@@ -95,3 +95,9 @@ export default function TributeDonate() {
     </div>
   );
 }
+
+
+
+
+
+

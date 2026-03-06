@@ -315,7 +315,7 @@ export default function DonorsManagement() {
           <Users className="w-8 h-8 text-blue-600" />
           <h1 className="text-3xl font-bold text-slate-900">إدارة المتبرعين</h1>
         </div>
-        <p className="text-slate-600">عرض وتعديل وحذف حسابات المتبرعين</p>
+        <p className="text-slate-600 عرض وتعديل وحذف حسابات المتبرعين</p>
         <div className="mt-4 w-full lg:w-auto">
           <Button
             className="bg-black hover:bg-gray-800 text-white w-full lg:w-auto"
@@ -346,13 +346,13 @@ export default function DonorsManagement() {
           <table className="w-full">
             <thead className="bg-slate-100 border-b border-slate-200">
               <tr>
-                <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">الاسم</th>
-                <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">البريد الإلكتروني</th>
-                <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">الهاتف</th>
-                <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">التبرعات</th>
-                <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">المبلغ الكلي</th>
-                <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">تاريخ التسجيل</th>
-                <th className="px-4 py-3 text-center text-sm font-semibold text-slate-700">الإجراءات</th>
+                <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700 الاسم</th>
+                <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700 البريد الإلكتروني</th>
+                <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700 الهاتف</th>
+                <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700 التبرعات</th>
+                <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700 المبلغ الكلي</th>
+                <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700 تاريخ التسجيل</th>
+                <th className="px-4 py-3 text-center text-sm font-semibold text-slate-700 الإجراءات</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200">
@@ -371,13 +371,13 @@ export default function DonorsManagement() {
                     className="hover:bg-slate-50 transition-colors"
                   >
                     <td className="px-4 py-3 text-sm font-medium text-slate-900">{donor.name}</td>
-                    <td className="px-4 py-3 text-sm text-slate-600">{donor.email}</td>
-                    <td className="px-4 py-3 text-sm text-slate-600">{donor.phone}</td>
-                    <td className="px-4 py-3 text-sm text-slate-600">{donor.donationsCount}</td>
+                    <td className="px-4 py-3 text-sm text-slate-600 {donor.email}</td>
+                    <td className="px-4 py-3 text-sm text-slate-600 {donor.phone}</td>
+                    <td className="px-4 py-3 text-sm text-slate-600 {donor.donationsCount}</td>
                     <td className="px-4 py-3 text-sm font-semibold text-green-600">
                       {donor.totalDonations.toLocaleString()} ر.س
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-600">
+                    <td className="px-4 py-3 text-sm text-slate-600 
                       {new Date(donor.created_at).toLocaleDateString("ar-SA")}
                     </td>
                     <td className="px-4 py-3">
@@ -510,3 +510,9 @@ export default function DonorsManagement() {
     </div>
   );
 }
+
+
+
+
+
+

@@ -12,12 +12,12 @@ export default function MediaLibrary() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" dir="rtl">
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">المكتبة الإعلامية</h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300">مركز موارد شامل للمحتوى التثقيفي</p>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">المكتبة الإعلامية</h1>
+          <p className="text-xl text-slate-600 مورد شامل للمحتوى التثقيفي والإعلامي</p>
         </div>
 
         {/* Search Bar */}
@@ -27,7 +27,7 @@ export default function MediaLibrary() {
             <input
               type="text"
               placeholder="ابحث في المكتبة..."
-              className="w-full pl-4 pr-12 py-3 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full pl-4 pr-12 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
           </div>
         </div>
@@ -39,14 +39,14 @@ export default function MediaLibrary() {
               <CardHeader>
                 <div className="flex items-center justify-between mb-3">
                   <BookOpen className="w-6 h-6 text-emerald-500" />
-                  <span className="text-xs font-semibold bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-2 py-1 rounded">
+                  <span className="text-xs font-semibold bg-emerald-100 text-emerald-800 px-2 py-1 rounded">
                     {resource.type}
                   </span>
                 </div>
                 <CardTitle className="text-lg">{resource.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-600 dark:text-slate-300 font-semibold">{resource.count} عنصر</p>
+                <p className="text-slate-600 font-semibold">{resource.count} عنصر</p>
               </CardContent>
             </Card>
           ))}
@@ -63,16 +63,16 @@ export default function MediaLibrary() {
           <CardContent>
             <div className="space-y-4">
               <div className="border-r-4 border-emerald-500 pr-4">
-                <p className="font-semibold text-slate-900 dark:text-white">الدليل الشامل للصحة النفسية</p>
-                <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">كتيب شامل يغطي جميع جوانب الصحة النفسية</p>
+                <p className="font-semibold text-slate-900 الشامل للصحة النفسية</p>
+                <p className="text-sm text-slate-600 mt-1">كتيب شامل يغطي جميع جوانب الصحة النفسية</p>
               </div>
               <div className="border-r-4 border-blue-500 pr-4">
-                <p className="font-semibold text-slate-900 dark:text-white">سلسلة فيديوهات حياتك أهم</p>
-                <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">50 فيديو توعوي عن المهارات الحياتية</p>
+                <p className="font-semibold text-slate-900 فيديوهات حياتك أهم</p>
+                <p className="text-sm text-slate-600 mt-1">50 فيديو توعوي عن المهارات الحياتية</p>
               </div>
               <div className="border-r-4 border-purple-500 pr-4">
-                <p className="font-semibold text-slate-900 dark:text-white">مجلة جمعية بداية الشهرية</p>
-                <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">مجلة شاملة تصدر كل شهر</p>
+                <p className="font-semibold text-slate-900 جمعية بداية الشهرية</p>
+                <p className="text-sm text-slate-600 mt-1">مجلة شاملة تصدر كل شهر</p>
               </div>
             </div>
           </CardContent>
@@ -81,3 +81,9 @@ export default function MediaLibrary() {
     </div>
   );
 }
+
+
+
+
+
+

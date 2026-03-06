@@ -30,12 +30,12 @@ export default function News() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" dir="rtl">
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">الأخبار والتحديثات</h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300">آخر المستجدات من جمعية بداية</p>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">الأخبار والتحديثات</h1>
+          <p className="text-xl text-slate-600 المستجدات من جمعية بداية</p>
         </div>
 
         {/* News List */}
@@ -46,7 +46,7 @@ export default function News() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="text-4xl">{item.image}</div>
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 mb-2">
+                    <div className="flex items-center gap-2 text-sm text-slate-600 mb-2">
                       <Calendar className="w-4 h-4" />
                       {item.date}
                     </div>
@@ -55,7 +55,7 @@ export default function News() {
                 </div>
               </CardHeader>
               <CardContent className="pt-4">
-                <p className="text-slate-600 dark:text-slate-300 mb-4">{item.excerpt}</p>
+                <p className="text-slate-600 mb-4">{item.excerpt}</p>
                 <button className="flex items-center gap-2 text-emerald-500 hover:text-emerald-600 font-semibold">
                   اقرأ المزيد
                   <ArrowRight className="w-4 h-4" />
@@ -74,14 +74,14 @@ export default function News() {
             </div>
           </CardHeader>
           <CardContent>
-            <p className="text-slate-700 dark:text-slate-300 mb-4">
+            <p className="text-slate-700 mb-4">
               تلقَ آخر الأخبار والتحديثات مباشرة في بريدك الإلكتروني
             </p>
             <div className="flex gap-2">
               <input
                 type="email"
                 placeholder="أدخل بريدك الإلكتروني"
-                className="flex-1 px-4 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
               <button className="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-6 py-2 rounded-lg transition">
                 اشترك
@@ -93,3 +93,9 @@ export default function News() {
     </div>
   );
 }
+
+
+
+
+
+

@@ -10,12 +10,12 @@ export default function ProgramsTreatment() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" dir="rtl">
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">البرامج العلاجية</h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300">رعاية صحية شاملة للمحتاجين</p>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">البرامج العلاجية</h1>
+          <p className="text-xl text-slate-600 صحية شاملة للمحتاجين</p>
         </div>
 
         {/* Stats */}
@@ -26,8 +26,7 @@ export default function ProgramsTreatment() {
               <CardTitle className="text-lg">مستفيد</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900 dark:text-white">15,000+</p>
-            </CardContent>
+              <p className="text-3xl font-bold text-slate-900            </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-3">
@@ -35,8 +34,7 @@ export default function ProgramsTreatment() {
               <CardTitle className="text-lg">متطوع</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900 dark:text-white">500+</p>
-            </CardContent>
+              <p className="text-3xl font-bold text-slate-900            </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-3">
@@ -44,8 +42,7 @@ export default function ProgramsTreatment() {
               <CardTitle className="text-lg">عملية</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900 dark:text-white">2,500+</p>
-            </CardContent>
+              <p className="text-3xl font-bold text-slate-900            </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-3">
@@ -53,8 +50,7 @@ export default function ProgramsTreatment() {
               <CardTitle className="text-lg">معدل النجاح</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900 dark:text-white">98%</p>
-            </CardContent>
+              <p className="text-3xl font-bold text-slate-900            </CardContent>
           </Card>
         </div>
 
@@ -66,8 +62,7 @@ export default function ProgramsTreatment() {
                 <CardTitle>{program.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-600 dark:text-slate-300">{program.description}</p>
-              </CardContent>
+                <p className="text-slate-600              </CardContent>
             </Card>
           ))}
         </div>
@@ -77,8 +72,7 @@ export default function ProgramsTreatment() {
           <CardHeader>
             <CardTitle>عن البرامج العلاجية</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 text-slate-700 dark:text-slate-300">
-            <p>
+          <CardContent className="space-y-4 text-slate-700            <p>
               تركز البرامج العلاجية في جمعية بداية على توفير الرعاية الصحية الشاملة والعالية الجودة للأفراد والعائلات المحتاجة، بما يساهم في تحسين جودة حياتهم.
             </p>
             <p>
@@ -90,3 +84,9 @@ export default function ProgramsTreatment() {
     </div>
   );
 }
+
+
+
+
+
+

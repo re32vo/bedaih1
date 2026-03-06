@@ -145,7 +145,7 @@ export default function Home() {
                     <div className="mt-1.5 w-5 h-5 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shrink-0 shadow-lg">
                       <div className="w-2 h-2 rounded-full bg-white" />
                     </div>
-                    <span className="text-slate-700">{item}</span>
+                    <span className="text-slate-700 {item}</span>
                   </li>
                 ))}
               </motion.ul>
@@ -261,3 +261,9 @@ export default function Home() {
     </>
   );
 }
+
+
+
+
+
+

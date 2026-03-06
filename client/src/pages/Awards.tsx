@@ -10,12 +10,12 @@ export default function Awards() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" dir="rtl">
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">الجوائز والتكريمات</h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300">اعترافاً بجهودنا في خدمة المجتمع</p>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">الجوائز والتكريمات</h1>
+          <p className="text-xl text-slate-600 بجهودنا في خدمة المجتمع</p>
         </div>
 
         {/* Awards List */}
@@ -25,14 +25,14 @@ export default function Awards() {
               <CardHeader>
                 <div className="flex items-start justify-between mb-2">
                   <Trophy className="w-6 h-6 text-yellow-500" />
-                  <span className="text-sm font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200 px-3 py-1 rounded-full">
+                  <span className="text-sm font-semibold bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full">
                     {award.year}
                   </span>
                 </div>
                 <CardTitle className="text-lg">{award.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-600 dark:text-slate-300">جهة الإصدار: {award.issuer}</p>
+                <p className="text-slate-600 الإصدار: {award.issuer}</p>
               </CardContent>
             </Card>
           ))}
@@ -46,8 +46,7 @@ export default function Awards() {
               <CardTitle>إنجازاتنا</CardTitle>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4 text-slate-700 dark:text-slate-300">
-            <p>
+          <CardContent className="space-y-4 text-slate-700            <p>
               تمثل هذه الجوائز والشهادات اعترافاً بالتزامنا المستمر بتقديم خدمات ذات جودة عالية وشفافية في العمل الخيري.
             </p>
             <ul className="list-disc list-inside space-y-2">
@@ -63,3 +62,9 @@ export default function Awards() {
     </div>
   );
 }
+
+
+
+
+
+

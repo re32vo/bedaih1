@@ -3,12 +3,12 @@ import { Phone, Mail, MapPin, Clock } from "lucide-react";
 
 export default function DirectorContact() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" dir="rtl">
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">بيانات التواصل مع المدير</h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300">نرحب باستقبال آرائكم واقتراحاتكم</p>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">بيانات التواصل مع المدير</h1>
+          <p className="text-xl text-slate-600 للتواصل مع مدير الجمعية واستقبال آرائكم واقتراحاتكم</p>
         </div>
 
         {/* Contact Methods */}
@@ -21,8 +21,8 @@ export default function DirectorContact() {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-700 dark:text-slate-300">+966 11 1234 5678</p>
-              <p className="text-slate-600 dark:text-slate-400 text-sm mt-2">مباشر من الساعة 9 صباحاً حتى 5 مساءً</p>
+              <p className="text-slate-700 011 1234 5678</p>
+                <p className="text-slate-600 text-sm mt-2">مباشر من الساعة 9 صباحاً حتى 5 مساءً</p>
             </CardContent>
           </Card>
 
@@ -34,8 +34,8 @@ export default function DirectorContact() {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-700 dark:text-slate-300">director@bedaya.org</p>
-              <p className="text-slate-600 dark:text-slate-400 text-sm mt-2">نرد على جميع الرسائل خلال 24 ساعة</p>
+              <p className="text-slate-700 director@bidayah.org</p>
+                <p className="text-slate-600 text-sm mt-2">نرد على جميع الرسائل خلال 24 ساعة</p>
             </CardContent>
           </Card>
 
@@ -47,8 +47,8 @@ export default function DirectorContact() {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-700 dark:text-slate-300">شارع الملك عبدالله</p>
-              <p className="text-slate-600 dark:text-slate-400 text-sm">الرياض، المملكة العربية السعودية</p>
+              <p className="text-slate-700 الملك عبدالله</p>
+                <p className="text-slate-600 text-sm">الرياض، المملكة العربية السعودية</p>
             </CardContent>
           </Card>
 
@@ -60,8 +60,8 @@ export default function DirectorContact() {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-700 dark:text-slate-300">يومياً من 9 ص إلى 5 م</p>
-              <p className="text-slate-600 dark:text-slate-400 text-sm">مغلق أيام الجمعة والسبت</p>
+              <p className="text-slate-700 من 9 ص إلى 5 م</p>
+                <p className="text-slate-600 text-sm">مغلق أيام الجمعة والسبت</p>
             </CardContent>
           </Card>
         </div>
@@ -77,9 +77,9 @@ export default function DirectorContact() {
                 أ.د
               </div>
               <div>
-                <p className="text-xl font-bold text-slate-900 dark:text-white">أ.د أحمد محمد علي</p>
-                <p className="text-slate-600 dark:text-slate-300">المدير التنفيذي - جمعية بداية</p>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">خبرة 20+ سنة في العمل الخيري</p>
+                  <p className="text-xl font-bold text-slate-900">أحمد محمد علي</p>
+                <p className="text-slate-600 التنفيذي - جمعية بداية</p>
+                <p className="text-sm text-slate-500 mt-1">خبرة 20+ سنة في العمل الخيري</p>
               </div>
             </div>
           </CardContent>
@@ -88,3 +88,9 @@ export default function DirectorContact() {
     </div>
   );
 }
+
+
+
+
+
+

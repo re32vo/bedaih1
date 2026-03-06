@@ -10,12 +10,12 @@ export default function DonationPlatform() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" dir="rtl">
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">منصة التبرع</h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300">منصة آمنة وشفافة للتبرعات الخيرية</p>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">منصة التبرع</h1>
+          <p className="text-xl text-slate-600 آمنة وشفافة للتبرعات الخيرية</p>
         </div>
 
         {/* Features */}
@@ -29,8 +29,7 @@ export default function DonationPlatform() {
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-600 dark:text-slate-300">{feature.description}</p>
-              </CardContent>
+                <p className="text-slate-600              </CardContent>
             </Card>
           ))}
         </div>
@@ -43,7 +42,7 @@ export default function DonationPlatform() {
               <CardTitle>التبرعات المستقبلة</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900 dark:text-white">+500,000 ر.س</p>
+              <p className="text-3xl font-bold text-slate-900 ر.س</p>
             </CardContent>
           </Card>
           <Card>
@@ -52,8 +51,7 @@ export default function DonationPlatform() {
               <CardTitle>المستفيدون</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900 dark:text-white">50,000+</p>
-            </CardContent>
+              <p className="text-3xl font-bold text-slate-900            </CardContent>
           </Card>
           <Card>
             <CardHeader>
@@ -61,8 +59,7 @@ export default function DonationPlatform() {
               <CardTitle>معدل الشفافية</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900 dark:text-white">99%</p>
-            </CardContent>
+              <p className="text-3xl font-bold text-slate-900            </CardContent>
           </Card>
         </div>
 
@@ -76,22 +73,22 @@ export default function DonationPlatform() {
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 bg-emerald-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
                 <div>
-                  <p className="font-semibold text-slate-900 dark:text-white">اختر المشروع</p>
-                  <p className="text-slate-600 dark:text-slate-300 text-sm">اختر المشروع أو البرنامج الذي تريد المساهمة فيه</p>
+                  <p className="font-semibold text-slate-900 المشروع</p>
+                  <p className="text-slate-600 text-sm">اختر المشروع أو البرنامج الذي تريد المساهمة فيه</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
                 <div>
-                  <p className="font-semibold text-slate-900 dark:text-white">تبرع بأمان</p>
-                  <p className="text-slate-600 dark:text-slate-300 text-sm">تبرع عبر طرق دفع آمنة ومشفرة</p>
+                  <p className="font-semibold text-slate-900 بأمان</p>
+                  <p className="text-slate-600 text-sm">تبرع عبر طرق دفع آمنة ومشفرة</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
                 <div>
-                  <p className="font-semibold text-slate-900 dark:text-white">تابع الأثر</p>
-                  <p className="text-slate-600 dark:text-slate-300 text-sm">شاهد كيفية استخدام تبرعك بالتفصيل</p>
+                  <p className="font-semibold text-slate-900 الأثر</p>
+                  <p className="text-slate-600 text-sm">شاهد كيفية استخدام تبرعك بالتفصيل</p>
                 </div>
               </div>
             </div>
@@ -101,3 +98,9 @@ export default function DonationPlatform() {
     </div>
   );
 }
+
+
+
+
+
+
