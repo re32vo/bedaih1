@@ -25,7 +25,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   const navLinks = [
     { href: "/", label: "الرئيسية" },
-    { href: "/contact", label: "اتصل بنا" },
   ];
 
   const aboutLinks = [
@@ -459,7 +458,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <li className="flex items-center gap-2"><MapPin className="w-5 h-5" /> المملكة العربية السعودية، الرياض</li>
                 <li className="flex items-center gap-2"><Phone className="w-5 h-5" /> <a href="tel:+966-555-0000" className="text-white">+966-555-0000</a></li>
                 <li className="flex items-center gap-2"><Mail className="w-5 h-5" /> <a href="mailto:info@bedaya.org" className="text-white">info@bedaya.org</a></li>
-                <li className="flex items-center gap-2"><MessageCircle className="w-5 h-5" /> <Link href="/contact"><span className="text-white hover:text-emerald-400 transition cursor-pointer">تواصل معنا</span></Link></li>
+                <li className="flex items-center gap-2"><MessageCircle className="w-5 h-5" /> <Link href="/contact"><span className="text-white hover:text-emerald-400 transition cursor-pointer">اتصل بنا</span></Link></li>
               </ul>
             </div>
           </div>
