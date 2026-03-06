@@ -60,7 +60,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   ];
 
   const donationOptionsLinks = [
-    { href: "/donate", label: "التبرع السريع" },
+    { href: "/donate/quick", label: "التبرع السريع" },
     { href: "/donate/recurring", label: "التبرع الدوري" },
     { href: "/donate/tribute", label: "إهداء التبرع" },
     { href: "/donate/campaign", label: "أطلق حملتك" },
