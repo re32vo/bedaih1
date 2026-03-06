@@ -57,12 +57,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
     else window.location.href = "/#donate-section";
   };
 
-  const [isMoreOpen, setIsMoreOpen] = useState(false);
-  const [isMobileMoreOpen, setIsMobileMoreOpen] = useState(false);
-  const [isProgramsOpen, setIsProgramsOpen] = useState(false);
-  const [isMobileProgramsOpen, setIsMobileProgramsOpen] = useState(false);
-  const [isVolunteerOpen, setIsVolunteerOpen] = useState(false);
-  const [isMobileVolunteerOpen, setIsMobileVolunteerOpen] = useState(false);
+  const [openDesktopDropdown, setOpenDesktopDropdown] = useState<"programs" | "volunteer" | "more" | null>(null);
+  const [openMobileDropdown, setOpenMobileDropdown] = useState<"programs" | "volunteer" | "more" | null>(null);
+
+  // Helper functions for desktop dropdowns
+  const toggleDesktopDropdown = (name: "programs" | "volunteer" | "more") => {
+    setOpenDesktopDropdown(openDesktopDropdown === name ? null : name);
+  };
+
+  // Helper functions for mobile dropdowns
+  const toggleMobileDropdown = (name: "programs" | "volunteer" | "more") => {
+    setOpenMobileDropdown(openMobileDropdown === name ? null : name);
+  };
 
   if (isEmployeePage || isDonorPage) return <div className="min-h-screen font-body rtl" dir="rtl">{children}</div>;
 
@@ -92,12 +98,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
             {/* programs dropdown trigger */}
             <div className="relative">
               <button
-                onClick={() => setIsProgramsOpen(!isProgramsOpen)}
+                onClick={() => toggleDesktopDropdown("programs")}
                 className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
               >
                 برامجنا <ChevronDown className="w-4 h-4 mr-1" />
               </button>
-              {isProgramsOpen && (
+              {openDesktopDropdown === "programs" && (
                 <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-lg z-50">
                   {programsLinks.map((link) => (
                     <Link key={link.href} href={link.href}>
@@ -120,12 +126,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
             {/* volunteer dropdown trigger */}
             <div className="relative">
               <button
-                onClick={() => setIsVolunteerOpen(!isVolunteerOpen)}
+                onClick={() => toggleDesktopDropdown("volunteer")}
                 className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
               >
                 المركز التطوعي <ChevronDown className="w-4 h-4 mr-1" />
               </button>
-              {isVolunteerOpen && (
+              {openDesktopDropdown === "volunteer" && (
                 <div className="absolute right-0 mt-2 w-52 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-lg z-50">
                   {volunteerLinks.map((link) => (
                     <Link key={link.href} href={link.href}>
@@ -148,12 +154,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
             {/* more dropdown trigger */}
             <div className="relative">
               <button
-                onClick={() => setIsMoreOpen(!isMoreOpen)}
+                onClick={() => toggleDesktopDropdown("more")}
                 className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
               >
                 المزيد <ChevronDown className="w-4 h-4 mr-1" />
               </button>
-              {isMoreOpen && (
+              {openDesktopDropdown === "more" && (
                 <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-lg z-50">
                   {moreLinks.map((link) => (
                     <Link key={link.href} href={link.href}>
@@ -219,11 +225,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
               {/* mobile programs section */}
               <button
                 className="flex items-center px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
-                onClick={() => setIsMobileProgramsOpen(!isMobileProgramsOpen)}
+                onClick={() => toggleMobileDropdown("programs")}
               >
-                برامجنا {isMobileProgramsOpen ? <ChevronUp className="w-4 h-4 mr-1" /> : <ChevronDown className="w-4 h-4 mr-1" />}
+                برامجنا {openMobileDropdown === "programs" ? <ChevronUp className="w-4 h-4 mr-1" /> : <ChevronDown className="w-4 h-4 mr-1" />}
               </button>
-              {isMobileProgramsOpen && (
+              {openMobileDropdown === "programs" && (
                 <div className="flex flex-col gap-1 mt-1">
                   {programsLinks.map((link) => (
                     <Link key={link.href} href={link.href}>
@@ -238,11 +244,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
               {/* mobile volunteer section */}
               <button
                 className="flex items-center px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
-                onClick={() => setIsMobileVolunteerOpen(!isMobileVolunteerOpen)}
+                onClick={() => toggleMobileDropdown("volunteer")}
               >
-                المركز التطوعي {isMobileVolunteerOpen ? <ChevronUp className="w-4 h-4 mr-1" /> : <ChevronDown className="w-4 h-4 mr-1" />}
+                المركز التطوعي {openMobileDropdown === "volunteer" ? <ChevronUp className="w-4 h-4 mr-1" /> : <ChevronDown className="w-4 h-4 mr-1" />}
               </button>
-              {isMobileVolunteerOpen && (
+              {openMobileDropdown === "volunteer" && (
                 <div className="flex flex-col gap-1 mt-1">
                   {volunteerLinks.map((link) => (
                     <Link key={link.href} href={link.href}>
@@ -257,11 +263,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
               {/* mobile more section */}
               <button
                 className="flex items-center px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
-                onClick={() => setIsMobileMoreOpen(!isMobileMoreOpen)}
+                onClick={() => toggleMobileDropdown("more")}
               >
-                المزيد {isMobileMoreOpen ? <ChevronUp className="w-4 h-4 mr-1" /> : <ChevronDown className="w-4 h-4 mr-1" />}
+                المزيد {openMobileDropdown === "more" ? <ChevronUp className="w-4 h-4 mr-1" /> : <ChevronDown className="w-4 h-4 mr-1" />}
               </button>
-              {isMobileMoreOpen && (
+              {openMobileDropdown === "more" && (
                 <div className="flex flex-col gap-1 mt-1">
                   {moreLinks.map((link) => (
                     <Link key={link.href} href={link.href}>
