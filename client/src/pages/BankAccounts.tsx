@@ -34,7 +34,7 @@ export default function BankAccounts() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">الحسابات البنكية</h1>
-          <p className="text-xl text-slate-600 آمن وسريع لدعم أعمالنا الخيرية</p>
+          <p className="text-xl text-slate-600">تبرع آمن وسريع لدعم أعمالنا الخيرية</p>
         </div>
 
         {/* Bank Accounts */}
@@ -50,7 +50,8 @@ export default function BankAccounts() {
               <CardContent className="pt-6 space-y-4">
                 <div>
                   <p className="text-slate-600 text-sm font-semibold mb-1">اسم الحساب</p>
-                  <p className="text-slate-900                </div>
+                  <p className="text-slate-900">{account.accountName}</p>
+                </div>
                 <div>
                   <p className="text-slate-600 text-sm font-semibold mb-1">رقم الحساب</p>
                   <div className="flex items-center justify-between bg-slate-100 p-3 rounded-lg">
@@ -59,7 +60,7 @@ export default function BankAccounts() {
                       onClick={() => copyToClipboard(account.accountNumber)}
                       className="p-2 hover:bg-slate-200 rounded transition"
                     >
-                      <Copy className="w-4 h-4 text-slate-600 />
+                      <Copy className="w-4 h-4 text-slate-600" />
                     </button>
                   </div>
                 </div>
@@ -71,7 +72,7 @@ export default function BankAccounts() {
                       onClick={() => copyToClipboard(account.iban)}
                       className="p-2 hover:bg-slate-200 rounded transition"
                     >
-                      <Copy className="w-4 h-4 text-slate-600 />
+                      <Copy className="w-4 h-4 text-slate-600" />
                     </button>
                   </div>
                 </div>
@@ -85,7 +86,8 @@ export default function BankAccounts() {
           <CardHeader>
             <CardTitle>ملاحظات مهمة</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 text-slate-700            <ul className="list-disc list-inside space-y-2">
+          <CardContent className="space-y-4 text-slate-700">
+            <ul className="list-disc list-inside space-y-2">
               <li>تأكد من صحة بيانات الحساب قبل التحويل</li>
               <li>تحويلاتك معفاة من الرسوم البنكية</li>
               <li>ستتلقى إيصال رسمي عند استقبال المبلغ</li>

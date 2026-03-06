@@ -15,7 +15,7 @@ export default function ProgramsAwareness() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">البرامج التوعوية</h1>
-          <p className="text-xl text-slate-600 تعزيز الوعي والمعرفة في المجتمع</p>
+          <p className="text-xl text-slate-600">تعزيز الوعي والمعرفة في المجتمع</p>
         </div>
 
         {/* Activities */}
@@ -29,7 +29,8 @@ export default function ProgramsAwareness() {
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-600              </CardContent>
+                <p className="text-slate-600">{activity.description}</p>
+              </CardContent>
             </Card>
           ))}
         </div>
@@ -65,7 +66,8 @@ export default function ProgramsAwareness() {
           <CardHeader>
             <CardTitle>عن البرامج التوعوية</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 text-slate-700            <p>
+          <CardContent className="space-y-4 text-slate-700">
+            <p>
               تؤمن جمعية بداية بأن التوعية والتثقيف هما أساس التطور المجتمعي والاستدامة. نعمل على نشر الوعي من خلال برامج متنوعة وفعالة.
             </p>
             <p>
@@ -75,7 +77,7 @@ export default function ProgramsAwareness() {
               <li>أكثر من 100 ندوة تثقيفية سنوياً</li>
               <li>برامج إذاعية أسبوعية</li>
               <li>شراكات مع المؤسسات التعليمية</li>
-              <li>محتوى توعوي رقمي منتجم</li>
+              <li>محتوى توعوي رقمي منتظم</li>
             </ul>
           </CardContent>
         </Card>

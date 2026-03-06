@@ -15,7 +15,7 @@ export default function CampaignDonate() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">أطلق حملتك</h1>
-          <p className="text-xl text-slate-600 حول حلمك إلى واقع بدعم الجميع</p>
+          <p className="text-xl text-slate-600">حول حلمك إلى واقع بدعم الجميع</p>
         </div>
 
         {/* Stats */}
@@ -78,7 +78,7 @@ export default function CampaignDonate() {
             </div>
           </CardHeader>
           <CardContent>
-            <ul className="list-disc list-inside space-y-2 text-slate-700 
+            <ul className="list-disc list-inside space-y-2 text-slate-700">
               <li>منصة موثوقة وآمنة لجمع الأموال</li>
               <li>دعم متكامل من فريق جمعية بداية</li>
               <li>وصول لآلاف المتبرعين المحتملين</li>
@@ -95,7 +95,7 @@ export default function CampaignDonate() {
             <CardTitle>هل أنت مستعد لتغيير العالم؟</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-slate-700 
+            <p className="text-slate-700">
               ابدأ حملتك اليوم وكن جزءاً من الحركة الاجتماعية التي تغير حياة الناس.
             </p>
             <button className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 rounded-lg transition">

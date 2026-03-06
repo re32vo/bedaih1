@@ -17,7 +17,7 @@ export default function MediaReports() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">التقارير الدورية</h1>
-          <p className="text-xl text-slate-600 شاملة عن إنجازاتنا وأثرنا المجتمعي</p>
+          <p className="text-xl text-slate-600">نظرة شاملة عن إنجازاتنا وأثرنا المجتمعي</p>
         </div>
 
         {/* Reports Grid */}
@@ -36,8 +36,9 @@ export default function MediaReports() {
               <CardContent>
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
-                    <p className="text-sm text-slate-600 صفحة</p>
-                    <p className="text-sm text-slate-600                  </div>
+                    <p className="text-sm text-slate-600">{report.pages} صفحة</p>
+                    <p className="text-sm text-slate-600">الحجم: {report.size}</p>
+                  </div>
                   <button className="p-2 hover:bg-slate-100 rounded-lg transition">
                     <Download className="w-5 h-5 text-emerald-500" />
                   </button>
@@ -55,7 +56,8 @@ export default function MediaReports() {
               <CardTitle>النمو السنوي</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900              <p className="text-sm text-slate-600 mt-2">زيادة في البرامج والخدمات</p>
+              <p className="text-3xl font-bold text-slate-900">+24%</p>
+              <p className="text-sm text-slate-600 mt-2">زيادة في البرامج والخدمات</p>
             </CardContent>
           </Card>
           <Card>
@@ -64,7 +66,8 @@ export default function MediaReports() {
               <CardTitle>الاستثمار في المجتمع</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900              <p className="text-sm text-slate-600 mt-2">ر.س استثمر في البرامج</p>
+              <p className="text-3xl font-bold text-slate-900">4.2M ر.س</p>
+              <p className="text-sm text-slate-600 mt-2">ر.س استثمر في البرامج</p>
             </CardContent>
           </Card>
           <Card>
@@ -73,7 +76,8 @@ export default function MediaReports() {
               <CardTitle>أعداد التقارير</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900              <p className="text-sm text-slate-600 mt-2">تقرير دوري منشور</p>
+              <p className="text-3xl font-bold text-slate-900">36</p>
+              <p className="text-sm text-slate-600 mt-2">تقرير دوري منشور</p>
             </CardContent>
           </Card>
         </div>
@@ -83,7 +87,8 @@ export default function MediaReports() {
           <CardHeader>
             <CardTitle>اعرف المزيد عن التقارير</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 text-slate-700            <p>
+          <CardContent className="space-y-4 text-slate-700">
+            <p>
               تنشر جمعية بداية تقارير شاملة بشكل دوري لتعكس شفافيتها وتقدمها في تحقيق أهدافها.
             </p>
             <ul className="list-disc list-inside space-y-2">

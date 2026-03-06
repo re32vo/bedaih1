@@ -15,7 +15,7 @@ export default function DonationPlatform() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">منصة التبرع</h1>
-          <p className="text-xl text-slate-600 آمنة وشفافة للتبرعات الخيرية</p>
+          <p className="text-xl text-slate-600">منصة آمنة وشفافة للتبرعات الخيرية</p>
         </div>
 
         {/* Features */}
@@ -29,7 +29,8 @@ export default function DonationPlatform() {
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-600              </CardContent>
+                <p className="text-slate-600">{feature.description}</p>
+              </CardContent>
             </Card>
           ))}
         </div>
@@ -42,7 +43,7 @@ export default function DonationPlatform() {
               <CardTitle>التبرعات المستقبلة</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900 ر.س</p>
+              <p className="text-3xl font-bold text-slate-900">2.5M ر.س</p>
             </CardContent>
           </Card>
           <Card>
@@ -51,7 +52,8 @@ export default function DonationPlatform() {
               <CardTitle>المستفيدون</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900            </CardContent>
+              <p className="text-3xl font-bold text-slate-900">8,000+</p>
+            </CardContent>
           </Card>
           <Card>
             <CardHeader>
@@ -59,7 +61,8 @@ export default function DonationPlatform() {
               <CardTitle>معدل الشفافية</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900            </CardContent>
+              <p className="text-3xl font-bold text-slate-900">98%</p>
+            </CardContent>
           </Card>
         </div>
 
@@ -73,21 +76,21 @@ export default function DonationPlatform() {
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 bg-emerald-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
                 <div>
-                  <p className="font-semibold text-slate-900 المشروع</p>
+                  <p className="font-semibold text-slate-900">اختر المشروع</p>
                   <p className="text-slate-600 text-sm">اختر المشروع أو البرنامج الذي تريد المساهمة فيه</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
                 <div>
-                  <p className="font-semibold text-slate-900 بأمان</p>
+                  <p className="font-semibold text-slate-900">تبرع بأمان</p>
                   <p className="text-slate-600 text-sm">تبرع عبر طرق دفع آمنة ومشفرة</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
                 <div>
-                  <p className="font-semibold text-slate-900 الأثر</p>
+                  <p className="font-semibold text-slate-900">تابع الأثر</p>
                   <p className="text-slate-600 text-sm">شاهد كيفية استخدام تبرعك بالتفصيل</p>
                 </div>
               </div>

@@ -56,7 +56,7 @@ export default function Announcements() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">الإعلانات والإخطارات</h1>
-          <p className="text-xl text-slate-600 الإعلانات والفرص من جمعية بداية</p>
+          <p className="text-xl text-slate-600">آخر الإعلانات والفرص من جمعية بداية</p>
         </div>
 
         {/* Announcements List */}
@@ -67,7 +67,8 @@ export default function Announcements() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="flex items-center gap-2 text-sm text-slate-600                        <Calendar className="w-4 h-4" />
+                      <div className="flex items-center gap-2 text-sm text-slate-600">
+                        <Calendar className="w-4 h-4" />
                         {announcement.date}
                       </div>
                       <span className={`text-xs font-semibold px-3 py-1 rounded-full ${typeColors[announcement.type]}`}>
@@ -77,7 +78,8 @@ export default function Announcements() {
                     <h3 className="text-lg font-semibold text-slate-900 mb-2">
                       {announcement.title}
                     </h3>
-                    <p className="text-slate-600                  </div>
+                    <p className="text-slate-600">{announcement.description}</p>
+                  </div>
                   <Megaphone className="w-6 h-6 text-emerald-500 flex-shrink-0" />
                 </div>
               </CardContent>

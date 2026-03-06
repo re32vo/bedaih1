@@ -7,13 +7,29 @@ import * as crypto from 'crypto';
 
 export class SecurityManager {
   /**
+   * تطبيع مفتاح التشفير إلى 32 بايت مناسبة لـ AES-256
+   */
+  private static normalizeAesKey(keyInput: string): Buffer {
+    const trimmed = keyInput.trim();
+
+    // إذا كان المفتاح hex بطول 64 حرفًا (32 بايت)، استخدمه مباشرة.
+    if (/^[0-9a-fA-F]{64}$/.test(trimmed)) {
+      return Buffer.from(trimmed, 'hex');
+    }
+
+    // خلاف ذلك، اشتق مفتاحًا ثابتًا بطول 32 بايت من النص.
+    return crypto.createHash('sha256').update(trimmed, 'utf8').digest();
+  }
+
+  /**
    * تشفير البيانات الحساسة
    */
   static encryptData(data: string, encryptionKey?: string): string {
     try {
-      const key = encryptionKey || process.env.ENCRYPTION_KEY || crypto.randomBytes(32).toString('hex');
+      const keySource = encryptionKey || process.env.ENCRYPTION_KEY || crypto.randomBytes(32).toString('hex');
+      const key = this.normalizeAesKey(keySource);
       const iv = crypto.randomBytes(16);
-      const cipher = crypto.createCipheriv('aes-256-gcm', Buffer.from(key.slice(0, 32), 'hex'), iv);
+      const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
       
       let encrypted = cipher.update(data, 'utf8', 'hex');
       encrypted += cipher.final('hex');
@@ -31,12 +47,16 @@ export class SecurityManager {
    */
   static decryptData(encryptedData: string, encryptionKey?: string): string {
     try {
-      const key = encryptionKey || process.env.ENCRYPTION_KEY || '';
+      const keySource = encryptionKey || process.env.ENCRYPTION_KEY || '';
+      if (!keySource) return '';
+
+      const key = this.normalizeAesKey(keySource);
       const [iv, authTag, encrypted] = encryptedData.split(':');
+      if (!iv || !authTag || !encrypted) return '';
       
       const decipher = crypto.createDecipheriv(
         'aes-256-gcm',
-        Buffer.from(key.slice(0, 32), 'hex'),
+        key,
         Buffer.from(iv, 'hex')
       );
       
@@ -56,9 +76,9 @@ export class SecurityManager {
    * تجزئة كلمات المرور (Password Hashing)
    */
   static hashPassword(password: string): string {
-    return crypto
-      .pbkdf2Sync(password, crypto.randomBytes(16).toString('hex'), 100000, 64, 'sha512')
-      .toString('hex');
+    const salt = crypto.randomBytes(16).toString('hex');
+    const hash = crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex');
+    return `${salt}:${hash}`;
   }
 
   /**
@@ -66,14 +86,11 @@ export class SecurityManager {
    */
   static verifyPassword(password: string, hash: string): boolean {
     try {
-      return crypto.timingSafeEqual(
-        Buffer.from(hash),
-        Buffer.from(
-          crypto
-            .pbkdf2Sync(password, crypto.randomBytes(16).toString('hex'), 100000, 64, 'sha512')
-            .toString('hex')
-        )
-      );
+      const [salt, storedHash] = hash.split(':');
+      if (!salt || !storedHash) return false;
+
+      const computedHash = crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex');
+      return crypto.timingSafeEqual(Buffer.from(storedHash, 'hex'), Buffer.from(computedHash, 'hex'));
     } catch {
       return false;
     }

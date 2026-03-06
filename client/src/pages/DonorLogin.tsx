@@ -373,7 +373,7 @@ export default function DonorLogin() {
           >
             <form onSubmit={handleVerify} className="space-y-6">
               <div className="bg-emerald-50 rounded-xl p-4 text-center">
-                <p className="text-sm text-slate-600 
+                <p className="text-sm text-slate-600">
                   تم إرسال كود تحقق من 6 أرقام إلى البريد الإلكتروني
                 </p>
                 {!isLogin && (

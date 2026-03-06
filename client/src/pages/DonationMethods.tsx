@@ -7,22 +7,26 @@ export default function DonationMethods() {
       icon: <CreditCard className="w-8 h-8" />,
       title: "البطاقات الائتمانية",
       description: "تبرع بسهولة عبر Visa أو MasterCard أو American Express",
-      color: "bg-blue-100 text-blue-600    },
+      color: "bg-blue-100 text-blue-600",
+    },
     {
       icon: <Banknote className="w-8 h-8" />,
       title: "التحويل البنكي",
       description: "حول أموالك مباشرة إلى حسابنا البنكي برقم IBAN",
-      color: "bg-emerald-100 text-emerald-600    },
+      color: "bg-emerald-100 text-emerald-600",
+    },
     {
       icon: <Smartphone className="w-8 h-8" />,
       title: "المحفظة الرقمية",
       description: "تبرع عبر Apple Pay أو Google Pay أو محافظ محلية",
-      color: "bg-purple-100 text-purple-600    },
+      color: "bg-purple-100 text-purple-600",
+    },
     {
       icon: <Heart className="w-8 h-8" />,
       title: "التبرع بالأجل",
       description: "تبرع شهري منتظم يساهم في استدامة برامجنا",
-      color: "bg-red-100 text-red-600    },
+      color: "bg-red-100 text-red-600",
+    },
   ];
 
   return (
@@ -31,7 +35,7 @@ export default function DonationMethods() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">طرق التبرع</h1>
-          <p className="text-xl text-slate-600 متعددة وآمنة لدعم جمعيتك</p>
+          <p className="text-xl text-slate-600">متعددة وآمنة لدعم جمعيتك</p>
         </div>
 
         {/* Methods Grid */}
@@ -45,7 +49,8 @@ export default function DonationMethods() {
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-600              </CardContent>
+                <p className="text-slate-600">{method.description}</p>
+              </CardContent>
             </Card>
           ))}
         </div>
@@ -55,7 +60,8 @@ export default function DonationMethods() {
           <CardHeader>
             <CardTitle>معلومات مهمة</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 text-slate-700            <p>
+          <CardContent className="space-y-4 text-slate-700">
+            <p>
               <strong>الأمان والخصوصية:</strong> جميع عمليات التبرع محمية بأعلى معايير التشفير والأمان. لا نحتفظ ببيانات بطاقتك.
             </p>
             <p>

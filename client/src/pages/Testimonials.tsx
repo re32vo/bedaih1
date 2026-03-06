@@ -35,7 +35,7 @@ export default function Testimonials() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">قالوا عن الجمعية</h1>
-          <p className="text-xl text-slate-600 حقيقية من المستفيدين والمتطوعين</p>
+          <p className="text-xl text-slate-600">قصص حقيقية من المستفيدين والمتطوعين</p>
         </div>
 
         {/* Testimonials Grid */}
@@ -46,7 +46,8 @@ export default function Testimonials() {
                 <Quote className="w-8 h-8 text-emerald-500 opacity-40 absolute top-4 right-4" />
                 <div>
                   <CardTitle className="text-lg">{testimonial.name}</CardTitle>
-                  <p className="text-sm text-slate-600                </div>
+                  <p className="text-sm text-slate-600">{testimonial.role}</p>
+                </div>
                 <div className="flex gap-1 mt-3">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
@@ -68,7 +69,8 @@ export default function Testimonials() {
               <CardTitle>رضا العملاء</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900              <p className="text-slate-600 text-sm mt-2">of customers are satisfied</p>
+              <p className="text-3xl font-bold text-slate-900">98%</p>
+              <p className="text-slate-600 text-sm mt-2">من المستفيدين راضون عن الخدمة</p>
             </CardContent>
           </Card>
           <Card>
@@ -78,7 +80,8 @@ export default function Testimonials() {
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2">
-                <p className="text-3xl font-bold text-slate-900                <div className="flex gap-1">
+                <p className="text-3xl font-bold text-slate-900">5.0</p>
+                <div className="flex gap-1">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                   ))}
@@ -92,7 +95,8 @@ export default function Testimonials() {
               <CardTitle>التقييمات</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900              <p className="text-slate-600 text-sm mt-2">تقييمات موثقة</p>
+              <p className="text-3xl font-bold text-slate-900">1,250+</p>
+              <p className="text-slate-600 text-sm mt-2">تقييمات موثقة</p>
             </CardContent>
           </Card>
         </div>

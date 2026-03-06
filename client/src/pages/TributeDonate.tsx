@@ -17,7 +17,7 @@ export default function TributeDonate() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">إهداء التبرع</h1>
-          <p className="text-xl text-slate-600 مناسباتك بالعطاء للآخرين</p>
+          <p className="text-xl text-slate-600">شارك مناسباتك بالعطاء للآخرين</p>
         </div>
 
         {/* Occasions */}
@@ -48,28 +48,28 @@ export default function TributeDonate() {
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 bg-emerald-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
                 <div>
-                  <p className="font-semibold text-slate-900 المناسبة</p>
+                  <p className="font-semibold text-slate-900">اختر المناسبة</p>
                   <p className="text-slate-600 text-sm">حدد المناسبة التي تود الإهداء بها</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
                 <div>
-                  <p className="font-semibold text-slate-900 البيانات</p>
+                  <p className="font-semibold text-slate-900">أدخل البيانات</p>
                   <p className="text-slate-600 text-sm">اسم المهدى إليه والرسالة (اختيارية)</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
                 <div>
-                  <p className="font-semibold text-slate-900 وأهد</p>
+                  <p className="font-semibold text-slate-900">تبرع وأهدِ</p>
                   <p className="text-slate-600 text-sm">أكمل عملية التبرع وأرسل الإهداء</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center font-bold">4</div>
                 <div>
-                  <p className="font-semibold text-slate-900 شهادة</p>
+                  <p className="font-semibold text-slate-900">استلم الشهادة</p>
                   <p className="text-slate-600 text-sm">استقبل شهادة رسمية للإهداء</p>
                 </div>
               </div>

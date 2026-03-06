@@ -53,7 +53,7 @@ export default function DonationOpportunities() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">فرص التبرع</h1>
-          <p className="text-xl text-slate-600 المجال الذي يلمس قلبك والساهم فيه</p>
+          <p className="text-xl text-slate-600">اختر المجال الذي يلمس قلبك وساهم فيه</p>
         </div>
 
         {/* Opportunities Grid */}
@@ -70,11 +70,13 @@ export default function DonationOpportunities() {
                 <p className="text-slate-600 text-sm">{opportunity.description}</p>
                 <div className="space-y-2 bg-slate-50 p-3 rounded-lg">
                   <div className="flex justify-between text-sm">
-                    <span className="text-slate-600 المطلوب:</span>
-                    <span className="font-semibold text-slate-900                  </div>
+                    <span className="text-slate-600">المبلغ المطلوب:</span>
+                    <span className="font-semibold text-slate-900">{opportunity.needsAmount}</span>
+                  </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-slate-600 الاستفادة:</span>
-                    <span className="font-semibold text-slate-900                  </div>
+                    <span className="text-slate-600">عدد المستفيدين:</span>
+                    <span className="font-semibold text-slate-900">{opportunity.impact}</span>
+                  </div>
                 </div>
                 <button className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 rounded-lg transition">
                   ساهم الآن
@@ -93,35 +95,36 @@ export default function DonationOpportunities() {
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-slate-700              اختر المجال الذي يناسب قيمك واهتماماتك. كل فرصة تبرع لها أثر مباشر وقابل للقياس.
+            <p className="text-slate-700">
+              اختر المجال الذي يناسب قيمك واهتماماتك. كل فرصة تبرع لها أثر مباشر وقابل للقياس.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex gap-3">
                 <Heart className="w-5 h-5 text-red-500 flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-slate-900 الشغف</p>
-                  <p className="text-sm text-slate-600 ما يهمك من برامج</p>
+                  <p className="font-semibold text-slate-900">اتبع شغفك</p>
+                  <p className="text-sm text-slate-600">اختر ما يهمك من البرامج</p>
                 </div>
               </div>
               <div className="flex gap-3">
                 <Target className="w-5 h-5 text-blue-500 flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-slate-900 الأثر</p>
-                  <p className="text-sm text-slate-600 الفئات الأكثر احتياجاً</p>
+                  <p className="font-semibold text-slate-900">قياس الأثر</p>
+                  <p className="text-sm text-slate-600">ركّز على الفئات الأكثر احتياجًا</p>
                 </div>
               </div>
               <div className="flex gap-3">
                 <Users className="w-5 h-5 text-emerald-500 flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-slate-900 الفئة</p>
-                  <p className="text-sm text-slate-600 فئة محددة من المجتمع</p>
+                  <p className="font-semibold text-slate-900">اختر الفئة</p>
+                  <p className="text-sm text-slate-600">ادعم فئة محددة من المجتمع</p>
                 </div>
               </div>
               <div className="flex gap-3">
                 <Lightbulb className="w-5 h-5 text-purple-500 flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-slate-900 المشروع</p>
-                  <p className="text-sm text-slate-600 معين يقترحه آخرون</p>
+                  <p className="font-semibold text-slate-900">فكرة المشروع</p>
+                  <p className="text-sm text-slate-600">اختر مشروعًا محددًا أو مقترحًا</p>
                 </div>
               </div>
             </div>

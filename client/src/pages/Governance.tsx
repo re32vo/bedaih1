@@ -21,7 +21,7 @@ export default function Governance() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">الحوكمة</h1>
-          <p className="text-xl text-slate-600 عمل يضمن الشفافية والمساءلة</p>
+          <p className="text-xl text-slate-600">نظام عمل يضمن الشفافية والمساءلة</p>
         </div>
 
         {/* Core Principles */}
@@ -37,7 +37,8 @@ export default function Governance() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-slate-600                </CardContent>
+                  <p className="text-slate-600">{principle.description}</p>
+                </CardContent>
               </Card>
             ))}
           </div>
@@ -56,7 +57,8 @@ export default function Governance() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-slate-600                </CardContent>
+                  <p className="text-slate-600">{item.description}</p>
+                </CardContent>
               </Card>
             ))}
           </div>
@@ -70,7 +72,8 @@ export default function Governance() {
               <CardTitle>سياسات الحوكمة</CardTitle>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4 text-slate-700            <p>
+          <CardContent className="space-y-4 text-slate-700">
+            <p>
               تعتمد جمعية بداية على مجموعة شاملة من السياسات والإجراءات التي تضمن إدارة فعالة وشفافة، مما يعكس التزامنا بأعلى معايير الحوكمة.
             </p>
             <ul className="list-disc list-inside space-y-2">

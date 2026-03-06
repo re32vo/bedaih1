@@ -8,7 +8,7 @@ export default function DirectorContact() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">بيانات التواصل مع المدير</h1>
-          <p className="text-xl text-slate-600 للتواصل مع مدير الجمعية واستقبال آرائكم واقتراحاتكم</p>
+          <p className="text-xl text-slate-600">للتواصل مع مدير الجمعية واستقبال آرائكم واقتراحاتكم</p>
         </div>
 
         {/* Contact Methods */}
@@ -21,7 +21,7 @@ export default function DirectorContact() {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-700 011 1234 5678</p>
+                <p className="text-slate-700">011 1234 5678</p>
                 <p className="text-slate-600 text-sm mt-2">مباشر من الساعة 9 صباحاً حتى 5 مساءً</p>
             </CardContent>
           </Card>
@@ -34,8 +34,8 @@ export default function DirectorContact() {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-700 director@bidayah.org</p>
-                <p className="text-slate-600 text-sm mt-2">نرد على جميع الرسائل خلال 24 ساعة</p>
+              <p className="text-slate-700">director@bidayah.org</p>
+              <p className="text-slate-600 text-sm mt-2">نرد على جميع الرسائل خلال 24 ساعة</p>
             </CardContent>
           </Card>
 
@@ -47,8 +47,8 @@ export default function DirectorContact() {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-700 الملك عبدالله</p>
-                <p className="text-slate-600 text-sm">الرياض، المملكة العربية السعودية</p>
+              <p className="text-slate-700">شارع الملك عبدالله</p>
+              <p className="text-slate-600 text-sm">الرياض، المملكة العربية السعودية</p>
             </CardContent>
           </Card>
 
@@ -60,8 +60,8 @@ export default function DirectorContact() {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-700 من 9 ص إلى 5 م</p>
-                <p className="text-slate-600 text-sm">مغلق أيام الجمعة والسبت</p>
+              <p className="text-slate-700">من 9 ص إلى 5 م</p>
+              <p className="text-slate-600 text-sm">مغلق أيام الجمعة والسبت</p>
             </CardContent>
           </Card>
         </div>
@@ -77,8 +77,8 @@ export default function DirectorContact() {
                 أ.د
               </div>
               <div>
-                  <p className="text-xl font-bold text-slate-900">أحمد محمد علي</p>
-                <p className="text-slate-600 التنفيذي - جمعية بداية</p>
+                <p className="text-xl font-bold text-slate-900">أحمد محمد علي</p>
+                <p className="text-slate-600">المدير التنفيذي - جمعية بداية</p>
                 <p className="text-sm text-slate-500 mt-1">خبرة 20+ سنة في العمل الخيري</p>
               </div>
             </div>

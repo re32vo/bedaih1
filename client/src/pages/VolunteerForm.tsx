@@ -19,7 +19,7 @@ export default function VolunteerForm() {
               <CardTitle>بناء علاقات</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-600 أشخاصاً جدداً وتبني علاقات قيمة</p>
+              <p className="text-slate-600">تعرف على أشخاص جدد وابنِ علاقات قيمة</p>
             </CardContent>
           </Card>
           <Card>
@@ -28,7 +28,7 @@ export default function VolunteerForm() {
               <CardTitle>تطوير المهارات</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-600 مهاراتك وكسب خبرة عملية قيمة</p>
+              <p className="text-slate-600">طور مهاراتك واكسب خبرة عملية قيمة</p>
             </CardContent>
           </Card>
           <Card>
@@ -37,7 +37,7 @@ export default function VolunteerForm() {
               <CardTitle>أثر حقيقي</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-600 في تحسين حياة الآخرين مباشرة</p>
+              <p className="text-slate-600">ساهم في تحسين حياة الآخرين بشكل مباشر</p>
             </CardContent>
           </Card>
         </div>
@@ -47,7 +47,8 @@ export default function VolunteerForm() {
           <CardHeader>
             <CardTitle>متطلبات التطوع</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 text-slate-700            <ul className="list-disc list-inside space-y-2">
+          <CardContent className="space-y-4 text-slate-700">
+            <ul className="list-disc list-inside space-y-2">
               <li>أن تكون بعمر 18 سنة فما فوق</li>
               <li>امتلاك الشغف والرغبة في خدمة المجتمع</li>
               <li>الالتزام بالمواعيد والمسؤوليات</li>
@@ -65,7 +66,8 @@ export default function VolunteerForm() {
               <CardTitle>كيفية التقديم</CardTitle>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4 text-slate-700            <div className="space-y-3">
+          <CardContent className="space-y-4 text-slate-700">
+            <div className="space-y-3">
               <div className="flex gap-3">
                 <span className="font-bold text-emerald-500">1.</span>
                 <p>قم بملء استمارة التطوع الإلكترونية</p>

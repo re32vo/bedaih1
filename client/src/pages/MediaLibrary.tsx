@@ -17,7 +17,7 @@ export default function MediaLibrary() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">المكتبة الإعلامية</h1>
-          <p className="text-xl text-slate-600 مورد شامل للمحتوى التثقيفي والإعلامي</p>
+          <p className="text-xl text-slate-600">مورد شامل للمحتوى التثقيفي والإعلامي</p>
         </div>
 
         {/* Search Bar */}
@@ -63,15 +63,15 @@ export default function MediaLibrary() {
           <CardContent>
             <div className="space-y-4">
               <div className="border-r-4 border-emerald-500 pr-4">
-                <p className="font-semibold text-slate-900 الشامل للصحة النفسية</p>
+                <p className="font-semibold text-slate-900">الدليل الشامل للصحة النفسية</p>
                 <p className="text-sm text-slate-600 mt-1">كتيب شامل يغطي جميع جوانب الصحة النفسية</p>
               </div>
               <div className="border-r-4 border-blue-500 pr-4">
-                <p className="font-semibold text-slate-900 فيديوهات حياتك أهم</p>
+                <p className="font-semibold text-slate-900">فيديوهات حياتك أهم</p>
                 <p className="text-sm text-slate-600 mt-1">50 فيديو توعوي عن المهارات الحياتية</p>
               </div>
               <div className="border-r-4 border-purple-500 pr-4">
-                <p className="font-semibold text-slate-900 جمعية بداية الشهرية</p>
+                <p className="font-semibold text-slate-900">مجلة جمعية بداية الشهرية</p>
                 <p className="text-sm text-slate-600 mt-1">مجلة شاملة تصدر كل شهر</p>
               </div>
             </div>

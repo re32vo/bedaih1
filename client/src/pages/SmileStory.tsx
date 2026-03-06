@@ -35,7 +35,7 @@ export default function SmileStory() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">قصة ابتسامة</h1>
-          <p className="text-xl text-slate-600 نجاح حقيقية من الأشخاص الذين ساعدناهم</p>
+          <p className="text-xl text-slate-600">قصص نجاح حقيقية من الأشخاص الذين ساعدناهم</p>
         </div>
 
         {/* Stories Grid */}
@@ -68,7 +68,8 @@ export default function SmileStory() {
               <CardTitle>حياة تحسنت</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900            </CardContent>
+              <p className="text-3xl font-bold text-slate-900">+50</p>
+            </CardContent>
           </Card>
           <Card>
             <CardHeader>
@@ -76,7 +77,8 @@ export default function SmileStory() {
               <CardTitle>ابتسامة عادت</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900            </CardContent>
+              <p className="text-3xl font-bold text-slate-900">+75</p>
+            </CardContent>
           </Card>
           <Card>
             <CardHeader>
@@ -84,7 +86,8 @@ export default function SmileStory() {
               <CardTitle>أحلام تحققت</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900            </CardContent>
+              <p className="text-3xl font-bold text-slate-900">+120</p>
+            </CardContent>
           </Card>
         </div>
 
@@ -94,7 +97,8 @@ export default function SmileStory() {
             <CardTitle>كن جزءاً من هذه القصص</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-slate-700              كل تبرع يساهم في تغيير حياة شخص ما. شارك في صنع قصة ابتسامة جديدة اليوم.
+            <p className="text-slate-700">
+              كل تبرع يساهم في تغيير حياة شخص ما. شارك في صنع قصة ابتسامة جديدة اليوم.
             </p>
             <div className="flex gap-3 flex-col sm:flex-row">
               <button className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-lg transition">

@@ -417,18 +417,18 @@ export default function DonorDashboard() {
                           </div>
                           <div>
                             <p className="font-bold text-emerald-700">{donation.amount} ريال</p>
-                            <p className="text-sm text-slate-600 {donation.method}</p>
+                            <p className="text-sm text-slate-600">{donation.method}</p>
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-sm text-slate-600 {donation.date}</p>
+                          <p className="text-sm text-slate-600">{donation.date}</p>
                         </div>
                       </div>
 
                       <div className="bg-slate-100 rounded-lg p-3 flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-mono text-slate-800">{donation.code}</span>
-                          <span className="text-xs text-slate-600 كود التبرع</span>
+                          <span className="text-xs text-slate-600">كود التبرع</span>
                         </div>
                         <button
                           onClick={() => copyToClipboard(donation.code)}
@@ -446,7 +446,7 @@ export default function DonorDashboard() {
                 ) : (
                   <div className="text-center py-8">
                     <Heart className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-                    <p className="text-slate-600 لا توجد تبرعات حتى الآن</p>
+                    <p className="text-slate-600">لا توجد تبرعات حتى الآن</p>
                   </div>
                 )}
               </div>
@@ -590,7 +590,7 @@ export default function DonorDashboard() {
               className="bg-gradient-to-br from-emerald-50 to-blue-50 rounded-2xl border border-emerald-200 p-6"
             >
               <h3 className="text-lg font-bold text-slate-900 mb-3">نصائح مهمة</h3>
-              <ul className="space-y-2 text-sm text-slate-700 
+              <ul className="space-y-2 text-sm text-slate-700">
                 <li className="flex gap-2">
                   <span className="text-emerald-500 font-bold">•</span>
                   احفظ كود التبرع لكل عملية

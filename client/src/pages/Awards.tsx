@@ -15,7 +15,7 @@ export default function Awards() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">الجوائز والتكريمات</h1>
-          <p className="text-xl text-slate-600 بجهودنا في خدمة المجتمع</p>
+          <p className="text-xl text-slate-600">تقديرًا بجهودنا في خدمة المجتمع</p>
         </div>
 
         {/* Awards List */}
@@ -32,7 +32,7 @@ export default function Awards() {
                 <CardTitle className="text-lg">{award.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-600 الإصدار: {award.issuer}</p>
+                <p className="text-slate-600">الجهة المانحة: {award.issuer}</p>
               </CardContent>
             </Card>
           ))}
@@ -46,7 +46,8 @@ export default function Awards() {
               <CardTitle>إنجازاتنا</CardTitle>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4 text-slate-700            <p>
+          <CardContent className="space-y-4 text-slate-700">
+            <p>
               تمثل هذه الجوائز والشهادات اعترافاً بالتزامنا المستمر بتقديم خدمات ذات جودة عالية وشفافية في العمل الخيري.
             </p>
             <ul className="list-disc list-inside space-y-2">

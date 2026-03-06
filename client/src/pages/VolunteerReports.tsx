@@ -14,7 +14,7 @@ export default function VolunteerReports() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">التقارير التطوعية</h1>
-          <p className="text-xl text-slate-600 تفصيلية عن نشاطاتنا التطوعية</p>
+          <p className="text-xl text-slate-600">تفصيلية عن نشاطاتنا التطوعية</p>
         </div>
 
         {/* Current Stats */}
@@ -25,7 +25,8 @@ export default function VolunteerReports() {
               <CardTitle className="text-lg">متطوع نشط</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900            </CardContent>
+              <p className="text-3xl font-bold text-slate-900">450</p>
+            </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-3">
@@ -33,7 +34,8 @@ export default function VolunteerReports() {
               <CardTitle className="text-lg">ساعات في الشهر</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900            </CardContent>
+              <p className="text-3xl font-bold text-slate-900">1,800</p>
+            </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-3">
@@ -41,7 +43,8 @@ export default function VolunteerReports() {
               <CardTitle className="text-lg">مشروع</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900            </CardContent>
+              <p className="text-3xl font-bold text-slate-900">12</p>
+            </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-3">
@@ -49,7 +52,8 @@ export default function VolunteerReports() {
               <CardTitle className="text-lg">معدل الرضا</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900            </CardContent>
+              <p className="text-3xl font-bold text-slate-900">94%</p>
+            </CardContent>
           </Card>
         </div>
 
@@ -69,13 +73,16 @@ export default function VolunteerReports() {
                   <div className="grid grid-cols-3 gap-6">
                     <div>
                       <p className="text-slate-600 text-sm mb-1">عدد المتطوعين</p>
-                      <p className="text-2xl font-bold text-slate-900                    </div>
+                      <p className="text-2xl font-bold text-slate-900">{report.volunteers}</p>
+                    </div>
                     <div>
                       <p className="text-slate-600 text-sm mb-1">ساعات العمل</p>
-                      <p className="text-2xl font-bold text-slate-900                    </div>
+                      <p className="text-2xl font-bold text-slate-900">{report.hours}</p>
+                    </div>
                     <div>
                       <p className="text-slate-600 text-sm mb-1">عدد المشاريع</p>
-                      <p className="text-2xl font-bold text-slate-900                    </div>
+                      <p className="text-2xl font-bold text-slate-900">{report.projects}</p>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

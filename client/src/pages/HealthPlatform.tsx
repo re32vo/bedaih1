@@ -15,7 +15,7 @@ export default function HealthPlatform() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">منصة التطوع الصحي</h1>
-          <p className="text-xl text-slate-600 صحية متطوعة لكل مجتمع</p>
+          <p className="text-xl text-slate-600">فرصة صحية متطوعة لكل مجتمع</p>
         </div>
 
         {/* Services */}
@@ -29,7 +29,8 @@ export default function HealthPlatform() {
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-600              </CardContent>
+                <p className="text-slate-600">{service.description}</p>
+              </CardContent>
             </Card>
           ))}
         </div>
@@ -43,7 +44,8 @@ export default function HealthPlatform() {
                 <CardTitle>متطوعونا الطبيون</CardTitle>
               </div>
             </CardHeader>
-            <CardContent className="space-y-2 text-slate-700              <p>أطباء وممرضون متطوعون</p>
+            <CardContent className="space-y-2 text-slate-700">
+              <p>أطباء وممرضون متطوعون</p>
               <p>متخصصون في مجالات مختلفة</p>
               <p>مكرسون لخدمة المجتمع</p>
             </CardContent>
@@ -55,7 +57,8 @@ export default function HealthPlatform() {
                 <CardTitle>الفئات المستهدفة</CardTitle>
               </div>
             </CardHeader>
-            <CardContent className="space-y-2 text-slate-700              <p>الأطفال والأمهات</p>
+            <CardContent className="space-y-2 text-slate-700">
+              <p>الأطفال والأمهات</p>
               <p>كبار السن</p>
               <p>الأسر المحتاجة</p>
             </CardContent>
@@ -70,7 +73,8 @@ export default function HealthPlatform() {
               <CardTitle>كيفية الانضمام</CardTitle>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4 text-slate-700            <p>إذا كنت متخصصاً صحياً وترغب في التطوع:</p>
+          <CardContent className="space-y-4 text-slate-700">
+            <p>إذا كنت متخصصاً صحياً وترغب في التطوع:</p>
             <ol className="list-decimal list-inside space-y-2">
               <li>تواصل معنا على health@bedaya.org</li>
               <li>أرسل سيرتك الذاتية والشهادات</li>

@@ -15,7 +15,7 @@ export default function Members() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">أعضاء الجمعية</h1>
-          <p className="text-xl text-slate-600 متخصص مكرس لخدمة المجتمع</p>
+          <p className="text-xl text-slate-600">فريق متخصص ومكرس لخدمة المجتمع</p>
         </div>
 
         {/* Stats */}
@@ -58,7 +58,7 @@ export default function Members() {
                 <CardDescription>{member.position}</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-600 {member.department}</p>
+                <p className="text-slate-600">{member.department}</p>
               </CardContent>
             </Card>
           ))}
@@ -69,7 +69,8 @@ export default function Members() {
           <CardHeader>
             <CardTitle>عن الفريق</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 text-slate-700            <p>
+          <CardContent className="space-y-4 text-slate-700">
+            <p>
               يتكون فريق جمعية بداية من متخصصين في مجالات متعددة، مكرسين لتقديم أفضل الخدمات الخيرية للمجتمع. نعمل بروح الفريق الواحد لتحقيق أهدافنا المشتركة.
             </p>
             <p>
