@@ -9,7 +9,7 @@ export default function About() {
       <section className="relative pt-0 pb-0 bg-white">
         {/* Banner Image */}
         <div className="w-full relative">
-          <img src="https://i.postimg.cc/nhvxqddh/12.jpg" alt="بانر من نحن" className="w-full h-64 object-cover object-center" />
+          <img src="https://i.postimg.cc/nhvxqddh/12.jpg" alt="بانر نبذة عن الجمعية" className="w-full h-64 object-cover object-center" />
         </div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 -mt-16">
           <motion.div 
@@ -19,7 +19,7 @@ export default function About() {
           >
             <div className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full border border-black/10">
               <Heart className="w-4 h-4 text-black" />
-              <span className="text-black text-sm font-medium">من نحن</span>
+              <span className="text-black text-sm font-medium">نبذة عن الجمعية</span>
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-black leading-tight">
               جمعية بداية الخيرية
@@ -241,20 +241,14 @@ export default function About() {
               كن جزءاً من التغيير
             </h2>
             <p className="text-lg sm:text-xl text-black mb-10 leading-relaxed">
-              انضم إلينا اليوم وساهم في صنع الفرق. سواء بالتبرع أو التطوع، كل مساهمة لها قيمة.
+              انضم إلينا اليوم وساهم في صنع الفرق. بالتبرع، كل مساهمة لها قيمة.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <div className="flex justify-center">
               <a 
                 href="/donate" 
                 className="bg-black text-white font-bold px-8 py-4 rounded-lg hover:bg-gray-900 transition-all shadow-lg hover:shadow-xl"
               >
                 تبرع الآن
-              </a>
-              <a 
-                href="/volunteer" 
-                className="bg-white text-black font-bold px-8 py-4 rounded-lg hover:bg-gray-100 transition-all border-2 border-black/10"
-              >
-                انضم كمتطوع
               </a>
             </div>
           </motion.div>
