@@ -27,8 +27,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
     { href: "/", label: "الرئيسية" },
     { href: "/about", label: "من نحن" },
     { href: "/jobs", label: "التوظيف" },
-    { href: "/volunteer", label: "تطوع معنا" },
+    // volunteer becomes dropdown 'المركز التطوعي'
+    { href: "/volunteer", label: "المركز التطوعي" },
     { href: "/contact", label: "اتصل بنا" },
+  ];
+
+  const volunteerLinks = [
+    { href: "/volunteer/form", label: "استمارة التطوع" },
+    { href: "/volunteer/health-platform", label: "منصة التطوع الصحي" },
+    { href: "/volunteer/donation-platform", label: "منصة التبرع" },
+    { href: "/volunteer/reports", label: "التقارير التطوعية" },
   ];
 
   const programsLinks = [
@@ -55,6 +63,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [isMobileMoreOpen, setIsMobileMoreOpen] = useState(false);
   const [isProgramsOpen, setIsProgramsOpen] = useState(false);
   const [isMobileProgramsOpen, setIsMobileProgramsOpen] = useState(false);
+  const [isVolunteerOpen, setIsVolunteerOpen] = useState(false);
+  const [isMobileVolunteerOpen, setIsMobileVolunteerOpen] = useState(false);
 
   if (isEmployeePage || isDonorPage) return <div className="min-h-screen font-body rtl" dir="rtl">{children}</div>;
 
@@ -100,6 +110,34 @@ export function Layout({ children }: { children: React.ReactNode }) {
                             : "text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
                         }`}
                         onClick={() => setIsProgramsOpen(false)}
+                      >
+                        {link.label}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* volunteer dropdown trigger */}
+            <div className="relative">
+              <button
+                onClick={() => setIsVolunteerOpen(!isVolunteerOpen)}
+                className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
+              >
+                المركز التطوعي <ChevronDown className="w-4 h-4 mr-1" />
+              </button>
+              {isVolunteerOpen && (
+                <div className="absolute right-0 mt-2 w-52 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-lg z-50">
+                  {volunteerLinks.map((link) => (
+                    <Link key={link.href} href={link.href}>
+                      <span
+                        className={`block px-4 py-2 text-sm cursor-pointer transition-colors ${
+                          location === link.href
+                            ? "bg-emerald-500 text-white"
+                            : "text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
+                        }`}
+                        onClick={() => setIsVolunteerOpen(false)}
                       >
                         {link.label}
                       </span>
@@ -190,6 +228,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
               {isMobileProgramsOpen && (
                 <div className="flex flex-col gap-1 mt-1">
                   {programsLinks.map((link) => (
+                    <Link key={link.href} href={link.href}>
+                      <span className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10" onClick={() => setIsMenuOpen(false)}>
+                        {link.label}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+
+              {/* mobile volunteer section */}
+              <button
+                className="flex items-center px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
+                onClick={() => setIsMobileVolunteerOpen(!isMobileVolunteerOpen)}
+              >
+                المركز التطوعي {isMobileVolunteerOpen ? <ChevronUp className="w-4 h-4 mr-1" /> : <ChevronDown className="w-4 h-4 mr-1" />}
+              </button>
+              {isMobileVolunteerOpen && (
+                <div className="flex flex-col gap-1 mt-1">
+                  {volunteerLinks.map((link) => (
                     <Link key={link.href} href={link.href}>
                       <span className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10" onClick={() => setIsMenuOpen(false)}>
                         {link.label}
