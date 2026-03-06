@@ -25,8 +25,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   const navLinks = [
     { href: "/", label: "الرئيسية" },
-    { href: "/about", label: "من نحن" },
     { href: "/contact", label: "اتصل بنا" },
+  ];
+
+  const aboutLinks = [
+    { href: "/members", label: "أعضاء الجمعية" },
+    { href: "/governance", label: "الحوكمة" },
+    { href: "/awards", label: "الجوائز" },
+    { href: "/director-contact", label: "بيانات التواصل مع المدير" },
   ];
 
   const volunteerLinks = [
@@ -51,13 +57,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
     { href: "/jobs", label: "التوظيف" },
   ];
 
-  const moreLinks = [
-    { href: "/members", label: "أعضاء الجمعية" },
-    { href: "/governance", label: "الحوكمة" },
-    { href: "/awards", label: "الجوائز" },
-    { href: "/director-contact", label: "بيانات التواصل مع المدير" },
-    { href: "/donation-methods", label: "طرق التبرع" },
-    { href: "/bank-accounts", label: "الحسابات البنكية" },
+  const donationOptionsLinks = [
+    { href: "/donate/quick", label: "التبرع السريع" },
+    { href: "/donate/recurring", label: "التبرع الدوري" },
+    { href: "/donate/tribute", label: "إهداء التبرع" },
+    { href: "/donate/campaign", label: "أطلق حملتك" },
+    { href: "/donate/opportunities", label: "فرص التبرع" },
   ];
 
   const handleDonateClick = () => {
@@ -66,16 +71,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
     else window.location.href = "/#donate-section";
   };
 
-  const [openDesktopDropdown, setOpenDesktopDropdown] = useState<"programs" | "volunteer" | "media" | "more" | null>(null);
-  const [openMobileDropdown, setOpenMobileDropdown] = useState<"programs" | "volunteer" | "media" | "more" | null>(null);
+  const [openDesktopDropdown, setOpenDesktopDropdown] = useState<"about" | "programs" | "volunteer" | "media" | "donation" | null>(null);
+  const [openMobileDropdown, setOpenMobileDropdown] = useState<"about" | "programs" | "volunteer" | "media" | "donation" | null>(null);
 
   // Helper functions for desktop dropdowns
-  const toggleDesktopDropdown = (name: "programs" | "volunteer" | "media" | "more") => {
+  const toggleDesktopDropdown = (name: "about" | "programs" | "volunteer" | "media" | "donation") => {
     setOpenDesktopDropdown(openDesktopDropdown === name ? null : name);
   };
 
   // Helper functions for mobile dropdowns
-  const toggleMobileDropdown = (name: "programs" | "volunteer" | "media" | "more") => {
+  const toggleMobileDropdown = (name: "about" | "programs" | "volunteer" | "media" | "donation") => {
     setOpenMobileDropdown(openMobileDropdown === name ? null : name);
   };
 
@@ -103,6 +108,34 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 </span>
               </Link>
             ))}
+
+            {/* about dropdown trigger */}
+            <div className="relative">
+              <button
+                onClick={() => toggleDesktopDropdown("about")}
+                className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
+              >
+                من نحن <ChevronDown className="w-4 h-4 mr-1" />
+              </button>
+              {openDesktopDropdown === "about" && (
+                <div className="absolute right-0 mt-2 w-52 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-lg z-50">
+                  {aboutLinks.map((link) => (
+                    <Link key={link.href} href={link.href}>
+                      <span
+                        className={`block px-4 py-2 text-sm cursor-pointer transition-colors ${
+                          location === link.href
+                            ? "bg-emerald-500 text-white"
+                            : "text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
+                        }`}
+                        onClick={() => setOpenDesktopDropdown(null)}
+                      >
+                        {link.label}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* programs dropdown trigger */}
             <div className="relative">
@@ -188,17 +221,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
               )}
             </div>
 
-            {/* more dropdown trigger */}
+            {/* donation options dropdown trigger */}
             <div className="relative">
               <button
-                onClick={() => toggleDesktopDropdown("more")}
+                onClick={() => toggleDesktopDropdown("donation")}
                 className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
               >
-                المزيد <ChevronDown className="w-4 h-4 mr-1" />
+                خيارات التبرع <ChevronDown className="w-4 h-4 mr-1" />
               </button>
-              {openDesktopDropdown === "more" && (
+              {openDesktopDropdown === "donation" && (
                 <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-lg z-50">
-                  {moreLinks.map((link) => (
+                  {donationOptionsLinks.map((link) => (
                     <Link key={link.href} href={link.href}>
                       <span
                         className={`block px-4 py-2 text-sm cursor-pointer transition-colors ${
@@ -206,7 +239,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                             ? "bg-emerald-500 text-white"
                             : "text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
                         }`}
-                        onClick={() => setIsMoreOpen(false)}
+                        onClick={() => setOpenDesktopDropdown(null)}
                       >
                         {link.label}
                       </span>
@@ -258,6 +291,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   </span>
                 </Link>
               ))}
+
+              {/* mobile about section */}
+              <button
+                className="flex items-center px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
+                onClick={() => toggleMobileDropdown("about")}
+              >
+                من نحن {openMobileDropdown === "about" ? <ChevronUp className="w-4 h-4 mr-1" /> : <ChevronDown className="w-4 h-4 mr-1" />}
+              </button>
+              {openMobileDropdown === "about" && (
+                <div className="flex flex-col gap-1 mt-1">
+                  {aboutLinks.map((link) => (
+                    <Link key={link.href} href={link.href}>
+                      <span className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10" onClick={() => setIsMenuOpen(false)}>
+                        {link.label}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              )}
 
               {/* mobile programs section */}
               <button
@@ -316,16 +368,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 </div>
               )}
 
-              {/* mobile more section */}
+              {/* mobile donation options section */}
               <button
                 className="flex items-center px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
-                onClick={() => toggleMobileDropdown("more")}
+                onClick={() => toggleMobileDropdown("donation")}
               >
-                المزيد {openMobileDropdown === "more" ? <ChevronUp className="w-4 h-4 mr-1" /> : <ChevronDown className="w-4 h-4 mr-1" />}
+                خيارات التبرع {openMobileDropdown === "donation" ? <ChevronUp className="w-4 h-4 mr-1" /> : <ChevronDown className="w-4 h-4 mr-1" />}
               </button>
-              {openMobileDropdown === "more" && (
+              {openMobileDropdown === "donation" && (
                 <div className="flex flex-col gap-1 mt-1">
-                  {moreLinks.map((link) => (
+                  {donationOptionsLinks.map((link) => (
                     <Link key={link.href} href={link.href}>
                       <span className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10" onClick={() => setIsMenuOpen(false)}>
                         {link.label}
