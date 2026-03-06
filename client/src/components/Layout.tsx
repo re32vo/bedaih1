@@ -415,7 +415,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       >
         <MessageCircle className="w-6 h-6" />
         <span className="absolute right-full mr-3 bg-slate-900 text-white px-3 py-1 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          تواصل معنا
+          واتساب
         </span>
       </a>
 
@@ -459,7 +459,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <li className="flex items-center gap-2"><MapPin className="w-5 h-5" /> المملكة العربية السعودية، الرياض</li>
                 <li className="flex items-center gap-2"><Phone className="w-5 h-5" /> <a href="tel:+966-555-0000" className="text-white">+966-555-0000</a></li>
                 <li className="flex items-center gap-2"><Mail className="w-5 h-5" /> <a href="mailto:info@bedaya.org" className="text-white">info@bedaya.org</a></li>
-                <li className="flex items-center gap-2"><MessageCircle className="w-5 h-5" /> <a href="https://wa.me/966533170903" target="_blank" rel="noopener noreferrer" className="text-white hover:text-green-400 transition">واتساب</a></li>
+                <li className="flex items-center gap-2"><MessageCircle className="w-5 h-5" /> <Link href="/contact"><span className="text-white hover:text-emerald-400 transition cursor-pointer">تواصل معنا</span></Link></li>
               </ul>
             </div>
           </div>
