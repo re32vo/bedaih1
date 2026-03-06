@@ -98,7 +98,7 @@ export default function CampaignDonate() {
             <p className="text-slate-700">
               ابدأ حملتك اليوم وكن جزءاً من الحركة الاجتماعية التي تغير حياة الناس.
             </p>
-            <button className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 rounded-lg transition">
+            <button onClick={() => console.log('ابدأ حملة جديدة')} className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 rounded-lg transition cursor-pointer">
               <Rocket className="w-5 h-5 inline-block mr-2" />
               ابدأ حملتك الآن
             </button>

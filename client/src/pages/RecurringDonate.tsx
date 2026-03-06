@@ -57,7 +57,7 @@ export default function RecurringDonate() {
                     </li>
                   ))}
                 </ul>
-                <button className={`w-full py-2 rounded-lg font-semibold transition ${index === 1 ? "bg-emerald-500 hover:bg-emerald-600 text-white" : "border-2 border-slate-300 hover:border-emerald-500"}`}>
+                <button onClick={() => console.log('تم اختيار الخطة:', plan.name)} className={`w-full py-2 rounded-lg font-semibold transition cursor-pointer ${index === 1 ? "bg-emerald-500 hover:bg-emerald-600 text-white" : "border-2 border-slate-300 hover:border-emerald-500"}`}>
                   اختر هذه الخطة
                 </button>
               </CardContent>

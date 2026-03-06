@@ -1,8 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Zap, Heart, CheckCircle2 } from "lucide-react";
+import { useLocation } from "wouter";
 
 export default function QuickDonate() {
   const amounts = [50, 100, 250, 500, 1000, 2500];
+  const [, setLocation] = useLocation();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" dir="rtl">
@@ -39,7 +41,9 @@ export default function QuickDonate() {
                 <span className="py-2 px-4 bg-slate-100 rounded-lg text-slate-900 font-semibold">ر.س</span>
               </div>
             </div>
-            <button className="w-full bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white font-bold py-3 rounded-lg transition">
+            <button 
+              onClick={() => setLocation('/donate')}
+              className="w-full bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white font-bold py-3 rounded-lg transition">
               <Heart className="w-5 h-5 inline-block mr-2" />
               تبرع الآن
             </button>

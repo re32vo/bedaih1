@@ -56,7 +56,7 @@ export default function News() {
               </CardHeader>
               <CardContent className="pt-4">
                 <p className="text-slate-600 mb-4">{item.excerpt}</p>
-                <button className="flex items-center gap-2 text-emerald-500 hover:text-emerald-600 font-semibold">
+                <button onClick={() => console.log('اقرأ المزيد:', item.title)} className="flex items-center gap-2 text-emerald-500 hover:text-emerald-600 font-semibold cursor-pointer">
                   اقرأ المزيد
                   <ArrowRight className="w-4 h-4" />
                 </button>
@@ -83,7 +83,7 @@ export default function News() {
                 placeholder="أدخل بريدك الإلكتروني"
                 className="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
-              <button className="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-6 py-2 rounded-lg transition">
+              <button onClick={() => console.log('تم الاشتراك')} className="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-6 py-2 rounded-lg transition cursor-pointer">
                 اشترك
               </button>
             </div>

@@ -41,12 +41,14 @@ export default function Testimonials() {
         {/* Testimonials Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {testimonials.map((testimonial, index) => (
-            <Card key={index} className="relative">
+            <Card key={index}>
               <CardHeader>
-                <Quote className="w-8 h-8 text-emerald-500 opacity-40 absolute top-4 right-4" />
-                <div>
-                  <CardTitle className="text-lg">{testimonial.name}</CardTitle>
-                  <p className="text-sm text-slate-600">{testimonial.role}</p>
+                <div className="flex gap-4">
+                  <div className="flex-1">
+                    <CardTitle className="text-lg">{testimonial.name}</CardTitle>
+                    <p className="text-sm text-slate-600">{testimonial.role}</p>
+                  </div>
+                  <Quote className="w-8 h-8 text-emerald-500 opacity-40 flex-shrink-0" />
                 </div>
                 <div className="flex gap-1 mt-3">
                   {[...Array(testimonial.rating)].map((_, i) => (
@@ -55,7 +57,7 @@ export default function Testimonials() {
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-700 italic">\"{testimonial.text}\"</p>
+                <p className="text-slate-700 italic">"{testimonial.text}"</p>
               </CardContent>
             </Card>
           ))}

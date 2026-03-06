@@ -30,7 +30,7 @@ export default function TributeDonate() {
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600 text-center text-sm mb-4">{occasion.description}</p>
-                <button className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 rounded-lg transition">
+                <button onClick={() => console.log('تم اختيار المناسبة:', occasion.title)} className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 rounded-lg transition cursor-pointer">
                   اختر هذه المناسبة
                 </button>
               </CardContent>
@@ -87,7 +87,7 @@ export default function TributeDonate() {
           </CardHeader>
           <CardContent className="bg-slate-50 p-4 rounded-lg">
             <p className="text-slate-700 text-sm leading-relaxed">
-              \"بسم الله الرحمن الرحيم، تم إهداء هذا التبرع إلى روح عزيزنا [الاسم] الذي غادرنا، تبرع أهداه [اسم المهدي] حفظه الله. اللهم اجعله له صدقة جارية. نسأل الله أن تنفع به المحتاجين.\"
+              "بسم الله الرحمن الرحيم، تم إهداء هذا التبرع إلى روح عزيزنا [الاسم] الذي غادرنا، تبرع أهداه [اسم المهدي] حفظه الله. اللهم اجعله له صدقة جارية. نسأل الله أن تنفع به المحتاجين."
             </p>
           </CardContent>
         </Card>

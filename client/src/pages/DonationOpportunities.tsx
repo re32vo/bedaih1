@@ -78,7 +78,7 @@ export default function DonationOpportunities() {
                     <span className="font-semibold text-slate-900">{opportunity.impact}</span>
                   </div>
                 </div>
-                <button className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 rounded-lg transition">
+                <button onClick={() => console.log('ساهم في:', opportunity.title)} className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 rounded-lg transition cursor-pointer">
                   ساهم الآن
                 </button>
               </CardContent>
