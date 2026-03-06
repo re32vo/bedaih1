@@ -15,7 +15,6 @@ const Beneficiaries = lazy(() => import("@/pages/Beneficiaries"));
 const Jobs = lazy(() => import("@/pages/Jobs"));
 const Contact = lazy(() => import("@/pages/Contact"));
 const Donate = lazy(() => import("@/pages/Donate"));
-const Volunteer = lazy(() => import("@/pages/Volunteer"));
 const Login = lazy(() => import("@/pages/Login"));
 const DonorLogin = lazy(() => import("@/pages/DonorLogin"));
 const DonorDashboard = lazy(() => import("@/pages/DonorDashboard"));
@@ -37,7 +36,6 @@ function Router() {
           <Route path="/contact" component={Contact} />
           <Route path="/projects" component={Home} />
           <Route path="/donate" component={Donate} />
-          <Route path="/volunteer" component={Volunteer} />
           <Route path="/login" component={Login} />
           <Route path="/donor-login" component={DonorLogin} />
           <Route path="/donor-dashboard" component={DonorDashboard} />

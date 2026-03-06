@@ -27,8 +27,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
     { href: "/", label: "الرئيسية" },
     { href: "/about", label: "من نحن" },
     { href: "/jobs", label: "التوظيف" },
-    // volunteer becomes dropdown 'المركز التطوعي'
-    { href: "/volunteer", label: "المركز التطوعي" },
     { href: "/contact", label: "اتصل بنا" },
   ];
 
