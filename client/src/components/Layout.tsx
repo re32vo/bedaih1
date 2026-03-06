@@ -157,7 +157,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                             ? "bg-emerald-500 text-white"
                             : "text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
                         }`}
-                        onClick={() => setIsProgramsOpen(false)}
+                        onClick={() => setOpenDesktopDropdown(null)}
                       >
                         {link.label}
                       </span>
@@ -185,7 +185,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                             ? "bg-emerald-500 text-white"
                             : "text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
                         }`}
-                        onClick={() => setIsVolunteerOpen(false)}
+                        onClick={() => setOpenDesktopDropdown(null)}
                       >
                         {link.label}
                       </span>
