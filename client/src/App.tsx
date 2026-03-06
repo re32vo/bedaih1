@@ -46,7 +46,6 @@ const Announcements = lazy(() => import("@/pages/Announcements"));
 const SmileStory = lazy(() => import("@/pages/SmileStory"));
 const MediaReports = lazy(() => import("@/pages/MediaReports"));
 // خيارات التبرع
-const QuickDonate = lazy(() => import("@/pages/QuickDonate"));
 const RecurringDonate = lazy(() => import("@/pages/RecurringDonate"));
 const TributeDonate = lazy(() => import("@/pages/TributeDonate"));
 const CampaignDonate = lazy(() => import("@/pages/CampaignDonate"));
@@ -100,7 +99,6 @@ function Router() {
           <Route path="/media/reports" component={MediaReports} />
           
           {/* خيارات التبرع routes */}
-          <Route path="/donate/quick" component={QuickDonate} />
           <Route path="/donate/recurring" component={RecurringDonate} />
           <Route path="/donate/tribute" component={TributeDonate} />
           <Route path="/donate/campaign" component={CampaignDonate} />
