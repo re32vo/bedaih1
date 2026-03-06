@@ -445,9 +445,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <div>
               <h4 className="text-base font-bold mb-3">الخدمات الإلكترونية</h4>
               <ul className="space-y-2">
-                <li><Link href="/beneficiary"><span className="text-white">تسجيل مستفيد</span></Link></li>
-                <li><Link href="/jobs"><span className="text-white">بوابة التوظيف</span></Link></li>
-                <li><Link href="/volunteer"><span className="text-white">سجل كمتطوع</span></Link></li>
                 <li><Link href="/login"><span className="text-white">دخول الموظفين</span></Link></li>
               </ul>
             </div>
@@ -458,7 +455,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <li className="flex items-center gap-2"><MapPin className="w-5 h-5" /> المملكة العربية السعودية، الرياض</li>
                 <li className="flex items-center gap-2"><Phone className="w-5 h-5" /> <a href="tel:+966-555-0000" className="text-white">+966-555-0000</a></li>
                 <li className="flex items-center gap-2"><Mail className="w-5 h-5" /> <a href="mailto:info@bedaya.org" className="text-white">info@bedaya.org</a></li>
-                <li className="flex items-center gap-2"><MessageCircle className="w-5 h-5" /> <Link href="/contact"><span className="text-white hover:text-emerald-400 transition cursor-pointer">اتصل بنا</span></Link></li>
               </ul>
             </div>
           </div>
