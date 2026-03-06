@@ -23,6 +23,34 @@ const Admin = lazy(() => import("@/pages/Admin"));
 const DonorsManagement = lazy(() => import("@/pages/DonorsManagement"));
 const Logs = lazy(() => import("@/pages/Logs"));
 const ThankYou = lazy(() => import("@/pages/ThankYou"));
+// من نحن
+const Members = lazy(() => import("@/pages/Members"));
+const Governance = lazy(() => import("@/pages/Governance"));
+const Awards = lazy(() => import("@/pages/Awards"));
+const DirectorContact = lazy(() => import("@/pages/DirectorContact"));
+const DonationMethods = lazy(() => import("@/pages/DonationMethods"));
+const BankAccounts = lazy(() => import("@/pages/BankAccounts"));
+// البرامج
+const ProgramsTreatment = lazy(() => import("@/pages/ProgramsTreatment"));
+const ProgramsAwareness = lazy(() => import("@/pages/ProgramsAwareness"));
+// المركز التطوعي
+const VolunteerForm = lazy(() => import("@/pages/VolunteerForm"));
+const HealthPlatform = lazy(() => import("@/pages/HealthPlatform"));
+const DonationPlatform = lazy(() => import("@/pages/DonationPlatform"));
+const VolunteerReports = lazy(() => import("@/pages/VolunteerReports"));
+// المركز الإعلامي
+const MediaLibrary = lazy(() => import("@/pages/MediaLibrary"));
+const News = lazy(() => import("@/pages/News"));
+const Testimonials = lazy(() => import("@/pages/Testimonials"));
+const Announcements = lazy(() => import("@/pages/Announcements"));
+const SmileStory = lazy(() => import("@/pages/SmileStory"));
+const MediaReports = lazy(() => import("@/pages/MediaReports"));
+// خيارات التبرع
+const QuickDonate = lazy(() => import("@/pages/QuickDonate"));
+const RecurringDonate = lazy(() => import("@/pages/RecurringDonate"));
+const TributeDonate = lazy(() => import("@/pages/TributeDonate"));
+const CampaignDonate = lazy(() => import("@/pages/CampaignDonate"));
+const DonationOpportunities = lazy(() => import("@/pages/DonationOpportunities"));
 
 function Router() {
   return (
@@ -44,6 +72,40 @@ function Router() {
           <Route path="/donors-management" component={DonorsManagement} />
           <Route path="/logs" component={Logs} />
           <Route path="/thank-you" component={ThankYou} />
+          
+          {/* من نحن routes */}
+          <Route path="/members" component={Members} />
+          <Route path="/governance" component={Governance} />
+          <Route path="/awards" component={Awards} />
+          <Route path="/director-contact" component={DirectorContact} />
+          <Route path="/donation-methods" component={DonationMethods} />
+          <Route path="/bank-accounts" component={BankAccounts} />
+          
+          {/* البرامج routes */}
+          <Route path="/programs/treatment" component={ProgramsTreatment} />
+          <Route path="/programs/awareness" component={ProgramsAwareness} />
+          
+          {/* المركز التطوعي routes */}
+          <Route path="/volunteer/form" component={VolunteerForm} />
+          <Route path="/volunteer/health-platform" component={HealthPlatform} />
+          <Route path="/volunteer/donation-platform" component={DonationPlatform} />
+          <Route path="/volunteer/reports" component={VolunteerReports} />
+          
+          {/* المركز الإعلامي routes */}
+          <Route path="/media/library" component={MediaLibrary} />
+          <Route path="/media/news" component={News} />
+          <Route path="/media/testimonials" component={Testimonials} />
+          <Route path="/media/announcements" component={Announcements} />
+          <Route path="/media/smile-story" component={SmileStory} />
+          <Route path="/media/reports" component={MediaReports} />
+          
+          {/* خيارات التبرع routes */}
+          <Route path="/donate/quick" component={QuickDonate} />
+          <Route path="/donate/recurring" component={RecurringDonate} />
+          <Route path="/donate/tribute" component={TributeDonate} />
+          <Route path="/donate/campaign" component={CampaignDonate} />
+          <Route path="/donate/opportunities" component={DonationOpportunities} />
+          
           <Route component={NotFound} />
         </Switch>
       </Suspense>
