@@ -26,7 +26,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const navLinks = [
     { href: "/", label: "الرئيسية" },
     { href: "/about", label: "من نحن" },
-    { href: "/jobs", label: "التوظيف" },
     { href: "/contact", label: "اتصل بنا" },
   ];
 
@@ -40,6 +39,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const programsLinks = [
     { href: "/programs/treatment", label: "البرامج العلاجية" },
     { href: "/programs/awareness", label: "البرامج التوعوية" },
+  ];
+
+  const mediaCenterLinks = [
+    { href: "/media/library", label: "المكتبة الإعلامية" },
+    { href: "/media/news", label: "الأخبار" },
+    { href: "/media/testimonials", label: "قالوا عن الجمعية" },
+    { href: "/media/announcements", label: "إعلانات" },
+    { href: "/media/smile-story", label: "قصة ابتسامة" },
+    { href: "/media/reports", label: "التقارير الدورية" },
+    { href: "/jobs", label: "التوظيف" },
   ];
 
   const moreLinks = [
@@ -57,16 +66,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
     else window.location.href = "/#donate-section";
   };
 
-  const [openDesktopDropdown, setOpenDesktopDropdown] = useState<"programs" | "volunteer" | "more" | null>(null);
-  const [openMobileDropdown, setOpenMobileDropdown] = useState<"programs" | "volunteer" | "more" | null>(null);
+  const [openDesktopDropdown, setOpenDesktopDropdown] = useState<"programs" | "volunteer" | "media" | "more" | null>(null);
+  const [openMobileDropdown, setOpenMobileDropdown] = useState<"programs" | "volunteer" | "media" | "more" | null>(null);
 
   // Helper functions for desktop dropdowns
-  const toggleDesktopDropdown = (name: "programs" | "volunteer" | "more") => {
+  const toggleDesktopDropdown = (name: "programs" | "volunteer" | "media" | "more") => {
     setOpenDesktopDropdown(openDesktopDropdown === name ? null : name);
   };
 
   // Helper functions for mobile dropdowns
-  const toggleMobileDropdown = (name: "programs" | "volunteer" | "more") => {
+  const toggleMobileDropdown = (name: "programs" | "volunteer" | "media" | "more") => {
     setOpenMobileDropdown(openMobileDropdown === name ? null : name);
   };
 
@@ -142,6 +151,34 @@ export function Layout({ children }: { children: React.ReactNode }) {
                             : "text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
                         }`}
                         onClick={() => setIsVolunteerOpen(false)}
+                      >
+                        {link.label}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* media center dropdown trigger */}
+            <div className="relative">
+              <button
+                onClick={() => toggleDesktopDropdown("media")}
+                className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
+              >
+                المركز الإعلامي <ChevronDown className="w-4 h-4 mr-1" />
+              </button>
+              {openDesktopDropdown === "media" && (
+                <div className="absolute right-0 mt-2 w-52 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-lg z-50">
+                  {mediaCenterLinks.map((link) => (
+                    <Link key={link.href} href={link.href}>
+                      <span
+                        className={`block px-4 py-2 text-sm cursor-pointer transition-colors ${
+                          location === link.href
+                            ? "bg-emerald-500 text-white"
+                            : "text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
+                        }`}
+                        onClick={() => setOpenDesktopDropdown(null)}
                       >
                         {link.label}
                       </span>
@@ -251,6 +288,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
               {openMobileDropdown === "volunteer" && (
                 <div className="flex flex-col gap-1 mt-1">
                   {volunteerLinks.map((link) => (
+                    <Link key={link.href} href={link.href}>
+                      <span className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10" onClick={() => setIsMenuOpen(false)}>
+                        {link.label}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+
+              {/* mobile media center section */}
+              <button
+                className="flex items-center px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
+                onClick={() => toggleMobileDropdown("media")}
+              >
+                المركز الإعلامي {openMobileDropdown === "media" ? <ChevronUp className="w-4 h-4 mr-1" /> : <ChevronDown className="w-4 h-4 mr-1" />}
+              </button>
+              {openMobileDropdown === "media" && (
+                <div className="flex flex-col gap-1 mt-1">
+                  {mediaCenterLinks.map((link) => (
                     <Link key={link.href} href={link.href}>
                       <span className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10" onClick={() => setIsMenuOpen(false)}>
                         {link.label}
