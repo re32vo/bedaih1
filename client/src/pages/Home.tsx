@@ -4,7 +4,6 @@ import { useInView } from "react-intersection-observer";
 import { ArrowRight, Heart, Users, Globe, BookOpen, Target, HandHeart, Handshake, Monitor } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { PageLoadingOverlay } from "@/components/PageLoadingOverlay";
 
 // Animation Variants
 const fadeIn = {
@@ -65,7 +64,6 @@ function StatCounter() {
 export default function Home() {
   return (
     <>
-      <PageLoadingOverlay />
       <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative pt-0 pb-0 bg-white">

@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, MapPin, Phone, Mail, Clock } from "lucide-react";
 import { motion } from "framer-motion";
-import { PageLoadingOverlay } from "@/components/PageLoadingOverlay";
 
 export default function Contact() {
   const mutation = useContactMessage();
@@ -33,7 +32,6 @@ export default function Contact() {
 
   return (
     <>
-      <PageLoadingOverlay />
       <div className="min-h-screen bg-white">
       {/* Header */}
       {/* Banner Image */}

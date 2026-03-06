@@ -9,7 +9,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, Briefcase } from "lucide-react";
 import { motion } from "framer-motion";
-import { PageLoadingOverlay } from "@/components/PageLoadingOverlay";
 
 export default function Jobs() {
   const mutation = useApplyJob();
@@ -37,7 +36,6 @@ export default function Jobs() {
 
   return (
     <>
-      <PageLoadingOverlay />
       <div className="min-h-screen bg-white py-8 sm:py-12 md:py-16 lg:py-20">
       <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
         <div className="text-center mb-10 sm:mb-14 md:mb-16 lg:mb-20 space-y-3 sm:space-y-4 md:space-y-6">
