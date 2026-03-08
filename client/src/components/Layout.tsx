@@ -363,8 +363,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
       <main className="flex-grow bg-white">{children}</main>
 
-      {/* Right-side donation shortcuts */}
-      {isDonationWidgetVisible ? (
+      {/* Right-side donation shortcuts - hidden on donation pages */}
+      {isDonationWidgetVisible && 
+       location !== '/donate' && 
+       location !== '/donate/recurring' && 
+       location !== '/donate/tribute' && 
+       location !== '/donate/campaign' && 
+       !location.startsWith('/donate/opportunities') ? (
         <div className="fixed top-24 right-2 z-50 w-[92px] rounded-xl bg-white/95 shadow-xl border border-slate-200 backdrop-blur-sm">
           <button
             onClick={() => setIsDonationWidgetVisible(false)}
@@ -397,7 +402,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
             })}
           </div>
         </div>
-      ) : (
+      ) : null}
+      
+      {!isDonationWidgetVisible && 
+       location !== '/donate' && 
+       location !== '/donate/recurring' && 
+       location !== '/donate/tribute' && 
+       location !== '/donate/campaign' && 
+       !location.startsWith('/donate/opportunities') && (
         <button
           onClick={() => setIsDonationWidgetVisible(true)}
           className="fixed top-28 right-1 z-50 bg-sky-500 text-white rounded-l-lg rounded-r-md px-1.5 py-2.5 shadow-lg hover:bg-sky-600 transition-colors"
