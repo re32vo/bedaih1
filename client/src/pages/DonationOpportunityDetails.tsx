@@ -196,8 +196,8 @@ export default function DonationOpportunityDetails() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 md:flex-row">
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 order-2 md:order-1 flex-1">
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 order-2 md:order-1 md:w-1/2">
             <h2 className="mb-4 text-xl font-extrabold text-slate-800">مبلغ التبرع</h2>
 
             {/* خيارات التبرع */}
@@ -448,7 +448,7 @@ export default function DonationOpportunityDetails() {
             </Button>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 order-1 md:order-2 flex-1">
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 order-1 md:order-2 md:w-1/2">
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-2xl font-extrabold text-slate-800">{selectedProject.title}</h2>
               <div className="flex items-center gap-2">
