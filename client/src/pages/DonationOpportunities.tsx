@@ -105,6 +105,7 @@ export default function DonationOpportunities() {
       return acc;
     }, {} as Record<string, { selected: number; custom: string }>)
   );
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
 
   const updateProjectAmount = (projectId: string, selected: number, custom: string = "") => {
     setProjectAmounts({
@@ -112,6 +113,10 @@ export default function DonationOpportunities() {
       [projectId]: { selected, custom },
     });
   };
+
+  const selectedProject = projects.find((project) => project.id === selectedProjectId) || null;
+  const selectedProjectAmount = selectedProject ? projectAmounts[selectedProject.id] : null;
+  const totalAmount = selectedProjectAmount?.custom ? Number(selectedProjectAmount.custom) || 0 : selectedProjectAmount?.selected || 0;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 py-6 md:py-10" dir="rtl">
@@ -212,17 +217,110 @@ export default function DonationOpportunities() {
                     className="h-10 rounded-lg bg-indigo-900 text-sm font-bold text-white transition hover:bg-indigo-800"
                   >
                     <ShoppingCart className="h-4 w-4" />
+                    إضافة للسلة
                   </Button>
                 </div>
 
                 {/* رابط تفاصيل المشروع */}
-                <button className="w-full text-center text-sm font-semibold text-slate-600 transition hover:text-sky-600">
+                <button
+                  type="button"
+                  onClick={() => setSelectedProjectId(project.id)}
+                  className="w-full text-center text-sm font-semibold text-slate-600 transition hover:text-sky-600"
+                >
                   ← تفاصيل المشروع
                 </button>
               </div>
             </div>
           ))}
         </div>
+
+        {selectedProject && (
+          <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                <div className="mb-3 text-right text-xl font-extrabold text-slate-800">مبلغ التبرع</div>
+                <div className="mb-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                  {[
+                    { label: "سهم الجود", value: 10 },
+                    { label: "سهم العطاء", value: 20 },
+                    { label: "سهم الإحسان", value: 30 },
+                    { label: "بما تجود به نفسك", value: 0 },
+                  ].map((option) => (
+                    <button
+                      key={option.label}
+                      type="button"
+                      onClick={() => {
+                        if (option.value === 0) {
+                          updateProjectAmount(selectedProject.id, 0, "");
+                          return;
+                        }
+                        updateProjectAmount(selectedProject.id, option.value, String(option.value));
+                      }}
+                      className={`rounded-lg border px-3 py-2 text-sm font-bold transition ${
+                        option.value > 0 && selectedProjectAmount?.selected === option.value
+                          ? "border-sky-500 bg-sky-50 text-sky-700"
+                          : "border-slate-300 bg-white text-slate-700"
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="relative mb-5">
+                  <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-lg font-bold text-slate-700">ريال</span>
+                  <Input
+                    value={selectedProjectAmount?.custom || ""}
+                    onChange={(e) => updateProjectAmount(selectedProject.id, 0, e.target.value.replace(/[^0-9]/g, ""))}
+                    className="h-12 rounded-xl border-slate-300 bg-white pr-14 text-right text-2xl font-extrabold"
+                    placeholder="0"
+                    inputMode="numeric"
+                  />
+                </div>
+
+                <div className="mb-5 grid grid-cols-2 gap-2 rounded-xl border border-slate-200 bg-white p-1">
+                  <button type="button" className="rounded-lg bg-slate-200 px-3 py-2 text-base font-bold text-slate-800">
+                    تبرع واحد
+                  </button>
+                  <button type="button" className="rounded-lg px-3 py-2 text-base font-semibold text-slate-700">
+                    التبرع الدوري
+                  </button>
+                </div>
+
+                <div className="mb-4 text-center text-4xl font-black text-slate-700">{totalAmount} ر.س</div>
+                <div className="mb-5 text-center text-3xl font-bold text-slate-700">الإجمالي</div>
+                <div className="mb-4 text-center text-2xl font-bold text-slate-700">اختر وسيلة الدفع الملائمة</div>
+
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  <button type="button" className="rounded-xl bg-indigo-900 px-4 py-3 text-lg font-bold text-white">
+                    التحويل البنكي
+                  </button>
+                  <button type="button" className="rounded-xl bg-sky-500 px-4 py-3 text-lg font-bold text-white">
+                    VISA / mada
+                  </button>
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                <div className="mb-3 flex items-center justify-between">
+                  <h3 className="text-3xl font-extrabold text-slate-800">{selectedProject.title}</h3>
+                  <div className="flex items-center gap-2">
+                    <button className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600"><Instagram className="h-4 w-4" /></button>
+                    <button className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600"><MessageCircle className="h-4 w-4" /></button>
+                    <button className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600"><Share2 className="h-4 w-4" /></button>
+                    <button className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600"><Facebook className="h-4 w-4" /></button>
+                  </div>
+                </div>
+
+                <div className="mb-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
+                  <img src={selectedProject.image} alt={selectedProject.title} className="h-[280px] w-full object-cover" />
+                </div>
+
+                <p className="text-center text-xl font-medium leading-relaxed text-slate-700">{selectedProject.description}</p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
