@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { RefreshCw, User, Phone, FolderOpen, CalendarDays, Banknote, Hash } from "lucide-react";
+import { User, Phone, FolderOpen, CalendarDays, Banknote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -38,7 +38,7 @@ export default function RecurringDonate() {
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-[760px] rounded-[24px] border border-slate-200 bg-white p-4 shadow-sm">
           <div className="mb-7 text-center">
-            <RefreshCw className="mx-auto mb-4 h-9 w-9 text-sky-500" />
+            <Banknote className="mx-auto mb-4 h-9 w-9 text-sky-500" />
             <h1 className="mb-4 text-3xl font-extrabold text-slate-900">التبرع الدوري</h1>
             <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold leading-6 text-slate-600">
               اكتشف سهولة التبرع والعطاء بخدمة التبرع الدوري! اترك لنا العناية بتنفيذ تبرعاتك تلقائيا وفق الجداول الزمنية التي تناسبك، وساهم معنا!
@@ -133,10 +133,10 @@ export default function RecurringDonate() {
                     key={amount}
                     onClick={() => {
                       setSelectedAmount(amount);
-                      setCustomAmount("");
+                      setCustomAmount(String(amount));
                     }}
                     className={`rounded-2xl border p-3 text-center transition-colors ${
-                      selectedAmount === amount && !customAmount
+                      selectedAmount === amount
                         ? "border-sky-500 bg-sky-50"
                         : "border-slate-300 bg-white hover:bg-slate-50"
                     }`}
@@ -149,12 +149,17 @@ export default function RecurringDonate() {
               </div>
 
               <div className="relative mt-3">
-                <Hash className="pointer-events-none absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-500">
+                  ريال
+                </span>
                 <Input
                   value={customAmount}
-                  onChange={(e) => setCustomAmount(e.target.value.replace(/[^0-9]/g, ""))}
+                  onChange={(e) => {
+                    setCustomAmount(e.target.value.replace(/[^0-9]/g, ""));
+                    setSelectedAmount(0);
+                  }}
                   placeholder="0"
-                  className="h-12 rounded-xl border-slate-300 bg-white pr-10 text-left text-2xl font-bold"
+                  className="h-12 rounded-xl border-slate-300 bg-white pr-16 text-center text-2xl font-bold"
                   inputMode="numeric"
                 />
               </div>
@@ -162,10 +167,9 @@ export default function RecurringDonate() {
 
             <Button
               onClick={handleSubmit}
-              className="mt-2 h-12 w-full rounded-2xl bg-sky-500 text-lg font-extrabold text-white hover:bg-sky-600"
+              className="mt-2 h-12 w-full justify-center rounded-2xl bg-sky-500 text-center text-lg font-extrabold text-white hover:bg-sky-600"
             >
-              <RefreshCw className="h-5 w-5" />
-              بدأ الاستقطاع
+              تبرع الآن
             </Button>
           </div>
         </div>
