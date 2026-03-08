@@ -396,6 +396,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
        location !== '/donate/recurring' && 
        location !== '/donate/tribute' && 
        location !== '/donate/campaign' && 
+       location !== '/cart' && 
        !location.startsWith('/donate/opportunities') ? (
         <div className="fixed top-24 right-2 z-50 w-[92px] rounded-xl bg-white/95 shadow-xl border border-slate-200 backdrop-blur-sm">
           <button
@@ -436,6 +437,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
        location !== '/donate/recurring' && 
        location !== '/donate/tribute' && 
        location !== '/donate/campaign' && 
+       location !== '/cart' && 
        !location.startsWith('/donate/opportunities') && (
         <button
           onClick={() => setIsDonationWidgetVisible(true)}

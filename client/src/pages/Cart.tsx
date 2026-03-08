@@ -64,7 +64,7 @@ export default function Cart() {
           <div className="lg:col-span-2 space-y-4">
             {items.map((item, index) => (
               <motion.div
-                key={`${item.id}-${item.amount}-${index}`}
+                key={`${item.id}-${item.amount}-${item.donationType}`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
