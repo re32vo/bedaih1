@@ -196,87 +196,110 @@ export default function DonationOpportunityDetails() {
         </div>
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <div className="rounded-2xl border border-slate-200 bg-white p-4">
-            <h2 className="mb-3 text-xl font-extrabold text-slate-800">مبلغ التبرع</h2>
+          <div className="rounded-2xl border border-slate-200 bg-white p-5">
+            <h2 className="mb-4 text-xl font-extrabold text-slate-800">مبلغ التبرع</h2>
 
-            {/* سهم الجود مع إمكانية تعديل المبلغ وعدد الأسهم */}
+            {/* سهم الجود - في إطار مميز */}
             <div className="mb-4 rounded-xl border-2 border-[#26a1d0] bg-[#26a1d0]/5 p-4">
               <h3 className="mb-3 text-sm font-bold text-slate-700">سهم الجود</h3>
               
-              <div className="relative">
-                <div className="flex items-center gap-2">
-                  {/* عدد الأسهم على اليمين */}
-                  <Select value={String(sharesCount)} onValueChange={(value) => {
-                    const count = Number(value);
-                    setSharesCount(count);
-                    setCustomAmount(String(shareAmount * count));
-                    setSelectedAmount(shareAmount * count);
-                  }}>
-                    <SelectTrigger className="h-12 w-20 rounded-lg bg-white text-center font-bold text-lg">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20].map((num) => (
-                        <SelectItem key={num} value={String(num)}>
-                          {num}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  
-                  {/* المبلغ على اليسار */}
-                  <div className="flex-1 relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-600">ر.س</span>
-                    <Input
-                      type="number"
-                      value={shareAmount}
-                      onChange={(e) => {
-                        const value = Number(e.target.value) || 0;
-                        setShareAmount(value);
-                        setCustomAmount(String(value * sharesCount));
-                        setSelectedAmount(value * sharesCount);
-                      }}
-                      className="h-12 rounded-lg border-slate-300 bg-white text-center font-bold text-xl pl-14"
-                      min="1"
-                    />
-                  </div>
-                </div>
+              <div className="flex items-center gap-2">
+                {/* عدد الأسهم على اليمين */}
+                <Select value={String(sharesCount)} onValueChange={(value) => {
+                  const count = Number(value);
+                  setSharesCount(count);
+                  setCustomAmount(String(shareAmount * count));
+                  setSelectedAmount(shareAmount * count);
+                  setCustomDonation(false);
+                }}>
+                  <SelectTrigger className="h-12 w-20 rounded-lg bg-white text-center font-bold text-lg">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20].map((num) => (
+                      <SelectItem key={num} value={String(num)}>
+                        {num}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 
-                <div className="mt-3 bg-white rounded-lg p-2 border border-slate-200 text-center">
-                  <span className="text-lg font-black text-[#26a1d0]">{shareAmount * sharesCount}</span>
-                  <span className="text-sm text-slate-600 mr-1">ر.س</span>
+                {/* المبلغ في الوسط */}
+                <div className="flex-1 relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-600">ر.س</span>
+                  <Input
+                    type="number"
+                    value={shareAmount}
+                    onChange={(e) => {
+                      const value = Number(e.target.value) || 0;
+                      setShareAmount(value);
+                      setCustomAmount(String(value * sharesCount));
+                      setSelectedAmount(value * sharesCount);
+                      setCustomDonation(false);
+                    }}
+                    className="h-12 rounded-lg border-slate-300 bg-white text-center font-bold text-xl pl-14"
+                    min="1"
+                  />
                 </div>
+              </div>
+              
+              {/* الإجمالي */}
+              <div className="mt-3 bg-white rounded-lg p-2 border border-slate-200 text-center">
+                <span className="text-lg font-black text-[#26a1d0]">{shareAmount * sharesCount}</span>
+                <span className="text-sm text-slate-600 mr-1">ر.س</span>
               </div>
             </div>
 
-            {/* خيارات أخرى */}
-            <div className="mb-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
-              {[{ label: "سهم العطاء", value: 20 }, { label: "سهم الإحسان", value: 30 }, { label: "بما تجود به نفسك", value: 0 }].map((option) => (
-                <button
-                  key={option.label}
-                  type="button"
-                  onClick={() => {
-                    if (option.value === 0) {
-                      setCustomDonation(true);
-                      setSelectedAmount(0);
-                      setCustomAmount("");
-                      return;
-                    }
-                    setCustomDonation(false);
-                    setSelectedAmount(option.value);
-                    setCustomAmount(String(option.value));
-                  }}
-                  className={`rounded-lg border px-3 py-2 text-sm font-bold transition ${
-                    (option.value === 0 && customDonation) || (option.value > 0 && selectedAmount === option.value && !customDonation)
-                      ? "border-sky-500 bg-sky-50 text-sky-700"
-                      : "border-slate-300 bg-white text-slate-700"
-                  }`}
-                >
-                  {option.label}
-                </button>
-              ))}
+            {/* خيارات التبرع الأخرى */}
+            <div className="mb-4 grid grid-cols-3 gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setCustomDonation(false);
+                  setSelectedAmount(20);
+                  setCustomAmount("20");
+                }}
+                className={`rounded-lg border px-3 py-2.5 text-sm font-bold transition ${
+                  selectedAmount === 20 && !customDonation
+                    ? "border-[#26a1d0] bg-[#26a1d0]/10 text-[#26a1d0]"
+                    : "border-slate-300 bg-white text-slate-700 hover:border-[#26a1d0]/50"
+                }`}
+              >
+                سهم العطاء
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setCustomDonation(false);
+                  setSelectedAmount(30);
+                  setCustomAmount("30");
+                }}
+                className={`rounded-lg border px-3 py-2.5 text-sm font-bold transition ${
+                  selectedAmount === 30 && !customDonation
+                    ? "border-[#26a1d0] bg-[#26a1d0]/10 text-[#26a1d0]"
+                    : "border-slate-300 bg-white text-slate-700 hover:border-[#26a1d0]/50"
+                }`}
+              >
+                سهم الإحسان
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setCustomDonation(true);
+                  setSelectedAmount(0);
+                  setCustomAmount("");
+                }}
+                className={`rounded-lg border px-3 py-2.5 text-sm font-bold transition ${
+                  customDonation
+                    ? "border-[#26a1d0] bg-[#26a1d0]/10 text-[#26a1d0]"
+                    : "border-slate-300 bg-white text-slate-700 hover:border-[#26a1d0]/50"
+                }`}
+              >
+                بما تجود به نفسك
+              </button>
             </div>
 
+            {/* حقل المبلغ - يظهر دائماً */}
             <div className="relative mb-4">
               <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-600">ريال</span>
               <Input
@@ -285,27 +308,27 @@ export default function DonationOpportunityDetails() {
                   const value = e.target.value.replace(/[^0-9]/g, "");
                   setCustomAmount(value);
                   
-                  // إذا كان المدخل صفر أو فارغ، فعّل زر "بما تجود به نفسك"
                   if (value === "0" || value === "") {
                     setCustomDonation(true);
                     setSelectedAmount(0);
                   } else {
                     setCustomDonation(false);
-                    setSelectedAmount(0);
+                    setSelectedAmount(Number(value));
                   }
                 }}
-                className="h-12 rounded-xl border-slate-300 bg-white pr-12 text-center text-xl font-bold"
+                className="h-14 rounded-xl border-2 border-slate-300 bg-white pr-14 text-left text-2xl font-bold focus:border-[#26a1d0]"
                 inputMode="numeric"
                 placeholder="0"
               />
             </div>
 
+            {/* أنواع التبرع */}
             <div className="mb-4 grid grid-cols-3 gap-2 rounded-xl border border-slate-200 bg-slate-50 p-1">
               <button 
                 type="button" 
                 onClick={() => setDonationType('quick')}
-                className={`rounded-lg px-2 py-2 text-xs sm:text-sm font-bold transition ${
-                  donationType === 'quick' ? 'bg-slate-200 text-slate-800' : 'text-slate-700'
+                className={`rounded-lg px-2 py-2.5 text-xs sm:text-sm font-bold transition ${
+                  donationType === 'quick' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-600'
                 }`}
               >
                 تبرع سريع
@@ -313,8 +336,8 @@ export default function DonationOpportunityDetails() {
               <button 
                 type="button" 
                 onClick={() => setDonationType('single')}
-                className={`rounded-lg px-2 py-2 text-xs sm:text-sm font-bold transition ${
-                  donationType === 'single' ? 'bg-slate-200 text-slate-800' : 'text-slate-700'
+                className={`rounded-lg px-2 py-2.5 text-xs sm:text-sm font-bold transition ${
+                  donationType === 'single' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-600'
                 }`}
               >
                 تبرع واحد
@@ -322,21 +345,18 @@ export default function DonationOpportunityDetails() {
               <button 
                 type="button" 
                 onClick={() => setDonationType('recurring')}
-                className={`rounded-lg px-2 py-2 text-xs sm:text-sm font-bold transition ${
-                  donationType === 'recurring' ? 'bg-slate-200 text-slate-800' : 'text-slate-700'
+                className={`rounded-lg px-2 py-2.5 text-xs sm:text-sm font-bold transition ${
+                  donationType === 'recurring' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-600'
                 }`}
               >
                 تبرع دوري
               </button>
             </div>
 
-            {/* قسم اختيار المدة للتبرع الدوري */}
+            {/* قسم التبرع الدوري */}
             {donationType === 'recurring' && (
-              <div className="mb-4 rounded-xl border border-amber-300 bg-amber-50 p-4">
-                <h3 className="mb-3 text-sm font-bold text-slate-800 flex items-center gap-2">
-                  <Heart className="h-4 w-4 text-amber-600" />
-                  التكرار
-                </h3>
+              <div className="mb-4 rounded-xl border-2 border-[#26a1d0] bg-white p-4">
+                <h3 className="mb-3 text-sm font-bold text-slate-800">التكرار</h3>
                 <div className="grid grid-cols-2 gap-2">
                   {[
                     { value: 'daily', label: 'يومي' },
@@ -348,49 +368,57 @@ export default function DonationOpportunityDetails() {
                       key={period.value}
                       type="button"
                       onClick={() => setRecurringPeriod(period.value)}
-                      className={`rounded-lg px-3 py-2 text-sm font-bold transition ${
+                      className={`rounded-lg px-3 py-2.5 text-sm font-bold transition ${
                         recurringPeriod === period.value
-                          ? 'bg-sky-500 text-white'
-                          : 'bg-white text-slate-700 border border-slate-300'
+                          ? 'bg-[#26a1d0] text-white'
+                          : 'bg-slate-50 text-slate-700 border border-slate-200 hover:border-[#26a1d0]'
                       }`}
                     >
                       {period.label}
                     </button>
                   ))}
                 </div>
-                <p className="mt-2 text-xs text-amber-700 bg-amber-100 rounded-lg p-2">
-                  {isLoggedIn 
-                    ? `سيتم خصم ${total} ريال ${recurringPeriod === 'daily' ? 'يومياً' : recurringPeriod === 'weekly' ? 'أسبوعياً' : recurringPeriod === 'monthly' ? 'شهرياً' : 'سنوياً'} تلقائياً`
-                    : 'يتطلب تسجيل الدخول لتفعيل التبرع الدوري'}
-                </p>
+                {isLoggedIn && (
+                  <p className="mt-3 text-xs text-slate-600 text-center bg-slate-50 rounded-lg p-2">
+                    سيتم خصم {total} ريال {recurringPeriod === 'daily' ? 'يومياً' : recurringPeriod === 'weekly' ? 'أسبوعياً' : recurringPeriod === 'monthly' ? 'شهرياً' : 'سنوياً'} تلقائياً
+                  </p>
+                )}
               </div>
             )}
 
-            {/* رسالة توضيحية لكل نوع تبرع */}
+            {/* رسائل توضيحية */}
             {donationType === 'quick' && (
-              <div className="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 p-3">
-                <p className="text-xs text-emerald-700 font-semibold">
+              <div className="mb-4 rounded-lg border border-emerald-300 bg-emerald-50 p-3">
+                <p className="text-sm text-emerald-700 font-semibold">
                   ⚡ تبرع سريع - يمكنك التبرع مباشرة بدون تسجيل دخول
                 </p>
               </div>
             )}
 
-            {donationType === 'single' && (
+            {donationType === 'single' && !isLoggedIn && (
               <div className="mb-4 rounded-lg border border-blue-200 bg-blue-50 p-3">
-                <p className="text-xs text-blue-700 font-semibold">
-                  {isLoggedIn 
-                    ? '✓ أنت مسجل دخول - يمكنك إتمام التبرع' 
-                    : '🔐 يتطلب تسجيل الدخول لتسجيل التبرع في حسابك'}
+                <p className="text-sm text-blue-700 font-semibold">
+                  🔐 يتطلب تسجيل الدخول لتسجيل التبرع في حسابك
                 </p>
               </div>
             )}
 
-            <div className="mb-4 text-center">
-              <p className="text-lg font-semibold text-slate-600">الإجمالي</p>
-              <p className="text-3xl font-black text-slate-800">{total} ر.س</p>
+            {donationType === 'recurring' && !isLoggedIn && (
+              <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-3">
+                <p className="text-sm text-amber-700 font-semibold">
+                  🔐 يتطلب تسجيل الدخول لتفعيل التبرع الدوري
+                </p>
+              </div>
+            )}
+
+            {/* الإجمالي */}
+            <div className="mb-4 text-center py-2">
+              <p className="text-base font-semibold text-slate-600">الإجمالي</p>
+              <p className="text-3xl font-black text-slate-900">{total} ر.س</p>
             </div>
 
-            <p className="mb-3 text-center text-lg font-bold text-slate-700">اختر وسيلة الدفع الملائمة</p>
+            {/* وسائل الدفع */}
+            <p className="mb-3 text-center text-base font-bold text-slate-700">اختر وسيلة الدفع الملائمة</p>
             <div className="grid grid-cols-3 gap-2">
               {paymentMethods.map((method) => (
                 <button
