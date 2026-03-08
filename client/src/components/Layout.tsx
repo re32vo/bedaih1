@@ -254,7 +254,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <ShoppingCart className="w-5 h-5" />
                 السلة
                 {getTotalItems() > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center shadow-lg border-2 border-white">
+                  <span className="absolute -top-2 -right-2 bg-red-600 text-white text-sm font-extrabold rounded-full min-w-[24px] h-6 px-1.5 flex items-center justify-center shadow-lg border-2 border-white">
                     {getTotalItems()}
                   </span>
                 )}
@@ -374,7 +374,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   <ShoppingCart className="w-5 h-5" />
                   السلة
                   {getTotalItems() > 0 && (
-                    <span className="absolute -top-2 left-3 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center shadow-lg border-2 border-white">
+                    <span className="absolute -top-2 left-3 bg-red-600 text-white text-sm font-extrabold rounded-full min-w-[24px] h-6 px-1.5 flex items-center justify-center shadow-lg border-2 border-white">
                       {getTotalItems()}
                     </span>
                   )}
