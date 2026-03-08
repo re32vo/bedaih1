@@ -33,6 +33,7 @@ export default function DonationOpportunityDetails() {
   const [shareAmount, setShareAmount] = useState<number>(30);
   const [sharesCount, setSharesCount] = useState<number>(1);
   const [recurringPeriod, setRecurringPeriod] = useState<string>("monthly");
+  const [selectedShareType, setSelectedShareType] = useState<'good' | 'giving' | 'kindness' | 'custom'>('good');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [donorEmail, setDonorEmail] = useState('');
   const [showLoginDialog, setShowLoginDialog] = useState(false);
@@ -196,7 +197,7 @@ export default function DonationOpportunityDetails() {
         </div>
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <div className="rounded-2xl border border-slate-200 bg-white p-5">
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 order-2 lg:order-1">
             <h2 className="mb-4 text-xl font-extrabold text-slate-800">مبلغ التبرع</h2>
 
             {/* خيارات التبرع */}
@@ -205,12 +206,13 @@ export default function DonationOpportunityDetails() {
                 type="button"
                 onClick={() => {
                   setCustomDonation(false);
+                  setSelectedShareType('good');
                   setShareAmount(30);
                   setCustomAmount(String(30 * sharesCount));
                   setSelectedAmount(30 * sharesCount);
                 }}
                 className={`rounded-lg border px-3 py-2.5 text-sm font-bold transition ${
-                  shareAmount === 30 && !customDonation
+                  selectedShareType === 'good' && !customDonation
                     ? "border-[#26a1d0] bg-[#26a1d0]/10 text-[#26a1d0]"
                     : "border-slate-300 bg-white text-slate-700 hover:border-[#26a1d0]/50"
                 }`}
@@ -221,12 +223,13 @@ export default function DonationOpportunityDetails() {
                 type="button"
                 onClick={() => {
                   setCustomDonation(false);
+                  setSelectedShareType('giving');
                   setShareAmount(20);
                   setCustomAmount(String(20 * sharesCount));
                   setSelectedAmount(20 * sharesCount);
                 }}
                 className={`rounded-lg border px-3 py-2.5 text-sm font-bold transition ${
-                  shareAmount === 20 && !customDonation
+                  selectedShareType === 'giving' && !customDonation
                     ? "border-[#26a1d0] bg-[#26a1d0]/10 text-[#26a1d0]"
                     : "border-slate-300 bg-white text-slate-700 hover:border-[#26a1d0]/50"
                 }`}
@@ -237,12 +240,13 @@ export default function DonationOpportunityDetails() {
                 type="button"
                 onClick={() => {
                   setCustomDonation(false);
+                  setSelectedShareType('kindness');
                   setShareAmount(30);
                   setCustomAmount(String(30 * sharesCount));
                   setSelectedAmount(30 * sharesCount);
                 }}
                 className={`rounded-lg border px-3 py-2.5 text-sm font-bold transition ${
-                  shareAmount === 30 && !customDonation
+                  selectedShareType === 'kindness' && !customDonation
                     ? "border-[#26a1d0] bg-[#26a1d0]/10 text-[#26a1d0]"
                     : "border-slate-300 bg-white text-slate-700 hover:border-[#26a1d0]/50"
                 }`}
@@ -253,6 +257,7 @@ export default function DonationOpportunityDetails() {
                 type="button"
                 onClick={() => {
                   setCustomDonation(true);
+                  setSelectedShareType('custom');
                   setSelectedAmount(0);
                   setCustomAmount("");
                 }}
@@ -273,18 +278,20 @@ export default function DonationOpportunityDetails() {
                 <Input
                   value={customAmount}
                   onChange={(e) => {
+                    if (!customDonation) return;
                     const value = e.target.value.replace(/[^0-9]/g, "");
                     setCustomAmount(value);
                     
                     if (value === "0" || value === "") {
-                      setCustomDonation(true);
                       setSelectedAmount(0);
                     } else {
-                      setCustomDonation(false);
                       setSelectedAmount(Number(value));
                     }
                   }}
-                  className="h-14 rounded-xl border-2 border-slate-300 bg-white pr-14 text-left text-2xl font-bold focus:border-[#26a1d0]"
+                  readOnly={!customDonation}
+                  className={`h-14 rounded-xl border-2 border-slate-300 pr-14 text-left text-2xl font-bold focus:border-[#26a1d0] ${
+                    customDonation ? 'bg-white' : 'bg-slate-50 cursor-not-allowed'
+                  }`}
                   inputMode="numeric"
                   placeholder="0"
                 />
@@ -432,7 +439,7 @@ export default function DonationOpportunityDetails() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-4">
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 order-1 lg:order-2">
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-2xl font-extrabold text-slate-800">{selectedProject.title}</h2>
               <div className="flex items-center gap-2">
