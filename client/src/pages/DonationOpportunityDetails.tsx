@@ -92,8 +92,8 @@ export default function DonationOpportunityDetails() {
     if (donationType === 'quick') {
       // التوجه مباشرة للدفع
       toast({
-        title: "تبرع سريع",
-        description: "سيتم توجيهك لإتمام التبرع مباشرة",
+        title: "تبرع",
+        description: "سيتم توجيهك لإتمام التبرع بمبلغ " + total + " ريال",
       });
       return;
     }
@@ -196,8 +196,8 @@ export default function DonationOpportunityDetails() {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 order-2 md:order-1 md:w-1/2">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 order-2 lg:order-1">
             <h2 className="mb-4 text-xl font-extrabold text-slate-800">مبلغ التبرع</h2>
 
             {/* خيارات التبرع */}
@@ -319,95 +319,6 @@ export default function DonationOpportunityDetails() {
               </Select>
             </div>
 
-            {/* أنواع التبرع */}
-            <div className="mb-4 grid grid-cols-3 gap-2 rounded-xl border border-slate-200 bg-slate-50 p-1">
-              <button 
-                type="button" 
-                onClick={() => setDonationType('quick')}
-                className={`rounded-lg px-2 py-2.5 text-xs sm:text-sm font-bold transition ${
-                  donationType === 'quick' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-600'
-                }`}
-              >
-                تبرع سريع
-              </button>
-              <button 
-                type="button" 
-                onClick={() => setDonationType('single')}
-                className={`rounded-lg px-2 py-2.5 text-xs sm:text-sm font-bold transition ${
-                  donationType === 'single' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-600'
-                }`}
-              >
-                تبرع واحد
-              </button>
-              <button 
-                type="button" 
-                onClick={() => setDonationType('recurring')}
-                className={`rounded-lg px-2 py-2.5 text-xs sm:text-sm font-bold transition ${
-                  donationType === 'recurring' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-600'
-                }`}
-              >
-                تبرع دوري
-              </button>
-            </div>
-
-            {/* قسم التبرع الدوري */}
-            {donationType === 'recurring' && (
-              <div className="mb-4 rounded-xl border-2 border-[#26a1d0] bg-white p-4">
-                <h3 className="mb-3 text-sm font-bold text-slate-800">التكرار</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { value: 'daily', label: 'يومي' },
-                    { value: 'weekly', label: 'أسبوعي' },
-                    { value: 'monthly', label: 'شهري' },
-                    { value: 'annual', label: 'سنوي' }
-                  ].map((period) => (
-                    <button
-                      key={period.value}
-                      type="button"
-                      onClick={() => setRecurringPeriod(period.value)}
-                      className={`rounded-lg px-3 py-2.5 text-sm font-bold transition ${
-                        recurringPeriod === period.value
-                          ? 'bg-[#26a1d0] text-white'
-                          : 'bg-slate-50 text-slate-700 border border-slate-200 hover:border-[#26a1d0]'
-                      }`}
-                    >
-                      {period.label}
-                    </button>
-                  ))}
-                </div>
-                {isLoggedIn && (
-                  <p className="mt-3 text-xs text-slate-600 text-center bg-slate-50 rounded-lg p-2">
-                    سيتم خصم {total} ريال {recurringPeriod === 'daily' ? 'يومياً' : recurringPeriod === 'weekly' ? 'أسبوعياً' : recurringPeriod === 'monthly' ? 'شهرياً' : 'سنوياً'} تلقائياً
-                  </p>
-                )}
-              </div>
-            )}
-
-            {/* رسائل توضيحية */}
-            {donationType === 'quick' && (
-              <div className="mb-4 rounded-lg border border-emerald-300 bg-emerald-50 p-3">
-                <p className="text-sm text-emerald-700 font-semibold">
-                  ⚡ تبرع سريع - يمكنك التبرع مباشرة بدون تسجيل دخول
-                </p>
-              </div>
-            )}
-
-            {donationType === 'single' && !isLoggedIn && (
-              <div className="mb-4 rounded-lg border border-blue-200 bg-blue-50 p-3">
-                <p className="text-sm text-blue-700 font-semibold">
-                  🔐 يتطلب تسجيل الدخول لتسجيل التبرع في حسابك
-                </p>
-              </div>
-            )}
-
-            {donationType === 'recurring' && !isLoggedIn && (
-              <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-3">
-                <p className="text-sm text-amber-700 font-semibold">
-                  🔐 يتطلب تسجيل الدخول لتفعيل التبرع الدوري
-                </p>
-              </div>
-            )}
-
             {/* الإجمالي */}
             <div className="mb-4 text-center py-2">
               <p className="text-base font-semibold text-slate-600">الإجمالي</p>
@@ -448,7 +359,7 @@ export default function DonationOpportunityDetails() {
             </Button>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 order-1 md:order-2 md:w-1/2">
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 order-1 lg:order-2">
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-2xl font-extrabold text-slate-800">{selectedProject.title}</h2>
               <div className="flex items-center gap-2">
