@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Layout } from "@/components/Layout";
 import ScrollToTop from "@/components/ScrollToTop";
 import { ThemeProvider } from "@/hooks/use-theme.tsx";
+import { CartProvider } from "@/hooks/use-cart";
 
 const NotFound = lazy(() => import("@/pages/not-found"));
 const Home = lazy(() => import("@/pages/Home"));
@@ -50,6 +51,7 @@ const TributeDonate = lazy(() => import("@/pages/TributeDonate"));
 const CampaignDonate = lazy(() => import("@/pages/CampaignDonate"));
 const DonationOpportunities = lazy(() => import("@/pages/DonationOpportunities"));
 const DonationOpportunityDetails = lazy(() => import("@/pages/DonationOpportunityDetails"));
+const Cart = lazy(() => import("@/pages/Cart"));
 
 function Router() {
   return (
@@ -104,6 +106,7 @@ function Router() {
           <Route path="/donate/campaign" component={CampaignDonate} />
           <Route path="/donate/opportunities/:id" component={DonationOpportunityDetails} />
           <Route path="/donate/opportunities" component={DonationOpportunities} />
+          <Route path="/cart" component={Cart} />
           
           <Route component={NotFound} />
         </Switch>
@@ -116,9 +119,11 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="light">
-        <Toaster />
-        <ScrollToTop />
-        <Router />
+        <CartProvider>
+          <Toaster />
+          <ScrollToTop />
+          <Router />
+        </CartProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
