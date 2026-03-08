@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Heart, Menu, X, Phone, MapPin, Mail, LogIn, User, ChevronDown, ChevronUp, MessageCircle } from "lucide-react";
+import { Heart, Menu, X, Phone, MapPin, Mail, LogIn, User, ChevronDown, ChevronUp, MessageCircle, Clock3, CalendarDays, Gift, Rocket } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,6 +11,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [location] = useLocation();
   const [isDonorLoggedIn, setIsDonorLoggedIn] = useState(false);
+  const [isDonationWidgetVisible, setIsDonationWidgetVisible] = useState(true);
   // تم تعطيل التبديل بين الوضعين، الموقع دائمًا أبيض
 
   useEffect(() => {
@@ -223,33 +224,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               )}
             </div>
 
-            {/* donation options dropdown trigger */}
-            <div className="relative">
-              <button
-                onClick={() => toggleDesktopDropdown("donation")}
-                className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
-              >
-                خيارات التبرع <ChevronDown className="w-4 h-4 mr-1" />
-              </button>
-              {openDesktopDropdown === "donation" && (
-                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-lg z-50">
-                  {donationOptionsLinks.map((link) => (
-                    <Link key={link.href} href={link.href}>
-                      <span
-                        className={`block px-4 py-2 text-sm cursor-pointer transition-colors ${
-                          location === link.href
-                            ? "bg-emerald-500 text-white"
-                            : "text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
-                        }`}
-                        onClick={() => setOpenDesktopDropdown(null)}
-                      >
-                        {link.label}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
+
           </nav>
 
           <div className="flex items-center gap-3">
@@ -370,24 +345,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 </div>
               )}
 
-              {/* mobile donation options section */}
-              <button
-                className="flex items-center px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
-                onClick={() => toggleMobileDropdown("donation")}
-              >
-                خيارات التبرع {openMobileDropdown === "donation" ? <ChevronUp className="w-4 h-4 mr-1" /> : <ChevronDown className="w-4 h-4 mr-1" />}
-              </button>
-              {openMobileDropdown === "donation" && (
-                <div className="flex flex-col gap-1 mt-1">
-                  {donationOptionsLinks.map((link) => (
-                    <Link key={link.href} href={link.href}>
-                      <span className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10" onClick={() => setIsMenuOpen(false)}>
-                        {link.label}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              )}  
+
 
               <Link href={isDonorLoggedIn ? "/donor-dashboard" : "/donor-login"}>
                 <Button className="w-full mt-2 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-full flex items-center justify-center gap-2">
@@ -404,6 +362,50 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </AnimatePresence>
 
       <main className="flex-grow bg-white">{children}</main>
+
+      {/* Right-side donation shortcuts */}
+      {isDonationWidgetVisible ? (
+        <div className="fixed top-28 right-3 z-50 w-[116px] rounded-2xl bg-white/95 shadow-xl border border-slate-200 backdrop-blur-sm">
+          <button
+            onClick={() => setIsDonationWidgetVisible(false)}
+            className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-sky-500 text-white flex items-center justify-center shadow-md hover:bg-sky-600 transition-colors"
+            aria-label="إخفاء خيارات التبرع"
+          >
+            <X className="w-4 h-4" />
+          </button>
+
+          <div className="py-3">
+            {donationOptionsLinks.map((link, index) => {
+              const icon =
+                index === 0 ? <Clock3 className="w-6 h-6 text-slate-700" /> :
+                index === 1 ? <CalendarDays className="w-6 h-6 text-slate-700" /> :
+                index === 2 ? <Gift className="w-6 h-6 text-slate-700" /> :
+                index === 3 ? <Rocket className="w-6 h-6 text-slate-700" /> :
+                <Heart className="w-6 h-6 text-slate-700" />;
+
+              return (
+                <Link key={link.href} href={link.href}>
+                  <span className="block px-3 py-2 text-center cursor-pointer hover:bg-slate-50 transition-colors">
+                    <span className="flex justify-center mb-2">{icon}</span>
+                    <span className="block text-[22px] leading-none text-sky-500 mb-2">_</span>
+                    <span className={`block text-sm font-medium ${location === link.href ? "text-sky-600" : "text-slate-800"}`}>
+                      {link.label}
+                    </span>
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      ) : (
+        <button
+          onClick={() => setIsDonationWidgetVisible(true)}
+          className="fixed top-32 right-2 z-50 bg-sky-500 text-white rounded-l-xl rounded-r-md px-2 py-3 shadow-lg hover:bg-sky-600 transition-colors"
+          aria-label="إظهار خيارات التبرع"
+        >
+          <Heart className="w-5 h-5" />
+        </button>
+      )}
 
       {/* WhatsApp Floating Button */}
       <a
