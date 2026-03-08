@@ -1,109 +1,168 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Rocket, Target, Users, TrendingUp } from "lucide-react";
+import { useState } from "react";
+import { X, ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function CampaignDonate() {
-  const steps = [
-    { title: "حدد حلمك", description: "ما الذي تريد جمع أموال له؟ برنامج، مشروع، أو قضية" },
-    { title: "اكتب قصتك", description: "شارك رؤيتك وأهدافك بطريقة مؤثرة وملهمة" },
-    { title: "اجمع التبرعات", description: "شارك حملتك مع أصدقائك والشبكات الاجتماعية" },
-    { title: "حقق الحلم", description: "عندما تصل للهدف، نساعدك في تنفيذ المشروع" },
-  ];
+  const [campaignTitle, setCampaignTitle] = useState("");
+  const [launcherName, setLauncherName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [selectedAmount, setSelectedAmount] = useState(5000);
+  const [customAmount, setCustomAmount] = useState("5000");
+  const [project, setProject] = useState("");
+
+  const titleSuggestions = ["صدقة عن () رحمه الله", "مساهمة جماعية عن ()", "صدقة عن والدي", "صدقة عن أمي"];
+  const quickAmounts = [5000, 15000, 25000];
+
+  const finalAmount = customAmount ? Number(customAmount) || 0 : selectedAmount;
+
+  const handleSubmit = () => {
+    if (!campaignTitle.trim() || !launcherName.trim() || !phone.trim() || !project || finalAmount <= 0) {
+      alert("الرجاء تعبئة البيانات بشكل صحيح");
+      return;
+    }
+
+    alert("تم إرسال طلب إطلاق الحملة بنجاح");
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" dir="rtl">
-      <div className="container mx-auto px-4 py-12">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 mb-4">أطلق حملتك</h1>
-          <p className="text-xl text-slate-600">حول حلمك إلى واقع بدعم الجميع</p>
-        </div>
+    <div className="min-h-screen bg-slate-100 py-8" dir="rtl">
+      <div className="container mx-auto px-4">
+        <div className="mx-auto max-w-[980px] rounded-2xl border border-slate-300 bg-white p-3 shadow-sm">
+          <button
+            type="button"
+            className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-sky-500 text-white"
+            aria-label="إغلاق"
+          >
+            <X className="h-5 w-5" />
+          </button>
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <Card>
-            <CardHeader>
-              <Rocket className="w-6 h-6 text-orange-500 mb-3" />
-              <CardTitle>حملة نشطة</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold text-slate-900">100+</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <Target className="w-6 h-6 text-blue-500 mb-3" />
-              <CardTitle>أموال مجموعة</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold text-slate-900">+10M</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <Users className="w-6 h-6 text-emerald-500 mb-3" />
-              <CardTitle>حملات أنجزت</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold text-slate-900">75+</p>
-            </CardContent>
-          </Card>
-        </div>
+          <div className="mb-5 rounded-2xl border border-slate-200 bg-white py-6 text-center text-6xl font-extrabold text-slate-900">
+            أطلق حملتك
+          </div>
 
-        {/* Steps */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-slate-900 mb-6">كيفية إطلاق حملتك</h2>
           <div className="space-y-4">
-            {steps.map((step, index) => (
-              <Card key={index}>
-                <CardContent className="pt-6">
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-10 h-10 bg-emerald-500 text-white rounded-full flex items-center justify-center font-bold">{index + 1}</div>
-                    <div>
-                      <p className="font-semibold text-slate-900 text-lg">{step.title}</p>
-                      <p className="text-slate-600 mt-1">{step.description}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            <div className="rounded-2xl border border-sky-500 bg-white p-2">
+              <div className="mb-2 flex flex-wrap justify-end gap-2">
+                {titleSuggestions.map((suggestion) => (
+                  <button
+                    key={suggestion}
+                    type="button"
+                    onClick={() => setCampaignTitle(suggestion)}
+                    className="rounded-full bg-sky-100 px-4 py-1 text-sm font-semibold text-sky-600"
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="h-11 rounded-xl bg-red-100 px-4 text-base font-bold text-red-500 hover:bg-red-100"
+                  onClick={() => setCampaignTitle("")}
+                >
+                  مسح
+                </Button>
+
+                <Input
+                  value={campaignTitle}
+                  onChange={(e) => setCampaignTitle(e.target.value)}
+                  className="h-11 rounded-xl border-0 bg-transparent text-right text-3xl font-bold shadow-none focus-visible:ring-0"
+                  placeholder="عنوان الحملة"
+                />
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-slate-300 bg-white p-2">
+              <div className="flex items-center gap-2">
+                <span className="rounded-full bg-sky-100 px-4 py-2 text-2xl font-bold text-sky-600">حدد كفاعل خير</span>
+                <Input
+                  value={launcherName}
+                  onChange={(e) => setLauncherName(e.target.value)}
+                  className="h-11 rounded-xl border-0 bg-transparent text-right text-4xl font-bold shadow-none focus-visible:ring-0"
+                  placeholder="اسم مطلق الحملة"
+                />
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-slate-500 bg-white px-3 py-2">
+              <div className="flex h-11 items-center">
+                <Input
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="h-auto border-0 p-0 text-right text-4xl font-medium text-slate-600 shadow-none focus-visible:ring-0"
+                  placeholder="051 234 5678"
+                />
+                <div className="mx-2 h-7 w-px bg-slate-200" />
+                <div className="flex items-center gap-1 text-sm font-semibold text-slate-700" dir="ltr">
+                  <ChevronDown className="h-4 w-4" />
+                  <span>🇸🇦</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-slate-300 bg-white p-2">
+              <div className="flex items-center gap-2">
+                <span className="text-4xl font-bold text-slate-900">ريال</span>
+                <Input
+                  value={customAmount}
+                  onChange={(e) => {
+                    setCustomAmount(e.target.value.replace(/[^0-9]/g, ""));
+                    setSelectedAmount(0);
+                  }}
+                  className="h-11 rounded-xl border-0 bg-transparent text-left text-4xl font-bold shadow-none focus-visible:ring-0"
+                  placeholder="0"
+                  inputMode="numeric"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2">
+              {quickAmounts.map((amount) => (
+                <button
+                  key={amount}
+                  type="button"
+                  onClick={() => {
+                    setSelectedAmount(amount);
+                    setCustomAmount(String(amount));
+                  }}
+                  className={`rounded-full px-5 py-1.5 text-2xl font-bold transition-colors ${
+                    selectedAmount === amount
+                      ? "bg-sky-500 text-white"
+                      : "bg-sky-100 text-sky-600"
+                  }`}
+                >
+                  {amount} ريال
+                </button>
+              ))}
+            </div>
+
+            <Select value={project} onValueChange={setProject}>
+              <SelectTrigger className="h-14 rounded-2xl border-slate-300 text-4xl font-bold">
+                <SelectValue placeholder="اختر المشروع" />
+              </SelectTrigger>
+              <SelectContent className="bg-white">
+                <SelectItem value="education">الدعم التعليمي</SelectItem>
+                <SelectItem value="health">الدعم الصحي</SelectItem>
+                <SelectItem value="housing">ترميم المنازل</SelectItem>
+                <SelectItem value="food">السلال الغذائية</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <div className="flex justify-center pt-2">
+              <Button
+                type="button"
+                onClick={handleSubmit}
+                className="h-14 min-w-[220px] rounded-2xl bg-sky-500 text-4xl font-extrabold text-white hover:bg-sky-600"
+              >
+                أطلق حملتك
+              </Button>
+            </div>
           </div>
         </div>
-
-        {/* Benefits */}
-        <Card className="mb-12">
-          <CardHeader>
-            <div className="flex items-center space-x-3">
-              <TrendingUp className="w-6 h-6 text-purple-500" />
-              <CardTitle>فوائد إطلاق حملة</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <ul className="list-disc list-inside space-y-2 text-slate-700">
-              <li>منصة موثوقة وآمنة لجمع الأموال</li>
-              <li>دعم متكامل من فريق جمعية بداية</li>
-              <li>وصول لآلاف المتبرعين المحتملين</li>
-              <li>أدوات تسويقية قوية لنشر حملتك</li>
-              <li>متابعة شفافة وآمنة للأموال المجموعة</li>
-              <li>شهادات وإيصالات رسمية للمتبرعين</li>
-            </ul>
-          </CardContent>
-        </Card>
-
-        {/* CTA */}
-        <Card>
-          <CardHeader>
-            <CardTitle>هل أنت مستعد لتغيير العالم؟</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-slate-700">
-              ابدأ حملتك اليوم وكن جزءاً من الحركة الاجتماعية التي تغير حياة الناس.
-            </p>
-            <button onClick={() => console.log('ابدأ حملة جديدة')} className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 rounded-lg transition cursor-pointer">
-              <Rocket className="w-5 h-5 inline-block mr-2" />
-              ابدأ حملتك الآن
-            </button>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );
