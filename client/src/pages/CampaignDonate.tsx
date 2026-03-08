@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 export default function CampaignDonate() {
   const [campaignTitle, setCampaignTitle] = useState("");
   const [launcherName, setLauncherName] = useState("");
+  const campaignTitleInputRef = useRef<HTMLInputElement>(null);
   const [phone, setPhone] = useState("");
   const [selectedAmount, setSelectedAmount] = useState(5000);
   const [customAmount, setCustomAmount] = useState("5000");
@@ -16,6 +17,28 @@ export default function CampaignDonate() {
   const quickAmounts = [5000, 15000, 25000];
 
   const finalAmount = customAmount ? Number(customAmount) || 0 : selectedAmount;
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setCampaignTitle(suggestion);
+
+    const openParenIndex = suggestion.indexOf("(");
+    const closeParenIndex = suggestion.indexOf(")");
+
+    // Place cursor inside () for instant name entry.
+    window.setTimeout(() => {
+      const input = campaignTitleInputRef.current;
+      if (!input) return;
+
+      input.focus();
+
+      if (openParenIndex !== -1 && closeParenIndex > openParenIndex) {
+        input.setSelectionRange(openParenIndex + 1, closeParenIndex);
+      } else {
+        const textLength = suggestion.length;
+        input.setSelectionRange(textLength, textLength);
+      }
+    }, 0);
+  };
 
   const handleSubmit = () => {
     if (!campaignTitle.trim() || !launcherName.trim() || !phone.trim() || !project || finalAmount <= 0) {
@@ -49,7 +72,7 @@ export default function CampaignDonate() {
                   <button
                     key={suggestion}
                     type="button"
-                    onClick={() => setCampaignTitle(suggestion)}
+                    onClick={() => handleSuggestionClick(suggestion)}
                     className="rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-700 md:px-4 md:text-sm"
                   >
                     {suggestion}
@@ -68,6 +91,7 @@ export default function CampaignDonate() {
                 </Button>
 
                 <Input
+                  ref={campaignTitleInputRef}
                   value={campaignTitle}
                   onChange={(e) => setCampaignTitle(e.target.value)}
                   className="h-10 rounded-xl border-0 bg-transparent text-center text-lg font-bold shadow-none focus-visible:ring-0 md:h-11 md:text-xl"
@@ -78,7 +102,13 @@ export default function CampaignDonate() {
 
             <div className="rounded-2xl border border-slate-300 bg-white p-2">
               <div className="flex items-center gap-2">
-                <span className="rounded-full bg-sky-100 px-3 py-2 text-sm font-bold text-sky-700 md:px-4 md:text-base">حدد كفاعل خير</span>
+                <button
+                  type="button"
+                  onClick={() => setLauncherName("فاعل خير")}
+                  className="rounded-full bg-sky-100 px-3 py-2 text-sm font-bold text-sky-700 transition-colors hover:bg-sky-200 md:px-4 md:text-base"
+                >
+                  حدد كفاعل خير
+                </button>
                 <Input
                   value={launcherName}
                   onChange={(e) => setLauncherName(e.target.value)}
