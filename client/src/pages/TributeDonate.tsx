@@ -16,7 +16,8 @@ export default function TributeDonate() {
   const [showAmountInCard, setShowAmountInCard] = useState(false);
   const [donationDate, setDonationDate] = useState("");
   const [donationTime, setDonationTime] = useState("04:00");
-  const [giftMessage, setGiftMessage] = useState("إهداء مشروع أوقاف ابتسم");
+  const [isSchedulingEnabled, setIsSchedulingEnabled] = useState(false);
+  const [giftMessage, setGiftMessage] = useState("إهداء مشروع أوقاف بداية");
 
   const templates: Template[] = [
     { id: "t1", label: "نموذج 1", src: "/1.jpg" },
@@ -36,7 +37,13 @@ export default function TributeDonate() {
       alert("الرجاء تعبئة بيانات البطاقة والمبلغ بشكل صحيح");
       return;
     }
-    alert("تم إرسال الإهداء بنجاح");
+
+    if (isSchedulingEnabled && (!donationDate || !donationTime)) {
+      alert("الرجاء اختيار تاريخ ووقت جدولة الإهداء");
+      return;
+    }
+
+    alert(isSchedulingEnabled ? "تمت جدولة الإهداء بنجاح" : "تم إرسال الإهداء فورا بنجاح");
   };
 
   return (
@@ -110,13 +117,13 @@ export default function TributeDonate() {
                   <Input
                     value={recipientName}
                     onChange={(e) => setRecipientName(e.target.value)}
-                    className="h-11 rounded-lg border-slate-300 bg-white text-right text-base"
+                    className="h-11 rounded-lg border-slate-300 bg-white text-center text-base"
                     placeholder="اسم المهدي"
                   />
                   <Input
                     value={senderName}
                     onChange={(e) => setSenderName(e.target.value)}
-                    className="h-11 rounded-lg border-slate-300 bg-white text-right text-base"
+                    className="h-11 rounded-lg border-slate-300 bg-white text-center text-base"
                     placeholder="اسم المهدي إليه"
                   />
 
@@ -188,21 +195,43 @@ export default function TributeDonate() {
               </Button>
 
               <div className="rounded-xl border border-slate-200 bg-white p-3">
-                <h3 className="mb-3 flex items-center justify-center gap-2 text-lg font-bold text-slate-800">
-                  <CalendarClock className="h-4 w-4" />
+                <label className="mb-2 flex cursor-pointer items-center justify-center gap-2 text-2xl font-bold text-slate-800">
+                  <input
+                    type="checkbox"
+                    checked={isSchedulingEnabled}
+                    onChange={(e) => setIsSchedulingEnabled(e.target.checked)}
+                    className="h-5 w-5 accent-sky-500"
+                  />
+                  <CalendarClock className="h-5 w-5" />
                   جدولة الإهداء
-                </h3>
+                </label>
 
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label className="mb-1 block text-xs text-slate-500">اختر التاريخ</label>
-                    <Input type="date" value={donationDate} onChange={(e) => setDonationDate(e.target.value)} className="h-11 rounded-lg border-slate-300" />
+                <p className="mb-3 text-center text-sm font-semibold text-slate-600">
+                  في حال عدم تفعيل الجدولة سيتم إرسال الإهداء مباشرة
+                </p>
+
+                {isSchedulingEnabled && (
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="mb-1 block text-center text-sm font-semibold text-slate-500">اختر التاريخ</label>
+                      <Input
+                        type="date"
+                        value={donationDate}
+                        onChange={(e) => setDonationDate(e.target.value)}
+                        className="h-11 rounded-lg border-slate-300 text-center"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-center text-sm font-semibold text-slate-500">اختر الوقت</label>
+                      <Input
+                        type="time"
+                        value={donationTime}
+                        onChange={(e) => setDonationTime(e.target.value)}
+                        className="h-11 rounded-lg border-slate-300 text-center"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label className="mb-1 block text-xs text-slate-500">اختر الوقت</label>
-                    <Input type="time" value={donationTime} onChange={(e) => setDonationTime(e.target.value)} className="h-11 rounded-lg border-slate-300" />
-                  </div>
-                </div>
+                )}
               </div>
 
               <Button
