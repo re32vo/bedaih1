@@ -34,12 +34,12 @@ export default function RecurringDonate() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 py-8" dir="rtl">
+    <div className="min-h-screen bg-slate-100 py-5 md:py-8" dir="rtl">
       <div className="container mx-auto px-4">
-        <div className="mx-auto max-w-[760px] rounded-[24px] border border-slate-200 bg-white p-4 shadow-sm">
+        <div className="mx-auto max-w-[760px] rounded-[24px] border border-slate-200 bg-white p-3 md:p-4 shadow-sm">
           <div className="mb-7 text-center">
             <Banknote className="mx-auto mb-4 h-9 w-9 text-sky-500" />
-            <h1 className="mb-4 text-3xl font-extrabold text-slate-900">التبرع الدوري</h1>
+            <h1 className="mb-4 text-2xl font-extrabold text-slate-900 md:text-3xl">التبرع الدوري</h1>
             <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold leading-6 text-slate-600">
               اكتشف سهولة التبرع والعطاء بخدمة التبرع الدوري! اترك لنا العناية بتنفيذ تبرعاتك تلقائيا وفق الجداول الزمنية التي تناسبك، وساهم معنا!
             </div>
@@ -49,7 +49,7 @@ export default function RecurringDonate() {
 
           <div className="space-y-5">
             <div>
-              <label className="mb-2 flex items-center justify-end gap-2 text-lg font-bold text-slate-800">
+              <label className="mb-2 flex items-center justify-center gap-2 text-base font-bold text-slate-800 md:text-lg">
                 <User className="h-5 w-5 text-slate-500" />
                 الاسم
               </label>
@@ -57,12 +57,12 @@ export default function RecurringDonate() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="أدخل الإسم كاملاً"
-                className="h-12 rounded-xl border-slate-300 bg-white text-right text-base"
+                className="h-12 rounded-xl border-slate-300 bg-white text-center text-base"
               />
             </div>
 
             <div>
-              <label className="mb-2 flex items-center justify-end gap-2 text-lg font-bold text-slate-800">
+              <label className="mb-2 flex items-center justify-center gap-2 text-base font-bold text-slate-800 md:text-lg">
                 <Phone className="h-5 w-5 text-slate-500" />
                 رقم الجوال
               </label>
@@ -71,7 +71,7 @@ export default function RecurringDonate() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="051 234 5678"
-                  className="h-auto border-0 p-0 text-right text-lg shadow-none focus-visible:ring-0"
+                  className="h-auto border-0 p-0 text-center text-lg shadow-none focus-visible:ring-0"
                 />
                 <div className="mx-3 h-8 w-px bg-slate-200" />
                 <div className="flex items-center gap-1 text-sm font-semibold text-slate-600" dir="ltr">
@@ -82,7 +82,7 @@ export default function RecurringDonate() {
             </div>
 
             <div>
-              <label className="mb-2 flex items-center justify-end gap-2 text-lg font-bold text-slate-800">
+              <label className="mb-2 flex items-center justify-center gap-2 text-base font-bold text-slate-800 md:text-lg">
                 <FolderOpen className="h-5 w-5 text-slate-500" />
                 المشروع
               </label>
@@ -100,7 +100,7 @@ export default function RecurringDonate() {
             </div>
 
             <div>
-              <label className="mb-3 flex items-center justify-end gap-2 text-lg font-bold text-slate-800">
+              <label className="mb-3 flex items-center justify-center gap-2 text-base font-bold text-slate-800 md:text-lg">
                 <CalendarDays className="h-5 w-5 text-sky-500" />
                 التكرار
               </label>
@@ -109,7 +109,7 @@ export default function RecurringDonate() {
                   <button
                     key={item.key}
                     onClick={() => setFrequency(item.key)}
-                    className={`h-11 rounded-xl border text-base font-bold transition-colors ${
+                    className={`h-10 rounded-xl border text-sm font-bold transition-colors md:h-11 md:text-base ${
                       frequency === item.key
                         ? "border-sky-500 bg-sky-50 text-sky-600"
                         : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
@@ -123,7 +123,7 @@ export default function RecurringDonate() {
             </div>
 
             <div>
-              <label className="mb-3 flex items-center justify-end gap-2 text-lg font-bold text-slate-800">
+              <label className="mb-3 flex items-center justify-center gap-2 text-base font-bold text-slate-800 md:text-lg">
                 <Banknote className="h-5 w-5 text-slate-500" />
                 المبلغ
               </label>
@@ -142,8 +142,8 @@ export default function RecurringDonate() {
                     }`}
                     type="button"
                   >
-                    <p className="text-3xl font-extrabold text-slate-900">{amount}</p>
-                    <p className="text-sm font-bold text-slate-500">ريال</p>
+                    <p className="text-2xl font-extrabold text-slate-900 md:text-3xl">{amount}</p>
+                    <p className="text-xs font-bold text-slate-500 md:text-sm">ريال</p>
                   </button>
                 ))}
               </div>
@@ -159,7 +159,7 @@ export default function RecurringDonate() {
                     setSelectedAmount(0);
                   }}
                   placeholder="0"
-                  className="h-12 rounded-xl border-slate-300 bg-white pr-16 text-center text-2xl font-bold"
+                  className="h-11 rounded-xl border-slate-300 bg-white pr-16 text-center text-xl font-bold md:h-12 md:text-2xl"
                   inputMode="numeric"
                 />
               </div>
@@ -167,7 +167,7 @@ export default function RecurringDonate() {
 
             <Button
               onClick={handleSubmit}
-              className="mt-2 h-12 w-full justify-center rounded-2xl bg-sky-500 text-center text-lg font-extrabold text-white hover:bg-sky-600"
+              className="mt-2 h-11 w-full justify-center rounded-2xl bg-sky-500 text-center text-base font-extrabold text-white hover:bg-sky-600 md:h-12 md:text-lg"
             >
               تبرع الآن
             </Button>

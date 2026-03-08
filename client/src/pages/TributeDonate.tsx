@@ -47,17 +47,17 @@ export default function TributeDonate() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 py-8" dir="rtl">
+    <div className="min-h-screen bg-slate-100 py-5 md:py-8" dir="rtl">
       <div className="container mx-auto px-4">
         <div className="mb-6 text-center">
-          <h1 className="text-4xl font-extrabold text-sky-600">إهداء التبرع</h1>
-          <p className="mt-2 text-lg text-slate-700">خدمة لتقديم التبرعات عن الغير كهدية للأهل والأصدقاء في مختلف المناسبات الاجتماعية</p>
+          <h1 className="text-3xl font-extrabold text-sky-600 md:text-4xl">إهداء التبرع</h1>
+          <p className="mt-2 text-base font-medium text-slate-700">خدمة لتقديم التبرعات عن الغير كهدية للأهل والأصدقاء في مختلف المناسبات الاجتماعية</p>
         </div>
 
         <div className="mx-auto grid max-w-[1100px] grid-cols-1 gap-4 rounded-2xl border border-slate-300 bg-white p-3 lg:grid-cols-[1fr_1.15fr]">
           <div className="rounded-xl border border-slate-300 bg-slate-50 p-3">
             <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
-              <img src={selectedTemplateData.src} alt="معاينة بطاقة الإهداء" className="h-[760px] w-full object-cover" />
+              <img src={selectedTemplateData.src} alt="معاينة بطاقة الإهداء" className="h-[460px] w-full object-cover md:h-[760px]" />
             </div>
           </div>
 
@@ -67,7 +67,7 @@ export default function TributeDonate() {
                 <div className="mx-auto flex w-40 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-900 py-2 text-white">
                   <Gift className="h-5 w-5" />
                 </div>
-                <h2 className="mt-2 text-4xl font-bold text-slate-900">اختر المناسبة</h2>
+                <h2 className="mt-2 text-2xl font-bold text-slate-900 md:text-3xl">اختر المناسبة</h2>
               </div>
 
               <div className="mx-auto grid max-w-[160px] grid-cols-1 gap-2">
@@ -79,12 +79,12 @@ export default function TributeDonate() {
                   }`}
                 >
                   <img src="/1.jpg" alt="إهداء عام" className="h-28 w-full rounded object-cover" />
-                  <p className="mt-2 text-xl font-bold text-slate-700">إهداء عام</p>
+                  <p className="mt-2 text-lg font-bold text-slate-700">إهداء عام</p>
                 </button>
               </div>
 
               <div>
-                <h3 className="mb-2 text-center text-4xl font-bold text-slate-900">اختر نموذج بطاقة الإهداء</h3>
+                <h3 className="mb-2 text-center text-2xl font-bold text-slate-900 md:text-3xl">اختر نموذج بطاقة الإهداء</h3>
                 <div className="flex gap-2 overflow-x-auto rounded-lg border border-slate-200 bg-white p-2">
                   {templates.map((template) => (
                     <button
@@ -105,13 +105,13 @@ export default function TributeDonate() {
                 <Input
                   value={giftMessage}
                   onChange={(e) => setGiftMessage(e.target.value)}
-                  className="h-14 rounded-xl border-slate-300 bg-white text-center text-2xl"
+                  className="h-11 rounded-xl border-slate-300 bg-white text-center text-lg md:h-12 md:text-xl"
                   placeholder="نص الإهداء"
                 />
               </div>
 
               <div className="rounded-xl border border-slate-200 bg-slate-100 p-3">
-                <h3 className="mb-3 text-center text-4xl font-bold text-slate-800">بيانات البطاقة</h3>
+                <h3 className="mb-3 text-center text-2xl font-bold text-slate-800 md:text-3xl">بيانات البطاقة</h3>
 
                 <div className="space-y-2">
                   <Input
@@ -195,7 +195,7 @@ export default function TributeDonate() {
               </Button>
 
               <div className="rounded-xl border border-slate-200 bg-white p-3">
-                <label className="mb-2 flex cursor-pointer items-center justify-center gap-2 text-2xl font-bold text-slate-800">
+                <label className="mb-2 flex cursor-pointer items-center justify-center gap-2 text-xl font-bold text-slate-800 md:text-2xl">
                   <input
                     type="checkbox"
                     checked={isSchedulingEnabled}
@@ -236,7 +236,7 @@ export default function TributeDonate() {
 
               <Button
                 onClick={submitGift}
-                className="h-12 w-full rounded-xl bg-sky-500 text-lg font-extrabold text-white hover:bg-sky-600"
+                className="h-11 w-full rounded-xl bg-sky-500 text-base font-extrabold text-white hover:bg-sky-600 md:h-12 md:text-lg"
                 type="button"
               >
                 <CircleDollarSign className="h-5 w-5" />
