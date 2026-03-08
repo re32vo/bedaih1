@@ -201,54 +201,50 @@ export default function DonationOpportunityDetails() {
 
             {/* سهم الجود مع إمكانية تعديل المبلغ وعدد الأسهم */}
             <div className="mb-4 rounded-xl border-2 border-[#26a1d0] bg-[#26a1d0]/5 p-4">
-              <h3 className="mb-3 text-lg font-bold text-slate-800">سهم الجود</h3>
+              <h3 className="mb-3 text-sm font-bold text-slate-700">سهم الجود</h3>
               
-              <div className="grid grid-cols-2 gap-3 mb-3">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-2">مبلغ السهم (ريال)</label>
-                  <Input
-                    type="number"
-                    value={shareAmount}
-                    onChange={(e) => {
-                      const value = Number(e.target.value) || 0;
-                      setShareAmount(value);
-                      setCustomAmount(String(value * sharesCount));
-                      setSelectedAmount(value * sharesCount);
-                    }}
-                    className="h-10 rounded-lg border-slate-300 bg-white text-center font-bold"
-                    min="1"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-2">عدد الأسهم</label>
+              <div className="relative">
+                <div className="flex items-center gap-2">
+                  {/* عدد الأسهم على اليمين */}
                   <Select value={String(sharesCount)} onValueChange={(value) => {
                     const count = Number(value);
                     setSharesCount(count);
                     setCustomAmount(String(shareAmount * count));
                     setSelectedAmount(shareAmount * count);
                   }}>
-                    <SelectTrigger className="h-10 rounded-lg bg-white">
+                    <SelectTrigger className="h-12 w-20 rounded-lg bg-white text-center font-bold text-lg">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {[1, 2, 3, 4, 5, 10, 15, 20].map((num) => (
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20].map((num) => (
                         <SelectItem key={num} value={String(num)}>
-                          {num} {num === 1 ? 'سهم' : 'أسهم'}
+                          {num}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
+                  
+                  {/* المبلغ على اليسار */}
+                  <div className="flex-1 relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-600">ر.س</span>
+                    <Input
+                      type="number"
+                      value={shareAmount}
+                      onChange={(e) => {
+                        const value = Number(e.target.value) || 0;
+                        setShareAmount(value);
+                        setCustomAmount(String(value * sharesCount));
+                        setSelectedAmount(value * sharesCount);
+                      }}
+                      className="h-12 rounded-lg border-slate-300 bg-white text-center font-bold text-xl pl-14"
+                      min="1"
+                    />
+                  </div>
                 </div>
-              </div>
-              
-              <div className="bg-white rounded-lg p-3 border border-slate-200">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-600">الإجمالي:</span>
-                  <span className="text-xl font-black text-[#26a1d0]">{shareAmount * sharesCount} ر.س</span>
-                </div>
-                <div className="text-xs text-slate-500 mt-1">
-                  {shareAmount} ريال × {sharesCount} {sharesCount === 1 ? 'سهم' : 'أسهم'}
+                
+                <div className="mt-3 bg-white rounded-lg p-2 border border-slate-200 text-center">
+                  <span className="text-lg font-black text-[#26a1d0]">{shareAmount * sharesCount}</span>
+                  <span className="text-sm text-slate-600 mr-1">ر.س</span>
                 </div>
               </div>
             </div>
@@ -337,24 +333,34 @@ export default function DonationOpportunityDetails() {
             {/* قسم اختيار المدة للتبرع الدوري */}
             {donationType === 'recurring' && (
               <div className="mb-4 rounded-xl border border-amber-300 bg-amber-50 p-4">
-                <h3 className="mb-2 text-sm font-bold text-slate-800 flex items-center gap-2">
+                <h3 className="mb-3 text-sm font-bold text-slate-800 flex items-center gap-2">
                   <Heart className="h-4 w-4 text-amber-600" />
-                  اختر فترة التبرع الدوري
+                  التكرار
                 </h3>
-                <Select value={recurringPeriod} onValueChange={setRecurringPeriod}>
-                  <SelectTrigger className="h-10 rounded-lg bg-white">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="monthly">شهرياً</SelectItem>
-                    <SelectItem value="quarterly">كل 3 أشهر (ربع سنوي)</SelectItem>
-                    <SelectItem value="semi-annual">كل 6 أشهر (نصف سنوي)</SelectItem>
-                    <SelectItem value="annual">سنوياً</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { value: 'daily', label: 'يومي' },
+                    { value: 'weekly', label: 'أسبوعي' },
+                    { value: 'monthly', label: 'شهري' },
+                    { value: 'annual', label: 'سنوي' }
+                  ].map((period) => (
+                    <button
+                      key={period.value}
+                      type="button"
+                      onClick={() => setRecurringPeriod(period.value)}
+                      className={`rounded-lg px-3 py-2 text-sm font-bold transition ${
+                        recurringPeriod === period.value
+                          ? 'bg-sky-500 text-white'
+                          : 'bg-white text-slate-700 border border-slate-300'
+                      }`}
+                    >
+                      {period.label}
+                    </button>
+                  ))}
+                </div>
                 <p className="mt-2 text-xs text-amber-700 bg-amber-100 rounded-lg p-2">
                   {isLoggedIn 
-                    ? `سيتم خصم ${total} ريال ${recurringPeriod === 'monthly' ? 'شهرياً' : recurringPeriod === 'quarterly' ? 'كل 3 أشهر' : recurringPeriod === 'semi-annual' ? 'كل 6 أشهر' : 'سنوياً'} تلقائياً`
+                    ? `سيتم خصم ${total} ريال ${recurringPeriod === 'daily' ? 'يومياً' : recurringPeriod === 'weekly' ? 'أسبوعياً' : recurringPeriod === 'monthly' ? 'شهرياً' : 'سنوياً'} تلقائياً`
                     : 'يتطلب تسجيل الدخول لتفعيل التبرع الدوري'}
                 </p>
               </div>
