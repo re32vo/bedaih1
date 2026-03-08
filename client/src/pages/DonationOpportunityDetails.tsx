@@ -456,21 +456,13 @@ export default function DonationOpportunityDetails() {
 
             <p className="text-lg leading-relaxed text-slate-700">{selectedProject.description}</p>
 
-            <div className="mt-5 grid grid-cols-2 gap-2">
+            <div className="mt-5">
               <Button 
                 type="button" 
                 onClick={handleDonateClick}
-                className="h-11 rounded-xl bg-[#26a1d0] text-white hover:bg-[#26a1d0]/90"
+                className="h-11 w-full rounded-xl bg-[#26a1d0] text-white hover:bg-[#26a1d0]/90"
               >
                 تبرع
-              </Button>
-              <Button 
-                type="button" 
-                onClick={handleAddToCart}
-                className="h-11 rounded-xl bg-[#283c6a] text-white hover:bg-[#283c6a]/90"
-              >
-                <ShoppingCart className="h-4 w-4" />
-                إضافة للسلة
               </Button>
             </div>
           </div>
