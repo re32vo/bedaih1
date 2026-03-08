@@ -113,13 +113,6 @@ export default function DonationOpportunities() {
     });
   };
 
-  const updateProjectAmount = (projectId: string, selected: number, custom: string = "") => {
-    setProjectAmounts({
-      ...projectAmounts,
-      [projectId]: { selected, custom },
-    });
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 py-6 md:py-10" dir="rtl">
       <div className="container mx-auto px-4">
