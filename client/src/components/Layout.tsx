@@ -250,10 +250,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
             {/* زر السلة */}
             <Link href="/cart">
-              <Button className="hidden md:flex text-white text-sm font-bold rounded-full px-4 h-10 bg-indigo-600 hover:bg-indigo-700 relative">
-                <ShoppingCart className="w-4 h-4" />
+              <Button className="hidden md:flex items-center gap-2 text-white text-sm font-bold rounded-full px-5 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 shadow-md relative">
+                <ShoppingCart className="w-5 h-5" />
+                السلة
                 {getTotalItems() > 0 && (
-                  <span className="absolute -top-1 -left-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center shadow-lg border-2 border-white">
                     {getTotalItems()}
                   </span>
                 )}
@@ -369,11 +370,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
               {/* زر السلة للموبايل */}
               <Link href="/cart">
-                <Button className="w-full mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-full flex items-center justify-center gap-2 relative">
-                  <ShoppingCart className="w-4 h-4" />
+                <Button className="w-full mt-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold rounded-full flex items-center justify-center gap-3 relative shadow-md">
+                  <ShoppingCart className="w-5 h-5" />
                   السلة
                   {getTotalItems() > 0 && (
-                    <span className="absolute -top-1 left-4 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                    <span className="absolute -top-2 left-3 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center shadow-lg border-2 border-white">
                       {getTotalItems()}
                     </span>
                   )}
