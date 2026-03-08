@@ -4,9 +4,13 @@ import { ShoppingCart, Share2, Facebook, MessageCircle, Instagram } from "lucide
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { donationProjects } from "@/data/donationProjects";
+import { useCart } from "@/hooks/use-cart";
+import { useToast } from "@/hooks/use-toast";
 
 export default function DonationOpportunities() {
   const [, setLocation] = useLocation();
+  const { addItem } = useCart();
+  const { toast } = useToast();
 
   const [projectAmounts, setProjectAmounts] = useState<Record<string, { selected: number; custom: string }>>(
     donationProjects.reduce((acc, project) => {
@@ -19,6 +23,39 @@ export default function DonationOpportunities() {
     setProjectAmounts({
       ...projectAmounts,
       [projectId]: { selected, custom },
+    });
+  };
+
+  const handleAddToCart = (projectId: string) => {
+    const project = donationProjects.find((p) => p.id === projectId);
+    if (!project) return;
+
+    const amount = projectAmounts[projectId].custom 
+      ? Number(projectAmounts[projectId].custom) || 0 
+      : projectAmounts[projectId].selected;
+
+    if (amount <= 0) {
+      toast({
+        title: "خطأ",
+        description: "الرجاء اختيار أو إدخال مبلغ التبرع",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    addItem({
+      id: project.id,
+      title: project.title,
+      description: project.description,
+      image: project.image,
+      amount,
+      donationType: 'single',
+      paymentMethod: 1,
+    });
+
+    toast({
+      title: "✅ تمت الإضافة للسلة",
+      description: `تم إضافة "${project.title}" بمبلغ ${amount} ريال`,
     });
   };
 
@@ -121,6 +158,7 @@ export default function DonationOpportunities() {
                   </Button>
                   <Button
                     type="button"
+                    onClick={() => handleAddToCart(project.id)}
                     variant="secondary"
                     className="h-10 rounded-lg bg-indigo-900 text-sm font-bold text-white transition hover:bg-indigo-800"
                   >

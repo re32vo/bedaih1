@@ -1,9 +1,10 @@
 import { Link, useLocation } from "wouter";
-import { Heart, Menu, X, Phone, MapPin, Mail, LogIn, User, ChevronDown, ChevronUp, MessageCircle, Clock3, CalendarDays, Gift, Rocket } from "lucide-react";
+import { Heart, Menu, X, Phone, MapPin, Mail, LogIn, User, ChevronDown, ChevronUp, MessageCircle, Clock3, CalendarDays, Gift, Rocket, ShoppingCart } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/hooks/use-theme.tsx";
+import { useCart } from "@/hooks/use-cart";
 
 import logoImg from "@/assets/logo.png";
 
@@ -12,6 +13,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
   const [isDonorLoggedIn, setIsDonorLoggedIn] = useState(false);
   const [isDonationWidgetVisible, setIsDonationWidgetVisible] = useState(true);
+  const { getTotalItems } = useCart();
   // تم تعطيل التبديل بين الوضعين، الموقع دائمًا أبيض
 
   useEffect(() => {
@@ -246,6 +248,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </Button>
             </Link>
 
+            {/* زر السلة */}
+            <Link href="/cart">
+              <Button className="hidden md:flex text-white text-sm font-bold rounded-full px-4 h-10 bg-indigo-600 hover:bg-indigo-700 relative">
+                <ShoppingCart className="w-4 h-4" />
+                {getTotalItems() > 0 && (
+                  <span className="absolute -top-1 -left-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                    {getTotalItems()}
+                  </span>
+                )}
+              </Button>
+            </Link>
+
             <Button onClick={handleDonateClick} className="hidden md:flex text-white text-sm font-bold rounded-full px-5 h-10 bg-gradient-to-r from-primary to-secondary">
               <Heart className="w-4 h-4 mr-2" /> تبرع الآن
             </Button>
@@ -350,6 +364,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <Link href={isDonorLoggedIn ? "/donor-dashboard" : "/donor-login"}>
                 <Button className="w-full mt-2 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-full flex items-center justify-center gap-2">
                   {isDonorLoggedIn ? <><User className="w-4 h-4" /> الملف التعريفي</> : <><LogIn className="w-4 h-4" /> دخول المتبرع</>}
+                </Button>
+              </Link>
+
+              {/* زر السلة للموبايل */}
+              <Link href="/cart">
+                <Button className="w-full mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-full flex items-center justify-center gap-2 relative">
+                  <ShoppingCart className="w-4 h-4" />
+                  السلة
+                  {getTotalItems() > 0 && (
+                    <span className="absolute -top-1 left-4 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                      {getTotalItems()}
+                    </span>
+                  )}
                 </Button>
               </Link>
 
