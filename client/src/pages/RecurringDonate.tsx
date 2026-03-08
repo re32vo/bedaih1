@@ -1,132 +1,174 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Heart, TrendingUp, Calendar, CheckCircle2 } from "lucide-react";
+import { useState } from "react";
+import { RefreshCw, User, Phone, FolderOpen, CalendarDays, Banknote, Hash } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+type Frequency = "daily" | "weekly" | "monthly" | "yearly";
 
 export default function RecurringDonate() {
-  const plans = [
-    {
-      name: "الخطة الأساسية",
-      amount: 50,
-      frequency: "شهري",
-      description: "ساهم بشكل منتظم برمز التزامك المستمر",
-      benefits: ["متابعة شهرية", "إيصالات رسمية", "شهادة تقدير"],
-    },
-    {
-      name: "الخطة المميزة",
-      amount: 150,
-      frequency: "شهري",
-      description: "دعم متعمق للبرامج الأساسية",
-      benefits: ["متابعة مميزة", "تقارير شاملة", "دعوة لفعالياتنا"],
-    },
-    {
-      name: "الخطة الفاخرة",
-      amount: 500,
-      frequency: "شهري",
-      description: "شراكة عميقة في رؤية الجمعية",
-      benefits: ["اجتماع ربع سنوي", "تقارير شاملة", "تميز في الفعاليات"],
-    },
+  const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [project, setProject] = useState("");
+  const [frequency, setFrequency] = useState<Frequency>("daily");
+  const [selectedAmount, setSelectedAmount] = useState<number>(10);
+  const [customAmount, setCustomAmount] = useState("");
+
+  const frequencies: { key: Frequency; label: string }[] = [
+    { key: "daily", label: "يومي" },
+    { key: "weekly", label: "أسبوعي" },
+    { key: "monthly", label: "شهري" },
+    { key: "yearly", label: "سنوي" },
   ];
 
+  const amountOptions = [10, 50, 100];
+  const finalAmount = customAmount ? Number(customAmount) || 0 : selectedAmount;
+
+  const handleSubmit = () => {
+    if (!fullName.trim() || !phone.trim() || !project || finalAmount <= 0) {
+      alert("الرجاء تعبئة جميع الحقول واختيار مبلغ صحيح");
+      return;
+    }
+
+    alert("تم استلام طلب الاستقطاع الدوري بنجاح");
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" dir="rtl">
-      <div className="container mx-auto px-4 py-12">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 mb-4">التبرع الدوري</h1>
-          <p className="text-xl text-slate-600">بدعم مستمر لأثر أكبر</p>
+    <div className="min-h-screen bg-slate-100 py-8 md:py-12" dir="rtl">
+      <div className="container mx-auto px-4">
+        <div className="mx-auto max-w-3xl rounded-[28px] border border-slate-200 bg-white p-5 md:p-8 shadow-sm">
+          <div className="mb-7 text-center">
+            <RefreshCw className="mx-auto mb-4 h-9 w-9 text-sky-500" />
+            <h1 className="mb-4 text-4xl font-extrabold text-slate-900">التبرع الدوري</h1>
+            <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-base font-semibold leading-7 text-slate-600">
+              اكتشف سهولة التبرع والعطاء بخدمة التبرع الدوري! اترك لنا العناية بتنفيذ تبرعاتك تلقائيا وفق الجداول الزمنية التي تناسبك، وساهم معنا!
+            </div>
+          </div>
+
+          <div className="mb-6 border-t border-slate-200" />
+
+          <div className="space-y-5">
+            <div>
+              <label className="mb-2 flex items-center justify-end gap-2 text-xl font-bold text-slate-800">
+                <User className="h-5 w-5 text-slate-500" />
+                الاسم
+              </label>
+              <Input
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                placeholder="أدخل الإسم كاملاً"
+                className="h-14 rounded-xl border-slate-300 bg-white text-right text-lg"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 flex items-center justify-end gap-2 text-xl font-bold text-slate-800">
+                <Phone className="h-5 w-5 text-slate-500" />
+                رقم الجوال
+              </label>
+              <div className="flex h-14 items-center rounded-xl border border-slate-300 bg-white px-3">
+                <Input
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="051 234 5678"
+                  className="h-auto border-0 p-0 text-right text-2xl shadow-none focus-visible:ring-0"
+                />
+                <div className="mx-3 h-8 w-px bg-slate-200" />
+                <div className="flex items-center gap-1 text-sm font-semibold text-slate-600" dir="ltr">
+                  <span>+966</span>
+                  <span>🇸🇦</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label className="mb-2 flex items-center justify-end gap-2 text-xl font-bold text-slate-800">
+                <FolderOpen className="h-5 w-5 text-slate-500" />
+                المشروع
+              </label>
+              <Select value={project} onValueChange={setProject}>
+                <SelectTrigger className="h-14 rounded-xl border-slate-300 bg-white text-lg">
+                  <SelectValue placeholder="اختر المشروع" />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="food">السلال الغذائية</SelectItem>
+                  <SelectItem value="health">الدعم الصحي</SelectItem>
+                  <SelectItem value="education">الدعم التعليمي</SelectItem>
+                  <SelectItem value="housing">ترميم المنازل</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label className="mb-3 flex items-center justify-end gap-2 text-xl font-bold text-slate-800">
+                <CalendarDays className="h-5 w-5 text-sky-500" />
+                التكرار
+              </label>
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                {frequencies.map((item) => (
+                  <button
+                    key={item.key}
+                    onClick={() => setFrequency(item.key)}
+                    className={`h-12 rounded-xl border text-lg font-bold transition-colors ${
+                      frequency === item.key
+                        ? "border-sky-500 bg-sky-50 text-sky-600"
+                        : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
+                    }`}
+                    type="button"
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label className="mb-3 flex items-center justify-end gap-2 text-xl font-bold text-slate-800">
+                <Banknote className="h-5 w-5 text-slate-500" />
+                المبلغ
+              </label>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                {amountOptions.map((amount) => (
+                  <button
+                    key={amount}
+                    onClick={() => {
+                      setSelectedAmount(amount);
+                      setCustomAmount("");
+                    }}
+                    className={`rounded-2xl border p-4 text-center transition-colors ${
+                      selectedAmount === amount && !customAmount
+                        ? "border-sky-500 bg-sky-50"
+                        : "border-slate-300 bg-white hover:bg-slate-50"
+                    }`}
+                    type="button"
+                  >
+                    <p className="text-4xl font-extrabold text-slate-900">{amount}</p>
+                    <p className="text-sm font-bold text-slate-500">ريال</p>
+                  </button>
+                ))}
+              </div>
+
+              <div className="relative mt-3">
+                <Hash className="pointer-events-none absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+                <Input
+                  value={customAmount}
+                  onChange={(e) => setCustomAmount(e.target.value.replace(/[^0-9]/g, ""))}
+                  placeholder="0"
+                  className="h-14 rounded-xl border-slate-300 bg-white pr-10 text-left text-3xl font-bold"
+                  inputMode="numeric"
+                />
+              </div>
+            </div>
+
+            <Button
+              onClick={handleSubmit}
+              className="mt-2 h-14 w-full rounded-2xl bg-sky-500 text-xl font-extrabold text-white hover:bg-sky-600"
+            >
+              <RefreshCw className="h-5 w-5" />
+              بدأ الاستقطاع
+            </Button>
+          </div>
         </div>
-
-        {/* Plans */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          {plans.map((plan, index) => (
-            <Card key={index} className={`cursor-pointer transition-all ${index === 1 ? "ring-2 ring-emerald-500 transform md:scale-105" : ""}`}>
-              <CardHeader>
-                {index === 1 && <div className="bg-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold mb-3 w-fit">الأشهر</div>}
-                <CardTitle className="text-lg">{plan.name}</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-bold text-slate-900">{plan.amount} ر.س</span>
-                  <span className="text-slate-600">/ {plan.frequency}</span>
-                </div>
-                <p className="text-slate-600 text-sm">{plan.description}</p>
-                <ul className="space-y-2">
-                  {plan.benefits.map((benefit, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                      {benefit}
-                    </li>
-                  ))}
-                </ul>
-                <button onClick={() => console.log('تم اختيار الخطة:', plan.name)} className={`w-full py-2 rounded-lg font-semibold transition cursor-pointer ${index === 1 ? "bg-emerald-500 hover:bg-emerald-600 text-white" : "border-2 border-slate-300 hover:border-emerald-500"}`}>
-                  اختر هذه الخطة
-                </button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Benefits */}
-        <Card className="mb-12">
-          <CardHeader>
-            <div className="flex items-center space-x-3">
-              <Heart className="w-6 h-6 text-red-500" />
-              <CardTitle>فوائد التبرع الدوري</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="flex gap-3">
-                <TrendingUp className="w-6 h-6 text-emerald-500 flex-shrink-0" />
-                <div>
-                  <p className="font-semibold text-slate-900">تبرع مستدام</p>
-                  <p className="text-sm text-slate-600">تبرع مستمر يسمح لنا بتخطيط برامج طويلة الأجل</p>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <Calendar className="w-6 h-6 text-blue-500 flex-shrink-0" />
-                <div>
-                  <p className="font-semibold text-slate-900">مرونة كاملة</p>
-                  <p className="text-sm text-slate-600">تعديل أو إيقاف الخطة في أي وقت</p>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <CheckCircle2 className="w-6 h-6 text-purple-500 flex-shrink-0" />
-                <div>
-                  <p className="font-semibold text-slate-900">متابعة شاملة</p>
-                  <p className="text-sm text-slate-600">تقارير منتظمة عن أثر تبرعك</p>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <Heart className="w-6 h-6 text-red-500 flex-shrink-0" />
-                <div>
-                  <p className="font-semibold text-slate-900">تأثير بالفرق</p>
-                  <p className="text-sm text-slate-600">تأثيرك المباشر على حياة الناس</p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* FAQ */}
-        <Card>
-          <CardHeader>
-            <CardTitle>الأسئلة الشائعة</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <p className="font-semibold text-slate-900 mb-2">هل يمكنني تغيير مبلغ التبرع؟</p>
-              <p className="text-slate-600 text-sm">نعم، يمكنك تغيير المبلغ في أي وقت من خلال حسابك</p>
-            </div>
-            <div>
-              <p className="font-semibold text-slate-900 mb-2">هل هناك رسوم إضافية؟</p>
-              <p className="text-slate-600 text-sm">لا، بدون أي رسوم إضافية، 100% من تبرعك يذهب للبرامج</p>
-            </div>
-            <div>
-              <p className="font-semibold text-slate-900 mb-2">كم مدة الالتزام؟</p>
-              <p className="text-slate-600 text-sm">لا توجد مدة التزام، يمكنك الإيقاف في أي وقت</p>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );
