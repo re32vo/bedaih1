@@ -365,30 +365,30 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
       {/* Right-side donation shortcuts */}
       {isDonationWidgetVisible ? (
-        <div className="fixed top-28 right-3 z-50 w-[116px] rounded-2xl bg-white/95 shadow-xl border border-slate-200 backdrop-blur-sm">
+        <div className="fixed top-24 right-2 z-50 w-[92px] rounded-xl bg-white/95 shadow-xl border border-slate-200 backdrop-blur-sm">
           <button
             onClick={() => setIsDonationWidgetVisible(false)}
-            className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-sky-500 text-white flex items-center justify-center shadow-md hover:bg-sky-600 transition-colors"
+            className="absolute -top-2 -left-2 w-7 h-7 rounded-full bg-sky-500 text-white flex items-center justify-center shadow-md hover:bg-sky-600 transition-colors"
             aria-label="إخفاء خيارات التبرع"
           >
-            <X className="w-4 h-4" />
+            <X className="w-3.5 h-3.5" />
           </button>
 
-          <div className="py-3">
+          <div className="py-2">
             {donationOptionsLinks.map((link, index) => {
               const icon =
-                index === 0 ? <Clock3 className="w-6 h-6 text-slate-700" /> :
-                index === 1 ? <CalendarDays className="w-6 h-6 text-slate-700" /> :
-                index === 2 ? <Gift className="w-6 h-6 text-slate-700" /> :
-                index === 3 ? <Rocket className="w-6 h-6 text-slate-700" /> :
-                <Heart className="w-6 h-6 text-slate-700" />;
+                index === 0 ? <Clock3 className="w-5 h-5 text-slate-700" /> :
+                index === 1 ? <CalendarDays className="w-5 h-5 text-slate-700" /> :
+                index === 2 ? <Gift className="w-5 h-5 text-slate-700" /> :
+                index === 3 ? <Rocket className="w-5 h-5 text-slate-700" /> :
+                <Heart className="w-5 h-5 text-slate-700" />;
 
               return (
                 <Link key={link.href} href={link.href}>
-                  <span className="block px-3 py-2 text-center cursor-pointer hover:bg-slate-50 transition-colors">
-                    <span className="flex justify-center mb-2">{icon}</span>
-                    <span className="block text-[22px] leading-none text-sky-500 mb-2">_</span>
-                    <span className={`block text-sm font-medium ${location === link.href ? "text-sky-600" : "text-slate-800"}`}>
+                  <span className="block px-2 py-1.5 text-center cursor-pointer hover:bg-slate-50 transition-colors">
+                    <span className="flex justify-center mb-1.5">{icon}</span>
+                    <span className="block h-px bg-sky-300 mx-1 mb-1.5" />
+                    <span className={`block text-[14px] leading-5 font-medium ${location === link.href ? "text-sky-600" : "text-slate-800"}`}>
                       {link.label}
                     </span>
                   </span>
@@ -400,10 +400,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
       ) : (
         <button
           onClick={() => setIsDonationWidgetVisible(true)}
-          className="fixed top-32 right-2 z-50 bg-sky-500 text-white rounded-l-xl rounded-r-md px-2 py-3 shadow-lg hover:bg-sky-600 transition-colors"
+          className="fixed top-28 right-1 z-50 bg-sky-500 text-white rounded-l-lg rounded-r-md px-1.5 py-2.5 shadow-lg hover:bg-sky-600 transition-colors"
           aria-label="إظهار خيارات التبرع"
         >
-          <Heart className="w-5 h-5" />
+          <Heart className="w-4 h-4" />
         </button>
       )}
 
