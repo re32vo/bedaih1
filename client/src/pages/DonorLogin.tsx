@@ -410,8 +410,8 @@ export default function DonorLogin() {
                   <>جاري التحقق...</>
                 ) : (
                   <>
-                    <CheckCircle className="w-5 h-5" />
                     {isLogin ? "تأكيد الدخول" : "إنشاء الحساب"}
+                    <CheckCircle className="w-5 h-5" />
                   </>
                 )}
               </motion.button>
