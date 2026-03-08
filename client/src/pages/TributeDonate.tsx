@@ -1,305 +1,227 @@
-import { useMemo, useState } from "react";
-import { Gift, CalendarClock, Plus, CircleDollarSign, X } from "lucide-react";
+import { useState } from "react";
+import { ShoppingCart, Share2, Facebook, MessageCircle, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-type Template = { id: string; label: string; src: string };
-
-type Card = {
+type Project = {
   id: string;
-  recipientName: string;
-  senderName: string;
-  phone: string;
-  selectedAmount: number;
-  customAmount: string;
-  showAmountInCard: boolean;
+  title: string;
+  description: string;
+  image: string;
+  amounts: number[];
 };
 
 export default function TributeDonate() {
-  const [selectedOccasion, setSelectedOccasion] = useState("general");
-  const [selectedTemplate, setSelectedTemplate] = useState("t1");
-  const [donationDate, setDonationDate] = useState("");
-  const [donationTime, setDonationTime] = useState("04:00");
-  const [isSchedulingEnabled, setIsSchedulingEnabled] = useState(false);
-  const [giftMessage, setGiftMessage] = useState("إهداء مشروع أوقاف بداية");
-  
-  const [cards, setCards] = useState<Card[]>([
+  const projects: Project[] = [
     {
       id: "1",
-      recipientName: "",
-      senderName: "",
-      phone: "",
-      selectedAmount: 100,
-      customAmount: "",
-      showAmountInCard: false,
+      title: "إبتسامة حافظ",
+      description: "مجموعة من معلمي ومعلمات وحفاظ كتاب الله تعالى بحاجة للعلاج والأدوية بأمراض الفم والأسنان، تبرعك يحقق لك الأجر وبعور التلاوة الصحيحة والنطق السلـ...",
+      image: "/1.jpg",
+      amounts: [500, 240, 120],
     },
-  ]);
-
-  const templates: Template[] = [
-    { id: "t1", label: "نموذج 1", src: "/1.jpg" },
-    { id: "t2", label: "نموذج 2", src: "/2.jpg" },
-    { id: "t3", label: "نموذج 3", src: "/3.jpg" },
+    {
+      id: "2",
+      title: "السنابل المضاعفة",
+      description: "ضاعف أجرك بالمساهمة في ثلاثة مشاريع بتبرع واحد، لدعم المحتاجين من الفقراء والمساكين والأيتام تبرعك يساهم في البرامج التالية: أوقاف ابتسم والصدقة اليوم...",
+      image: "/2.jpg",
+      amounts: [500, 300, 100],
+    },
+    {
+      id: "3",
+      title: "الصدقة اليومية",
+      description: "صدقتك اليوم .. عن كل يوم. يومياً حسنة والحسنة بعشر أمثالها والله يضاعف لمن يشاء، تصدق بـ ريال واحد عن كل يوم من أيام العام المساهمة في علاج الفقر...",
+      image: "/3.jpg",
+      amounts: [500, 360, 90],
+    },
+    {
+      id: "4",
+      title: "فرحة محتاج",
+      description: "ساهم في علاج وتوعية المرضى المحتاجين الذين يعجزون عن تحمل التكاليف، بتبرعك تمنحهم الابتسامة التي يستحقونها، وتساعدهم على استعادة صحتهم وكرامتهم.",
+      image: "/1.jpg",
+      amounts: [500, 300, 50],
+    },
+    {
+      id: "5",
+      title: "هدية الوالدين",
+      description: "ما أعظمها من هدية حين تتصدق عن والديك ترفع بها درجاتهما ومنازلهما في الج نة، برأ بهما ورحمة وإحساناً، فهما السبب بعد الله في وجودك في الحياة، وخصهما الـ...",
+      image: "/2.jpg",
+      amounts: [500, 265, 95],
+    },
+    {
+      id: "6",
+      title: "بزكاتك يبتسم",
+      description: "تطهر الزكاة مال صاحبها وتضاعفه، وتقربه إلى الله تعالى طالما أنه يقدم هذه الزكاة بنفس مؤمنة، طاهرة لرضى الله تعالى.",
+      image: "/3.jpg",
+      amounts: [],
+    },
+    {
+      id: "7",
+      title: "الصدقة الجارية",
+      description: "الصدقة الجارية من أفضل الصدقات التي يمكن لا تنقطع فساهم الآن في صدقة جارية عنك وعن أحد تحب، لدى المحتاجين من الفقراء والمساكين والأيتام ليدوم أجرك ويبقى أثرك.",
+      image: "/1.jpg",
+      amounts: [300, 100, 50],
+    },
+    {
+      id: "8",
+      title: "بسمة يتيم",
+      description: "أيتام يعانون من ألم المرض وألم الفقد، وليس لديهم ما يكفيهم لعلاجهم ونوعيتهم من المرض.",
+      image: "/2.jpg",
+      amounts: [500, 300, 100],
+    },
+    {
+      id: "9",
+      title: "أوقاف ابتسم",
+      description: "الوقف أفضل أنواع الصدقات والأعمال الصالحة وأنفعها، تنتظم أثر الوقف من خلال ستة مشاريع وقفية هي: تأسيس وتشغيل عيادات أسنان وقفية ...",
+      image: "/3.jpg",
+      amounts: [800, 500, 50],
+    },
+    {
+      id: "10",
+      title: "الصدقة الجارية للوالدين",
+      description: "قال رسول الله (إذا مات ابن آدم انقطع عمله إلا من ثلاث: صدقة جارية، أو علم ينتفع به أو ولد صالح يدعو له).",
+      image: "/1.jpg",
+      amounts: [300, 100, 50],
+    },
+    {
+      id: "11",
+      title: "تفريج كربة",
+      description: "العديد من المرضى من ذوي الحاجة والفقراء يعانون من آلام الأسنان الشديدة، وينتظرون يد العون لتخفيف معاناتهم، بدعمك تمنحهم الإبتسامة ونكف...",
+      image: "/2.jpg",
+      amounts: [],
+    },
+    {
+      id: "12",
+      title: "صدقة ليالي رمضان 🌙",
+      description: "🌙 في شهر الرحمة، اجعل عطاؤك حياة 💛 ساهم في صدقة ليالي رمضان مع جمعية ابتسم أنسم لدعم المحتاجين الأيتام والأوقاف والوقائع ابتسم المستدامة. ✨ 💛 ...",
+      image: "/3.jpg",
+      amounts: [],
+    },
   ];
 
-  const selectedTemplateData = useMemo(
-    () => templates.find((template) => template.id === selectedTemplate) || templates[0],
-    [selectedTemplate]
+  const [projectAmounts, setProjectAmounts] = useState<Record<string, { selected: number; custom: string }>>(
+    projects.reduce((acc, project) => {
+      acc[project.id] = { selected: 0, custom: "" };
+      return acc;
+    }, {} as Record<string, { selected: number; custom: string }>)
   );
 
-  const addCard = () => {
-    const newCard: Card = {
-      id: String(Date.now()),
-      recipientName: "",
-      senderName: "",
-      phone: "",
-      selectedAmount: 100,
-      customAmount: "",
-      showAmountInCard: false,
-    };
-    setCards([...cards, newCard]);
-  };
-
-  const removeCard = (cardId: string) => {
-    setCards(cards.filter((card) => card.id !== cardId));
-  };
-
-  const updateCard = (cardId: string, field: keyof Card, value: any) => {
-    setCards(cards.map((card) => (card.id === cardId ? { ...card, [field]: value } : card)));
-  };
-
-  const submitGift = () => {
-    // Validate all cards
-    for (const card of cards) {
-      const finalAmount = card.customAmount ? Number(card.customAmount) || 0 : card.selectedAmount;
-      if (!card.recipientName.trim() || !card.senderName.trim() || !card.phone.trim() || finalAmount <= 0) {
-        alert("الرجاء تعبئة بيانات جميع البطاقات والمبلغ بشكل صحيح");
-        return;
-      }
-    }
-
-    if (isSchedulingEnabled && (!donationDate || !donationTime)) {
-      alert("الرجاء اختيار تاريخ ووقت جدولة الإهداء");
-      return;
-    }
-
-    alert(isSchedulingEnabled ? "تمت جدولة الإهداء بنجاح" : "تم إرسال الإهداء فورا بنجاح");
+  const updateProjectAmount = (projectId: string, selected: number, custom: string = "") => {
+    setProjectAmounts({
+      ...projectAmounts,
+      [projectId]: { selected, custom },
+    });
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 py-5 md:py-8" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 py-6 md:py-10" dir="rtl">
       <div className="container mx-auto px-4">
-        <div className="mb-6 text-center">
-          <h1 className="text-3xl font-extrabold text-sky-600 md:text-4xl">إهداء التبرع</h1>
-          <p className="mt-2 text-base font-medium text-slate-700">خدمة لتقديم التبرعات عن الغير كهدية للأهل والأصدقاء في مختلف المناسبات الاجتماعية</p>
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl font-extrabold text-sky-600 md:text-4xl">فرص التبرع</h1>
+          <p className="mt-2 text-base font-medium text-slate-700">
+            اختر المشروع الذي ترغب في دعمه وساهم في صناعة الفرق
+          </p>
         </div>
 
-        <div className="mx-auto grid max-w-[1100px] grid-cols-1 gap-4 rounded-2xl border border-slate-300 bg-white p-3 lg:grid-cols-[1fr_1.15fr]">
-          <div className="rounded-xl border border-slate-300 bg-slate-50 p-3">
-            <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
-              <img src={selectedTemplateData.src} alt="معاينة بطاقة الإهداء" className="h-[460px] w-full object-cover md:h-[760px]" />
-            </div>
-          </div>
-
-          <div className="rounded-xl border border-slate-300 bg-slate-50 p-3">
-            <div className="space-y-4">
-              <div className="text-center">
-                <div className="mx-auto flex w-40 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-900 py-2 text-white">
-                  <Gift className="h-5 w-5" />
-                </div>
-                <h2 className="mt-2 text-2xl font-bold text-slate-900 md:text-3xl">اختر المناسبة</h2>
-              </div>
-
-              <div className="mx-auto grid max-w-[160px] grid-cols-1 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setSelectedOccasion("general")}
-                  className={`rounded-md border p-2 text-center transition ${
-                    selectedOccasion === "general" ? "border-sky-500 bg-sky-50" : "border-slate-300 bg-white"
-                  }`}
-                >
-                  <img src="/1.jpg" alt="إهداء عام" className="h-28 w-full rounded object-cover" />
-                  <p className="mt-2 text-lg font-bold text-slate-700">إهداء عام</p>
-                </button>
-              </div>
-
-              <div>
-                <h3 className="mb-2 text-center text-2xl font-bold text-slate-900 md:text-3xl">اختر نموذج بطاقة الإهداء</h3>
-                <div className="flex gap-2 overflow-x-auto rounded-lg border border-slate-200 bg-white p-2">
-                  {templates.map((template) => (
-                    <button
-                      key={template.id}
-                      type="button"
-                      onClick={() => setSelectedTemplate(template.id)}
-                      className={`min-w-[130px] rounded-md border p-1 transition ${
-                        selectedTemplate === template.id ? "border-sky-500 bg-sky-50" : "border-slate-200"
-                      }`}
-                    >
-                      <img src={template.src} alt={template.label} className="h-44 w-full rounded object-cover" />
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <Input
-                  value={giftMessage}
-                  onChange={(e) => setGiftMessage(e.target.value)}
-                  className="h-11 rounded-xl border-slate-300 bg-white text-center text-lg md:h-12 md:text-xl"
-                  placeholder="نص الإهداء"
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {projects.map((project) => (
+            <div
+              key={project.id}
+              className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:shadow-lg"
+            >
+              {/* صورة المشروع */}
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="h-full w-full object-cover"
                 />
               </div>
 
-              {cards.map((card, index) => (
-                <div key={card.id} className="relative rounded-xl border border-slate-200 bg-slate-100 p-3">
-                  {index > 0 && (
-                    <button
-                      type="button"
-                      onClick={() => removeCard(card.id)}
-                      className="absolute left-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-indigo-900 text-white transition hover:bg-indigo-800"
-                    >
-                      <X className="h-5 w-5" />
-                    </button>
-                  )}
-                  
-                  <h3 className="mb-3 text-center text-2xl font-bold text-slate-800 md:text-3xl">بيانات البطاقة</h3>
-
-                  <div className="space-y-2">
-                    <Input
-                      value={card.recipientName}
-                      onChange={(e) => updateCard(card.id, "recipientName", e.target.value)}
-                      className="h-11 rounded-lg border-slate-300 bg-white text-center text-base"
-                      placeholder="اسم المهدي"
-                    />
-                    <Input
-                      value={card.senderName}
-                      onChange={(e) => updateCard(card.id, "senderName", e.target.value)}
-                      className="h-11 rounded-lg border-slate-300 bg-white text-center text-base"
-                      placeholder="اسم المهدي إليه"
-                    />
-
-                    <div className="grid grid-cols-[1fr_auto] gap-2">
-                      <div className="flex h-11 items-center rounded-lg border border-slate-300 bg-white px-3">
-                        <Input
-                          value={card.phone}
-                          onChange={(e) => updateCard(card.id, "phone", e.target.value)}
-                          placeholder="051 234 5678"
-                          className="h-auto border-0 p-0 text-center shadow-none focus-visible:ring-0"
-                        />
-                        <div className="mx-2 h-6 w-px bg-slate-200" />
-                        <div className="flex items-center gap-1 text-xs font-semibold text-slate-600" dir="ltr">
-                          <span>+966</span>
-                          <span>🇸🇦</span>
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-3 gap-1">
-                        {[50, 100, 150].map((amount) => (
-                          <button
-                            key={amount}
-                            type="button"
-                            onClick={() => {
-                              updateCard(card.id, "selectedAmount", amount);
-                              updateCard(card.id, "customAmount", String(amount));
-                            }}
-                            className={`h-11 rounded-lg border px-3 text-sm font-bold ${
-                              card.selectedAmount === amount ? "border-sky-500 bg-sky-50 text-sky-700" : "border-slate-300 bg-white text-slate-700"
-                            }`}
-                          >
-                            {amount}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-[1fr_auto] gap-2">
-                      <div className="relative">
-                        <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-500">ريال</span>
-                        <Input
-                          value={card.customAmount}
-                          onChange={(e) => {
-                            const value = e.target.value.replace(/[^0-9]/g, "");
-                            updateCard(card.id, "customAmount", value);
-                            updateCard(card.id, "selectedAmount", 0);
-                          }}
-                          className="h-11 rounded-lg border-slate-300 bg-white pr-12 text-center font-bold"
-                          placeholder="0"
-                          inputMode="numeric"
-                        />
-                      </div>
-
-                      <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                        <input
-                          type="checkbox"
-                          checked={card.showAmountInCard}
-                          onChange={(e) => updateCard(card.id, "showAmountInCard", e.target.checked)}
-                          className="h-4 w-4 accent-sky-500"
-                        />
-                        إظهار المبلغ المهدي إليه
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              ))}
-
-              <Button 
-                type="button" 
-                onClick={addCard}
-                className="h-11 w-full rounded-xl bg-indigo-900 text-base font-bold text-white hover:bg-indigo-800"
-              >
-                <Plus className="h-4 w-4" />
-                إضافة بطاقة أخرى
-              </Button>
-
-              <div className="rounded-xl border border-slate-200 bg-white p-3">
-                <label className="mb-2 flex cursor-pointer items-center justify-center gap-2 text-xl font-bold text-slate-800 md:text-2xl">
-                  <input
-                    type="checkbox"
-                    checked={isSchedulingEnabled}
-                    onChange={(e) => setIsSchedulingEnabled(e.target.checked)}
-                    className="h-5 w-5 accent-sky-500"
-                  />
-                  <CalendarClock className="h-5 w-5" />
-                  جدولة الإهداء
-                </label>
-
-                <p className="mb-3 text-center text-sm font-semibold text-slate-600">
-                  في حال عدم تفعيل الجدولة سيتم إرسال الإهداء مباشرة
-                </p>
-
-                {isSchedulingEnabled && (
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <label className="mb-1 block text-center text-sm font-semibold text-slate-500">اختر التاريخ</label>
-                      <Input
-                        type="date"
-                        value={donationDate}
-                        onChange={(e) => setDonationDate(e.target.value)}
-                        className="h-11 rounded-lg border-slate-300 text-center"
-                      />
-                    </div>
-                    <div>
-                      <label className="mb-1 block text-center text-sm font-semibold text-slate-500">اختر الوقت</label>
-                      <Input
-                        type="time"
-                        value={donationTime}
-                        onChange={(e) => setDonationTime(e.target.value)}
-                        className="h-11 rounded-lg border-slate-300 text-center"
-                      />
-                    </div>
-                  </div>
-                )}
+              {/* أيقونات المشاركة */}
+              <div className="flex items-center justify-center gap-2 bg-slate-100 py-2">
+                <button className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600 transition hover:bg-slate-400">
+                  <Instagram className="h-4 w-4" />
+                </button>
+                <button className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600 transition hover:bg-slate-400">
+                  <MessageCircle className="h-4 w-4" />
+                </button>
+                <button className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600 transition hover:bg-slate-400">
+                  <Share2 className="h-4 w-4" />
+                </button>
+                <button className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600 transition hover:bg-slate-400">
+                  <Facebook className="h-4 w-4" />
+                </button>
               </div>
 
-              <Button
-                onClick={submitGift}
-                className="h-11 w-full rounded-xl bg-sky-500 text-base font-extrabold text-white hover:bg-sky-600 md:h-12 md:text-lg"
-                type="button"
-              >
-                <CircleDollarSign className="h-5 w-5" />
-                أهدي الآن
-              </Button>
+              {/* محتوى البطاقة */}
+              <div className="p-4">
+                <h3 className="mb-2 text-center text-xl font-bold text-slate-900">{project.title}</h3>
+                <p className="mb-4 line-clamp-4 text-center text-sm leading-relaxed text-slate-600">
+                  {project.description}
+                </p>
+
+                {/* أزرار المبالغ السريعة */}
+                {project.amounts.length > 0 && (
+                  <div className="mb-3 flex justify-center gap-2">
+                    {project.amounts.map((amount) => (
+                      <button
+                        key={amount}
+                        type="button"
+                        onClick={() => updateProjectAmount(project.id, amount, String(amount))}
+                        className={`rounded-lg border px-4 py-2 text-sm font-bold transition ${
+                          projectAmounts[project.id].selected === amount
+                            ? "border-sky-500 bg-sky-50 text-sky-700"
+                            : "border-slate-300 bg-white text-slate-700 hover:border-sky-300"
+                        }`}
+                      >
+                        {amount}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* حقل المبلغ */}
+                <div className="relative mb-3">
+                  <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-500">
+                    ريال
+                  </span>
+                  <Input
+                    value={projectAmounts[project.id].custom}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^0-9]/g, "");
+                      updateProjectAmount(project.id, 0, value);
+                    }}
+                    className="h-11 rounded-lg border-slate-300 bg-white pr-12 text-center text-lg font-bold"
+                    placeholder="0"
+                    inputMode="numeric"
+                  />
+                </div>
+
+                {/* أزرار التبرع */}
+                <div className="mb-3 grid grid-cols-2 gap-2">
+                  <Button
+                    type="button"
+                    className="h-10 rounded-lg bg-sky-500 text-sm font-bold text-white transition hover:bg-sky-600"
+                  >
+                    تبرع
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    className="h-10 rounded-lg bg-indigo-900 text-sm font-bold text-white transition hover:bg-indigo-800"
+                  >
+                    <ShoppingCart className="h-4 w-4" />
+                  </Button>
+                </div>
+
+                {/* رابط تفاصيل المشروع */}
+                <button className="w-full text-center text-sm font-semibold text-slate-600 transition hover:text-sky-600">
+                  ← تفاصيل المشروع
+                </button>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>
