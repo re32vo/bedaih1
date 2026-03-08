@@ -416,7 +416,7 @@ export default function DonationOpportunityDetails() {
 
             {/* وسائل الدفع */}
             <p className="mb-3 text-center text-base font-bold text-slate-700">اختر وسيلة الدفع الملائمة</p>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-3 gap-2 mb-4">
               {paymentMethods.map((method) => (
                 <button
                   key={method.id}
@@ -437,6 +437,15 @@ export default function DonationOpportunityDetails() {
                 </button>
               ))}
             </div>
+
+            {/* زر التبرع */}
+            <Button 
+              type="button" 
+              onClick={handleDonateClick}
+              className="h-12 w-full rounded-xl bg-[#26a1d0] text-white hover:bg-[#26a1d0]/90 text-lg font-bold"
+            >
+              تبرع
+            </Button>
           </div>
 
           <div className="rounded-2xl border border-slate-200 bg-white p-4 order-1 lg:order-2">
@@ -455,16 +464,6 @@ export default function DonationOpportunityDetails() {
             </div>
 
             <p className="text-lg leading-relaxed text-slate-700">{selectedProject.description}</p>
-
-            <div className="mt-5">
-              <Button 
-                type="button" 
-                onClick={handleDonateClick}
-                className="h-11 w-full rounded-xl bg-[#26a1d0] text-white hover:bg-[#26a1d0]/90"
-              >
-                تبرع
-              </Button>
-            </div>
           </div>
         </div>
       </div>
