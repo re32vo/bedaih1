@@ -199,68 +199,34 @@ export default function DonationOpportunityDetails() {
           <div className="rounded-2xl border border-slate-200 bg-white p-5">
             <h2 className="mb-4 text-xl font-extrabold text-slate-800">مبلغ التبرع</h2>
 
-            {/* سهم الجود - في إطار مميز */}
-            <div className="mb-4 rounded-xl border-2 border-[#26a1d0] bg-[#26a1d0]/5 p-4">
-              <h3 className="mb-3 text-sm font-bold text-slate-700">سهم الجود</h3>
-              
-              <div className="flex items-center gap-2">
-                {/* عدد الأسهم على اليمين */}
-                <Select value={String(sharesCount)} onValueChange={(value) => {
-                  const count = Number(value);
-                  setSharesCount(count);
-                  setCustomAmount(String(shareAmount * count));
-                  setSelectedAmount(shareAmount * count);
-                  setCustomDonation(false);
-                }}>
-                  <SelectTrigger className="h-12 w-20 rounded-lg bg-white text-center font-bold text-lg">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20].map((num) => (
-                      <SelectItem key={num} value={String(num)}>
-                        {num}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                
-                {/* المبلغ في الوسط */}
-                <div className="flex-1 relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-600">ر.س</span>
-                  <Input
-                    type="number"
-                    value={shareAmount}
-                    onChange={(e) => {
-                      const value = Number(e.target.value) || 0;
-                      setShareAmount(value);
-                      setCustomAmount(String(value * sharesCount));
-                      setSelectedAmount(value * sharesCount);
-                      setCustomDonation(false);
-                    }}
-                    className="h-12 rounded-lg border-slate-300 bg-white text-center font-bold text-xl pl-14"
-                    min="1"
-                  />
-                </div>
-              </div>
-              
-              {/* الإجمالي */}
-              <div className="mt-3 bg-white rounded-lg p-2 border border-slate-200 text-center">
-                <span className="text-lg font-black text-[#26a1d0]">{shareAmount * sharesCount}</span>
-                <span className="text-sm text-slate-600 mr-1">ر.س</span>
-              </div>
-            </div>
-
-            {/* خيارات التبرع الأخرى */}
-            <div className="mb-4 grid grid-cols-3 gap-2">
+            {/* خيارات التبرع */}
+            <div className="mb-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
               <button
                 type="button"
                 onClick={() => {
                   setCustomDonation(false);
-                  setSelectedAmount(20);
-                  setCustomAmount("20");
+                  setShareAmount(30);
+                  setCustomAmount(String(30 * sharesCount));
+                  setSelectedAmount(30 * sharesCount);
                 }}
                 className={`rounded-lg border px-3 py-2.5 text-sm font-bold transition ${
-                  selectedAmount === 20 && !customDonation
+                  shareAmount === 30 && !customDonation
+                    ? "border-[#26a1d0] bg-[#26a1d0]/10 text-[#26a1d0]"
+                    : "border-slate-300 bg-white text-slate-700 hover:border-[#26a1d0]/50"
+                }`}
+              >
+                سهم الجود
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setCustomDonation(false);
+                  setShareAmount(20);
+                  setCustomAmount(String(20 * sharesCount));
+                  setSelectedAmount(20 * sharesCount);
+                }}
+                className={`rounded-lg border px-3 py-2.5 text-sm font-bold transition ${
+                  shareAmount === 20 && !customDonation
                     ? "border-[#26a1d0] bg-[#26a1d0]/10 text-[#26a1d0]"
                     : "border-slate-300 bg-white text-slate-700 hover:border-[#26a1d0]/50"
                 }`}
@@ -271,11 +237,12 @@ export default function DonationOpportunityDetails() {
                 type="button"
                 onClick={() => {
                   setCustomDonation(false);
-                  setSelectedAmount(30);
-                  setCustomAmount("30");
+                  setShareAmount(30);
+                  setCustomAmount(String(30 * sharesCount));
+                  setSelectedAmount(30 * sharesCount);
                 }}
                 className={`rounded-lg border px-3 py-2.5 text-sm font-bold transition ${
-                  selectedAmount === 30 && !customDonation
+                  shareAmount === 30 && !customDonation
                     ? "border-[#26a1d0] bg-[#26a1d0]/10 text-[#26a1d0]"
                     : "border-slate-300 bg-white text-slate-700 hover:border-[#26a1d0]/50"
                 }`}
@@ -299,27 +266,50 @@ export default function DonationOpportunityDetails() {
               </button>
             </div>
 
-            {/* حقل المبلغ - يظهر دائماً */}
-            <div className="relative mb-4">
-              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-600">ريال</span>
-              <Input
-                value={customAmount}
-                onChange={(e) => {
-                  const value = e.target.value.replace(/[^0-9]/g, "");
-                  setCustomAmount(value);
-                  
-                  if (value === "0" || value === "") {
-                    setCustomDonation(true);
-                    setSelectedAmount(0);
-                  } else {
-                    setCustomDonation(false);
-                    setSelectedAmount(Number(value));
-                  }
-                }}
-                className="h-14 rounded-xl border-2 border-slate-300 bg-white pr-14 text-left text-2xl font-bold focus:border-[#26a1d0]"
-                inputMode="numeric"
-                placeholder="0"
-              />
+            {/* حقل المبلغ مع عدد الأسهم */}
+            <div className="flex items-center gap-2 mb-4">
+              <div className="relative flex-1">
+                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-600">ريال</span>
+                <Input
+                  value={customAmount}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/[^0-9]/g, "");
+                    setCustomAmount(value);
+                    
+                    if (value === "0" || value === "") {
+                      setCustomDonation(true);
+                      setSelectedAmount(0);
+                    } else {
+                      setCustomDonation(false);
+                      setSelectedAmount(Number(value));
+                    }
+                  }}
+                  className="h-14 rounded-xl border-2 border-slate-300 bg-white pr-14 text-left text-2xl font-bold focus:border-[#26a1d0]"
+                  inputMode="numeric"
+                  placeholder="0"
+                />
+              </div>
+              
+              {/* عدد الأسهم */}
+              <Select value={String(sharesCount)} onValueChange={(value) => {
+                const count = Number(value);
+                setSharesCount(count);
+                if (!customDonation && shareAmount > 0) {
+                  setCustomAmount(String(shareAmount * count));
+                  setSelectedAmount(shareAmount * count);
+                }
+              }}>
+                <SelectTrigger className="h-14 w-24 rounded-xl bg-white text-center font-bold text-xl border-2 border-slate-300">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20].map((num) => (
+                    <SelectItem key={num} value={String(num)}>
+                      {num}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             {/* أنواع التبرع */}
