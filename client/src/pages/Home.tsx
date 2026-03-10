@@ -264,7 +264,7 @@ export default function Home() {
           
           <div className="partners-viewport relative overflow-hidden">
             <div className="partners-track animate-partners-scroll" style={{ willChange: "transform" }}>
-              {[...partners, ...partners, ...partners].map((partner, index) => (
+              {[...partners, ...partners].map((partner, index) => (
                 <div key={`${partner.id}-${index}`} className="partners-item">
                   {partner.name}
                 </div>

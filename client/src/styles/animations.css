@@ -149,6 +149,7 @@ a:hover {
 .partners-viewport {
   position: relative;
   overflow: hidden;
+  direction: ltr;
 }
 
 .partners-marquee {
@@ -183,12 +184,12 @@ a:hover {
     transform: translateX(0);
   }
   to {
-    transform: translateX(-33.333%);
+    transform: translateX(calc(-50% - 0.625rem));
   }
 }
 
 .animate-partners-scroll {
-  animation: partners-scroll 14s linear infinite;
+  animation: partners-scroll 11s linear infinite;
   will-change: transform;
 }
 
