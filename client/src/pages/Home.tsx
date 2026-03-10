@@ -115,69 +115,39 @@ export default function Home() {
       <div className="container mx-auto space-y-10 px-4 md:space-y-14">
         <section className="rounded-2xl border border-slate-200 bg-white p-4 md:p-6">
           <div className="mb-8 flex items-center justify-center gap-4">
-            <div className="h-px w-20 bg-slate-300 md:w-72" />
-            <h2 className="text-2xl font-extrabold text-slate-900 md:text-4xl">المزيد هنا</h2>
-            <div className="h-px w-20 bg-slate-300 md:w-72" />
+            <div className="h-px w-20 bg-slate-300 md:w-64" />
+            <h2 className="text-2xl font-extrabold text-slate-900 md:text-4xl">ابتسم في ارقام</h2>
+            <div className="h-px w-20 bg-slate-300 md:w-64" />
           </div>
 
-          <div className="grid grid-cols-1 gap-6 text-center md:grid-cols-3">
-            <button type="button" onClick={() => setLocation("/media/library")} className="rounded-xl p-3 transition hover:bg-slate-50">
-              <div className="mb-3 flex justify-center"><Newspaper className="h-10 w-10 text-sky-600" /></div>
-              <p className="text-xl font-bold text-slate-800">المركز الإعلامي</p>
-            </button>
-            <button type="button" onClick={() => setLocation("/media/announcements")} className="rounded-xl p-3 transition hover:bg-slate-50">
-              <div className="mb-3 flex justify-center"><FileText className="h-10 w-10 text-sky-600" /></div>
-              <p className="text-xl font-bold text-slate-800">الإصدارات والأنظمة</p>
-            </button>
-            <button type="button" onClick={() => setLocation("/media/news")} className="rounded-xl p-3 transition hover:bg-slate-50">
-              <div className="mb-3 flex justify-center"><Calendar className="h-10 w-10 text-sky-600" /></div>
-              <p className="text-xl font-bold text-slate-800">المدونة والأخبار</p>
-            </button>
-          </div>
-        </section>
-
-        <section>
-          <div className="mb-8 flex items-center justify-center gap-4">
-            <div className="h-px w-20 bg-slate-300 md:w-56" />
-            <h2 className="text-2xl font-extrabold text-slate-900 md:text-4xl">المركز الإعلامي</h2>
-            <div className="h-px w-20 bg-slate-300 md:w-56" />
-          </div>
-
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {mediaItems.map((item) => (
-              <article key={item.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                <img src={item.image} alt={item.title} className="mb-4 h-44 w-full rounded-xl object-cover" />
-                <div className="mb-3 flex items-center justify-between text-sm text-slate-500">
-                  <span className="rounded-full bg-slate-100 px-3 py-1">{item.type}</span>
-                  <span>{item.date}</span>
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+            {stats.slice(0, 6).map((item) => (
+              <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-lg font-semibold text-slate-500">{item.title}</p>
+                    <p className="text-4xl font-extrabold text-slate-900">{item.value}</p>
+                  </div>
+                  <div className="rounded-2xl bg-sky-500 p-3 text-white">
+                    <item.icon className="h-7 w-7" />
+                  </div>
                 </div>
-                <h3 className="mb-2 text-lg font-extrabold text-slate-900">{item.title}</h3>
-                <p className="line-clamp-3 text-sm leading-6 text-slate-600">{item.excerpt}</p>
-                <button type="button" className="mt-3 font-bold text-slate-800 hover:text-sky-600">اقرا المزيد</button>
-                <div className="mt-4 flex items-center gap-2 text-slate-400">
-                  <Share2 className="h-4 w-4" />
-                  <Facebook className="h-4 w-4" />
-                  <MessageCircle className="h-4 w-4" />
-                </div>
-              </article>
-            ))}
-          </div>
-
-          <div className="mt-8 text-center">
-            <Button type="button" className="rounded-xl bg-sky-500 px-8 text-white hover:bg-sky-600" onClick={() => setLocation("/media/news")}>
-              عرض المزيد
-            </Button>
-          </div>
-        </section>
-
-        <section className="rounded-2xl border border-slate-200 bg-white p-4 md:p-6">
-          <h2 className="mb-8 text-center text-3xl font-extrabold text-slate-900 md:text-5xl">شركاء النجاح</h2>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {partners.map((partner) => (
-              <div key={partner.id} className="flex h-32 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 px-4 text-center text-xl font-bold text-slate-600">
-                {partner.name}
               </div>
             ))}
+          </div>
+
+          <div className="mt-4 flex justify-center">
+            <div className="w-full max-w-[340px] rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-lg font-semibold leading-7 text-slate-500">{stats[6].title}</p>
+                  <p className="text-4xl font-extrabold text-slate-900">{stats[6].value}</p>
+                </div>
+                <div className="rounded-2xl bg-sky-500 p-3 text-white">
+                  <UserRound className="h-7 w-7" />
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -259,42 +229,70 @@ export default function Home() {
         </section>
 
         <section className="rounded-2xl border border-slate-200 bg-white p-4 md:p-6">
+          <h2 className="mb-8 text-center text-3xl font-extrabold text-slate-900 md:text-5xl">شركاء النجاح</h2>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {partners.map((partner) => (
+              <div key={partner.id} className="flex h-32 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 px-4 text-center text-xl font-bold text-slate-600">
+                {partner.name}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section>
           <div className="mb-8 flex items-center justify-center gap-4">
-            <div className="h-px w-20 bg-slate-300 md:w-64" />
-            <h2 className="text-2xl font-extrabold text-slate-900 md:text-4xl">ابتسم في ارقام</h2>
-            <div className="h-px w-20 bg-slate-300 md:w-64" />
+            <div className="h-px w-20 bg-slate-300 md:w-56" />
+            <h2 className="text-2xl font-extrabold text-slate-900 md:text-4xl">المركز الإعلامي</h2>
+            <div className="h-px w-20 bg-slate-300 md:w-56" />
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {stats.slice(0, 4).map((item) => (
-              <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-lg font-semibold text-slate-500">{item.title}</p>
-                    <p className="text-4xl font-extrabold text-slate-900">{item.value}</p>
-                  </div>
-                  <div className="rounded-2xl bg-sky-500 p-3 text-white">
-                    <item.icon className="h-7 w-7" />
-                  </div>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {mediaItems.map((item) => (
+              <article key={item.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                <img src={item.image} alt={item.title} className="mb-4 h-44 w-full rounded-xl object-cover" />
+                <div className="mb-3 flex items-center justify-between text-sm text-slate-500">
+                  <span className="rounded-full bg-slate-100 px-3 py-1">{item.type}</span>
+                  <span>{item.date}</span>
                 </div>
-              </div>
+                <h3 className="mb-2 text-lg font-extrabold text-slate-900">{item.title}</h3>
+                <p className="line-clamp-3 text-sm leading-6 text-slate-600">{item.excerpt}</p>
+                <button type="button" className="mt-3 font-bold text-slate-800 hover:text-sky-600">اقرا المزيد</button>
+                <div className="mt-4 flex items-center gap-2 text-slate-400">
+                  <Share2 className="h-4 w-4" />
+                  <Facebook className="h-4 w-4" />
+                  <MessageCircle className="h-4 w-4" />
+                </div>
+              </article>
             ))}
           </div>
 
-          <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
-            {stats.slice(4).map((item) => (
-              <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-lg font-semibold leading-7 text-slate-500">{item.title}</p>
-                    <p className="text-4xl font-extrabold text-slate-900">{item.value}</p>
-                  </div>
-                  <div className="rounded-2xl bg-sky-500 p-3 text-white">
-                    <item.icon className="h-7 w-7" />
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="mt-8 text-center">
+            <Button type="button" className="rounded-xl bg-sky-500 px-8 text-white hover:bg-sky-600" onClick={() => setLocation("/media/news")}>
+              عرض المزيد
+            </Button>
+          </div>
+        </section>
+
+        <section className="rounded-2xl border border-slate-200 bg-white p-4 md:p-6">
+          <div className="mb-8 flex items-center justify-center gap-4">
+            <div className="h-px w-20 bg-slate-300 md:w-72" />
+            <h2 className="text-2xl font-extrabold text-slate-900 md:text-4xl">المزيد هنا</h2>
+            <div className="h-px w-20 bg-slate-300 md:w-72" />
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 text-center md:grid-cols-3">
+            <button type="button" onClick={() => setLocation("/media/library")} className="rounded-xl p-3 transition hover:bg-slate-50">
+              <div className="mb-3 flex justify-center"><Newspaper className="h-10 w-10 text-sky-600" /></div>
+              <p className="text-xl font-bold text-slate-800">المركز الإعلامي</p>
+            </button>
+            <button type="button" onClick={() => setLocation("/media/announcements")} className="rounded-xl p-3 transition hover:bg-slate-50">
+              <div className="mb-3 flex justify-center"><FileText className="h-10 w-10 text-sky-600" /></div>
+              <p className="text-xl font-bold text-slate-800">الإصدارات والأنظمة</p>
+            </button>
+            <button type="button" onClick={() => setLocation("/media/news")} className="rounded-xl p-3 transition hover:bg-slate-50">
+              <div className="mb-3 flex justify-center"><Calendar className="h-10 w-10 text-sky-600" /></div>
+              <p className="text-xl font-bold text-slate-800">المدونة والأخبار</p>
+            </button>
           </div>
         </section>
       </div>
