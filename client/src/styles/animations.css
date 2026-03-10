@@ -152,13 +152,36 @@ a:hover {
     transform: translateX(0);
   }
   to {
-    transform: translateX(-33.333%);
+    transform: translateX(calc(-50% - 0.625rem));
   }
 }
 
 .animate-scroll-rtl {
-  animation: scroll-rtl 10s linear infinite;
+  animation: scroll-rtl 16s linear infinite;
   will-change: transform;
+}
+
+.partners-track {
+  display: flex;
+  width: max-content;
+  gap: 1.25rem;
+}
+
+.partners-item {
+  flex-shrink: 0;
+  width: 220px;
+  height: 7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  padding: 0 1rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #475569;
 }
 
 /* Enhanced form elements */
