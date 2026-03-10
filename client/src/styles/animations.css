@@ -148,16 +148,18 @@ a:hover {
 
 /* Infinite scroll animation for partners */
 @keyframes scroll-rtl {
-  0% {
+  from {
     transform: translateX(0);
   }
-  100% {
+  to {
     transform: translateX(-50%);
   }
 }
 
 .animate-scroll-rtl {
-  animation: scroll-rtl 12s linear infinite;
+  animation: scroll-rtl 10s linear infinite;
+  will-change: transform;
+}
 }
 
 /* Enhanced form elements */
