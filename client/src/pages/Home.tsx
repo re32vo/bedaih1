@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
-import { Calendar, FileText, Newspaper, Users, Clock3, HeartPulse, TrendingUp, UserRound, ShoppingCart, Share2, Facebook, MessageCircle } from "lucide-react";
+import { Users, Clock3, HeartPulse, TrendingUp, UserRound, ShoppingCart, Share2, Facebook, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { donationProjects } from "@/data/donationProjects";
@@ -260,13 +260,15 @@ export default function Home() {
         <section className="rounded-xl md:rounded-2xl border border-slate-200 bg-white p-3 sm:p-4 md:p-6 overflow-hidden">
           <h2 className="mb-4 sm:mb-6 md:mb-8 text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-slate-900">شركاء النجاح</h2>
 
-          <div className="mx-auto max-w-sm rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-            <img
-              src={featuredPartner.image}
-              alt={featuredPartner.name}
-              loading="lazy"
-              className="mx-auto h-24 w-24 rounded-lg object-contain"
-            />
+          <div className="mx-auto max-w-sm rounded-xl border border-slate-200 bg-gradient-to-b from-white to-slate-50 p-4 sm:p-5 shadow-sm">
+            <div className="mx-auto flex h-28 w-full max-w-[220px] items-center justify-center rounded-xl border border-slate-200 bg-white px-3 py-2">
+              <img
+                src={featuredPartner.image}
+                alt={featuredPartner.name}
+                loading="lazy"
+                className="h-full w-full object-contain"
+              />
+            </div>
             <p className="mt-3 text-center text-lg font-extrabold text-slate-700">{featuredPartner.name}</p>
           </div>
         </section>
@@ -305,28 +307,6 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="rounded-xl md:rounded-2xl border border-slate-200 bg-white p-3 sm:p-4 md:p-6">
-          <div className="mb-4 sm:mb-6 md:mb-8 flex items-center justify-center gap-2 sm:gap-4">
-            <div className="h-px w-8 sm:w-16 md:w-20 lg:w-72 bg-slate-300" />
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900">المزيد هنا</h2>
-            <div className="h-px w-8 sm:w-16 md:w-20 lg:w-72 bg-slate-300" />
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 sm:gap-5 md:gap-6 sm:grid-cols-3">
-            <button type="button" onClick={() => setLocation("/media/library")} className="rounded-lg sm:rounded-xl p-3 sm:p-4 transition hover:bg-slate-50 touch-manipulation flex flex-col items-center justify-center gap-2 sm:gap-3 text-center">
-              <Newspaper className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 text-sky-600 flex-shrink-0" />
-              <p className="text-base sm:text-lg md:text-xl font-bold text-slate-800">المركز الإعلامي</p>
-            </button>
-            <button type="button" onClick={() => setLocation("/media/announcements")} className="rounded-lg sm:rounded-xl p-3 sm:p-4 transition hover:bg-slate-50 touch-manipulation flex flex-col items-center justify-center gap-2 sm:gap-3 text-center">
-              <FileText className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 text-sky-600 flex-shrink-0" />
-              <p className="text-base sm:text-lg md:text-xl font-bold text-slate-800">الإصدارات والأنظمة</p>
-            </button>
-            <button type="button" onClick={() => setLocation("/media/news")} className="rounded-lg sm:rounded-xl p-3 sm:p-4 transition hover:bg-slate-50 touch-manipulation flex flex-col items-center justify-center gap-2 sm:gap-3 text-center">
-              <Calendar className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 text-sky-600 flex-shrink-0" />
-              <p className="text-base sm:text-lg md:text-xl font-bold text-slate-800">المدونة والأخبار</p>
-            </button>
-          </div>
-        </section>
       </div>
     </div>
   );
