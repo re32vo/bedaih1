@@ -276,6 +276,12 @@ export default function Home() {
                   {partner.name}
                 </div>
               ))}
+              {/* نسخة ثالثة (لضمان سلاسة الحركة) */}
+              {partners.map((partner) => (
+                <div key={`third-${partner.id}`} className="flex-shrink-0 w-[220px] h-28 flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50 px-4 text-center text-base font-bold text-slate-600">
+                  {partner.name}
+                </div>
+              ))}
             </div>
           </div>
         </section>
