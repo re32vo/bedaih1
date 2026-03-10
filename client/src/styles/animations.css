@@ -154,6 +154,7 @@ a:hover {
 
 .partners-marquee {
   height: 7rem;
+  position: relative;
 }
 
 .partners-item {
@@ -171,33 +172,17 @@ a:hover {
   font-size: 1rem;
   font-weight: 700;
   color: #475569;
-}
-
-.partners-track {
-  display: flex;
-  width: max-content;
-  gap: 1.25rem;
-}
-
-@keyframes partners-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(calc(-50% - 0.625rem));
-  }
-}
-
-.animate-partners-scroll {
-  animation: partners-scroll 11s linear infinite;
+  position: absolute;
+  top: 0;
+  left: 0;
   will-change: transform;
 }
 
-@media (max-width: 640px) {
-  .partners-track {
-    gap: 0.875rem;
-  }
+.partners-marquee-item {
+  transform: translate3d(9999px, 0, 0);
+}
 
+@media (max-width: 640px) {
   .partners-item {
     width: 180px;
   }
