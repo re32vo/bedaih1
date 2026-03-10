@@ -126,8 +126,9 @@ export default function Home() {
             <div className="h-px w-8 sm:w-16 md:w-20 lg:w-64 bg-slate-300" />
           </div>
 
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-            {stats.slice(0, 6).map((item) => (
+          {/* الصف الأول: 4 عناصر */}
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 mb-3 sm:mb-4">
+            {stats.slice(0, 4).map((item) => (
               <div key={item.id} className="rounded-xl md:rounded-2xl border border-slate-200 bg-slate-50 p-3 sm:p-4">
                 <div className="flex items-center justify-between">
                   <div className="min-w-0 flex-1">
@@ -144,8 +145,28 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="mt-3 sm:mt-4 flex justify-center">
-            <div className="w-full max-w-[340px] rounded-xl md:rounded-2xl border border-slate-200 bg-slate-50 p-3 sm:p-4">
+          {/* الصف الثاني: 2 عنصر */}
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-2 mb-3 sm:mb-4">
+            {stats.slice(4, 6).map((item) => (
+              <div key={item.id} className="rounded-xl md:rounded-2xl border border-slate-200 bg-slate-50 p-3 sm:p-4">
+                <div className="flex items-center justify-between">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs sm:text-sm md:text-base font-semibold text-slate-500 leading-tight mb-1">{item.title}</p>
+                    <p className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900">
+                      {statsInView ? <CountUp end={item.value} duration={1.6} separator="," /> : 0}
+                    </p>
+                  </div>
+                  <div className="rounded-xl md:rounded-2xl bg-sky-500 p-2 sm:p-2.5 md:p-3 text-white flex-shrink-0">
+                    <item.icon className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* الصف الثالث: 1 عنصر في المنتصف */}
+          <div className="flex justify-center">
+            <div className="w-full max-w-[340px] lg:max-w-[400px] rounded-xl md:rounded-2xl border border-slate-200 bg-slate-50 p-3 sm:p-4">
               <div className="flex items-center justify-between">
                 <div className="min-w-0 flex-1">
                   <p className="text-xs sm:text-sm md:text-base font-semibold leading-tight sm:leading-7 text-slate-500 mb-1">{stats[6].title}</p>
@@ -290,18 +311,18 @@ export default function Home() {
             <div className="h-px w-8 sm:w-16 md:w-20 lg:w-72 bg-slate-300" />
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:gap-5 md:gap-6 text-center sm:grid-cols-3">
-            <button type="button" onClick={() => setLocation("/media/library")} className="rounded-lg sm:rounded-xl p-3 sm:p-4 transition hover:bg-slate-50 touch-manipulation">
-              <div className="mb-2 sm:mb-3 flex justify-center"><Newspaper className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 text-sky-600" /></div>
-              <p className="text-base sm:text-lg md:text-xl font-bold text-slate-800">المركز الإعلامي</p>
+          <div className="grid grid-cols-1 gap-4 sm:gap-5 md:gap-6 sm:grid-cols-3">
+            <button type="button" onClick={() => setLocation("/media/library")} className="rounded-lg sm:rounded-xl p-3 sm:p-4 transition hover:bg-slate-50 touch-manipulation flex flex-col items-center justify-center">
+              <Newspaper className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 text-sky-600 mb-2 sm:mb-3" />
+              <p className="text-base sm:text-lg md:text-xl font-bold text-slate-800 text-center">المركز الإعلامي</p>
             </button>
-            <button type="button" onClick={() => setLocation("/media/announcements")} className="rounded-lg sm:rounded-xl p-3 sm:p-4 transition hover:bg-slate-50 touch-manipulation">
-              <div className="mb-2 sm:mb-3 flex justify-center"><FileText className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 text-sky-600" /></div>
-              <p className="text-base sm:text-lg md:text-xl font-bold text-slate-800">الإصدارات والأنظمة</p>
+            <button type="button" onClick={() => setLocation("/media/announcements")} className="rounded-lg sm:rounded-xl p-3 sm:p-4 transition hover:bg-slate-50 touch-manipulation flex flex-col items-center justify-center">
+              <FileText className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 text-sky-600 mb-2 sm:mb-3" />
+              <p className="text-base sm:text-lg md:text-xl font-bold text-slate-800 text-center">الإصدارات والأنظمة</p>
             </button>
-            <button type="button" onClick={() => setLocation("/media/news")} className="rounded-lg sm:rounded-xl p-3 sm:p-4 transition hover:bg-slate-50 touch-manipulation">
-              <div className="mb-2 sm:mb-3 flex justify-center"><Calendar className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 text-sky-600" /></div>
-              <p className="text-base sm:text-lg md:text-xl font-bold text-slate-800">المدونة والأخبار</p>
+            <button type="button" onClick={() => setLocation("/media/news")} className="rounded-lg sm:rounded-xl p-3 sm:p-4 transition hover:bg-slate-50 touch-manipulation flex flex-col items-center justify-center">
+              <Calendar className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 text-sky-600 mb-2 sm:mb-3" />
+              <p className="text-base sm:text-lg md:text-xl font-bold text-slate-800 text-center">المدونة والأخبار</p>
             </button>
           </div>
         </section>
