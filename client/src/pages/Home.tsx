@@ -259,14 +259,30 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="rounded-xl md:rounded-2xl border border-slate-200 bg-white p-3 sm:p-4 md:p-6">
+        <section className="rounded-xl md:rounded-2xl border border-slate-200 bg-white p-3 sm:p-4 md:p-6 overflow-hidden">
           <h2 className="mb-4 sm:mb-6 md:mb-8 text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-slate-900">شركاء النجاح</h2>
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {partners.map((partner) => (
-              <div key={partner.id} className="flex h-24 sm:h-28 md:h-32 items-center justify-center rounded-xl md:rounded-2xl border border-slate-200 bg-slate-50 px-3 sm:px-4 text-center text-sm sm:text-base md:text-lg lg:text-xl font-bold text-slate-600">
-                {partner.name}
-              </div>
-            ))}
+          
+          <div className="relative">
+            <div className="flex gap-4 sm:gap-6 animate-scroll-rtl">
+              {/* نسخة أولى من الشركاء */}
+              {partners.map((partner) => (
+                <div key={`first-${partner.id}`} className="flex-shrink-0 w-[200px] sm:w-[240px] md:w-[280px] h-24 sm:h-28 md:h-32 flex items-center justify-center rounded-xl md:rounded-2xl border border-slate-200 bg-slate-50 px-3 sm:px-4 text-center text-sm sm:text-base md:text-lg lg:text-xl font-bold text-slate-600">
+                  {partner.name}
+                </div>
+              ))}
+              {/* نسخة ثانية من الشركاء (للحركة المستمرة) */}
+              {partners.map((partner) => (
+                <div key={`second-${partner.id}`} className="flex-shrink-0 w-[200px] sm:w-[240px] md:w-[280px] h-24 sm:h-28 md:h-32 flex items-center justify-center rounded-xl md:rounded-2xl border border-slate-200 bg-slate-50 px-3 sm:px-4 text-center text-sm sm:text-base md:text-lg lg:text-xl font-bold text-slate-600">
+                  {partner.name}
+                </div>
+              ))}
+              {/* نسخة ثالثة (لضمان استمرارية الحركة) */}
+              {partners.map((partner) => (
+                <div key={`third-${partner.id}`} className="flex-shrink-0 w-[200px] sm:w-[240px] md:w-[280px] h-24 sm:h-28 md:h-32 flex items-center justify-center rounded-xl md:rounded-2xl border border-slate-200 bg-slate-50 px-3 sm:px-4 text-center text-sm sm:text-base md:text-lg lg:text-xl font-bold text-slate-600">
+                  {partner.name}
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
