@@ -47,7 +47,7 @@ const mediaItems: MediaItem[] = [
 
 const featuredPartner = {
   name: "وزارة الصحة",
-  image: "/oz.png",
+  image: "/12344.png",
 };
 
 const stats = [
@@ -257,19 +257,15 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="rounded-xl md:rounded-2xl border border-slate-200 bg-white p-3 sm:p-4 md:p-6 overflow-hidden">
-          <h2 className="mb-4 sm:mb-6 md:mb-8 text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-slate-900">شركاء النجاح</h2>
-
-          <div className="mx-auto max-w-sm rounded-xl border border-slate-200 bg-gradient-to-b from-white to-slate-50 p-4 sm:p-5 shadow-sm">
-            <div className="mx-auto flex h-28 w-full max-w-[220px] items-center justify-center rounded-xl border border-slate-200 bg-white px-3 py-2">
-              <img
-                src={featuredPartner.image}
-                alt={featuredPartner.name}
-                loading="lazy"
-                className="h-full w-full object-contain"
-              />
-            </div>
-            <p className="mt-3 text-center text-lg font-extrabold text-slate-700">{featuredPartner.name}</p>
+        <section className="py-2 sm:py-3">
+          <div className="mx-auto flex max-w-sm flex-col items-center justify-center gap-3">
+            <img
+              src={featuredPartner.image}
+              alt={featuredPartner.name}
+              loading="lazy"
+              className="h-28 w-44 sm:h-32 sm:w-52 object-contain"
+            />
+            <p className="text-center text-xl sm:text-2xl font-extrabold text-slate-700">{featuredPartner.name}</p>
           </div>
         </section>
 
