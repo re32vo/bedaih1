@@ -138,7 +138,7 @@ export default function Home() {
       const viewportWidth = viewport.getBoundingClientRect().width || 0;
       step = cardWidth + getGap();
 
-      positions = partners.map((_, index) => viewportWidth - cardWidth - index * step);
+      positions = partners.map((_, index) => viewportWidth + index * step);
       partnerItemRefs.current.forEach((item, index) => {
         if (!item) return;
         item.style.transform = `translate3d(${positions[index]}px, 0, 0)`;
@@ -160,7 +160,7 @@ export default function Home() {
         for (let i = 0; i < positions.length; i += 1) {
           if (positions[i] <= minX) {
             const maxPos = Math.max(...positions);
-            positions[i] = maxPos + step;
+            positions[i] = Math.max(maxPos + step, viewport.getBoundingClientRect().width + step);
           }
         }
 
