@@ -150,6 +150,8 @@ a:hover {
   position: relative;
   overflow: hidden;
   direction: ltr;
+  margin: 0 auto;
+  max-width: 1120px;
 }
 
 .partners-marquee {
@@ -176,6 +178,20 @@ a:hover {
   top: 0;
   left: 0;
   will-change: transform;
+  overflow: visible;
+}
+
+.partners-item::after {
+  content: "";
+  position: absolute;
+  left: calc(100% + 2px);
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translateY(-50%);
+  border-radius: 9999px;
+  background: radial-gradient(circle at 35% 35%, #38bdf8 0%, #0284c7 60%, #0369a1 100%);
+  box-shadow: 0 0 0 3px #f8fafc;
 }
 
 .partners-marquee-item {
@@ -183,6 +199,10 @@ a:hover {
 }
 
 @media (max-width: 640px) {
+  .partners-viewport {
+    max-width: 100%;
+  }
+
   .partners-item {
     width: 180px;
   }
