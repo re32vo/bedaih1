@@ -152,12 +152,6 @@ a:hover {
 }
 
 .partners-marquee {
-  --partners-count: 4;
-  --partner-width: 220px;
-  --partner-gap: 1.25rem;
-  --partner-step: calc(var(--partner-width) + var(--partner-gap));
-  --partner-duration: 12s;
-  position: relative;
   height: 7rem;
 }
 
@@ -178,30 +172,33 @@ a:hover {
   color: #475569;
 }
 
-.partners-marquee-item {
-  position: absolute;
-  top: 0;
-  left: 100%;
-  width: var(--partner-width);
-  transform: translateX(calc(var(--partner-index) * var(--partner-step)));
-  animation: partner-item-loop var(--partner-duration) linear infinite;
-  animation-delay: var(--partner-delay, 0s);
+.partners-track {
+  display: flex;
+  width: max-content;
+  gap: 1.25rem;
+}
+
+@keyframes partners-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-33.333%);
+  }
+}
+
+.animate-partners-scroll {
+  animation: partners-scroll 14s linear infinite;
   will-change: transform;
 }
 
-@keyframes partner-item-loop {
-  from {
-    transform: translateX(calc(var(--partner-index) * var(--partner-step)));
-  }
-  to {
-    transform: translateX(calc((var(--partner-index) - var(--partners-count)) * var(--partner-step)));
-  }
-}
-
 @media (max-width: 640px) {
-  .partners-marquee {
-    --partner-width: 180px;
-    --partner-gap: 0.875rem;
+  .partners-track {
+    gap: 0.875rem;
+  }
+
+  .partners-item {
+    width: 180px;
   }
 }
 

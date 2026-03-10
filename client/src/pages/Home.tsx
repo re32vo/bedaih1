@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from "react";
+import { useState } from "react";
 import { useLocation } from "wouter";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
@@ -263,16 +263,9 @@ export default function Home() {
           <h2 className="mb-4 sm:mb-6 md:mb-8 text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-slate-900">شركاء النجاح</h2>
           
           <div className="partners-viewport relative overflow-hidden">
-            <div className="partners-marquee" style={{ "--partners-count": partners.length } as CSSProperties}>
-              {partners.map((partner, index) => (
-                <div
-                  key={partner.id}
-                  className="partners-item partners-marquee-item"
-                  style={{
-                    "--partner-index": index,
-                    "--partner-delay": `-${(index * 12) / partners.length}s`,
-                  } as CSSProperties}
-                >
+            <div className="partners-track animate-partners-scroll" style={{ willChange: "transform" }}>
+              {[...partners, ...partners, ...partners].map((partner, index) => (
+                <div key={`${partner.id}-${index}`} className="partners-item">
                   {partner.name}
                 </div>
               ))}
