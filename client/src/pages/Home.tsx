@@ -262,14 +262,20 @@ export default function Home() {
         <section className="rounded-xl md:rounded-2xl border border-slate-200 bg-white p-3 sm:p-4 md:p-6 overflow-hidden">
           <h2 className="mb-4 sm:mb-6 md:mb-8 text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-slate-900">شركاء النجاح</h2>
           
-          <div className="relative overflow-hidden">
+          <div className="partners-viewport relative overflow-hidden">
             <div className="partners-track animate-scroll-rtl" style={{ willChange: "transform" }}>
-              {[...partners, ...partners].map((partner, index) => (
-                <div key={`${partner.id}-${index}`} className="partners-item">
-                  {partner.name}
+              {[1, 2, 3].map((copy) => (
+                <div key={`copy-${copy}`} className="partners-group">
+                  {partners.map((partner) => (
+                    <div key={`${copy}-${partner.id}`} className="partners-item">
+                      {partner.name}
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
+            <div className="partners-portal partners-portal-left" aria-hidden="true" />
+            <div className="partners-portal partners-portal-right" aria-hidden="true" />
           </div>
         </section>
 

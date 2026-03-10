@@ -152,18 +152,27 @@ a:hover {
     transform: translateX(0);
   }
   to {
-    transform: translateX(calc(-50% - 0.625rem));
+    transform: translateX(-33.333%);
   }
 }
 
 .animate-scroll-rtl {
-  animation: scroll-rtl 16s linear infinite;
+  animation: scroll-rtl 14s linear infinite;
   will-change: transform;
+}
+
+.partners-viewport {
+  position: relative;
+  overflow: hidden;
 }
 
 .partners-track {
   display: flex;
   width: max-content;
+}
+
+.partners-group {
+  display: flex;
   gap: 1.25rem;
 }
 
@@ -182,6 +191,29 @@ a:hover {
   font-size: 1rem;
   font-weight: 700;
   color: #475569;
+}
+
+.partners-portal {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2.5rem;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.partners-portal-left {
+  left: 0;
+  background: linear-gradient(to right, #ffffff 0%, rgba(255, 255, 255, 0) 100%);
+  border-right: 1px solid rgba(14, 116, 144, 0.3);
+  box-shadow: 8px 0 18px rgba(14, 116, 144, 0.12);
+}
+
+.partners-portal-right {
+  right: 0;
+  background: linear-gradient(to left, #ffffff 0%, rgba(255, 255, 255, 0) 100%);
+  border-left: 1px solid rgba(14, 116, 144, 0.3);
+  box-shadow: -8px 0 18px rgba(14, 116, 144, 0.12);
 }
 
 /* Enhanced form elements */
