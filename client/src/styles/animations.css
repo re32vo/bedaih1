@@ -146,35 +146,19 @@ a:hover {
   animation: slideInLeft 0.3s ease reverse;
 }
 
-/* Infinite scroll animation for partners */
-@keyframes scroll-rtl {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-33.333%);
-  }
-}
-
-.animate-scroll-rtl {
-  animation: scroll-rtl 14s linear infinite;
-  will-change: transform;
-}
-
 .partners-viewport {
   position: relative;
   overflow: hidden;
 }
 
-.partners-track {
-  display: flex;
-  width: max-content;
-}
-
-.partners-group {
-  display: flex;
-  gap: 1.25rem;
-  padding-right: 1.25rem;
+.partners-marquee {
+  --partners-count: 4;
+  --partner-width: 220px;
+  --partner-gap: 1.25rem;
+  --partner-step: calc(var(--partner-width) + var(--partner-gap));
+  --partner-duration: 12s;
+  position: relative;
+  height: 7rem;
 }
 
 .partners-item {
@@ -194,6 +178,26 @@ a:hover {
   color: #475569;
 }
 
+.partners-marquee-item {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: var(--partner-width);
+  transform: translateX(calc(var(--partner-index) * var(--partner-step)));
+  animation: partner-item-loop var(--partner-duration) linear infinite;
+  animation-delay: calc((var(--partner-index) * var(--partner-duration) / var(--partners-count)) * -1);
+  will-change: transform;
+}
+
+@keyframes partner-item-loop {
+  from {
+    transform: translateX(calc(var(--partner-index) * var(--partner-step)));
+  }
+  to {
+    transform: translateX(calc((var(--partner-index) - var(--partners-count)) * var(--partner-step)));
+  }
+}
+
 .partners-portal {
   position: absolute;
   top: 0;
@@ -211,6 +215,13 @@ a:hover {
   border-right: 2px solid rgba(2, 132, 199, 0.45);
   box-shadow: 10px 0 22px rgba(2, 132, 199, 0.2);
   animation: portal-beam 1.6s ease-in-out infinite;
+}
+
+@media (max-width: 640px) {
+  .partners-marquee {
+    --partner-width: 180px;
+    --partner-gap: 0.875rem;
+  }
 }
 
 @keyframes portal-beam {
