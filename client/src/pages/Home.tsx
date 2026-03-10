@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
+import CountUp from "react-countup";
+import { useInView } from "react-intersection-observer";
 import { Calendar, FileText, Newspaper, Users, Clock3, HeartPulse, TrendingUp, UserRound, ShoppingCart, Share2, Facebook, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -64,6 +66,10 @@ export default function Home() {
   const [, setLocation] = useLocation();
   const { addItem } = useCart();
   const { toast } = useToast();
+  const { ref: statsRef, inView: statsInView } = useInView({
+    triggerOnce: true,
+    threshold: 0.2,
+  });
 
   const featuredProjects = donationProjects.slice(0, 4);
   const [projectAmounts, setProjectAmounts] = useState<Record<string, { selected: number; custom: string }>>(
@@ -113,7 +119,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-slate-100 py-6 md:py-8" dir="rtl">
       <div className="container mx-auto space-y-10 px-4 md:space-y-14">
-        <section className="rounded-2xl border border-slate-200 bg-white p-4 md:p-6">
+        <section ref={statsRef} className="rounded-2xl border border-slate-200 bg-white p-4 md:p-6">
           <div className="mb-8 flex items-center justify-center gap-4">
             <div className="h-px w-20 bg-slate-300 md:w-64" />
             <h2 className="text-2xl font-extrabold text-slate-900 md:text-4xl">ابتسم في ارقام</h2>
@@ -125,8 +131,10 @@ export default function Home() {
               <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-lg font-semibold text-slate-500">{item.title}</p>
-                    <p className="text-4xl font-extrabold text-slate-900">{item.value}</p>
+                    <p className="text-base font-semibold text-slate-500">{item.title}</p>
+                    <p className="text-3xl font-extrabold text-slate-900">
+                      {statsInView ? <CountUp end={item.value} duration={1.6} separator="," /> : 0}
+                    </p>
                   </div>
                   <div className="rounded-2xl bg-sky-500 p-3 text-white">
                     <item.icon className="h-7 w-7" />
@@ -140,8 +148,10 @@ export default function Home() {
             <div className="w-full max-w-[340px] rounded-2xl border border-slate-200 bg-slate-50 p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-lg font-semibold leading-7 text-slate-500">{stats[6].title}</p>
-                  <p className="text-4xl font-extrabold text-slate-900">{stats[6].value}</p>
+                  <p className="text-base font-semibold leading-7 text-slate-500">{stats[6].title}</p>
+                  <p className="text-3xl font-extrabold text-slate-900">
+                    {statsInView ? <CountUp end={stats[6].value} duration={1.6} separator="," /> : 0}
+                  </p>
                 </div>
                 <div className="rounded-2xl bg-sky-500 p-3 text-white">
                   <UserRound className="h-7 w-7" />
