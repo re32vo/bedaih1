@@ -263,16 +263,16 @@ export default function Home() {
           <h2 className="mb-4 sm:mb-6 md:mb-8 text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-slate-900">شركاء النجاح</h2>
           
           <div className="relative overflow-hidden">
-            <div className="flex gap-4 sm:gap-6 animate-scroll-rtl">
+            <div className="flex gap-5 animate-scroll-rtl">
               {/* نسخة أولى من الشركاء */}
               {partners.map((partner) => (
-                <div key={`first-${partner.id}`} className="flex-shrink-0 w-[200px] sm:w-[240px] md:w-[280px] h-24 sm:h-28 md:h-32 flex items-center justify-center rounded-xl md:rounded-2xl border border-slate-200 bg-slate-50 px-3 sm:px-4 text-center text-sm sm:text-base md:text-lg lg:text-xl font-bold text-slate-600">
+                <div key={`first-${partner.id}`} className="flex-shrink-0 w-[220px] h-28 flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50 px-4 text-center text-base font-bold text-slate-600">
                   {partner.name}
                 </div>
               ))}
               {/* نسخة ثانية من الشركاء (للحركة المستمرة) */}
               {partners.map((partner) => (
-                <div key={`second-${partner.id}`} className="flex-shrink-0 w-[200px] sm:w-[240px] md:w-[280px] h-24 sm:h-28 md:h-32 flex items-center justify-center rounded-xl md:rounded-2xl border border-slate-200 bg-slate-50 px-3 sm:px-4 text-center text-sm sm:text-base md:text-lg lg:text-xl font-bold text-slate-600">
+                <div key={`second-${partner.id}`} className="flex-shrink-0 w-[220px] h-28 flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50 px-4 text-center text-base font-bold text-slate-600">
                   {partner.name}
                 </div>
               ))}

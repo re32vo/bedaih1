@@ -157,7 +157,7 @@ a:hover {
 }
 
 .animate-scroll-rtl {
-  animation: scroll-rtl 20s linear infinite;
+  animation: scroll-rtl 12s linear infinite;
 }
 
 /* Enhanced form elements */
