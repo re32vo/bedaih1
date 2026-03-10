@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useLocation } from "wouter";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
@@ -45,12 +45,10 @@ const mediaItems: MediaItem[] = [
   },
 ];
 
-const partners = [
-  { id: "p1", name: "السندس Dental Care" },
-  { id: "p2", name: "وزارة الصحة" },
-  { id: "p3", name: "زمزم" },
-  { id: "p4", name: "وزارة الموارد البشرية" },
-];
+const featuredPartner = {
+  name: "وزارة الصحة",
+  image: "/oz.png",
+};
 
 const stats = [
   { id: "s1", title: "خدمة علاجية", value: 39081, icon: HeartPulse },
@@ -72,8 +70,6 @@ export default function Home() {
   });
 
   const featuredProjects = donationProjects.slice(0, 4);
-  const partnersViewportRef = useRef<HTMLDivElement | null>(null);
-  const partnerItemRefs = useRef<Array<HTMLDivElement | null>>([]);
   const [projectAmounts, setProjectAmounts] = useState<Record<string, { selected: number; custom: string }>>(
     featuredProjects.reduce((acc, project) => {
       acc[project.id] = { selected: project.amounts[0] || 0, custom: project.amounts[0] ? String(project.amounts[0]) : "" };
@@ -117,80 +113,6 @@ export default function Home() {
       description: `تمت إضافة ${project.title} بمبلغ ${amount} ريال`,
     });
   };
-
-  useEffect(() => {
-    const viewport = partnersViewportRef.current;
-    if (!viewport || partners.length === 0) return;
-
-    let frameId = 0;
-    let lastTime = 0;
-    let positions: number[] = [];
-    let step = 240;
-    const speed = 72; // px/sec
-
-    const getGap = () => (window.innerWidth <= 640 ? 14 : 20);
-
-    const setup = () => {
-      const firstItem = partnerItemRefs.current[0];
-      if (!firstItem) return;
-
-      const cardWidth = firstItem.getBoundingClientRect().width || 220;
-      const viewportWidth = viewport.getBoundingClientRect().width || 0;
-      step = cardWidth + getGap();
-      const totalTrackWidth = cardWidth * partners.length + getGap() * (partners.length - 1);
-      const centerStart = (viewportWidth - totalTrackWidth) / 2;
-
-      // Initial render: show the partners around the middle of the section.
-      positions = partners.map((_, index) => centerStart + index * step);
-      partnerItemRefs.current.forEach((item, index) => {
-        if (!item) return;
-        item.style.transform = `translate3d(${positions[index]}px, 0, 0)`;
-      });
-    };
-
-    const tick = (time: number) => {
-      if (!lastTime) lastTime = time;
-      const delta = (time - lastTime) / 1000;
-      lastTime = time;
-
-      const firstItem = partnerItemRefs.current[0];
-      if (firstItem) {
-        const cardWidth = firstItem.getBoundingClientRect().width || 220;
-        const minX = -cardWidth;
-
-        positions = positions.map((pos) => pos - speed * delta);
-
-        for (let i = 0; i < positions.length; i += 1) {
-          if (positions[i] <= minX) {
-            const maxPos = Math.max(...positions);
-            const viewportWidth = viewport.getBoundingClientRect().width || 0;
-            // Once a card exits fully from the left, re-enter it immediately from the right edge.
-            positions[i] = Math.max(maxPos + step, viewportWidth + 8);
-          }
-        }
-
-        partnerItemRefs.current.forEach((item, index) => {
-          if (!item) return;
-          item.style.transform = `translate3d(${positions[index]}px, 0, 0)`;
-        });
-      }
-
-      frameId = window.requestAnimationFrame(tick);
-    };
-
-    const onResize = () => {
-      setup();
-    };
-
-    setup();
-    frameId = window.requestAnimationFrame(tick);
-    window.addEventListener("resize", onResize);
-
-    return () => {
-      window.cancelAnimationFrame(frameId);
-      window.removeEventListener("resize", onResize);
-    };
-  }, []);
 
   return (
     <div className="min-h-screen bg-slate-100 py-4 md:py-8" dir="rtl">
@@ -337,21 +259,15 @@ export default function Home() {
 
         <section className="rounded-xl md:rounded-2xl border border-slate-200 bg-white p-3 sm:p-4 md:p-6 overflow-hidden">
           <h2 className="mb-4 sm:mb-6 md:mb-8 text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-slate-900">شركاء النجاح</h2>
-          
-          <div ref={partnersViewportRef} className="partners-viewport relative overflow-hidden">
-            <div className="partners-marquee">
-              {partners.map((partner, index) => (
-                <div
-                  key={partner.id}
-                  ref={(el) => {
-                    partnerItemRefs.current[index] = el;
-                  }}
-                  className="partners-item partners-marquee-item"
-                >
-                  {partner.name}
-                </div>
-              ))}
-            </div>
+
+          <div className="mx-auto max-w-sm rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
+            <img
+              src={featuredPartner.image}
+              alt={featuredPartner.name}
+              loading="lazy"
+              className="mx-auto h-24 w-24 rounded-lg object-contain"
+            />
+            <p className="mt-3 text-center text-lg font-extrabold text-slate-700">{featuredPartner.name}</p>
           </div>
         </section>
 
