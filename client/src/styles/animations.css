@@ -160,11 +160,7 @@ a:hover {
 }
 
 .animate-scroll-rtl {
-  animation: scroll-rtl 30s linear infinite;
-}
-
-.animate-scroll-rtl:hover {
-  animation-play-state: paused;
+  animation: scroll-rtl 20s linear infinite;
 }
   @apply border-2 border-transparent bg-white rounded-lg px-4 py-2 transition-all duration-300;
 }
