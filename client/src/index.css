@@ -48,6 +48,78 @@
   --secondary-foreground: 0 0% 100%;
   --secondary-border: 215 28% 17%;
   --muted: 215 28% 17%;
+
+/* تحسينات للأجهزة المحمولة */
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* تحسين التمرير على الأجهزة المحمولة */
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* تحسين حجم النقر على العناصر التفاعلية */
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  
+  /* منع التكبير غير المرغوب على iOS */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+  
+  /* تحسين أداء الصور */
+  img {
+    content-visibility: auto;
+  }
+}
+
+@layer utilities {
+  /* فئة للتفاعل على اللمس */
+  .touch-manipulation {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  
+  /* تحسين الأداء للعناصر المتحركة */
+  .will-change-transform {
+    will-change: transform;
+  }
+  
+  .will-change-opacity {
+    will-change: opacity;
+  }
+  
+  /* فئات للضغط على الأزرار */
+  .active-scale:active {
+    transform: scale(0.97);
+  }
+  
+  /* تحسين النصوص للقراءة */
+  .text-optimize {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
   --muted-foreground: 222 20% 80%;
   --accent: 36 100% 50%;
 }

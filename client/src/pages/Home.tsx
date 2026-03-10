@@ -117,44 +117,44 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 py-6 md:py-8" dir="rtl">
-      <div className="container mx-auto space-y-10 px-4 md:space-y-14">
-        <section ref={statsRef} className="rounded-2xl border border-slate-200 bg-white p-4 md:p-6">
-          <div className="mb-8 flex items-center justify-center gap-4">
-            <div className="h-px w-20 bg-slate-300 md:w-64" />
-            <h2 className="text-2xl font-extrabold text-slate-900 md:text-4xl">ابتسم في ارقام</h2>
-            <div className="h-px w-20 bg-slate-300 md:w-64" />
+    <div className="min-h-screen bg-slate-100 py-4 md:py-8" dir="rtl">
+      <div className="container mx-auto space-y-6 px-3 sm:px-4 md:space-y-10 lg:space-y-14">
+        <section ref={statsRef} className="rounded-xl md:rounded-2xl border border-slate-200 bg-white p-3 sm:p-4 md:p-6">
+          <div className="mb-4 sm:mb-6 md:mb-8 flex items-center justify-center gap-2 sm:gap-4">
+            <div className="h-px w-8 sm:w-16 md:w-20 lg:w-64 bg-slate-300" />
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900">ابتسم في ارقام</h2>
+            <div className="h-px w-8 sm:w-16 md:w-20 lg:w-64 bg-slate-300" />
           </div>
 
-          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
             {stats.slice(0, 6).map((item) => (
-              <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <div key={item.id} className="rounded-xl md:rounded-2xl border border-slate-200 bg-slate-50 p-3 sm:p-4">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-base font-semibold text-slate-500">{item.title}</p>
-                    <p className="text-3xl font-extrabold text-slate-900">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs sm:text-sm md:text-base font-semibold text-slate-500 leading-tight mb-1">{item.title}</p>
+                    <p className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900">
                       {statsInView ? <CountUp end={item.value} duration={1.6} separator="," /> : 0}
                     </p>
                   </div>
-                  <div className="rounded-2xl bg-sky-500 p-3 text-white">
-                    <item.icon className="h-7 w-7" />
+                  <div className="rounded-xl md:rounded-2xl bg-sky-500 p-2 sm:p-2.5 md:p-3 text-white flex-shrink-0">
+                    <item.icon className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7" />
                   </div>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="mt-4 flex justify-center">
-            <div className="w-full max-w-[340px] rounded-2xl border border-slate-200 bg-slate-50 p-4">
+          <div className="mt-3 sm:mt-4 flex justify-center">
+            <div className="w-full max-w-[340px] rounded-xl md:rounded-2xl border border-slate-200 bg-slate-50 p-3 sm:p-4">
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-base font-semibold leading-7 text-slate-500">{stats[6].title}</p>
-                  <p className="text-3xl font-extrabold text-slate-900">
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm md:text-base font-semibold leading-tight sm:leading-7 text-slate-500 mb-1">{stats[6].title}</p>
+                  <p className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900">
                     {statsInView ? <CountUp end={stats[6].value} duration={1.6} separator="," /> : 0}
                   </p>
                 </div>
-                <div className="rounded-2xl bg-sky-500 p-3 text-white">
-                  <UserRound className="h-7 w-7" />
+                <div className="rounded-xl md:rounded-2xl bg-sky-500 p-2 sm:p-2.5 md:p-3 text-white flex-shrink-0">
+                  <UserRound className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7" />
                 </div>
               </div>
             </div>
@@ -162,33 +162,33 @@ export default function Home() {
         </section>
 
         <section>
-          <h2 className="mb-8 text-center text-3xl font-extrabold text-slate-900 md:text-5xl">من مشاريع الجمعية</h2>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <h2 className="mb-4 sm:mb-6 md:mb-8 text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-slate-900">من مشاريع الجمعية</h2>
+          <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-4">
             {featuredProjects.map((project) => {
               const amounts = project.amounts.slice(0, 3);
               return (
-                <div key={project.id} className="rounded-2xl border border-slate-200 bg-white shadow-sm">
-                  <img src={project.image} alt={project.title} className="h-32 w-full rounded-t-2xl object-cover" />
+                <div key={project.id} className="rounded-xl md:rounded-2xl border border-slate-200 bg-white shadow-sm">
+                  <img src={project.image} alt={project.title} loading="lazy" className="h-28 sm:h-32 md:h-36 w-full rounded-t-xl md:rounded-t-2xl object-cover" />
 
-                  <div className="border-y border-slate-100 bg-slate-50 px-4 py-2 text-slate-400">
-                    <div className="flex items-center gap-2">
-                      <Share2 className="h-4 w-4" />
-                      <MessageCircle className="h-4 w-4" />
-                      <Facebook className="h-4 w-4" />
+                  <div className="border-y border-slate-100 bg-slate-50 px-3 sm:px-4 py-1.5 sm:py-2 text-slate-400">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <Share2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                      <MessageCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                      <Facebook className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     </div>
                   </div>
 
-                  <div className="space-y-3 p-4">
-                    <h3 className="m-0 text-center text-xl font-extrabold text-slate-900">{project.title}</h3>
-                    <p className="line-clamp-4 text-center text-sm leading-6 text-slate-600">{project.description}</p>
+                  <div className="space-y-2 sm:space-y-3 p-3 sm:p-4">
+                    <h3 className="m-0 text-center text-base sm:text-lg md:text-xl font-extrabold text-slate-900">{project.title}</h3>
+                    <p className="line-clamp-3 sm:line-clamp-4 text-center text-xs sm:text-sm leading-5 sm:leading-6 text-slate-600">{project.description}</p>
 
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
                       {amounts.map((amount) => (
                         <button
                           key={amount}
                           type="button"
                           onClick={() => updateProjectAmount(project.id, amount, String(amount))}
-                          className={`rounded-xl border px-2 py-2 text-sm font-bold transition ${
+                          className={`rounded-lg sm:rounded-xl border px-1.5 sm:px-2 py-1.5 sm:py-2 text-xs sm:text-sm font-bold transition touch-manipulation ${
                             projectAmounts[project.id]?.selected === amount
                               ? "border-sky-500 bg-sky-50 text-sky-700"
                               : "border-slate-300 bg-white text-slate-700"
@@ -200,29 +200,29 @@ export default function Home() {
                     </div>
 
                     <div className="relative">
-                      <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-600">ريال</span>
+                      <span className="pointer-events-none absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 text-xs sm:text-sm font-bold text-slate-600">ريال</span>
                       <Input
                         value={projectAmounts[project.id]?.custom || ""}
                         onChange={(e) => {
                           const value = e.target.value.replace(/[^0-9]/g, "");
                           updateProjectAmount(project.id, 0, value);
                         }}
-                        className="h-10 rounded-xl border-slate-300 pr-14 text-center text-lg font-bold"
+                        className="h-9 sm:h-10 rounded-lg sm:rounded-xl border-slate-300 pr-12 sm:pr-14 text-center text-base sm:text-lg font-bold touch-manipulation"
                         inputMode="numeric"
                         placeholder="0"
                       />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2">
-                      <Button type="button" className="rounded-xl bg-sky-500 font-bold text-white hover:bg-sky-600" onClick={() => setLocation(`/donate/opportunities/${project.id}`)}>
+                    <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
+                      <Button type="button" className="rounded-lg sm:rounded-xl bg-sky-500 font-bold text-white hover:bg-sky-600 text-xs sm:text-sm h-9 sm:h-10 touch-manipulation" onClick={() => setLocation(`/donate/opportunities/${project.id}`)}>
                         تبرع
                       </Button>
-                      <Button type="button" className="rounded-xl bg-indigo-900 font-bold text-white hover:bg-indigo-800" onClick={() => addProjectToCart(project.id)}>
-                        <ShoppingCart className="h-4 w-4" />
+                      <Button type="button" className="rounded-lg sm:rounded-xl bg-indigo-900 font-bold text-white hover:bg-indigo-800 h-9 sm:h-10 touch-manipulation" onClick={() => addProjectToCart(project.id)}>
+                        <ShoppingCart className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                       </Button>
                     </div>
 
-                    <button type="button" onClick={() => setLocation(`/donate/opportunities/${project.id}`)} className="w-full text-center font-bold text-slate-700 hover:text-sky-600">
+                    <button type="button" onClick={() => setLocation(`/donate/opportunities/${project.id}`)} className="w-full text-center font-bold text-slate-700 hover:text-sky-600 text-xs sm:text-sm touch-manipulation py-1">
                       تفاصيل المشروع ←
                     </button>
                   </div>
@@ -231,18 +231,18 @@ export default function Home() {
             })}
           </div>
 
-          <div className="mt-8 text-center">
-            <Button type="button" className="rounded-xl bg-sky-500 px-8 text-white hover:bg-sky-600" onClick={() => setLocation("/donate/opportunities")}>
+          <div className="mt-4 sm:mt-6 md:mt-8 text-center">
+            <Button type="button" className="rounded-lg sm:rounded-xl bg-sky-500 px-6 sm:px-8 text-white hover:bg-sky-600 text-sm sm:text-base h-10 sm:h-11 touch-manipulation" onClick={() => setLocation("/donate/opportunities")}>
               عرض المزيد
             </Button>
           </div>
         </section>
 
-        <section className="rounded-2xl border border-slate-200 bg-white p-4 md:p-6">
-          <h2 className="mb-8 text-center text-3xl font-extrabold text-slate-900 md:text-5xl">شركاء النجاح</h2>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <section className="rounded-xl md:rounded-2xl border border-slate-200 bg-white p-3 sm:p-4 md:p-6">
+          <h2 className="mb-4 sm:mb-6 md:mb-8 text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-slate-900">شركاء النجاح</h2>
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-4">
             {partners.map((partner) => (
-              <div key={partner.id} className="flex h-32 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 px-4 text-center text-xl font-bold text-slate-600">
+              <div key={partner.id} className="flex h-24 sm:h-28 md:h-32 items-center justify-center rounded-xl md:rounded-2xl border border-slate-200 bg-slate-50 px-3 sm:px-4 text-center text-sm sm:text-base md:text-lg lg:text-xl font-bold text-slate-600">
                 {partner.name}
               </div>
             ))}
@@ -250,58 +250,58 @@ export default function Home() {
         </section>
 
         <section>
-          <div className="mb-8 flex items-center justify-center gap-4">
-            <div className="h-px w-20 bg-slate-300 md:w-56" />
-            <h2 className="text-2xl font-extrabold text-slate-900 md:text-4xl">المركز الإعلامي</h2>
-            <div className="h-px w-20 bg-slate-300 md:w-56" />
+          <div className="mb-4 sm:mb-6 md:mb-8 flex items-center justify-center gap-2 sm:gap-4">
+            <div className="h-px w-8 sm:w-16 md:w-20 lg:w-56 bg-slate-300" />
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900">المركز الإعلامي</h2>
+            <div className="h-px w-8 sm:w-16 md:w-20 lg:w-56 bg-slate-300" />
           </div>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:gap-5 md:gap-6 md:grid-cols-2 lg:grid-cols-3">
             {mediaItems.map((item) => (
-              <article key={item.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                <img src={item.image} alt={item.title} className="mb-4 h-44 w-full rounded-xl object-cover" />
-                <div className="mb-3 flex items-center justify-between text-sm text-slate-500">
-                  <span className="rounded-full bg-slate-100 px-3 py-1">{item.type}</span>
-                  <span>{item.date}</span>
+              <article key={item.id} className="rounded-xl md:rounded-2xl border border-slate-200 bg-white p-3 sm:p-4 shadow-sm">
+                <img src={item.image} alt={item.title} loading="lazy" className="mb-3 sm:mb-4 h-36 sm:h-40 md:h-44 w-full rounded-lg sm:rounded-xl object-cover" />
+                <div className="mb-2 sm:mb-3 flex items-center justify-between text-xs sm:text-sm text-slate-500">
+                  <span className="rounded-full bg-slate-100 px-2 sm:px-3 py-0.5 sm:py-1 text-xs">{item.type}</span>
+                  <span className="text-xs">{item.date}</span>
                 </div>
-                <h3 className="mb-2 text-lg font-extrabold text-slate-900">{item.title}</h3>
-                <p className="line-clamp-3 text-sm leading-6 text-slate-600">{item.excerpt}</p>
-                <button type="button" className="mt-3 font-bold text-slate-800 hover:text-sky-600">اقرا المزيد</button>
-                <div className="mt-4 flex items-center gap-2 text-slate-400">
-                  <Share2 className="h-4 w-4" />
-                  <Facebook className="h-4 w-4" />
-                  <MessageCircle className="h-4 w-4" />
+                <h3 className="mb-1.5 sm:mb-2 text-base sm:text-lg font-extrabold text-slate-900 leading-snug">{item.title}</h3>
+                <p className="line-clamp-2 sm:line-clamp-3 text-xs sm:text-sm leading-5 sm:leading-6 text-slate-600">{item.excerpt}</p>
+                <button type="button" className="mt-2 sm:mt-3 font-bold text-slate-800 hover:text-sky-600 text-xs sm:text-sm touch-manipulation">اقرا المزيد</button>
+                <div className="mt-3 sm:mt-4 flex items-center gap-2 sm:gap-3 text-slate-400">
+                  <Share2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  <Facebook className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  <MessageCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
               </article>
             ))}
           </div>
 
-          <div className="mt-8 text-center">
-            <Button type="button" className="rounded-xl bg-sky-500 px-8 text-white hover:bg-sky-600" onClick={() => setLocation("/media/news")}>
+          <div className="mt-4 sm:mt-6 md:mt-8 text-center">
+            <Button type="button" className="rounded-lg sm:rounded-xl bg-sky-500 px-6 sm:px-8 text-white hover:bg-sky-600 text-sm sm:text-base h-10 sm:h-11 touch-manipulation" onClick={() => setLocation("/media/news")}>
               عرض المزيد
             </Button>
           </div>
         </section>
 
-        <section className="rounded-2xl border border-slate-200 bg-white p-4 md:p-6">
-          <div className="mb-8 flex items-center justify-center gap-4">
-            <div className="h-px w-20 bg-slate-300 md:w-72" />
-            <h2 className="text-2xl font-extrabold text-slate-900 md:text-4xl">المزيد هنا</h2>
-            <div className="h-px w-20 bg-slate-300 md:w-72" />
+        <section className="rounded-xl md:rounded-2xl border border-slate-200 bg-white p-3 sm:p-4 md:p-6">
+          <div className="mb-4 sm:mb-6 md:mb-8 flex items-center justify-center gap-2 sm:gap-4">
+            <div className="h-px w-8 sm:w-16 md:w-20 lg:w-72 bg-slate-300" />
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900">المزيد هنا</h2>
+            <div className="h-px w-8 sm:w-16 md:w-20 lg:w-72 bg-slate-300" />
           </div>
 
-          <div className="grid grid-cols-1 gap-6 text-center md:grid-cols-3">
-            <button type="button" onClick={() => setLocation("/media/library")} className="rounded-xl p-3 transition hover:bg-slate-50">
-              <div className="mb-3 flex justify-center"><Newspaper className="h-10 w-10 text-sky-600" /></div>
-              <p className="text-xl font-bold text-slate-800">المركز الإعلامي</p>
+          <div className="grid grid-cols-1 gap-4 sm:gap-5 md:gap-6 text-center sm:grid-cols-3">
+            <button type="button" onClick={() => setLocation("/media/library")} className="rounded-lg sm:rounded-xl p-3 sm:p-4 transition hover:bg-slate-50 touch-manipulation">
+              <div className="mb-2 sm:mb-3 flex justify-center"><Newspaper className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 text-sky-600" /></div>
+              <p className="text-base sm:text-lg md:text-xl font-bold text-slate-800">المركز الإعلامي</p>
             </button>
-            <button type="button" onClick={() => setLocation("/media/announcements")} className="rounded-xl p-3 transition hover:bg-slate-50">
-              <div className="mb-3 flex justify-center"><FileText className="h-10 w-10 text-sky-600" /></div>
-              <p className="text-xl font-bold text-slate-800">الإصدارات والأنظمة</p>
+            <button type="button" onClick={() => setLocation("/media/announcements")} className="rounded-lg sm:rounded-xl p-3 sm:p-4 transition hover:bg-slate-50 touch-manipulation">
+              <div className="mb-2 sm:mb-3 flex justify-center"><FileText className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 text-sky-600" /></div>
+              <p className="text-base sm:text-lg md:text-xl font-bold text-slate-800">الإصدارات والأنظمة</p>
             </button>
-            <button type="button" onClick={() => setLocation("/media/news")} className="rounded-xl p-3 transition hover:bg-slate-50">
-              <div className="mb-3 flex justify-center"><Calendar className="h-10 w-10 text-sky-600" /></div>
-              <p className="text-xl font-bold text-slate-800">المدونة والأخبار</p>
+            <button type="button" onClick={() => setLocation("/media/news")} className="rounded-lg sm:rounded-xl p-3 sm:p-4 transition hover:bg-slate-50 touch-manipulation">
+              <div className="mb-2 sm:mb-3 flex justify-center"><Calendar className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 text-sky-600" /></div>
+              <p className="text-base sm:text-lg md:text-xl font-bold text-slate-800">المدونة والأخبار</p>
             </button>
           </div>
         </section>

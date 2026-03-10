@@ -94,13 +94,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen font-body flex flex-col rtl bg-slate-900 overflow-x-hidden" dir="rtl">
       <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 shadow-sm border-b border-slate-200 dark:border-slate-800 w-full">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="container mx-auto px-3 sm:px-4 py-2.5 sm:py-3 flex items-center justify-between">
           <Link href="/">
             <div className="flex items-center gap-2 sm:gap-3 cursor-pointer">
               <img src={logoImg} alt="شعار جمعية بداية" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
               <div className="flex flex-col">
-                <h1 className="text-sm sm:text-lg font-bold text-slate-900 dark:text-white">جمعية بداية</h1>
-                <p className="text-xs sm:text-xs text-slate-600 dark:text-slate-300">جمعية خيرية موثوقة</p>
+                <h1 className="text-sm sm:text-base md:text-lg font-bold text-slate-900 dark:text-white">جمعية بداية</h1>
+                <p className="text-xs text-slate-600 dark:text-slate-300">جمعية خيرية موثوقة</p>
               </div>
             </div>
           </Link>
@@ -233,7 +233,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             {/* تم حذف زر تبديل الوضع */}
 
             <Link href={isDonorLoggedIn ? "/donor-dashboard" : "/donor-login"}>
-              <Button className="hidden md:flex text-white text-sm font-bold rounded-full px-5 h-10 bg-slate-700 hover:bg-slate-600">
+              <Button className="hidden md:flex text-white text-sm font-bold rounded-full px-4 lg:px-5 h-9 lg:h-10 bg-slate-700 hover:bg-slate-600 touch-manipulation">
                 {isDonorLoggedIn ? (
                   <>
                     <User className="w-4 h-4 mr-2" />
@@ -250,7 +250,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
             {/* زر السلة */}
             <Link href="/cart">
-              <Button className="hidden md:flex items-center gap-2 text-white text-sm font-bold rounded-full px-5 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 shadow-md relative">
+              <Button className="hidden md:flex items-center gap-2 text-white text-sm font-bold rounded-full px-4 lg:px-5 h-9 lg:h-10 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 shadow-md relative touch-manipulation">
                 <ShoppingCart className="w-5 h-5" />
                 السلة
                 {getTotalItems() > 0 && (
@@ -261,11 +261,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </Button>
             </Link>
 
-            <Button onClick={handleDonateClick} className="hidden md:flex text-white text-sm font-bold rounded-full px-5 h-10 bg-gradient-to-r from-primary to-secondary">
+            <Button onClick={handleDonateClick} className="hidden md:flex text-white text-sm font-bold rounded-full px-4 lg:px-5 h-9 lg:h-10 bg-gradient-to-r from-primary to-secondary touch-manipulation">
               <Heart className="w-4 h-4 mr-2" /> تبرع الآن
             </Button>
 
-            <button className="md:hidden p-2 text-slate-900 dark:text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            <button className="md:hidden p-2 text-slate-900 dark:text-white touch-manipulation" onClick={() => setIsMenuOpen(!isMenuOpen)}>
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
@@ -274,11 +274,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="md:hidden z-40 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 overflow-hidden w-full">
-            <div className="container mx-auto px-4 py-4 flex flex-col gap-2">
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="md:hidden z-40 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 overflow-hidden w-full max-h-[80vh] overflow-y-auto">
+            <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 flex flex-col gap-1.5 sm:gap-2">
               {navLinks.map((link) => (
                 <Link key={link.href} href={link.href}>
-                  <span className={`block px-3 py-2 rounded-lg text-base font-medium transition-all ${location === link.href ? "font-semibold bg-emerald-500 text-white dark:bg-emerald-600" : "text-slate-700 dark:text-white hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/10 dark:hover:text-white"}`}>
+                  <span className={`block px-3 py-2.5 rounded-lg text-base font-medium transition-all touch-manipulation ${location === link.href ? "font-semibold bg-emerald-500 text-white dark:bg-emerald-600" : "text-slate-700 dark:text-white hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/10 dark:hover:text-white"}`}>
                     {link.label}
                   </span>
                 </Link>
@@ -286,16 +286,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
               {/* mobile about section */}
               <button
-                className="flex items-center px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
+                className="flex items-center justify-between px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 touch-manipulation"
                 onClick={() => toggleMobileDropdown("about")}
               >
                 من نحن {openMobileDropdown === "about" ? <ChevronUp className="w-4 h-4 mr-1" /> : <ChevronDown className="w-4 h-4 mr-1" />}
               </button>
               {openMobileDropdown === "about" && (
-                <div className="flex flex-col gap-1 mt-1">
+                <div className="flex flex-col gap-0.5 mt-0.5 mb-1">
                   {aboutLinks.map((link) => (
                     <Link key={link.href} href={link.href}>
-                      <span className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10" onClick={() => setIsMenuOpen(false)}>
+                      <span className="block px-4 sm:px-5 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 touch-manipulation" onClick={() => setIsMenuOpen(false)}>
                         {link.label}
                       </span>
                     </Link>
@@ -305,16 +305,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
               {/* mobile programs section */}
               <button
-                className="flex items-center px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
+                className="flex items-center justify-between px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 touch-manipulation"
                 onClick={() => toggleMobileDropdown("programs")}
               >
                 برامجنا {openMobileDropdown === "programs" ? <ChevronUp className="w-4 h-4 mr-1" /> : <ChevronDown className="w-4 h-4 mr-1" />}
               </button>
               {openMobileDropdown === "programs" && (
-                <div className="flex flex-col gap-1 mt-1">
+                <div className="flex flex-col gap-0.5 mt-0.5 mb-1">
                   {programsLinks.map((link) => (
                     <Link key={link.href} href={link.href}>
-                      <span className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10" onClick={() => setIsMenuOpen(false)}>
+                      <span className="block px-4 sm:px-5 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 touch-manipulation" onClick={() => setIsMenuOpen(false)}>
                         {link.label}
                       </span>
                     </Link>
@@ -324,16 +324,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
               {/* mobile volunteer section */}
               <button
-                className="flex items-center px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
+                className="flex items-center justify-between px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 touch-manipulation"
                 onClick={() => toggleMobileDropdown("volunteer")}
               >
                 المركز التطوعي {openMobileDropdown === "volunteer" ? <ChevronUp className="w-4 h-4 mr-1" /> : <ChevronDown className="w-4 h-4 mr-1" />}
               </button>
               {openMobileDropdown === "volunteer" && (
-                <div className="flex flex-col gap-1 mt-1">
+                <div className="flex flex-col gap-0.5 mt-0.5 mb-1">
                   {volunteerLinks.map((link) => (
                     <Link key={link.href} href={link.href}>
-                      <span className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10" onClick={() => setIsMenuOpen(false)}>
+                      <span className="block px-4 sm:px-5 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 touch-manipulation" onClick={() => setIsMenuOpen(false)}>
                         {link.label}
                       </span>
                     </Link>
@@ -343,16 +343,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
               {/* mobile media center section */}
               <button
-                className="flex items-center px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
+                className="flex items-center justify-between px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 touch-manipulation"
                 onClick={() => toggleMobileDropdown("media")}
               >
                 المركز الإعلامي {openMobileDropdown === "media" ? <ChevronUp className="w-4 h-4 mr-1" /> : <ChevronDown className="w-4 h-4 mr-1" />}
               </button>
               {openMobileDropdown === "media" && (
-                <div className="flex flex-col gap-1 mt-1">
+                <div className="flex flex-col gap-0.5 mt-0.5 mb-1">
                   {mediaCenterLinks.map((link) => (
                     <Link key={link.href} href={link.href}>
-                      <span className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10" onClick={() => setIsMenuOpen(false)}>
+                      <span className="block px-4 sm:px-5 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 touch-manipulation" onClick={() => setIsMenuOpen(false)}>
                         {link.label}
                       </span>
                     </Link>
@@ -363,14 +363,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 
               <Link href={isDonorLoggedIn ? "/donor-dashboard" : "/donor-login"}>
-                <Button className="w-full mt-2 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-full flex items-center justify-center gap-2">
+                <Button className="w-full mt-2 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-full flex items-center justify-center gap-2 h-11 touch-manipulation">
                   {isDonorLoggedIn ? <><User className="w-4 h-4" /> الملف التعريفي</> : <><LogIn className="w-4 h-4" /> دخول المتبرع</>}
                 </Button>
               </Link>
 
               {/* زر السلة للموبايل */}
               <Link href="/cart">
-                <Button className="w-full mt-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold rounded-full flex items-center justify-center gap-3 relative shadow-md">
+                <Button className="w-full mt-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold rounded-full flex items-center justify-center gap-3 relative shadow-md h-11 touch-manipulation">
                   <ShoppingCart className="w-5 h-5" />
                   السلة
                   {getTotalItems() > 0 && (
@@ -381,7 +381,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 </Button>
               </Link>
 
-              <Button onClick={handleDonateClick} className="w-full mt-2 bg-accent text-accent-foreground font-bold rounded-full">
+              <Button onClick={handleDonateClick} className="w-full mt-2 bg-accent text-accent-foreground font-bold rounded-full h-11 touch-manipulation">
                 <Heart className="w-4 h-4 mr-2" /> تبرع الآن
               </Button>
             </div>
@@ -399,16 +399,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
        location !== '/donate/campaign' && 
        location !== '/cart' && 
        !location.startsWith('/donate/opportunities') ? (
-        <div className="fixed top-24 right-2 z-50 w-[92px] rounded-xl bg-white/95 shadow-xl border border-slate-200 backdrop-blur-sm">
+        <div className="fixed top-20 sm:top-24 right-1.5 sm:right-2 z-50 w-[88px] sm:w-[92px] rounded-lg sm:rounded-xl bg-white/95 shadow-xl border border-slate-200 backdrop-blur-sm">
           <button
             onClick={() => setIsDonationWidgetVisible(false)}
-            className="absolute -top-2 -left-2 w-7 h-7 rounded-full bg-sky-500 text-white flex items-center justify-center shadow-md hover:bg-sky-600 transition-colors"
+            className="absolute -top-2 -left-2 w-7 h-7 rounded-full bg-sky-500 text-white flex items-center justify-center shadow-md hover:bg-sky-600 transition-colors touch-manipulation"
             aria-label="إخفاء خيارات التبرع"
           >
             <X className="w-3.5 h-3.5" />
           </button>
 
-          <div className="py-2">
+          <div className="py-1.5 sm:py-2">
             {donationOptionsLinks.map((link, index) => {
               const icon =
                 index === 0 ? <Clock3 className="w-5 h-5 text-slate-700" /> :
@@ -419,10 +419,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
               return (
                 <Link key={link.href} href={link.href}>
-                  <span className="block px-2 py-1.5 text-center cursor-pointer hover:bg-slate-50 transition-colors">
-                    <span className="flex justify-center mb-1.5">{icon}</span>
-                    <span className="block h-px bg-sky-300 mx-1 mb-1.5" />
-                    <span className={`block text-[14px] leading-5 font-medium ${location === link.href ? "text-sky-600" : "text-slate-800"}`}>
+                  <span className="block px-1.5 sm:px-2 py-1.5 text-center cursor-pointer hover:bg-slate-50 transition-colors touch-manipulation">
+                    <span className="flex justify-center mb-1 sm:mb-1.5">{icon}</span>
+                    <span className="block h-px bg-sky-300 mx-0.5 sm:mx-1 mb-1 sm:mb-1.5" />
+                    <span className={`block text-[13px] sm:text-[14px] leading-5 font-medium ${location === link.href ? "text-sky-600" : "text-slate-800"}`}>
                       {link.label}
                     </span>
                   </span>
@@ -442,7 +442,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
        !location.startsWith('/donate/opportunities') && (
         <button
           onClick={() => setIsDonationWidgetVisible(true)}
-          className="fixed top-28 right-1 z-50 bg-sky-500 text-white rounded-l-lg rounded-r-md px-1.5 py-2.5 shadow-lg hover:bg-sky-600 transition-colors"
+          className="fixed top-24 sm:top-28 right-0.5 sm:right-1 z-50 bg-sky-500 text-white rounded-l-lg rounded-r-md px-1.5 py-2.5 shadow-lg hover:bg-sky-600 transition-colors touch-manipulation"
           aria-label="إظهار خيارات التبرع"
         >
           <Heart className="w-4 h-4" />
@@ -454,32 +454,32 @@ export function Layout({ children }: { children: React.ReactNode }) {
         href="https://wa.me/966533170903"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-110 flex items-center justify-center group"
+        className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-50 bg-green-500 hover:bg-green-600 text-white rounded-full p-3 sm:p-4 shadow-lg transition-all duration-300 hover:scale-110 flex items-center justify-center group touch-manipulation"
         aria-label="تواصل عبر واتساب"
       >
-        <MessageCircle className="w-6 h-6" />
-        <span className="absolute right-full mr-3 bg-slate-900 text-white px-3 py-1 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />
+        <span className="absolute right-full mr-2 sm:mr-3 bg-slate-900 text-white px-2 sm:px-3 py-1 rounded-lg text-xs sm:text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           واتساب
         </span>
       </a>
 
       <footer className="bg-slate-900 text-slate-200 mt-0">
-        <div className="container mx-auto px-4 py-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="container mx-auto px-3 sm:px-4 py-5 sm:py-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
             <div>
-              <div className="flex items-center gap-3 mb-4">
-                <img src={logoImg} alt="شعار" className="w-12 h-12 object-contain" />
+              <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                <img src={logoImg} alt="شعار" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
                 <div>
-                  <h3 className="text-lg font-bold">جمعية بداية</h3>
-                  <p className="text-sm">جمعية خيرية موثوقة</p>
+                  <h3 className="text-base sm:text-lg font-bold">جمعية بداية</h3>
+                  <p className="text-xs sm:text-sm">جمعية خيرية موثوقة</p>
                 </div>
               </div>
-              <p className="text-sm">نسعى لبناء مجتمع متكافل من خلال مبادرات خيرية مستدامة تصل للمستحقين بكرامة وشفافية.</p>
+              <p className="text-xs sm:text-sm leading-relaxed">نسعى لبناء مجتمع متكافل من خلال مبادرات خيرية مستدامة تصل للمستحقين بكرامة وشفافية.</p>
             </div>
 
             <div>
-              <h4 className="text-base font-bold mb-3">روابط سريعة</h4>
-              <ul className="space-y-2">
+              <h4 className="text-sm sm:text-base font-bold mb-2 sm:mb-3">روابط سريعة</h4>
+              <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
                 <li><Link href="/"><span className="text-white">الرئيسية</span></Link></li>
                 <li><Link href="/about"><span className="text-white">من نحن</span></Link></li>
                 <li><Link href="/donate"><span className="text-white">تبرع</span></Link></li>
@@ -488,23 +488,23 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </div>
 
             <div>
-              <h4 className="text-base font-bold mb-3">الخدمات الإلكترونية</h4>
-              <ul className="space-y-2">
+              <h4 className="text-sm sm:text-base font-bold mb-2 sm:mb-3">الخدمات الإلكترونية</h4>
+              <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
                 <li><Link href="/login"><span className="text-white">دخول الموظفين</span></Link></li>
               </ul>
             </div>
 
             <div>
-              <h4 className="text-base font-bold mb-3">تواصل معنا</h4>
-              <ul className="space-y-3 text-sm">
-                <li className="flex items-center gap-2"><MapPin className="w-5 h-5" /> المملكة العربية السعودية، الرياض</li>
-                <li className="flex items-center gap-2"><Phone className="w-5 h-5" /> <a href="tel:+966-555-0000" className="text-white">+966-555-0000</a></li>
-                <li className="flex items-center gap-2"><Mail className="w-5 h-5" /> <a href="mailto:info@bedaya.org" className="text-white">info@bedaya.org</a></li>
+              <h4 className="text-sm sm:text-base font-bold mb-2 sm:mb-3">تواصل معنا</h4>
+              <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm">
+                <li className="flex items-center gap-2"><MapPin className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" /> <span className="leading-relaxed">المملكة العربية السعودية، الرياض</span></li>
+                <li className="flex items-center gap-2"><Phone className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" /> <a href="tel:+966-555-0000" className="text-white hover:text-emerald-400 transition-colors">+966-555-0000</a></li>
+                <li className="flex items-center gap-2"><Mail className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" /> <a href="mailto:info@bedaya.org" className="text-white hover:text-emerald-400 transition-colors break-all">info@bedaya.org</a></li>
               </ul>
             </div>
           </div>
 
-          <div className="border-t pt-4 mt-6 border-slate-800 text-center text-sm font-semibold">
+          <div className="border-t pt-3 sm:pt-4 mt-5 sm:mt-6 border-slate-800 text-center text-xs sm:text-sm font-semibold">
             <p>&copy; {new Date().getFullYear()} جمعية بداية للأعمال الخيرية. جميع الحقوق محفوظة.</p>
           </div>
         </div>
