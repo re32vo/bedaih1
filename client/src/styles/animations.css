@@ -217,6 +217,38 @@ a:hover {
   animation: portal-beam 1.6s ease-in-out infinite;
 }
 
+/* Infinite horizontal scrolling for media cards */
+@keyframes media-scroll-rtl {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-50% - 0.5rem));
+  }
+}
+
+.animate-media-scroll-rtl {
+  animation: media-scroll-rtl 18s linear infinite;
+  will-change: transform;
+}
+
+.media-track {
+  display: flex;
+  width: max-content;
+  gap: 1rem;
+}
+
+.media-card {
+  flex-shrink: 0;
+  width: min(86vw, 360px);
+}
+
+@media (min-width: 768px) {
+  .media-card {
+    width: 360px;
+  }
+}
+
 @media (max-width: 640px) {
   .partners-marquee {
     --partner-width: 180px;
