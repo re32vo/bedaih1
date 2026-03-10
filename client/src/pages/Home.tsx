@@ -313,17 +313,17 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:gap-5 md:gap-6 sm:grid-cols-3">
-            <button type="button" onClick={() => setLocation("/media/library")} className="rounded-lg sm:rounded-xl p-3 sm:p-4 transition hover:bg-slate-50 touch-manipulation flex items-center sm:flex-col sm:justify-center gap-3 sm:gap-4">
+            <button type="button" onClick={() => setLocation("/media/library")} className="rounded-lg sm:rounded-xl p-3 sm:p-4 transition hover:bg-slate-50 touch-manipulation flex items-center gap-3 sm:gap-4">
               <Newspaper className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 text-sky-600 flex-shrink-0" />
-              <p className="text-base sm:text-lg md:text-xl font-bold text-slate-800 sm:text-center">المركز الإعلامي</p>
+              <p className="text-base sm:text-lg md:text-xl font-bold text-slate-800">المركز الإعلامي</p>
             </button>
-            <button type="button" onClick={() => setLocation("/media/announcements")} className="rounded-lg sm:rounded-xl p-3 sm:p-4 transition hover:bg-slate-50 touch-manipulation flex items-center sm:flex-col sm:justify-center gap-3 sm:gap-4">
+            <button type="button" onClick={() => setLocation("/media/announcements")} className="rounded-lg sm:rounded-xl p-3 sm:p-4 transition hover:bg-slate-50 touch-manipulation flex items-center gap-3 sm:gap-4">
               <FileText className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 text-sky-600 flex-shrink-0" />
-              <p className="text-base sm:text-lg md:text-xl font-bold text-slate-800 sm:text-center">الإصدارات والأنظمة</p>
+              <p className="text-base sm:text-lg md:text-xl font-bold text-slate-800">الإصدارات والأنظمة</p>
             </button>
-            <button type="button" onClick={() => setLocation("/media/news")} className="rounded-lg sm:rounded-xl p-3 sm:p-4 transition hover:bg-slate-50 touch-manipulation flex items-center sm:flex-col sm:justify-center gap-3 sm:gap-4">
+            <button type="button" onClick={() => setLocation("/media/news")} className="rounded-lg sm:rounded-xl p-3 sm:p-4 transition hover:bg-slate-50 touch-manipulation flex items-center gap-3 sm:gap-4">
               <Calendar className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 text-sky-600 flex-shrink-0" />
-              <p className="text-base sm:text-lg md:text-xl font-bold text-slate-800 sm:text-center">المدونة والأخبار</p>
+              <p className="text-base sm:text-lg md:text-xl font-bold text-slate-800">المدونة والأخبار</p>
             </button>
           </div>
         </section>
