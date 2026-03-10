@@ -146,9 +146,6 @@ a:hover {
   animation: slideInLeft 0.3s ease reverse;
 }
 
-/* Enhanced form elements */
-.form-input-enhanced {
-
 /* Infinite scroll animation for partners */
 @keyframes scroll-rtl {
   0% {
@@ -162,6 +159,9 @@ a:hover {
 .animate-scroll-rtl {
   animation: scroll-rtl 20s linear infinite;
 }
+
+/* Enhanced form elements */
+.form-input-enhanced {
   @apply border-2 border-transparent bg-white rounded-lg px-4 py-2 transition-all duration-300;
 }
 
