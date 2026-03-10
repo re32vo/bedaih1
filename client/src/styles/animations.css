@@ -162,13 +162,17 @@ a:hover {
 .partners-item {
   flex-shrink: 0;
   width: 220px;
-  height: 7rem;
+  left: calc(100% + 4px);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 18px;
+  height: 18px;
   border-radius: 0.75rem;
   border: 1px solid #e2e8f0;
-  background: #f8fafc;
+  border: 2px solid rgba(14, 116, 144, 0.28);
+  background:
+    radial-gradient(circle at center, rgba(14, 116, 144, 0.2) 0 34%, rgba(14, 116, 144, 0) 35% 100%),
+    linear-gradient(135deg, rgba(14, 116, 144, 0.16), rgba(14, 116, 144, 0.04));
+  box-shadow: 0 0 0 4px #f8fafc;
   padding: 0 1rem;
   text-align: center;
   font-size: 1rem;
@@ -179,6 +183,10 @@ a:hover {
   left: 0;
   will-change: transform;
 }
+
+  .partners-item::after {
+    display: none;
+  }
 
 .partners-item::after {
   content: "";
