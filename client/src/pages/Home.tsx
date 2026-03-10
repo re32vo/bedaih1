@@ -137,8 +137,11 @@ export default function Home() {
       const cardWidth = firstItem.getBoundingClientRect().width || 220;
       const viewportWidth = viewport.getBoundingClientRect().width || 0;
       step = cardWidth + getGap();
+      const totalTrackWidth = cardWidth * partners.length + getGap() * (partners.length - 1);
+      const centerStart = (viewportWidth - totalTrackWidth) / 2;
 
-      positions = partners.map((_, index) => viewportWidth + index * step);
+      // Initial render: show the partners around the middle of the section.
+      positions = partners.map((_, index) => centerStart + index * step);
       partnerItemRefs.current.forEach((item, index) => {
         if (!item) return;
         item.style.transform = `translate3d(${positions[index]}px, 0, 0)`;
@@ -160,7 +163,9 @@ export default function Home() {
         for (let i = 0; i < positions.length; i += 1) {
           if (positions[i] <= minX) {
             const maxPos = Math.max(...positions);
-            positions[i] = Math.max(maxPos + step, viewport.getBoundingClientRect().width + step);
+            const viewportWidth = viewport.getBoundingClientRect().width || 0;
+            // Once a card exits fully from the left, re-enter it immediately from the right edge.
+            positions[i] = Math.max(maxPos + step, viewportWidth + 8);
           }
         }
 
