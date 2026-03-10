@@ -268,7 +268,10 @@ export default function Home() {
                 <div
                   key={partner.id}
                   className="partners-item partners-marquee-item"
-                  style={{ "--partner-index": index } as CSSProperties}
+                  style={{
+                    "--partner-index": index,
+                    "--partner-delay": `-${(index * 12) / partners.length}s`,
+                  } as CSSProperties}
                 >
                   {partner.name}
                 </div>

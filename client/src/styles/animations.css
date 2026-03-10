@@ -185,7 +185,7 @@ a:hover {
   width: var(--partner-width);
   transform: translateX(calc(var(--partner-index) * var(--partner-step)));
   animation: partner-item-loop var(--partner-duration) linear infinite;
-  animation-delay: calc((var(--partner-index) * var(--partner-duration) / var(--partners-count)) * -1);
+  animation-delay: var(--partner-delay, 0s);
   will-change: transform;
 }
 
