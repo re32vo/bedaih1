@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, useRoute } from "wouter";
-import { ShoppingCart, Share2, Facebook, MessageCircle, Instagram, CreditCard, Landmark, Smartphone, LogIn, Check, Heart } from "lucide-react";
+import { Share2, Facebook, MessageCircle, Instagram, CreditCard, Landmark, Smartphone, LogIn, Check, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -22,7 +22,7 @@ export default function DonationOpportunityDetails() {
   const [, setLocation] = useLocation();
   const [match, params] = useRoute("/donate/opportunities/:id");
   const selectedProject = match ? donationProjects.find((project) => project.id === params.id) : undefined;
-  const { addItem, getTotalItems } = useCart();
+  const { addItem } = useCart();
   const { toast } = useToast();
 
   const [selectedAmount, setSelectedAmount] = useState<number>(selectedProject?.amounts[0] || 30);
@@ -147,51 +147,12 @@ export default function DonationOpportunityDetails() {
     }
   };
 
-  const handleAddToCart = () => {
-    if (!selectedProject) return;
-    
-    if (total <= 0) {
-      toast({
-        title: "تنبيه",
-        description: "الرجاء اختيار مبلغ صحيح",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    addItem({
-      id: selectedProject.id,
-      title: selectedProject.title,
-      description: selectedProject.description,
-      image: selectedProject.image,
-      amount: total,
-      donationType: donationType,
-      paymentMethod: selectedPaymentMethod || undefined,
-    });
-
-    toast({
-      title: "تمت الإضافة للسلة",
-      description: `تمت إضافة "${selectedProject.title}" بمبلغ ${total} ريال للسلة بنجاح`,
-    });
-  };
-
   return (
     <div className="min-h-screen bg-slate-100 py-6 md:py-10" dir="rtl">
       <div className="container mx-auto px-4">
         <div className="mb-5 flex items-center justify-between">
           <h1 className="text-2xl font-extrabold text-slate-800 md:text-3xl">تفاصيل المشروع</h1>
           <div className="flex items-center gap-3">
-            {getTotalItems() > 0 && (
-              <div className="relative">
-                <Button type="button" variant="outline" onClick={() => setLocation("/cart")}>
-                  <ShoppingCart className="h-4 w-4 ml-1" />
-                  السلة
-                  <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
-                    {getTotalItems()}
-                  </span>
-                </Button>
-              </div>
-            )}
             <Button type="button" variant="outline" onClick={() => setLocation("/donate/opportunities")}>عودة</Button>
           </div>
         </div>

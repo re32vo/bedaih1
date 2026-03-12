@@ -368,19 +368,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 </Button>
               </Link>
 
-              {/* زر السلة للموبايل */}
-              <Link href="/cart">
-                <Button className="w-full mt-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold rounded-full flex items-center justify-center gap-3 relative shadow-md h-11 touch-manipulation">
-                  <ShoppingCart className="w-5 h-5" />
-                  السلة
-                  {getTotalItems() > 0 && (
-                    <span className="absolute -top-2 left-3 bg-red-600 text-white text-sm font-extrabold rounded-full min-w-[24px] h-6 px-1.5 flex items-center justify-center shadow-lg border-2 border-white">
-                      {getTotalItems()}
-                    </span>
-                  )}
-                </Button>
-              </Link>
-
               <Button onClick={handleDonateClick} className="w-full mt-2 bg-accent text-accent-foreground font-bold rounded-full h-11 touch-manipulation">
                 <Heart className="w-4 h-4 mr-2" /> تبرع الآن
               </Button>
@@ -447,6 +434,24 @@ export function Layout({ children }: { children: React.ReactNode }) {
         >
           <Heart className="w-4 h-4" />
         </button>
+      )}
+
+      {/* Mobile floating cart button */}
+      {location !== '/cart' && (
+        <Link href="/cart">
+          <button
+            className="md:hidden fixed bottom-4 left-4 z-50 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full px-4 py-3 shadow-xl flex items-center gap-2 touch-manipulation"
+            aria-label="الانتقال إلى السلة"
+          >
+            <ShoppingCart className="w-5 h-5" />
+            <span className="text-sm font-bold">السلة</span>
+            {getTotalItems() > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-extrabold rounded-full min-w-[22px] h-5 px-1 flex items-center justify-center border-2 border-white">
+                {getTotalItems()}
+              </span>
+            )}
+          </button>
+        </Link>
       )}
 
       {/* WhatsApp Floating Button */}
