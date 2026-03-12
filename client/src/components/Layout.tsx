@@ -440,13 +440,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
       {location !== '/cart' && (
         <Link href="/cart">
           <button
-            className="md:hidden fixed bottom-4 left-4 z-50 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full px-4 py-3 shadow-xl flex items-center gap-2 touch-manipulation"
+            className="md:hidden fixed bottom-2 left-2 z-50 relative overflow-visible bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full px-4 py-3 shadow-xl flex items-center gap-2 touch-manipulation"
             aria-label="الانتقال إلى السلة"
           >
             <ShoppingCart className="w-5 h-5" />
             <span className="text-sm font-bold">السلة</span>
             {getTotalItems() > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-extrabold rounded-full min-w-[22px] h-5 px-1 flex items-center justify-center border-2 border-white">
+              <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-extrabold rounded-full min-w-[22px] h-5 px-1 flex items-center justify-center border-2 border-white leading-none">
                 {getTotalItems()}
               </span>
             )}
