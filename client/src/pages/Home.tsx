@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
-import { Users, Clock3, HeartPulse, TrendingUp, UserRound, ShoppingCart, Share2, Facebook, MessageCircle, ChevronLeft, ChevronRight, Star, ChevronDown, ChevronUp } from "lucide-react";
+import { Users, Clock3, HeartPulse, TrendingUp, UserRound, ShoppingCart, Share2, Facebook, MessageCircle, ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { donationProjects } from "@/data/donationProjects";
@@ -54,44 +54,6 @@ const testimonials = [
   },
 ];
 
-const faqs = [
-  {
-    id: "f1",
-    question: "كيف يمكنني التبرع لجمعية بداية؟",
-    answer: "يمكنك التبرع بطرق متعددة: عبر الموقع الإلكتروني مباشرةً بالاضافة الى خيار اضافة المشاريع للسلة، أو التحويل البنكي لحساباتنا المعتمدة، أو عبر نقاط البيع في مقر الجمعية. جميع التبرعات مرخصة وآمنة.",
-  },
-  {
-    id: "f2",
-    question: "هل جمعية بداية معتمدة ومرخصة رسمياً؟",
-    answer: "نعم، جمعية بداية حاصلة على ترخيص رسمي من وزارة الموارد البشرية والتنمية الاجتماعية، وهي مسجلة بسجل المنظمات غير الربحية بالمملكة العربية السعودية.",
-  },
-  {
-    id: "f3",
-    question: "ما هي المشاريع التي تدعمها الجمعية؟",
-    answer: "تدعم الجمعية مشاريع علاجية لطب الأسنان وعمليات التخدير الكامل، ومشاريع دعم الأيتام، وبرامج التوعية الصحية، وفرص التطوع، وأوقاف بداية للصدقة الجارية.",
-  },
-  {
-    id: "f4",
-    question: "هل يمكنني التبرع بمبلغ محدد لمشروع معين؟",
-    answer: "بالتأكيد، يمكنك اختيار أي مشروع من صفحة مشاريع التبرع وتحديد المبلغ الذي تريده. سيذهب تبرعك مباشرةً لذلك المشروع المختار.",
-  },
-  {
-    id: "f5",
-    question: "كيف أتأكد أن تبرعي وصل؟",
-    answer: "بعد إتمام عملية التبرع ستصلك رسالة تأكيد إلكترونية فورية تحتوي على رقم العملية وتفاصيل تبرعك. يمكنك أيضاً تتبع تبرعاتك من خلال لوحة تحكم المتبرع بعد تسجيل الدخول.",
-  },
-  {
-    id: "f6",
-    question: "هل التبرع معفى من الضريبة؟",
-    answer: "جمعية بداية منظمة غير ربحية معتمدة. للاستفسار عن الإعفاءات الضريبية لتبرعاتك، يُنصح بالتواصل مع المختص الضريبي الخاص بك أو الاطلاع على لوائح هيئة الزكاة والضريبة والجمارك.",
-  },
-  {
-    id: "f7",
-    question: "كيف يمكنني الانضمام كمتطوع؟",
-    answer: "يسعدنا انضمامك! يمكنك تعبئة استمارة التطوع من خلال صفحة المركز التطوعي على موقعنا، وسيتواصل معك فريقنا لتحديد فرصة التطوع المناسبة لمهاراتك واهتماماتك.",
-  },
-];
-
 const partners = [
   { id: "p1", name: "وزارة الصحة", image: "/asr.png" },
 ];
@@ -123,7 +85,6 @@ export default function Home() {
     }, {} as Record<string, { selected: number; custom: string }>)
   );
   const [currentPartnerIndex, setCurrentPartnerIndex] = useState(0);
-  const [openFaqId, setOpenFaqId] = useState<string | null>(null);
 
   const updateProjectAmount = (projectId: string, selected: number, custom: string = "") => {
     setProjectAmounts((prev) => ({ ...prev, [projectId]: { selected, custom } }));
@@ -374,39 +335,6 @@ export default function Home() {
                     <p className="text-xs text-slate-500">{t.role}</p>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* قسم الأسئلة الشائعة */}
-        <section>
-          <div className="mb-4 sm:mb-6 md:mb-8 flex items-center justify-center gap-2 sm:gap-4">
-            <div className="h-px w-8 sm:w-16 md:w-20 lg:w-56 bg-slate-300" />
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900">الأسئلة الشائعة</h2>
-            <div className="h-px w-8 sm:w-16 md:w-20 lg:w-56 bg-slate-300" />
-          </div>
-          <p className="text-center text-slate-500 text-sm sm:text-base mb-6 sm:mb-8">إجابات على أكثر الأسئلة التي يطرحها زوارنا</p>
-
-          <div className="grid grid-cols-2 gap-2 sm:gap-3">
-            {faqs.map((faq) => (
-              <div key={faq.id} className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-                <button
-                  type="button"
-                  className="w-full flex items-center justify-between px-2.5 sm:px-3 py-2.5 sm:py-3 text-right touch-manipulation"
-                  onClick={() => setOpenFaqId(openFaqId === faq.id ? null : faq.id)}
-                >
-                  <span className="font-bold text-slate-900 text-xs sm:text-sm leading-5">{faq.question}</span>
-                  {openFaqId === faq.id
-                    ? <ChevronUp className="w-4 h-4 text-emerald-600 shrink-0 mr-1" />
-                    : <ChevronDown className="w-4 h-4 text-slate-400 shrink-0 mr-1" />
-                  }
-                </button>
-                {openFaqId === faq.id && (
-                  <div className="px-2.5 sm:px-3 pb-3 text-slate-600 text-xs sm:text-sm leading-6 border-t border-slate-100 pt-2">
-                    {faq.answer}
-                  </div>
-                )}
               </div>
             ))}
           </div>

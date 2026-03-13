@@ -52,6 +52,7 @@ const CampaignDonate = lazy(() => import("@/pages/CampaignDonate"));
 const DonationOpportunities = lazy(() => import("@/pages/DonationOpportunities"));
 const DonationOpportunityDetails = lazy(() => import("@/pages/DonationOpportunityDetails"));
 const Cart = lazy(() => import("@/pages/Cart"));
+const Faq = lazy(() => import("@/pages/Faq"));
 
 function Router() {
   return (
@@ -107,6 +108,7 @@ function Router() {
           <Route path="/donate/opportunities/:id" component={DonationOpportunityDetails} />
           <Route path="/donate/opportunities" component={DonationOpportunities} />
           <Route path="/cart" component={Cart} />
+          <Route path="/faq" component={Faq} />
           
           <Route component={NotFound} />
         </Switch>
