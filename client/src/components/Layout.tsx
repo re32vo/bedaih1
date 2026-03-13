@@ -95,22 +95,32 @@ export function Layout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen font-body flex flex-col rtl bg-slate-900 overflow-x-hidden" dir="rtl">
       <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 shadow-sm border-b border-slate-200 dark:border-slate-800 w-full">
         <div className="relative container mx-auto px-3 sm:px-4 py-2.5 sm:py-3 flex items-center justify-between">
-          {location !== '/cart' && (
-            <Link href="/cart">
-              <button
-                className="md:hidden absolute left-3 top-1/2 -translate-y-1/2 z-10 overflow-visible bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full px-3 py-2 shadow-lg flex items-center gap-1.5 touch-manipulation"
-                aria-label="الانتقال إلى السلة"
-              >
-                <ShoppingCart className="w-4 h-4" />
-                <span className="text-xs font-bold">السلة</span>
-                {getTotalItems() > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-extrabold rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center border-2 border-white leading-none">
-                    {getTotalItems()}
-                  </span>
-                )}
-              </button>
-            </Link>
-          )}
+          <div className="md:hidden absolute left-3 top-1/2 -translate-y-1/2 z-20 flex items-center gap-2">
+            <button
+              className="p-2 text-slate-900 dark:text-white bg-white/90 rounded-lg border border-slate-200 shadow-sm touch-manipulation"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="فتح قائمة التصنيفات"
+            >
+              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+
+            {location !== '/cart' && (
+              <Link href="/cart">
+                <button
+                  className="relative overflow-visible bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full px-3 py-2 shadow-lg flex items-center gap-1.5 touch-manipulation"
+                  aria-label="الانتقال إلى السلة"
+                >
+                  <ShoppingCart className="w-4 h-4" />
+                  <span className="text-xs font-bold">السلة</span>
+                  {getTotalItems() > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-extrabold rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center border-2 border-white leading-none">
+                      {getTotalItems()}
+                    </span>
+                  )}
+                </button>
+              </Link>
+            )}
+          </div>
 
           <Link href="/" className="absolute right-3 sm:right-4 md:static md:right-auto">
             <div className="flex items-center gap-2 sm:gap-3 cursor-pointer">
@@ -282,9 +292,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <Heart className="w-4 h-4 mr-2" /> تبرع الآن
             </Button>
 
-            <button className="md:hidden p-2 text-slate-900 dark:text-white touch-manipulation" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
           </div>
         </div>
       </header>
