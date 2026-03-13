@@ -74,16 +74,14 @@ const heroSlides = [
     image: "/12344.png",
     title: "بركاتك يبتسم",
     subtitle: "ادفع زكاتك لعلاج الفقراء والمساكين",
-    options: ["سهم النور", "سهم البركة", "سهم الإحسان"],
-    defaultAmount: 35,
+    projectId: "6",
   },
   {
     id: "h2",
     image: "/oz.png",
     title: "خير الأعمال في خير الليالي",
     subtitle: "العشر الأواخر",
-    options: ["سهم النور", "سهم البركة", "سهم الإحسان"],
-    defaultAmount: 35,
+    projectId: "12",
   },
 ];
 
@@ -106,8 +104,11 @@ export default function Home() {
   const [currentPartnerIndex, setCurrentPartnerIndex] = useState(0);
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
-  const [selectedHeroOption, setSelectedHeroOption] = useState(heroSlides[0].options[0]);
-  const [heroAmount, setHeroAmount] = useState(String(heroSlides[0].defaultAmount));
+  const [heroAmount, setHeroAmount] = useState("100");
+
+  const currentHeroSlide = heroSlides[currentHeroIndex];
+  const currentHeroProject = donationProjects.find((project) => project.id === currentHeroSlide.projectId) || donationProjects[0];
+  const heroQuickAmounts = currentHeroProject.amounts.length > 0 ? currentHeroProject.amounts.slice(0, 3) : [500, 300, 100];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -126,9 +127,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const currentSlide = heroSlides[currentHeroIndex];
-    setSelectedHeroOption(currentSlide.options[0]);
-    setHeroAmount(String(currentSlide.defaultAmount));
+    setHeroAmount(String(heroQuickAmounts[0] || 100));
   }, [currentHeroIndex]);
 
   const updateProjectAmount = (projectId: string, selected: number, custom: string = "") => {
@@ -193,7 +192,6 @@ export default function Home() {
   };
 
   const donateFromHero = () => {
-    const currentSlide = heroSlides[currentHeroIndex];
     const numericAmount = Number(heroAmount);
 
     if (!numericAmount || numericAmount <= 0) {
@@ -206,12 +204,12 @@ export default function Home() {
     }
 
     addItem({
-      id: `hero-${currentSlide.id}-${selectedHeroOption}`,
-      title: selectedHeroOption,
-      description: currentSlide.title,
-      image: currentSlide.image,
+      id: currentHeroProject.id,
+      title: currentHeroProject.title,
+      description: currentHeroProject.description,
+      image: currentHeroProject.image,
       amount: numericAmount,
-      donationType: "quick",
+      donationType: "single",
       paymentMethod: 1,
     });
 
@@ -263,22 +261,22 @@ export default function Home() {
               </div>
 
               <div className="w-full max-w-[300px] rounded-xl bg-white/95 border border-white/70 p-3 sm:p-4 shadow-xl">
-                <p className="text-center text-sm sm:text-base font-extrabold text-slate-800 mb-2">{heroSlides[currentHeroIndex].title}</p>
-                <p className="text-center text-xs sm:text-sm text-slate-500 mb-3">{heroSlides[currentHeroIndex].subtitle}</p>
+                <p className="text-center text-sm sm:text-base font-extrabold text-slate-800 mb-1">{currentHeroProject.title}</p>
+                <p className="text-center text-[11px] sm:text-xs text-slate-500 mb-3 line-clamp-2">{currentHeroProject.description}</p>
 
                 <div className="grid grid-cols-3 gap-1.5 mb-3">
-                  {heroSlides[currentHeroIndex].options.map((option) => (
+                  {heroQuickAmounts.map((amount) => (
                     <button
-                      key={option}
+                      key={amount}
                       type="button"
-                      onClick={() => setSelectedHeroOption(option)}
+                      onClick={() => setHeroAmount(String(amount))}
                       className={`rounded-md border px-1 py-1 text-[11px] sm:text-xs font-bold transition ${
-                        selectedHeroOption === option
+                        heroAmount === String(amount)
                           ? "border-sky-500 bg-sky-50 text-sky-700"
                           : "border-slate-300 text-slate-700 hover:bg-slate-50"
                       }`}
                     >
-                      {option}
+                      {amount}
                     </button>
                   ))}
                 </div>
@@ -297,7 +295,7 @@ export default function Home() {
                   <Button type="button" onClick={donateFromHero} className="h-9 text-xs sm:text-sm bg-sky-500 hover:bg-sky-600 text-white font-bold">
                     تبرع
                   </Button>
-                  <Button type="button" onClick={() => setLocation("/donate/opportunities")} className="h-9 text-xs sm:text-sm bg-indigo-900 hover:bg-indigo-800 text-white font-bold">
+                  <Button type="button" onClick={() => setLocation(`/donate/opportunities/${currentHeroProject.id}`)} className="h-9 text-xs sm:text-sm bg-indigo-900 hover:bg-indigo-800 text-white font-bold">
                     تفاصيل المشروع
                   </Button>
                 </div>
