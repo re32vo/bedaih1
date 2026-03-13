@@ -94,7 +94,24 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen font-body flex flex-col rtl bg-slate-900 overflow-x-hidden" dir="rtl">
       <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 shadow-sm border-b border-slate-200 dark:border-slate-800 w-full">
-        <div className="container mx-auto px-3 sm:px-4 py-2.5 sm:py-3 flex items-center justify-between">
+        <div className="relative container mx-auto px-3 sm:px-4 py-2.5 sm:py-3 flex items-center justify-between">
+          {location !== '/cart' && (
+            <Link href="/cart">
+              <button
+                className="md:hidden absolute left-3 top-1/2 -translate-y-1/2 z-10 overflow-visible bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full px-3 py-2 shadow-lg flex items-center gap-1.5 touch-manipulation"
+                aria-label="الانتقال إلى السلة"
+              >
+                <ShoppingCart className="w-4 h-4" />
+                <span className="text-xs font-bold">السلة</span>
+                {getTotalItems() > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-extrabold rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center border-2 border-white leading-none">
+                    {getTotalItems()}
+                  </span>
+                )}
+              </button>
+            </Link>
+          )}
+
           <Link href="/">
             <div className="flex items-center gap-2 sm:gap-3 cursor-pointer">
               <img src={logoImg} alt="شعار جمعية بداية" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
@@ -434,24 +451,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         >
           <Heart className="w-4 h-4" />
         </button>
-      )}
-
-      {/* Mobile floating cart button */}
-      {location !== '/cart' && (
-        <Link href="/cart">
-          <button
-            className="md:hidden fixed bottom-2 left-2 z-50 relative overflow-visible bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full px-4 py-3 shadow-xl flex items-center gap-2 touch-manipulation"
-            aria-label="الانتقال إلى السلة"
-          >
-            <ShoppingCart className="w-5 h-5" />
-            <span className="text-sm font-bold">السلة</span>
-            {getTotalItems() > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-extrabold rounded-full min-w-[22px] h-5 px-1 flex items-center justify-center border-2 border-white leading-none">
-                {getTotalItems()}
-              </span>
-            )}
-          </button>
-        </Link>
       )}
 
       {/* WhatsApp Floating Button */}
