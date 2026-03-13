@@ -99,7 +99,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <div className="container mx-auto px-3 sm:px-4 py-1.5 flex items-center justify-between">
             {/* يمين: ملف تعريفي / تسجيل دخول */}
             <Link href={isDonorLoggedIn ? "/donor-dashboard" : "/donor-login"}>
-              <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-sm font-medium touch-manipulation border border-slate-200 dark:border-slate-700 transition-colors">
+              <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-slate-900 hover:bg-slate-100 text-sm font-semibold touch-manipulation border border-slate-300 shadow-sm transition-colors">
                 <User className="w-4 h-4" />
                 <span>{isDonorLoggedIn ? "الملف التعريفي" : "تسجيل الدخول"}</span>
               </button>
@@ -107,11 +107,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
             {/* يسار: السلة */}
             {location !== '/cart' && (
               <Link href="/cart">
-                <button className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-sm font-semibold touch-manipulation shadow-sm transition-colors">
+                <button className="relative overflow-visible flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-sm font-semibold touch-manipulation shadow-sm transition-colors">
                   <ShoppingCart className="w-4 h-4" />
                   <span>السلة</span>
                   {getTotalItems() > 0 && (
-                    <span className="absolute -top-1 -left-1 bg-red-600 text-white text-[10px] font-extrabold rounded-full min-w-[16px] h-4 px-0.5 flex items-center justify-center border border-white leading-none">
+                    <span className="absolute -top-2 -left-2 bg-red-600 text-white text-[11px] font-extrabold rounded-full min-w-[20px] h-5 px-1 flex items-center justify-center border-2 border-white shadow leading-none">
                       {getTotalItems()}
                     </span>
                   )}
@@ -267,7 +267,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </button>
             {/* ملف تعريفي - كمبيوتر فقط */}
             <Link href={isDonorLoggedIn ? "/donor-dashboard" : "/donor-login"}>
-              <button className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-sm font-medium touch-manipulation border border-slate-200 dark:border-slate-700 transition-colors">
+              <button className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-slate-900 hover:bg-slate-100 text-sm font-semibold touch-manipulation border border-slate-300 shadow-sm transition-colors">
                 <User className="w-4 h-4" />
                 <span>{isDonorLoggedIn ? "الملف التعريفي" : "تسجيل الدخول"}</span>
               </button>
@@ -275,11 +275,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
             {/* السلة - كمبيوتر فقط */}
             {location !== '/cart' && (
               <Link href="/cart">
-                <button className="hidden md:flex relative items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-sm font-semibold touch-manipulation shadow-sm transition-colors">
+                <button className="hidden md:flex relative overflow-visible items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-sm font-semibold touch-manipulation shadow-sm transition-colors">
                   <ShoppingCart className="w-4 h-4" />
                   <span>السلة</span>
                   {getTotalItems() > 0 && (
-                    <span className="absolute -top-1 -left-1 bg-red-600 text-white text-[10px] font-extrabold rounded-full min-w-[16px] h-4 px-0.5 flex items-center justify-center border border-white leading-none">
+                    <span className="absolute -top-2 -left-2 bg-red-600 text-white text-[11px] font-extrabold rounded-full min-w-[20px] h-5 px-1 flex items-center justify-center border-2 border-white shadow leading-none">
                       {getTotalItems()}
                     </span>
                   )}
