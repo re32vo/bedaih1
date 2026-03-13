@@ -48,6 +48,9 @@
   --secondary-foreground: 0 0% 100%;
   --secondary-border: 215 28% 17%;
   --muted: 215 28% 17%;
+  --muted-foreground: 222 20% 80%;
+  --accent: 36 100% 50%;
+}
 
 /* تحسينات للأجهزة المحمولة */
 @layer base {
@@ -84,9 +87,9 @@
     font-size: 16px;
   }
   
-  /* تحسين أداء الصور */
+  /* تحسين ثبات عرض الصور على الجوال */
   img {
-    content-visibility: auto;
+    content-visibility: visible;
   }
 }
 
@@ -120,12 +123,6 @@
     -moz-osx-font-smoothing: grayscale;
   }
 }
-  --muted-foreground: 222 20% 80%;
-  --accent: 36 100% 50%;
-}
-
-
-
 
 /* Global Styles */
 * {
@@ -197,6 +194,8 @@ img {
   -webkit-user-drag: none;
   user-select: none;
   pointer-events: auto;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 a {

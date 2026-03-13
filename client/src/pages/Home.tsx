@@ -122,6 +122,14 @@ export default function Home() {
     setHeroAmount(String(heroQuickAmounts[0] || 100));
   }, [currentHeroIndex]);
 
+  useEffect(() => {
+    // Preload hero images to prevent white flash during slide changes on mobile.
+    heroSlides.forEach((slide) => {
+      const img = new Image();
+      img.src = slide.image;
+    });
+  }, []);
+
   const updateProjectAmount = (projectId: string, selected: number, custom: string = "") => {
     setProjectAmounts((prev) => ({ ...prev, [projectId]: { selected, custom } }));
   };
@@ -263,6 +271,9 @@ export default function Home() {
           <img
             src={heroSlides[currentHeroIndex].image}
             alt={heroSlides[currentHeroIndex].title}
+            loading="eager"
+            fetchPriority="high"
+            decoding="sync"
             className="absolute inset-0 h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-slate-900/25" />
