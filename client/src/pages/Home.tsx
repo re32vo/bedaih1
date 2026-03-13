@@ -263,9 +263,7 @@ export default function Home() {
             {partners.map((partner) => (
               <div key={partner.id} className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-6 min-h-24 flex flex-col items-center justify-center shadow-sm gap-2">
                 <img src={partner.image} alt={partner.name} loading="lazy" className="h-12 w-full object-contain" />
-                {partner.id === "p2" && (
-                  <p className="text-center text-sm sm:text-base font-bold text-slate-600 leading-snug">{partner.name}</p>
-                )}
+                <p className="text-center text-sm sm:text-base font-bold text-slate-600 leading-snug">{partner.name}</p>
               </div>
             ))}
           </div>
