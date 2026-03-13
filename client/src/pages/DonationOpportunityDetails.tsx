@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useLocation, useRoute } from "wouter";
-import { Share2, Facebook, MessageCircle, Instagram, CreditCard, Landmark, Smartphone, LogIn, Check, Heart } from "lucide-react";
+import { Share2, Facebook, MessageCircle, Instagram, CreditCard, Landmark, Smartphone, LogIn, Check, Heart, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -259,25 +258,28 @@ export default function DonationOpportunityDetails() {
               </div>
               
               {/* عدد الأسهم */}
-              <Select value={String(sharesCount)} onValueChange={(value) => {
-                const count = Number(value);
-                setSharesCount(count);
-                if (!customDonation && shareAmount > 0) {
-                  setCustomAmount(String(shareAmount * count));
-                  setSelectedAmount(shareAmount * count);
-                }
-              }}>
-                <SelectTrigger className="h-14 w-24 rounded-xl bg-white text-center font-bold text-xl border-2 border-slate-300">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
+              <div className="relative w-24">
+                <select
+                  value={String(sharesCount)}
+                  onChange={(e) => {
+                    const count = Number(e.target.value);
+                    setSharesCount(count);
+                    if (!customDonation && shareAmount > 0) {
+                      setCustomAmount(String(shareAmount * count));
+                      setSelectedAmount(shareAmount * count);
+                    }
+                  }}
+                  className="h-14 w-full appearance-none rounded-xl border-2 border-slate-300 bg-white px-8 text-center text-xl font-bold text-slate-900 outline-none transition focus:border-[#26a1d0]"
+                  aria-label="عدد الأسهم"
+                >
                   {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20].map((num) => (
-                    <SelectItem key={num} value={String(num)}>
+                    <option key={num} value={String(num)}>
                       {num}
-                    </SelectItem>
+                    </option>
                   ))}
-                </SelectContent>
-              </Select>
+                </select>
+                <ChevronDown className="pointer-events-none absolute left-2 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" />
+              </div>
             </div>
 
             {/* الإجمالي */}
