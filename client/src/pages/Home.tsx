@@ -216,105 +216,117 @@ export default function Home() {
     setLocation(`/checkout?mode=hero&projectId=${currentHeroProject.id}&amount=${numericAmount}`);
   };
 
+  const heroProjectCard = (
+    <div className="w-full max-w-[300px] rounded-xl bg-white/95 border border-white/70 p-3 sm:p-4 shadow-xl">
+      <p className="text-center text-sm sm:text-base font-extrabold text-slate-800 mb-1">{currentHeroProject.title}</p>
+      <p className="text-center text-[11px] sm:text-xs text-slate-500 mb-3 line-clamp-2">{currentHeroProject.description}</p>
+
+      <div className="grid grid-cols-3 gap-1.5 mb-3">
+        {heroQuickAmounts.map((amount) => (
+          <button
+            key={amount}
+            type="button"
+            onClick={() => setHeroAmount(String(amount))}
+            className={`rounded-md border px-1 py-1 text-[11px] sm:text-xs font-bold transition ${
+              heroAmount === String(amount)
+                ? "border-sky-500 bg-sky-50 text-sky-700"
+                : "border-slate-300 text-slate-700 hover:bg-slate-50"
+            }`}
+          >
+            {amount}
+          </button>
+        ))}
+      </div>
+
+      <div className="relative mb-3">
+        <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-500">ر.س</span>
+        <Input
+          value={heroAmount}
+          onChange={(e) => setHeroAmount(e.target.value.replace(/[^0-9]/g, ""))}
+          className="h-9 pr-10 text-center text-sm font-bold"
+          inputMode="numeric"
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-2">
+        <Button type="button" onClick={donateFromHero} className="h-9 text-xs sm:text-sm bg-sky-500 hover:bg-sky-600 text-white font-bold">
+          تبرع
+        </Button>
+        <Button type="button" onClick={() => setLocation(`/donate/opportunities/${currentHeroProject.id}`)} className="h-9 text-xs sm:text-sm bg-indigo-900 hover:bg-indigo-800 text-white font-bold">
+          تفاصيل المشروع
+        </Button>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-slate-100 py-4 md:py-8" dir="rtl">
       <div className="container mx-auto space-y-6 px-3 sm:px-4 md:space-y-10 lg:space-y-14">
-        <section className="relative overflow-hidden rounded-xl md:rounded-2xl min-h-[440px] sm:min-h-[520px]">
-          <picture>
-            <source media="(max-width: 639px)" srcSet={heroSlides[currentHeroIndex].imageMobile} />
-            <source media="(max-width: 1023px)" srcSet={heroSlides[currentHeroIndex].imageTablet} />
-            <img
-              src={heroSlides[currentHeroIndex].imageDesktop}
-              alt={heroSlides[currentHeroIndex].title}
-              className="absolute inset-0 h-full w-full object-cover"
-              loading="eager"
-            />
-          </picture>
-          <div className="absolute inset-0 bg-slate-900/25" />
+        <section className="space-y-3 sm:space-y-4">
+          <div className="relative overflow-hidden rounded-xl md:rounded-2xl min-h-[420px] lg:min-h-[520px]">
+            <picture>
+              <source media="(max-width: 639px)" srcSet={heroSlides[currentHeroIndex].imageMobile} />
+              <source media="(max-width: 1023px)" srcSet={heroSlides[currentHeroIndex].imageTablet} />
+              <img
+                src={heroSlides[currentHeroIndex].imageDesktop}
+                alt={heroSlides[currentHeroIndex].title}
+                className="absolute inset-0 h-full w-full object-cover"
+                loading="eager"
+              />
+            </picture>
+            <div className="absolute inset-0 bg-slate-900/25" />
 
-          <button
-            type="button"
-            onClick={goToPrevHero}
-            className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-white/75 text-slate-700 hover:bg-white flex items-center justify-center"
-            aria-label="السابق"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </button>
-          <button
-            type="button"
-            onClick={goToNextHero}
-            className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-white/75 text-slate-700 hover:bg-white flex items-center justify-center"
-            aria-label="التالي"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </button>
+            <button
+              type="button"
+              onClick={goToPrevHero}
+              className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-white/75 text-slate-700 hover:bg-white flex items-center justify-center"
+              aria-label="السابق"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={goToNextHero}
+              className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-white/75 text-slate-700 hover:bg-white flex items-center justify-center"
+              aria-label="التالي"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
 
-          <div className="relative z-10 min-h-[440px] sm:min-h-[520px] p-4 sm:p-6 md:p-8 flex items-center">
-            <div className="w-full flex flex-col lg:flex-row-reverse lg:items-center lg:justify-between gap-5 sm:gap-7">
-              <div className="text-white max-w-2xl">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-3">
-                  {heroSlides[currentHeroIndex].title}
-                </h1>
-                <p className="inline-block bg-sky-500/75 px-3 py-2 text-lg sm:text-2xl font-bold">
-                  {heroSlides[currentHeroIndex].subtitle}
-                </p>
-              </div>
-
-              <div className="w-full max-w-[300px] rounded-xl bg-white/95 border border-white/70 p-3 sm:p-4 shadow-xl">
-                <p className="text-center text-sm sm:text-base font-extrabold text-slate-800 mb-1">{currentHeroProject.title}</p>
-                <p className="text-center text-[11px] sm:text-xs text-slate-500 mb-3 line-clamp-2">{currentHeroProject.description}</p>
-
-                <div className="grid grid-cols-3 gap-1.5 mb-3">
-                  {heroQuickAmounts.map((amount) => (
-                    <button
-                      key={amount}
-                      type="button"
-                      onClick={() => setHeroAmount(String(amount))}
-                      className={`rounded-md border px-1 py-1 text-[11px] sm:text-xs font-bold transition ${
-                        heroAmount === String(amount)
-                          ? "border-sky-500 bg-sky-50 text-sky-700"
-                          : "border-slate-300 text-slate-700 hover:bg-slate-50"
-                      }`}
-                    >
-                      {amount}
-                    </button>
-                  ))}
+            <div className="relative z-10 min-h-[420px] lg:min-h-[520px] p-4 sm:p-6 md:p-8 flex items-start lg:items-center">
+              <div className="w-full flex flex-col lg:flex-row-reverse lg:items-center lg:justify-between gap-5 sm:gap-7">
+                <div className="text-white max-w-2xl pt-2 sm:pt-4 lg:pt-0">
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-3">
+                    {heroSlides[currentHeroIndex].title}
+                  </h1>
+                  <p className="inline-block bg-sky-500/75 px-3 py-2 text-lg sm:text-2xl font-bold">
+                    {heroSlides[currentHeroIndex].subtitle}
+                  </p>
                 </div>
 
-                <div className="relative mb-3">
-                  <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-500">ر.س</span>
-                  <Input
-                    value={heroAmount}
-                    onChange={(e) => setHeroAmount(e.target.value.replace(/[^0-9]/g, ""))}
-                    className="h-9 pr-10 text-center text-sm font-bold"
-                    inputMode="numeric"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <Button type="button" onClick={donateFromHero} className="h-9 text-xs sm:text-sm bg-sky-500 hover:bg-sky-600 text-white font-bold">
-                    تبرع
-                  </Button>
-                  <Button type="button" onClick={() => setLocation(`/donate/opportunities/${currentHeroProject.id}`)} className="h-9 text-xs sm:text-sm bg-indigo-900 hover:bg-indigo-800 text-white font-bold">
-                    تفاصيل المشروع
-                  </Button>
+                <div className="hidden lg:block lg:w-full lg:max-w-[300px]">
+                  {heroProjectCard}
                 </div>
               </div>
             </div>
+
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5">
+              {heroSlides.map((slide, index) => (
+                <button
+                  key={slide.id}
+                  type="button"
+                  onClick={() => setCurrentHeroIndex(index)}
+                  className={`h-2.5 rounded-full transition-all ${
+                    index === currentHeroIndex ? "w-6 bg-white" : "w-2.5 bg-white/60 hover:bg-white/80"
+                  }`}
+                  aria-label={`الانتقال للبنر ${index + 1}`}
+                />
+              ))}
+            </div>
           </div>
 
-          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5">
-            {heroSlides.map((slide, index) => (
-              <button
-                key={slide.id}
-                type="button"
-                onClick={() => setCurrentHeroIndex(index)}
-                className={`h-2.5 rounded-full transition-all ${
-                  index === currentHeroIndex ? "w-6 bg-white" : "w-2.5 bg-white/60 hover:bg-white/80"
-                }`}
-                aria-label={`الانتقال للبنر ${index + 1}`}
-              />
-            ))}
+          <div className="flex justify-center lg:hidden">
+            {heroProjectCard}
           </div>
         </section>
 
