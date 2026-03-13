@@ -71,17 +71,30 @@ const stats = [
 const heroSlides = [
   {
     id: "h1",
-    image: "/12344.png",
+    imageDesktop: "/12344.png",
+    imageTablet: "/12344.png",
+    imageMobile: "/12344.png",
     title: "بركاتك يبتسم",
     subtitle: "ادفع زكاتك لعلاج الفقراء والمساكين",
     projectId: "6",
   },
   {
     id: "h2",
-    image: "/oz.png",
+    imageDesktop: "/oz.png",
+    imageTablet: "/oz.png",
+    imageMobile: "/oz.png",
     title: "خير الأعمال في خير الليالي",
     subtitle: "العشر الأواخر",
     projectId: "12",
+  },
+  {
+    id: "h3",
+    imageDesktop: "/hero-therapy-desktop.jpg",
+    imageTablet: "/hero-therapy-tablet.jpg",
+    imageMobile: "/hero-therapy-mobile.jpg",
+    title: "علاجهم يبدأ بتبرعك",
+    subtitle: "صورة محسنة تلقائيا لكل جهاز",
+    projectId: "11",
   },
 ];
 
@@ -207,11 +220,16 @@ export default function Home() {
     <div className="min-h-screen bg-slate-100 py-4 md:py-8" dir="rtl">
       <div className="container mx-auto space-y-6 px-3 sm:px-4 md:space-y-10 lg:space-y-14">
         <section className="relative overflow-hidden rounded-xl md:rounded-2xl min-h-[440px] sm:min-h-[520px]">
-          <img
-            src={heroSlides[currentHeroIndex].image}
-            alt={heroSlides[currentHeroIndex].title}
-            className="absolute inset-0 h-full w-full object-cover"
-          />
+          <picture>
+            <source media="(max-width: 639px)" srcSet={heroSlides[currentHeroIndex].imageMobile} />
+            <source media="(max-width: 1023px)" srcSet={heroSlides[currentHeroIndex].imageTablet} />
+            <img
+              src={heroSlides[currentHeroIndex].imageDesktop}
+              alt={heroSlides[currentHeroIndex].title}
+              className="absolute inset-0 h-full w-full object-cover"
+              loading="eager"
+            />
+          </picture>
           <div className="absolute inset-0 bg-slate-900/25" />
 
           <button
