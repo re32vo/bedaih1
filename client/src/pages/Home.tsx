@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
@@ -85,6 +85,15 @@ export default function Home() {
     }, {} as Record<string, { selected: number; custom: string }>)
   );
   const [currentPartnerIndex, setCurrentPartnerIndex] = useState(0);
+  const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTestimonialIndex((prev) => (prev + 1) % testimonials.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const updateProjectAmount = (projectId: string, selected: number, custom: string = "") => {
     setProjectAmounts((prev) => ({ ...prev, [projectId]: { selected, custom } }));
@@ -317,26 +326,40 @@ export default function Home() {
           </div>
           <p className="text-center text-slate-500 text-sm sm:text-base mb-6 sm:mb-8">آراء متبرعين حول تجربتهم مع جمعية بداية</p>
 
-          <div className="flex gap-3 sm:gap-4 overflow-x-auto pb-2 snap-x snap-mandatory">
-            {testimonials.map((t) => (
-              <div key={t.id} className="min-w-[85%] sm:min-w-[62%] md:min-w-[48%] lg:min-w-[32%] snap-start rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm flex flex-col gap-3">
-                <div className="flex items-center gap-1">
-                  {Array.from({ length: t.rating }).map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  ))}
+          <div className="max-w-3xl mx-auto">
+            <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm flex flex-col gap-3 min-h-[210px] sm:min-h-[190px]">
+              <div className="flex items-center gap-1">
+                {Array.from({ length: testimonials[currentTestimonialIndex].rating }).map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-slate-700 text-sm sm:text-base leading-relaxed flex-1">
+                {testimonials[currentTestimonialIndex].text}
+              </p>
+              <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
+                <div className="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-sm">
+                  {testimonials[currentTestimonialIndex].name.charAt(0)}
                 </div>
-                <p className="text-slate-700 text-sm sm:text-base leading-relaxed flex-1">{t.text}</p>
-                <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
-                  <div className="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-sm">
-                    {t.name.charAt(0)}
-                  </div>
-                  <div>
-                    <p className="font-bold text-slate-900 text-sm">{t.name}</p>
-                    <p className="text-xs text-slate-500">{t.role}</p>
-                  </div>
+                <div>
+                  <p className="font-bold text-slate-900 text-sm">{testimonials[currentTestimonialIndex].name}</p>
+                  <p className="text-xs text-slate-500">{testimonials[currentTestimonialIndex].role}</p>
                 </div>
               </div>
-            ))}
+            </div>
+
+            <div className="mt-3 flex items-center justify-center gap-1.5">
+              {testimonials.map((item, index) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setCurrentTestimonialIndex(index)}
+                  className={`h-2.5 rounded-full transition-all ${
+                    index === currentTestimonialIndex ? "w-6 bg-emerald-500" : "w-2.5 bg-slate-300 hover:bg-slate-400"
+                  }`}
+                  aria-label={`الانتقال إلى التقييم ${index + 1}`}
+                />
+              ))}
+            </div>
           </div>
         </section>
 
