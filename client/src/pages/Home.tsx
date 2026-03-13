@@ -90,7 +90,7 @@ export default function Home() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTestimonialIndex((prev) => (prev + 1) % testimonials.length);
-    }, 3000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -138,6 +138,14 @@ export default function Home() {
 
   const goToPrevPartner = () => {
     setCurrentPartnerIndex((prev) => (prev - 1 + partners.length) % partners.length);
+  };
+
+  const goToNextTestimonial = () => {
+    setCurrentTestimonialIndex((prev) => (prev + 1) % testimonials.length);
+  };
+
+  const goToPrevTestimonial = () => {
+    setCurrentTestimonialIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
 
   return (
@@ -327,24 +335,44 @@ export default function Home() {
           <p className="text-center text-slate-500 text-sm sm:text-base mb-6 sm:mb-8">آراء متبرعين حول تجربتهم مع جمعية بداية</p>
 
           <div className="max-w-3xl mx-auto">
-            <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm flex flex-col gap-3 min-h-[210px] sm:min-h-[190px]">
-              <div className="flex items-center gap-1">
-                {Array.from({ length: testimonials[currentTestimonialIndex].rating }).map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                ))}
-              </div>
-              <p className="text-slate-700 text-sm sm:text-base leading-relaxed flex-1">
-                {testimonials[currentTestimonialIndex].text}
-              </p>
-              <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
-                <div className="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-sm">
-                  {testimonials[currentTestimonialIndex].name.charAt(0)}
+            <div className="flex items-center gap-2 sm:gap-3">
+              <button
+                type="button"
+                onClick={goToPrevTestimonial}
+                className="h-10 w-10 rounded-full border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 flex items-center justify-center shrink-0"
+                aria-label="التقييم السابق"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+
+              <div className="flex-1 rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm flex flex-col gap-3 min-h-[210px] sm:min-h-[190px]">
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: testimonials[currentTestimonialIndex].rating }).map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  ))}
                 </div>
-                <div>
-                  <p className="font-bold text-slate-900 text-sm">{testimonials[currentTestimonialIndex].name}</p>
-                  <p className="text-xs text-slate-500">{testimonials[currentTestimonialIndex].role}</p>
+                <p className="text-slate-700 text-sm sm:text-base leading-relaxed flex-1">
+                  {testimonials[currentTestimonialIndex].text}
+                </p>
+                <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
+                  <div className="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-sm">
+                    {testimonials[currentTestimonialIndex].name.charAt(0)}
+                  </div>
+                  <div>
+                    <p className="font-bold text-slate-900 text-sm">{testimonials[currentTestimonialIndex].name}</p>
+                    <p className="text-xs text-slate-500">{testimonials[currentTestimonialIndex].role}</p>
+                  </div>
                 </div>
               </div>
+
+              <button
+                type="button"
+                onClick={goToNextTestimonial}
+                className="h-10 w-10 rounded-full border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 flex items-center justify-center shrink-0"
+                aria-label="التقييم التالي"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
             </div>
 
             <div className="mt-3 flex items-center justify-center gap-1.5">
