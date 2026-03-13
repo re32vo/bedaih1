@@ -73,8 +73,8 @@ const homeBanners = [
     id: "b1",
     title: "صدقتك اليوم تصنع فرقًا بكرة",
     subtitle: "تبرع الآن وشاركنا أثر الخير للمستفيدين",
-    cta: "تبرع الآن",
-    href: "/donate",
+    cta: "صفحة التبرع المباشر",
+    href: "/banner-donate",
     bgClass: "from-emerald-500 to-teal-600",
   },
   {
