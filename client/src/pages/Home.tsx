@@ -2,46 +2,93 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
-import { Users, Clock3, HeartPulse, TrendingUp, UserRound, ShoppingCart, Share2, Facebook, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { Users, Clock3, HeartPulse, TrendingUp, UserRound, ShoppingCart, Share2, Facebook, MessageCircle, ChevronLeft, ChevronRight, Star, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { donationProjects } from "@/data/donationProjects";
 import { useCart } from "@/hooks/use-cart";
 import { useToast } from "@/hooks/use-toast";
 
-type MediaItem = {
-  id: string;
-  title: string;
-  excerpt: string;
-  image: string;
-  date: string;
-  type: string;
-};
+const testimonials = [
+  {
+    id: "t1",
+    name: "أم محمد",
+    role: "متبرعة منتظمة",
+    rating: 5,
+    text: "جمعية بداية تستحق كل الدعم. أتبرع معهم منذ سنوات وأجد شفافية كاملة في كيف تُصرف التبرعات. أحس فعلاً أن تبرعي يصل لمن يستحق.",
+  },
+  {
+    id: "t2",
+    name: "عبدالله العمري",
+    role: "متبرع",
+    rating: 5,
+    text: "سهولة في التبرع والدفع عبر الموقع، وأصلني إيصال فوري. الجمعية محترمة وخدماتها تصل فعلاً لمحتاجيها. بارك الله في القائمين عليها.",
+  },
+  {
+    id: "t3",
+    name: "سارة القحطاني",
+    role: "متطوعة",
+    rating: 5,
+    text: "تطوعت مع الجمعية في عدة مخيمات صحية وكان التنظيم رائعاً. الفريق متعاون جداً والأثر على المستفيدين ملموس وحقيقي.",
+  },
+  {
+    id: "t4",
+    name: "خالد الزهراني",
+    role: "مستفيد سابق",
+    rating: 5,
+    text: "استفدت من خدمات الجمعية في وقت عصيب، وكان التعامل بكل احترام وكرامة. لن أنسى هذا الجميل وسأسعى دائماً لأكون جزءاً من الدعم.",
+  },
+  {
+    id: "t5",
+    name: "نورة السلمي",
+    role: "متبرعة",
+    rating: 5,
+    text: "أطفالي يعرفون جمعية بداية ويشاركون معي في اختيار مشاريع التبرع. هذه الجمعية علّمتنا ثقافة العطاء من الصغر.",
+  },
+  {
+    id: "t6",
+    name: "فهد البقمي",
+    role: "شريك داعم",
+    rating: 5,
+    text: "شركتنا تدعم الجمعية ضمن مسؤوليتنا الاجتماعية. نجد دائماً تقارير واضحة وشفافية في الإنفاق. علاقة شراكة ناجحة ومثمرة.",
+  },
+];
 
-const mediaItems: MediaItem[] = [
+const faqs = [
   {
-    id: "m1",
-    title: "بيان إعلامي",
-    excerpt: "جمعية بداية تقدم خدمات طب الفم والأسنان للمواطنين القادمين من دول مجلس التعاون.",
-    image: "/1.jpg",
-    date: "2026-03-01",
-    type: "أخبار",
+    id: "f1",
+    question: "كيف يمكنني التبرع لجمعية بداية؟",
+    answer: "يمكنك التبرع بطرق متعددة: عبر الموقع الإلكتروني مباشرةً بالاضافة الى خيار اضافة المشاريع للسلة، أو التحويل البنكي لحساباتنا المعتمدة، أو عبر نقاط البيع في مقر الجمعية. جميع التبرعات مرخصة وآمنة.",
   },
   {
-    id: "m2",
-    title: "أخطاء شائعة في العناية بالأسنان خلال الصيام",
-    excerpt: "خلال شهر الصيام، يتعرض البعض لأخطاء شائعة في تنظيف الأسنان ونمط الغذاء اليومي.",
-    image: "/2.jpg",
-    date: "2026-03-02",
-    type: "مقالات",
+    id: "f2",
+    question: "هل جمعية بداية معتمدة ومرخصة رسمياً؟",
+    answer: "نعم، جمعية بداية حاصلة على ترخيص رسمي من وزارة الموارد البشرية والتنمية الاجتماعية، وهي مسجلة بسجل المنظمات غير الربحية بالمملكة العربية السعودية.",
   },
   {
-    id: "m3",
-    title: "مرضى السكري.. كيف يعتنون بصحة الفم أثناء الصيام؟",
-    excerpt: "توعية خاصة لمرضى السكري حول أفضل ممارسات العناية بالفم في رمضان.",
-    image: "/3.jpg",
-    date: "2026-03-03",
-    type: "مقالات",
+    id: "f3",
+    question: "ما هي المشاريع التي تدعمها الجمعية؟",
+    answer: "تدعم الجمعية مشاريع علاجية لطب الأسنان وعمليات التخدير الكامل، ومشاريع دعم الأيتام، وبرامج التوعية الصحية، وفرص التطوع، وأوقاف بداية للصدقة الجارية.",
+  },
+  {
+    id: "f4",
+    question: "هل يمكنني التبرع بمبلغ محدد لمشروع معين؟",
+    answer: "بالتأكيد، يمكنك اختيار أي مشروع من صفحة مشاريع التبرع وتحديد المبلغ الذي تريده. سيذهب تبرعك مباشرةً لذلك المشروع المختار.",
+  },
+  {
+    id: "f5",
+    question: "كيف أتأكد أن تبرعي وصل؟",
+    answer: "بعد إتمام عملية التبرع ستصلك رسالة تأكيد إلكترونية فورية تحتوي على رقم العملية وتفاصيل تبرعك. يمكنك أيضاً تتبع تبرعاتك من خلال لوحة تحكم المتبرع بعد تسجيل الدخول.",
+  },
+  {
+    id: "f6",
+    question: "هل التبرع معفى من الضريبة؟",
+    answer: "جمعية بداية منظمة غير ربحية معتمدة. للاستفسار عن الإعفاءات الضريبية لتبرعاتك، يُنصح بالتواصل مع المختص الضريبي الخاص بك أو الاطلاع على لوائح هيئة الزكاة والضريبة والجمارك.",
+  },
+  {
+    id: "f7",
+    question: "كيف يمكنني الانضمام كمتطوع؟",
+    answer: "يسعدنا انضمامك! يمكنك تعبئة استمارة التطوع من خلال صفحة المركز التطوعي على موقعنا، وسيتواصل معك فريقنا لتحديد فرصة التطوع المناسبة لمهاراتك واهتماماتك.",
   },
 ];
 
@@ -76,6 +123,7 @@ export default function Home() {
     }, {} as Record<string, { selected: number; custom: string }>)
   );
   const [currentPartnerIndex, setCurrentPartnerIndex] = useState(0);
+  const [openFaqId, setOpenFaqId] = useState<string | null>(null);
 
   const updateProjectAmount = (projectId: string, selected: number, custom: string = "") => {
     setProjectAmounts((prev) => ({ ...prev, [projectId]: { selected, custom } }));
@@ -299,37 +347,68 @@ export default function Home() {
           </div>
         </section>
 
+        {/* قسم التقييمات */}
         <section>
           <div className="mb-4 sm:mb-6 md:mb-8 flex items-center justify-center gap-2 sm:gap-4">
             <div className="h-px w-8 sm:w-16 md:w-20 lg:w-56 bg-slate-300" />
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900">المركز الإعلامي</h2>
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900">ماذا قالوا عنّا</h2>
             <div className="h-px w-8 sm:w-16 md:w-20 lg:w-56 bg-slate-300" />
           </div>
+          <p className="text-center text-slate-500 text-sm sm:text-base mb-6 sm:mb-8">آراء متبرعين ومتطوعين ومستفيدين من خدمات الجمعية</p>
 
-          <div className="grid grid-cols-1 gap-4 sm:gap-5 md:gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {mediaItems.map((item) => (
-              <article key={item.id} className="rounded-xl md:rounded-2xl border border-slate-200 bg-white p-3 sm:p-4 shadow-sm">
-                <img src={item.image} alt={item.title} loading="lazy" className="mb-3 sm:mb-4 h-36 sm:h-40 md:h-44 w-full rounded-lg sm:rounded-xl object-cover" />
-                <div className="mb-2 sm:mb-3 flex items-center justify-between text-xs sm:text-sm text-slate-500">
-                  <span className="rounded-full bg-slate-100 px-2 sm:px-3 py-0.5 sm:py-1 text-xs">{item.type}</span>
-                  <span className="text-xs">{item.date}</span>
+          <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {testimonials.map((t) => (
+              <div key={t.id} className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm flex flex-col gap-3">
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: t.rating }).map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  ))}
                 </div>
-                <h3 className="mb-1.5 sm:mb-2 text-base sm:text-lg font-extrabold text-slate-900 leading-snug">{item.title}</h3>
-                <p className="line-clamp-2 sm:line-clamp-3 text-xs sm:text-sm leading-5 sm:leading-6 text-slate-600">{item.excerpt}</p>
-                <button type="button" className="mt-2 sm:mt-3 font-bold text-slate-800 hover:text-sky-600 text-xs sm:text-sm touch-manipulation">اقرا المزيد</button>
-                <div className="mt-3 sm:mt-4 flex items-center gap-2 sm:gap-3 text-slate-400">
-                  <Share2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                  <Facebook className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                  <MessageCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <p className="text-slate-700 text-sm sm:text-base leading-relaxed flex-1">"{t.text}"</p>
+                <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
+                  <div className="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-sm">
+                    {t.name.charAt(0)}
+                  </div>
+                  <div>
+                    <p className="font-bold text-slate-900 text-sm">{t.name}</p>
+                    <p className="text-xs text-slate-500">{t.role}</p>
+                  </div>
                 </div>
-              </article>
+              </div>
             ))}
           </div>
+        </section>
 
-          <div className="mt-4 sm:mt-6 md:mt-8 text-center">
-            <Button type="button" className="rounded-lg sm:rounded-xl bg-sky-500 px-6 sm:px-8 text-white hover:bg-sky-600 text-sm sm:text-base h-10 sm:h-11 touch-manipulation" onClick={() => setLocation("/media/news")}>
-              عرض المزيد
-            </Button>
+        {/* قسم الأسئلة الشائعة */}
+        <section>
+          <div className="mb-4 sm:mb-6 md:mb-8 flex items-center justify-center gap-2 sm:gap-4">
+            <div className="h-px w-8 sm:w-16 md:w-20 lg:w-56 bg-slate-300" />
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900">الأسئلة الشائعة</h2>
+            <div className="h-px w-8 sm:w-16 md:w-20 lg:w-56 bg-slate-300" />
+          </div>
+          <p className="text-center text-slate-500 text-sm sm:text-base mb-6 sm:mb-8">إجابات على أكثر الأسئلة التي يطرحها زوارنا</p>
+
+          <div className="max-w-3xl mx-auto flex flex-col gap-3">
+            {faqs.map((faq) => (
+              <div key={faq.id} className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+                <button
+                  type="button"
+                  className="w-full flex items-center justify-between px-4 sm:px-5 py-3 sm:py-4 text-right touch-manipulation"
+                  onClick={() => setOpenFaqId(openFaqId === faq.id ? null : faq.id)}
+                >
+                  <span className="font-bold text-slate-900 text-sm sm:text-base">{faq.question}</span>
+                  {openFaqId === faq.id
+                    ? <ChevronUp className="w-5 h-5 text-emerald-600 shrink-0 mr-2" />
+                    : <ChevronDown className="w-5 h-5 text-slate-400 shrink-0 mr-2" />
+                  }
+                </button>
+                {openFaqId === faq.id && (
+                  <div className="px-4 sm:px-5 pb-4 text-slate-600 text-sm sm:text-base leading-relaxed border-t border-slate-100 pt-3">
+                    {faq.answer}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </section>
 
