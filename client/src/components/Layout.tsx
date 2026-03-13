@@ -112,7 +112,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </Link>
           )}
 
-          <Link href="/" className="absolute left-24 sm:left-28 md:static md:left-auto">
+          <Link href="/" className="absolute right-3 sm:right-4 md:static md:right-auto">
             <div className="flex items-center gap-2 sm:gap-3 cursor-pointer">
               <img src={logoImg} alt="شعار جمعية بداية" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
               <div className="flex flex-col">
