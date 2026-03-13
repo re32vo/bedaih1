@@ -94,8 +94,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen font-body flex flex-col rtl bg-slate-900 overflow-x-hidden" dir="rtl">
       <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 shadow-sm w-full">
-        {/* شريط الأدوات العلوي */}
-        <div className="border-b border-slate-200 dark:border-slate-800">
+        {/* شريط الأدوات العلوي - جوال فقط */}
+        <div className="md:hidden border-b border-slate-200 dark:border-slate-800">
           <div className="container mx-auto px-3 sm:px-4 py-1.5 flex items-center justify-between">
             {/* يمين: ملف تعريفي / تسجيل دخول */}
             <Link href={isDonorLoggedIn ? "/donor-dashboard" : "/donor-login"}>
@@ -265,6 +265,27 @@ export function Layout({ children }: { children: React.ReactNode }) {
             >
               {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
+            {/* ملف تعريفي - كمبيوتر فقط */}
+            <Link href={isDonorLoggedIn ? "/donor-dashboard" : "/donor-login"}>
+              <button className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-sm font-medium touch-manipulation border border-slate-200 dark:border-slate-700 transition-colors">
+                <User className="w-4 h-4" />
+                <span>{isDonorLoggedIn ? "الملف التعريفي" : "تسجيل الدخول"}</span>
+              </button>
+            </Link>
+            {/* السلة - كمبيوتر فقط */}
+            {location !== '/cart' && (
+              <Link href="/cart">
+                <button className="hidden md:flex relative items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-sm font-semibold touch-manipulation shadow-sm transition-colors">
+                  <ShoppingCart className="w-4 h-4" />
+                  <span>السلة</span>
+                  {getTotalItems() > 0 && (
+                    <span className="absolute -top-1 -left-1 bg-red-600 text-white text-[10px] font-extrabold rounded-full min-w-[16px] h-4 px-0.5 flex items-center justify-center border border-white leading-none">
+                      {getTotalItems()}
+                    </span>
+                  )}
+                </button>
+              </Link>
+            )}
             {/* زر تبرع للكمبيوتر */}
             <Button onClick={handleDonateClick} className="hidden md:flex text-white text-sm font-bold rounded-full px-4 lg:px-5 h-9 lg:h-10 bg-gradient-to-r from-primary to-secondary touch-manipulation">
               <Heart className="w-4 h-4 mr-2" /> تبرع الآن
