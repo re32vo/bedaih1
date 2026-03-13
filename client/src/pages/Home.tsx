@@ -356,15 +356,15 @@ export default function Home() {
           </div>
           <p className="text-center text-slate-500 text-sm sm:text-base mb-6 sm:mb-8">آراء متبرعين ومتطوعين ومستفيدين من خدمات الجمعية</p>
 
-          <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <div className="flex gap-3 sm:gap-4 overflow-x-auto pb-2 snap-x snap-mandatory">
             {testimonials.map((t) => (
-              <div key={t.id} className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm flex flex-col gap-3">
+              <div key={t.id} className="min-w-[85%] sm:min-w-[62%] md:min-w-[48%] lg:min-w-[32%] snap-start rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm flex flex-col gap-3">
                 <div className="flex items-center gap-1">
                   {Array.from({ length: t.rating }).map((_, i) => (
                     <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                   ))}
                 </div>
-                <p className="text-slate-700 text-sm sm:text-base leading-relaxed flex-1">"{t.text}"</p>
+                <p className="text-slate-700 text-sm sm:text-base leading-relaxed flex-1">{t.text}</p>
                 <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
                   <div className="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-sm">
                     {t.name.charAt(0)}
@@ -388,22 +388,22 @@ export default function Home() {
           </div>
           <p className="text-center text-slate-500 text-sm sm:text-base mb-6 sm:mb-8">إجابات على أكثر الأسئلة التي يطرحها زوارنا</p>
 
-          <div className="max-w-3xl mx-auto flex flex-col gap-3">
+          <div className="grid grid-cols-2 gap-2 sm:gap-3">
             {faqs.map((faq) => (
               <div key={faq.id} className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
                 <button
                   type="button"
-                  className="w-full flex items-center justify-between px-4 sm:px-5 py-3 sm:py-4 text-right touch-manipulation"
+                  className="w-full flex items-center justify-between px-2.5 sm:px-3 py-2.5 sm:py-3 text-right touch-manipulation"
                   onClick={() => setOpenFaqId(openFaqId === faq.id ? null : faq.id)}
                 >
-                  <span className="font-bold text-slate-900 text-sm sm:text-base">{faq.question}</span>
+                  <span className="font-bold text-slate-900 text-xs sm:text-sm leading-5">{faq.question}</span>
                   {openFaqId === faq.id
-                    ? <ChevronUp className="w-5 h-5 text-emerald-600 shrink-0 mr-2" />
-                    : <ChevronDown className="w-5 h-5 text-slate-400 shrink-0 mr-2" />
+                    ? <ChevronUp className="w-4 h-4 text-emerald-600 shrink-0 mr-1" />
+                    : <ChevronDown className="w-4 h-4 text-slate-400 shrink-0 mr-1" />
                   }
                 </button>
                 {openFaqId === faq.id && (
-                  <div className="px-4 sm:px-5 pb-4 text-slate-600 text-sm sm:text-base leading-relaxed border-t border-slate-100 pt-3">
+                  <div className="px-2.5 sm:px-3 pb-3 text-slate-600 text-xs sm:text-sm leading-6 border-t border-slate-100 pt-2">
                     {faq.answer}
                   </div>
                 )}
