@@ -22,7 +22,7 @@ const mediaItems: MediaItem[] = [
   {
     id: "m1",
     title: "بيان إعلامي",
-    excerpt: "جمعية ابتسم تقدم خدمات طب الفم والأسنان للمواطنين القادمين من دول مجلس التعاون.",
+    excerpt: "جمعية بداية تقدم خدمات طب الفم والأسنان للمواطنين القادمين من دول مجلس التعاون.",
     image: "/1.jpg",
     date: "2026-03-01",
     type: "أخبار",
@@ -46,7 +46,7 @@ const mediaItems: MediaItem[] = [
 ];
 
 const partners = [
-  { id: "p1", name: "شريك النجاح", image: "/asr.png" },
+  { id: "p1", name: "وزارة الصحة", image: "/asr.png" },
 ];
 
 const stats = [
@@ -128,7 +128,7 @@ export default function Home() {
         <section ref={statsRef} className="rounded-xl md:rounded-2xl border border-slate-200 bg-white p-3 sm:p-4 md:p-6">
           <div className="mb-4 sm:mb-6 md:mb-8 flex items-center justify-center gap-2 sm:gap-4">
             <div className="h-px w-8 sm:w-16 md:w-20 lg:w-64 bg-slate-300" />
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900">ابتسم في ارقام</h2>
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900">بداية في ارقام</h2>
             <div className="h-px w-8 sm:w-16 md:w-20 lg:w-64 bg-slate-300" />
           </div>
 
