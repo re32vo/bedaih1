@@ -195,22 +195,12 @@ export default function Home() {
       return;
     }
 
-    addItem({
-      id: currentHeroProject.id,
-      title: currentHeroProject.title,
-      description: currentHeroProject.description,
-      image: currentHeroProject.image,
-      amount: numericAmount,
-      donationType: "single",
-      paymentMethod: 1,
-    });
-
     toast({
-      title: "تمت الإضافة للسلة",
-      description: "تم تحويلك لصفحة الدفع",
+      title: "تحويل لصفحة الدفع",
+      description: "سيتم الدفع لهذا المشروع فقط",
     });
 
-    setLocation("/checkout");
+    setLocation(`/checkout?mode=hero&projectId=${currentHeroProject.id}&amount=${numericAmount}`);
   };
 
   return (

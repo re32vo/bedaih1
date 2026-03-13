@@ -1429,11 +1429,11 @@ export async function registerRoutes(
   app.post("/api/donors/donation", async (req, res) => {
     try {
       const token = req.headers.authorization?.split(' ')[1];
-      const { email, amount, method, code } = req.body;
+      const { email, amount, method, code, name } = req.body;
 
       // Verify token if provided (for logged in donors)
       let donorEmail = email;
-      let donorName = "متبرع";
+      let donorName = (typeof name === 'string' && name.trim()) ? name.trim() : "متبرع";
       
       if (token) {
         const verifiedEmail = verifyToken(token);
@@ -1446,6 +1446,25 @@ export async function registerRoutes(
             donorName = donor.name || "متبرع";
           }
         }
+      }
+
+      const isAnonymousDonation = typeof donorEmail === 'string' && donorEmail.endsWith('@donation.local');
+
+      // Ensure donor record exists for dashboard/admin tracking
+      if (isAnonymousDonation) {
+        donorName = "فاعل خير";
+        await upsertDonor({
+          email: donorEmail,
+          name: donorName,
+          phone: "",
+          lastLogin: false,
+        });
+      } else if (donorEmail) {
+        await upsertDonor({
+          email: donorEmail,
+          name: donorName,
+          lastLogin: false,
+        });
       }
 
       // Save to Supabase
@@ -1469,8 +1488,8 @@ export async function registerRoutes(
         }
       });
 
-      // Send receipt email if not a guest
-      if (donorEmail !== 'guest@donation.local') {
+      // Send receipt email if not anonymous donation
+      if (!isAnonymousDonation) {
         try {
           await sendDonationReceipt(donorEmail, donorName, Number(amount), method, code);
         } catch (emailErr) {
