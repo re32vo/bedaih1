@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "wouter";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
@@ -68,6 +68,49 @@ const stats = [
   { id: "s7", title: "متطوعو الجمعية", value: 1141, icon: UserRound },
 ];
 
+const homeBanners = [
+  {
+    id: "b1",
+    title: "صدقتك اليوم تصنع فرقًا بكرة",
+    subtitle: "تبرع الآن وشاركنا أثر الخير للمستفيدين",
+    cta: "تبرع الآن",
+    href: "/donate",
+    bgClass: "from-emerald-500 to-teal-600",
+  },
+  {
+    id: "b2",
+    title: "مشاريع علاجية تنتظر دعمك",
+    subtitle: "اختر مشروعك وساهم في علاج الحالات المستحقة",
+    cta: "استعرض المشاريع",
+    href: "/donate/opportunities",
+    bgClass: "from-sky-500 to-cyan-600",
+  },
+  {
+    id: "b3",
+    title: "تبرع دوري.. أجر مستمر",
+    subtitle: "خيار سهل يضمن استمرارية العطاء كل شهر",
+    cta: "ابدأ التبرع الدوري",
+    href: "/donate/recurring",
+    bgClass: "from-indigo-500 to-blue-600",
+  },
+  {
+    id: "b4",
+    title: "خل تبرعك هدية لمن تحب",
+    subtitle: "أهدي صدقة باسم شخص عزيز عليك",
+    cta: "إهداء التبرع",
+    href: "/donate/tribute",
+    bgClass: "from-rose-500 to-orange-500",
+  },
+  {
+    id: "b5",
+    title: "شارك حملتنا القادمة",
+    subtitle: "أطلق حملتك وساهم في نشر الخير بشكل أوسع",
+    cta: "أطلق حملتك",
+    href: "/donate/campaign",
+    bgClass: "from-violet-500 to-fuchsia-600",
+  },
+];
+
 export default function Home() {
   const [, setLocation] = useLocation();
   const { addItem } = useCart();
@@ -86,6 +129,10 @@ export default function Home() {
   );
   const [currentPartnerIndex, setCurrentPartnerIndex] = useState(0);
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
+  const randomBanners = useMemo(() => {
+    const shuffled = [...homeBanners].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, 2);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -211,6 +258,27 @@ export default function Home() {
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section>
+          <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
+            {randomBanners.map((banner) => (
+              <div
+                key={banner.id}
+                className={`rounded-xl md:rounded-2xl bg-gradient-to-l ${banner.bgClass} p-4 sm:p-5 md:p-6 text-white shadow-lg`}
+              >
+                <h3 className="text-lg sm:text-xl md:text-2xl font-extrabold mb-2">{banner.title}</h3>
+                <p className="text-white/90 text-sm sm:text-base mb-4">{banner.subtitle}</p>
+                <Button
+                  type="button"
+                  onClick={() => setLocation(banner.href)}
+                  className="bg-white text-slate-900 hover:bg-slate-100 font-bold rounded-lg sm:rounded-xl h-10 px-5"
+                >
+                  {banner.cta}
+                </Button>
+              </div>
+            ))}
           </div>
         </section>
 
