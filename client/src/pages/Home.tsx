@@ -45,11 +45,6 @@ const mediaItems: MediaItem[] = [
   },
 ];
 
-const partners = [
-  { id: "p1", name: "السندس", image: "/asr.png" },
-  { id: "p2", name: "وزارة الصحة", image: "/oz.png" },
-];
-
 const stats = [
   { id: "s1", title: "خدمة علاجية", value: 39081, icon: HeartPulse },
   { id: "s2", title: "مستفيدو الجمعية", value: 40210, icon: TrendingUp },
@@ -254,18 +249,6 @@ export default function Home() {
             <Button type="button" className="rounded-lg sm:rounded-xl bg-sky-500 px-6 sm:px-8 text-white hover:bg-sky-600 text-sm sm:text-base h-10 sm:h-11 touch-manipulation" onClick={() => setLocation("/donate/opportunities")}>
               عرض المزيد
             </Button>
-          </div>
-        </section>
-
-        <section className="rounded-xl md:rounded-2xl border border-slate-200 bg-white p-3 sm:p-4 md:p-6 overflow-hidden">
-          <h2 className="mb-4 sm:mb-6 md:mb-8 text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-slate-900">شركاء النجاح</h2>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-2 sm:gap-4">
-            {partners.map((partner) => (
-              <div key={partner.id} className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-6 min-h-24 flex flex-col items-center justify-center shadow-sm gap-2">
-                <img src={partner.image} alt={partner.name} loading="lazy" className="h-12 w-full object-contain" />
-                <p className="text-center text-sm sm:text-base font-bold text-slate-600 leading-snug">{partner.name}</p>
-              </div>
-            ))}
           </div>
         </section>
 
