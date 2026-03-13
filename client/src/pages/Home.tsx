@@ -119,14 +119,6 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentHeroIndex((prev) => (prev + 1) % heroSlides.length);
-    }, 6000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
     setHeroAmount(String(heroQuickAmounts[0] || 100));
   }, [currentHeroIndex]);
 
