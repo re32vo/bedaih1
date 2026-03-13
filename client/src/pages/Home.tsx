@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
@@ -129,10 +129,6 @@ export default function Home() {
   );
   const [currentPartnerIndex, setCurrentPartnerIndex] = useState(0);
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
-  const randomBanners = useMemo(() => {
-    const shuffled = [...homeBanners].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, 2);
-  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -198,6 +194,27 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-slate-100 py-4 md:py-8" dir="rtl">
       <div className="container mx-auto space-y-6 px-3 sm:px-4 md:space-y-10 lg:space-y-14">
+        <section>
+          <div className="grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-2 xl:grid-cols-3">
+            {homeBanners.map((banner) => (
+              <div
+                key={banner.id}
+                className={`rounded-xl md:rounded-2xl bg-gradient-to-l ${banner.bgClass} p-4 sm:p-5 md:p-6 text-white shadow-lg`}
+              >
+                <h3 className="text-lg sm:text-xl md:text-2xl font-extrabold mb-2">{banner.title}</h3>
+                <p className="text-white/90 text-sm sm:text-base mb-4">{banner.subtitle}</p>
+                <Button
+                  type="button"
+                  onClick={() => setLocation(banner.href)}
+                  className="bg-white text-slate-900 hover:bg-slate-100 font-bold rounded-lg sm:rounded-xl h-10 px-5"
+                >
+                  {banner.cta}
+                </Button>
+              </div>
+            ))}
+          </div>
+        </section>
+
         <section ref={statsRef} className="rounded-xl md:rounded-2xl border border-slate-200 bg-white p-3 sm:p-4 md:p-6">
           <div className="mb-4 sm:mb-6 md:mb-8 flex items-center justify-center gap-2 sm:gap-4">
             <div className="h-px w-8 sm:w-16 md:w-20 lg:w-64 bg-slate-300" />
@@ -258,27 +275,6 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-
-        <section>
-          <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
-            {randomBanners.map((banner) => (
-              <div
-                key={banner.id}
-                className={`rounded-xl md:rounded-2xl bg-gradient-to-l ${banner.bgClass} p-4 sm:p-5 md:p-6 text-white shadow-lg`}
-              >
-                <h3 className="text-lg sm:text-xl md:text-2xl font-extrabold mb-2">{banner.title}</h3>
-                <p className="text-white/90 text-sm sm:text-base mb-4">{banner.subtitle}</p>
-                <Button
-                  type="button"
-                  onClick={() => setLocation(banner.href)}
-                  className="bg-white text-slate-900 hover:bg-slate-100 font-bold rounded-lg sm:rounded-xl h-10 px-5"
-                >
-                  {banner.cta}
-                </Button>
-              </div>
-            ))}
           </div>
         </section>
 
