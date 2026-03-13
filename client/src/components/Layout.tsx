@@ -94,10 +94,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen font-body flex flex-col rtl bg-slate-900 overflow-x-hidden" dir="rtl">
       <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 shadow-sm border-b border-slate-200 dark:border-slate-800 w-full">
-        <div className="relative container mx-auto px-3 sm:px-4 py-2.5 sm:py-3 flex items-center justify-between">
+        <div className="relative container mx-auto px-3 sm:px-4 py-2.5 sm:py-3 min-h-[76px] sm:min-h-[84px] flex items-center justify-between">
           <div className="md:hidden absolute left-3 top-1/2 -translate-y-1/2 z-20 flex items-center gap-2">
             <button
-              className="p-2 text-slate-900 dark:text-white bg-white/90 rounded-lg border border-slate-200 shadow-sm touch-manipulation"
+              className="p-2 text-white bg-slate-800 rounded-lg border border-slate-700 shadow-sm hover:bg-slate-700 touch-manipulation"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="فتح قائمة التصنيفات"
             >
