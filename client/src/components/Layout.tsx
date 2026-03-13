@@ -93,27 +93,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen font-body flex flex-col rtl bg-slate-900 overflow-x-hidden" dir="rtl">
-      <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 shadow-sm border-b border-slate-200 dark:border-slate-800 w-full">
-        <div className="relative container mx-auto px-3 sm:px-4 py-2.5 sm:py-3 min-h-[76px] sm:min-h-[84px] flex items-center justify-between">
-          <div className="md:hidden absolute left-3 top-1/2 -translate-y-1/2 z-20 flex items-center gap-2">
-            <button
-              className="p-2 text-white bg-slate-800 rounded-lg border border-slate-700 shadow-sm hover:bg-slate-700 touch-manipulation"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="فتح قائمة التصنيفات"
-            >
-              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-
+      <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 shadow-sm w-full">
+        {/* شريط الأدوات العلوي */}
+        <div className="border-b border-slate-200 dark:border-slate-800">
+          <div className="container mx-auto px-3 sm:px-4 py-1.5 flex items-center justify-between">
+            {/* يمين: ملف تعريفي / تسجيل دخول */}
+            <Link href={isDonorLoggedIn ? "/donor-dashboard" : "/donor-login"}>
+              <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-sm font-medium touch-manipulation border border-slate-200 dark:border-slate-700 transition-colors">
+                <User className="w-4 h-4" />
+                <span>{isDonorLoggedIn ? "الملف التعريفي" : "تسجيل الدخول"}</span>
+              </button>
+            </Link>
+            {/* يسار: السلة */}
             {location !== '/cart' && (
               <Link href="/cart">
-                <button
-                  className="relative overflow-visible bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full px-3 py-2 shadow-lg flex items-center gap-1.5 touch-manipulation"
-                  aria-label="الانتقال إلى السلة"
-                >
+                <button className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-sm font-semibold touch-manipulation shadow-sm transition-colors">
                   <ShoppingCart className="w-4 h-4" />
-                  <span className="text-xs font-bold">السلة</span>
+                  <span>السلة</span>
                   {getTotalItems() > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-extrabold rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center border-2 border-white leading-none">
+                    <span className="absolute -top-1 -left-1 bg-red-600 text-white text-[10px] font-extrabold rounded-full min-w-[16px] h-4 px-0.5 flex items-center justify-center border border-white leading-none">
                       {getTotalItems()}
                     </span>
                   )}
@@ -121,8 +119,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </Link>
             )}
           </div>
-
-          <Link href="/" className="absolute right-3 sm:right-4 md:static md:right-auto">
+        </div>
+        {/* الهيدر الرئيسي */}
+        <div className="container mx-auto px-3 sm:px-4 py-2.5 sm:py-3 min-h-[56px] sm:min-h-[64px] flex items-center justify-between border-b border-slate-200 dark:border-slate-800">
+          <Link href="/">
             <div className="flex items-center gap-2 sm:gap-3 cursor-pointer">
               <img src={logoImg} alt="شعار جمعية بداية" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
               <div className="flex flex-col">
@@ -256,42 +256,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
           </nav>
 
-          <div className="flex items-center gap-3">
-            {/* تم حذف زر تبديل الوضع */}
-
-            <Link href={isDonorLoggedIn ? "/donor-dashboard" : "/donor-login"}>
-              <Button className="hidden md:flex text-white text-sm font-bold rounded-full px-4 lg:px-5 h-9 lg:h-10 bg-slate-700 hover:bg-slate-600 touch-manipulation">
-                {isDonorLoggedIn ? (
-                  <>
-                    <User className="w-4 h-4 mr-2" />
-                    الملف التعريفي
-                  </>
-                ) : (
-                  <>
-                    <LogIn className="w-4 h-4 mr-2" />
-                    دخول المتبرع
-                  </>
-                )}
-              </Button>
-            </Link>
-
-            {/* زر السلة */}
-            <Link href="/cart">
-              <Button className="hidden md:flex items-center gap-2 text-white text-sm font-bold rounded-full px-4 lg:px-5 h-9 lg:h-10 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 shadow-md relative touch-manipulation">
-                <ShoppingCart className="w-5 h-5" />
-                السلة
-                {getTotalItems() > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-600 text-white text-sm font-extrabold rounded-full min-w-[24px] h-6 px-1.5 flex items-center justify-center shadow-lg border-2 border-white">
-                    {getTotalItems()}
-                  </span>
-                )}
-              </Button>
-            </Link>
-
+          <div className="flex items-center gap-2">
+            {/* زر القائمة للجوال */}
+            <button
+              className="md:hidden p-2 text-white bg-slate-800 rounded-lg border border-slate-700 shadow-sm hover:bg-slate-700 touch-manipulation"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="فتح قائمة التصنيفات"
+            >
+              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+            {/* زر تبرع للكمبيوتر */}
             <Button onClick={handleDonateClick} className="hidden md:flex text-white text-sm font-bold rounded-full px-4 lg:px-5 h-9 lg:h-10 bg-gradient-to-r from-primary to-secondary touch-manipulation">
               <Heart className="w-4 h-4 mr-2" /> تبرع الآن
             </Button>
-
           </div>
         </div>
       </header>
