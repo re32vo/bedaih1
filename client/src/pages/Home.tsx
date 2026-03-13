@@ -68,46 +68,22 @@ const stats = [
   { id: "s7", title: "متطوعو الجمعية", value: 1141, icon: UserRound },
 ];
 
-const homeBanners = [
+const heroSlides = [
   {
-    id: "b1",
-    title: "صدقتك اليوم تصنع فرقًا بكرة",
-    subtitle: "تبرع الآن وشاركنا أثر الخير للمستفيدين",
-    cta: "صفحة التبرع المباشر",
-    href: "/banner-donate",
-    bgClass: "from-emerald-500 to-teal-600",
+    id: "h1",
+    image: "/12344.png",
+    title: "بركاتك يبتسم",
+    subtitle: "ادفع زكاتك لعلاج الفقراء والمساكين",
+    options: ["سهم النور", "سهم البركة", "سهم الإحسان"],
+    defaultAmount: 35,
   },
   {
-    id: "b2",
-    title: "مشاريع علاجية تنتظر دعمك",
-    subtitle: "اختر مشروعك وساهم في علاج الحالات المستحقة",
-    cta: "استعرض المشاريع",
-    href: "/donate/opportunities",
-    bgClass: "from-sky-500 to-cyan-600",
-  },
-  {
-    id: "b3",
-    title: "تبرع دوري.. أجر مستمر",
-    subtitle: "خيار سهل يضمن استمرارية العطاء كل شهر",
-    cta: "ابدأ التبرع الدوري",
-    href: "/donate/recurring",
-    bgClass: "from-indigo-500 to-blue-600",
-  },
-  {
-    id: "b4",
-    title: "خل تبرعك هدية لمن تحب",
-    subtitle: "أهدي صدقة باسم شخص عزيز عليك",
-    cta: "إهداء التبرع",
-    href: "/donate/tribute",
-    bgClass: "from-rose-500 to-orange-500",
-  },
-  {
-    id: "b5",
-    title: "شارك حملتنا القادمة",
-    subtitle: "أطلق حملتك وساهم في نشر الخير بشكل أوسع",
-    cta: "أطلق حملتك",
-    href: "/donate/campaign",
-    bgClass: "from-violet-500 to-fuchsia-600",
+    id: "h2",
+    image: "/oz.png",
+    title: "خير الأعمال في خير الليالي",
+    subtitle: "العشر الأواخر",
+    options: ["سهم النور", "سهم البركة", "سهم الإحسان"],
+    defaultAmount: 35,
   },
 ];
 
@@ -129,6 +105,9 @@ export default function Home() {
   );
   const [currentPartnerIndex, setCurrentPartnerIndex] = useState(0);
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
+  const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
+  const [selectedHeroOption, setSelectedHeroOption] = useState(heroSlides[0].options[0]);
+  const [heroAmount, setHeroAmount] = useState(String(heroSlides[0].defaultAmount));
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -137,6 +116,20 @@ export default function Home() {
 
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentHeroIndex((prev) => (prev + 1) % heroSlides.length);
+    }, 6000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const currentSlide = heroSlides[currentHeroIndex];
+    setSelectedHeroOption(currentSlide.options[0]);
+    setHeroAmount(String(currentSlide.defaultAmount));
+  }, [currentHeroIndex]);
 
   const updateProjectAmount = (projectId: string, selected: number, custom: string = "") => {
     setProjectAmounts((prev) => ({ ...prev, [projectId]: { selected, custom } }));
@@ -191,26 +184,138 @@ export default function Home() {
     setCurrentTestimonialIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
 
+  const goToNextHero = () => {
+    setCurrentHeroIndex((prev) => (prev + 1) % heroSlides.length);
+  };
+
+  const goToPrevHero = () => {
+    setCurrentHeroIndex((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+  };
+
+  const donateFromHero = () => {
+    const currentSlide = heroSlides[currentHeroIndex];
+    const numericAmount = Number(heroAmount);
+
+    if (!numericAmount || numericAmount <= 0) {
+      toast({
+        title: "خطأ",
+        description: "حدد مبلغ زكاة صحيح",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    addItem({
+      id: `hero-${currentSlide.id}-${selectedHeroOption}`,
+      title: selectedHeroOption,
+      description: currentSlide.title,
+      image: currentSlide.image,
+      amount: numericAmount,
+      donationType: "quick",
+      paymentMethod: 1,
+    });
+
+    toast({
+      title: "تمت الإضافة للسلة",
+      description: "تم تحويلك لصفحة الدفع",
+    });
+
+    setLocation("/checkout");
+  };
+
   return (
     <div className="min-h-screen bg-slate-100 py-4 md:py-8" dir="rtl">
       <div className="container mx-auto space-y-6 px-3 sm:px-4 md:space-y-10 lg:space-y-14">
-        <section>
-          <div className="grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-2 xl:grid-cols-3">
-            {homeBanners.map((banner) => (
-              <div
-                key={banner.id}
-                className={`rounded-xl md:rounded-2xl bg-gradient-to-l ${banner.bgClass} p-4 sm:p-5 md:p-6 text-white shadow-lg`}
-              >
-                <h3 className="text-lg sm:text-xl md:text-2xl font-extrabold mb-2">{banner.title}</h3>
-                <p className="text-white/90 text-sm sm:text-base mb-4">{banner.subtitle}</p>
-                <Button
-                  type="button"
-                  onClick={() => setLocation(banner.href)}
-                  className="bg-white text-slate-900 hover:bg-slate-100 font-bold rounded-lg sm:rounded-xl h-10 px-5"
-                >
-                  {banner.cta}
-                </Button>
+        <section className="relative overflow-hidden rounded-xl md:rounded-2xl min-h-[440px] sm:min-h-[520px]">
+          <img
+            src={heroSlides[currentHeroIndex].image}
+            alt={heroSlides[currentHeroIndex].title}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-slate-900/25" />
+
+          <button
+            type="button"
+            onClick={goToPrevHero}
+            className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-white/75 text-slate-700 hover:bg-white flex items-center justify-center"
+            aria-label="السابق"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={goToNextHero}
+            className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-white/75 text-slate-700 hover:bg-white flex items-center justify-center"
+            aria-label="التالي"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+
+          <div className="relative z-10 min-h-[440px] sm:min-h-[520px] p-4 sm:p-6 md:p-8 flex items-center">
+            <div className="w-full flex flex-col lg:flex-row-reverse lg:items-center lg:justify-between gap-5 sm:gap-7">
+              <div className="text-white max-w-2xl">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-3">
+                  {heroSlides[currentHeroIndex].title}
+                </h1>
+                <p className="inline-block bg-sky-500/75 px-3 py-2 text-lg sm:text-2xl font-bold">
+                  {heroSlides[currentHeroIndex].subtitle}
+                </p>
               </div>
+
+              <div className="w-full max-w-[300px] rounded-xl bg-white/95 border border-white/70 p-3 sm:p-4 shadow-xl">
+                <p className="text-center text-sm sm:text-base font-extrabold text-slate-800 mb-2">{heroSlides[currentHeroIndex].title}</p>
+                <p className="text-center text-xs sm:text-sm text-slate-500 mb-3">{heroSlides[currentHeroIndex].subtitle}</p>
+
+                <div className="grid grid-cols-3 gap-1.5 mb-3">
+                  {heroSlides[currentHeroIndex].options.map((option) => (
+                    <button
+                      key={option}
+                      type="button"
+                      onClick={() => setSelectedHeroOption(option)}
+                      className={`rounded-md border px-1 py-1 text-[11px] sm:text-xs font-bold transition ${
+                        selectedHeroOption === option
+                          ? "border-sky-500 bg-sky-50 text-sky-700"
+                          : "border-slate-300 text-slate-700 hover:bg-slate-50"
+                      }`}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="relative mb-3">
+                  <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-500">ر.س</span>
+                  <Input
+                    value={heroAmount}
+                    onChange={(e) => setHeroAmount(e.target.value.replace(/[^0-9]/g, ""))}
+                    className="h-9 pr-10 text-center text-sm font-bold"
+                    inputMode="numeric"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <Button type="button" onClick={donateFromHero} className="h-9 text-xs sm:text-sm bg-sky-500 hover:bg-sky-600 text-white font-bold">
+                    تبرع
+                  </Button>
+                  <Button type="button" onClick={() => setLocation("/donate/opportunities")} className="h-9 text-xs sm:text-sm bg-indigo-900 hover:bg-indigo-800 text-white font-bold">
+                    تفاصيل المشروع
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5">
+            {heroSlides.map((slide, index) => (
+              <button
+                key={slide.id}
+                type="button"
+                onClick={() => setCurrentHeroIndex(index)}
+                className={`h-2.5 rounded-full transition-all ${
+                  index === currentHeroIndex ? "w-6 bg-white" : "w-2.5 bg-white/60 hover:bg-white/80"
+                }`}
+                aria-label={`الانتقال للبنر ${index + 1}`}
+              />
             ))}
           </div>
         </section>
