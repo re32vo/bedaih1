@@ -14,6 +14,18 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
+const assistanceTypeLabels: Record<string, string> = {
+  financial: "مساعدة مالية",
+  food: "سلة غذائية",
+  medical: "علاج ودواء",
+  housing: "ترميم منازل",
+  education: "دعم تعليمي",
+};
+
+function translateAssistanceType(value: string) {
+  return assistanceTypeLabels[value] || value;
+}
+
 interface Donor {
   id: number;
   email: string;
@@ -628,7 +640,7 @@ export default function DonorsManagement() {
                         <p className="text-xs text-slate-500">{new Date(item.createdAt).toLocaleDateString("ar-SA")}</p>
                       </td>
                       <td className="px-4 py-3 text-sm text-slate-700">{item.email}</td>
-                      <td className="px-4 py-3 text-sm text-slate-700">{item.assistanceType || "-"}</td>
+                      <td className="px-4 py-3 text-sm text-slate-700">{translateAssistanceType(item.assistanceType) || "-"}</td>
                       <td className="px-4 py-3 text-sm text-slate-700">
                         <span className={`inline-flex rounded-full px-2 py-1 text-xs font-bold ${item.status?.value === "approved" ? "bg-emerald-100 text-emerald-700" : item.status?.value === "rejected" ? "bg-red-100 text-red-700" : item.status?.value === "under_review" ? "bg-amber-100 text-amber-700" : item.status?.value === "completed" ? "bg-blue-100 text-blue-700" : "bg-slate-100 text-slate-700"}`}>
                           {item.status?.label || "قيد الانتظار"}
@@ -700,7 +712,7 @@ export default function DonorsManagement() {
                 {requestDetails.requestType === "volunteer" ? "المشروع" : "نوع المساعدة"}
               </p>
               <p className="font-semibold text-slate-900">
-                {requestDetails.requestType === "volunteer" ? requestDetails.item.opportunityTitle : requestDetails.item.assistanceType}
+                {requestDetails.requestType === "volunteer" ? requestDetails.item.opportunityTitle : translateAssistanceType(requestDetails.item.assistanceType)}
               </p>
             </div>
 
