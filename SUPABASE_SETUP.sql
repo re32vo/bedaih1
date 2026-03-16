@@ -1,7 +1,12 @@
--- إنشاء جداول قاعدة البيانات لمشروع bedaih1
--- شغل هذا الملف في Supabase SQL Editor
+-- ============================================================
+-- ملف الإعداد الكامل لـ Supabase - مشروع بديه
+-- شغّل هذا الملف كاملاً في Supabase SQL Editor
+-- تاريخ آخر تحديث: مارس 2026
+-- ============================================================
+-- قسم 1: إنشاء الجداول (آمن - لا يؤثر على البيانات الموجودة)
+-- ============================================================
 
--- جدول المتبرعين
+-- جدول المتبرعين / العملاء
 CREATE TABLE IF NOT EXISTS donors (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   email TEXT UNIQUE NOT NULL,
@@ -22,7 +27,7 @@ CREATE TABLE IF NOT EXISTS donations (
 );
 
 -- جدول المستفيدين
--- national_id بدون UNIQUE: نفس الشخص يقدر يسوي طلبات بأنواع مختلفة (قاعدة 30 يوم في الكود)
+-- ملاحظة: national_id بدون UNIQUE لأن نفس الشخص يقدر يقدم طلبات بأنواع مختلفة
 CREATE TABLE IF NOT EXISTS beneficiaries (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   full_name TEXT NOT NULL,
@@ -101,6 +106,7 @@ CREATE TABLE IF NOT EXISTS tokens (
 );
 
 -- جدول سجل التدقيق
+-- مهم جداً: تُخزَّن فيه حالات طلبات المتطوعين والمستفيدين (action = 'request_status_update')
 CREATE TABLE IF NOT EXISTS audit_log (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   action TEXT NOT NULL,
@@ -120,25 +126,76 @@ CREATE TABLE IF NOT EXISTS outgoing_emails (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- إنشاء الفهارس لتحسين الأداء
+-- ============================================================
+-- قسم 2: إزالة قيود UNIQUE القديمة (migrations)
+-- ============================================================
+
+-- إزالة UNIQUE عن national_id في المستفيدين
+-- (اللوجيك الآن في الكود: 30 يوم لكل نوع مساعدة)
+ALTER TABLE beneficiaries DROP CONSTRAINT IF EXISTS beneficiaries_national_id_key;
+
+-- إزالة أي unique قديم على email في الجداول التي تسمح بتعدد الطلبات
+DROP INDEX IF EXISTS idx_volunteers_email_unique;
+DROP INDEX IF EXISTS idx_contact_messages_email_unique;
+DROP INDEX IF EXISTS idx_job_applications_email_unique;
+
+-- ============================================================
+-- قسم 3: إنشاء الفهارس (لتسريع الاستعلامات)
+-- ============================================================
+
+-- donors
 CREATE INDEX IF NOT EXISTS idx_donors_email ON donors(email);
+
+-- donations
 CREATE INDEX IF NOT EXISTS idx_donations_email ON donations(email);
 CREATE INDEX IF NOT EXISTS idx_donations_created_at ON donations(created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_beneficiaries_created_at ON beneficiaries(created_at DESC);
+
+-- beneficiaries
 CREATE INDEX IF NOT EXISTS idx_beneficiaries_email ON beneficiaries(email);
+CREATE INDEX IF NOT EXISTS idx_beneficiaries_created_at ON beneficiaries(created_at DESC);
+-- فهرس مركب لقاعدة 30 يوم (national_id + نوع المساعدة)
 CREATE INDEX IF NOT EXISTS idx_beneficiaries_national_id_type ON beneficiaries(national_id, assistance_type, created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_job_applications_email ON job_applications(email);
-CREATE INDEX IF NOT EXISTS idx_job_applications_created_at ON job_applications(created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_contact_messages_email ON contact_messages(email);
-CREATE INDEX IF NOT EXISTS idx_contact_messages_created_at ON contact_messages(created_at DESC);
+
+-- volunteers
 CREATE INDEX IF NOT EXISTS idx_volunteers_email ON volunteers(email);
 CREATE INDEX IF NOT EXISTS idx_volunteers_created_at ON volunteers(created_at DESC);
+
+-- job_applications
+CREATE INDEX IF NOT EXISTS idx_job_applications_email ON job_applications(email);
+CREATE INDEX IF NOT EXISTS idx_job_applications_created_at ON job_applications(created_at DESC);
+
+-- contact_messages
+CREATE INDEX IF NOT EXISTS idx_contact_messages_email ON contact_messages(email);
+CREATE INDEX IF NOT EXISTS idx_contact_messages_created_at ON contact_messages(created_at DESC);
+
+-- employees
 CREATE INDEX IF NOT EXISTS idx_employees_email ON employees(email);
+
+-- otp_tokens
 CREATE INDEX IF NOT EXISTS idx_otp_tokens_email ON otp_tokens(email, expires_at);
+
+-- audit_log
 CREATE INDEX IF NOT EXISTS idx_audit_log_created_at ON audit_log(created_at DESC);
+-- فهرس لتسريع استعلامات حالات الطلبات
 CREATE INDEX IF NOT EXISTS idx_audit_log_action ON audit_log(action, created_at DESC);
+
+-- tokens
 CREATE INDEX IF NOT EXISTS idx_tokens_token ON tokens(token);
 CREATE INDEX IF NOT EXISTS idx_tokens_email ON tokens(email, expires_at);
 
--- ملاحظة: تم تعطيل RLS لأن الخادم يتعامل مع المصادقة
--- يمكن تفعيل RLS لاحقاً إذا لزم الأمر
+-- ============================================================
+-- قسم 4: تعطيل RLS (Row Level Security)
+-- الخادم يتحكم في الصلاحيات بنفسه
+-- ============================================================
+
+ALTER TABLE donors DISABLE ROW LEVEL SECURITY;
+ALTER TABLE donations DISABLE ROW LEVEL SECURITY;
+ALTER TABLE beneficiaries DISABLE ROW LEVEL SECURITY;
+ALTER TABLE job_applications DISABLE ROW LEVEL SECURITY;
+ALTER TABLE contact_messages DISABLE ROW LEVEL SECURITY;
+ALTER TABLE employees DISABLE ROW LEVEL SECURITY;
+ALTER TABLE volunteers DISABLE ROW LEVEL SECURITY;
+ALTER TABLE otp_tokens DISABLE ROW LEVEL SECURITY;
+ALTER TABLE tokens DISABLE ROW LEVEL SECURITY;
+ALTER TABLE audit_log DISABLE ROW LEVEL SECURITY;
+ALTER TABLE outgoing_emails DISABLE ROW LEVEL SECURITY;
