@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { LogOut, Users, Heart, Briefcase, Mail, CheckCircle, AlertCircle, Phone, MapPin, FileText, Calendar, RefreshCw, Search, Download, Bell, ChevronLeft, ChevronRight, Filter } from "lucide-react";
-import logoImg from "@/assets/logo.png";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -299,17 +298,7 @@ export default function Dashboard() {
   // ...existing code...
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="text-center">
-          <img 
-            src={logoImg} 
-            alt="شعار جمعية بداية" 
-            className="w-32 h-32 object-contain mx-auto animate-logo-pulse" 
-          />
-        </div>
-      </div>
-    );
+    return null;
   }
 
   if (!isAuthenticated) {

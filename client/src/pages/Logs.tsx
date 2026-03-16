@@ -7,7 +7,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table } from "@/components/ui/table";
 import { useLocation } from "wouter";
 import { FileText, Filter, RefreshCw, ShieldCheck, AlertCircle } from "lucide-react";
-import logoImg from "@/assets/logo.png";
 
 interface AuditEntry {
   id: string;
@@ -232,17 +231,7 @@ export default function Logs() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="text-center">
-          <img 
-            src={logoImg} 
-            alt="شعار جمعية بداية" 
-            className="w-32 h-32 object-contain mx-auto animate-logo-pulse" 
-          />
-        </div>
-      </div>
-    );
+    return null;
   }
 
   const isPresident = role === "president";

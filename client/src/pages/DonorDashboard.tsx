@@ -278,17 +278,7 @@ export default function DonorDashboard() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <img 
-            src={logoImg} 
-            alt="شعار جمعية بداية" 
-            className="w-32 h-32 object-contain mx-auto animate-logo-pulse" 
-          />
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (

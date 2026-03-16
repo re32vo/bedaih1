@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { Users, Edit2, Trash2, Search, X, Check, Gift, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import logoImg from "@/assets/logo.png";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -50,9 +49,7 @@ export default function DonorsManagement() {
         description: "يرجى تسجيل الدخول أولاً",
         variant: "destructive",
       });
-      setTimeout(() => {
-        window.location.href = "/login";
-      }, 1500);
+      window.location.href = "/login";
       return;
     }
 
@@ -86,9 +83,7 @@ export default function DonorsManagement() {
           description: "ليس لديك صلاحية إدارة المتبرعين",
           variant: "destructive",
         });
-        setTimeout(() => {
-          window.location.href = "/dashboard";
-        }, 1500);
+        window.location.href = "/dashboard";
         return;
       }
 
@@ -100,9 +95,7 @@ export default function DonorsManagement() {
         description: "فشل التحقق من الصلاحيات",
         variant: "destructive",
       });
-      setTimeout(() => {
-        window.location.href = "/login";
-      }, 1500);
+      window.location.href = "/login";
     }
   };
 
@@ -294,17 +287,7 @@ export default function DonorsManagement() {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-white">
-        <div className="text-center">
-          <img 
-            src={logoImg} 
-            alt="شعار جمعية بداية" 
-            className="w-32 h-32 object-contain mx-auto animate-logo-pulse" 
-          />
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (
