@@ -1582,6 +1582,7 @@ export async function registerRoutes(
         label: requestStatusLabels[status] || status,
         color: requestStatusColors[status] || "slate",
         note: details.note ? String(details.note) : "",
+        emailMessage: details.emailMessage ? String(details.emailMessage) : "",
         updatedBy: details.updatedByName ? String(details.updatedByName) : (details.updatedBy ? String(details.updatedBy) : ""),
         updatedAt: entry.timestamp,
       });
@@ -1610,6 +1611,7 @@ export async function registerRoutes(
         label: requestStatusLabels.pending,
         color: requestStatusColors.pending,
         note: "",
+        emailMessage: "",
         updatedBy: "",
         updatedAt: item.createdAt || new Date().toISOString(),
       },
@@ -2097,6 +2099,7 @@ export async function registerRoutes(
           label: requestStatusLabels[input.status],
           color: requestStatusColors[input.status],
           note: input.note || "",
+          emailMessage: input.emailMessage || "",
           updatedBy: employee.name,
           updatedAt: new Date().toISOString(),
         },

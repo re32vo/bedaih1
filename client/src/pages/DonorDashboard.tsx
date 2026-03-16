@@ -25,6 +25,7 @@ interface RequestStatus {
   label: string;
   color: string;
   note?: string;
+  emailMessage?: string;
   updatedBy?: string;
   updatedAt?: string;
 }
@@ -546,7 +547,8 @@ export default function DonorDashboard() {
                         <p className="text-sm text-slate-700 whitespace-pre-wrap">{item.experience || "لا توجد تفاصيل"}</p>
                         <div className="mt-2 text-xs text-slate-500">
                           <p>تاريخ الطلب: {item.createdAt ? new Date(item.createdAt).toLocaleDateString('ar-SA') : "-"}</p>
-                          {item.status?.note ? <p>ملاحظة الموظف: {item.status.note}</p> : null}
+                          {item.status?.note ? <p>عنوان الملاحظة: {item.status.note}</p> : null}
+                          {item.status?.emailMessage ? <p>نص ملاحظة الموظف: {item.status.emailMessage}</p> : null}
                         </div>
                       </div>
                     )) : (
@@ -568,7 +570,8 @@ export default function DonorDashboard() {
                         <p className="text-sm text-slate-700">{item.address || "لا يوجد عنوان"}</p>
                         <div className="mt-2 text-xs text-slate-500">
                           <p>تاريخ الطلب: {item.createdAt ? new Date(item.createdAt).toLocaleDateString('ar-SA') : "-"}</p>
-                          {item.status?.note ? <p>ملاحظة الموظف: {item.status.note}</p> : null}
+                          {item.status?.note ? <p>عنوان الملاحظة: {item.status.note}</p> : null}
+                          {item.status?.emailMessage ? <p>نص ملاحظة الموظف: {item.status.emailMessage}</p> : null}
                         </div>
                       </div>
                     )) : (

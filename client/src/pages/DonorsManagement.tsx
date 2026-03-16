@@ -729,22 +729,22 @@ export default function DonorsManagement() {
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">ملاحظة العميل</label>
+                <label className="mb-1 block text-sm font-medium text-slate-700">عنوان الملاحظة</label>
                 <input
                   value={requestDetails.note}
                   onChange={(e) => setRequestDetails({ ...requestDetails, note: e.target.value })}
-                  placeholder="هذه الملاحظة ستظهر للعميل داخل اللوحة"
+                  placeholder="اكتب عنوان الملاحظة الذي سيظهر للعميل"
                   className="w-full rounded border border-slate-300 px-3 py-2"
                 />
               </div>
             </div>
 
             <div className="mt-4">
-              <label className="mb-1 block text-sm font-medium text-slate-700">رسالة البريد للعميل</label>
+              <label className="mb-1 block text-sm font-medium text-slate-700">نص ملاحظة الموظف</label>
               <textarea
                 value={requestDetails.emailMessage}
                 onChange={(e) => setRequestDetails({ ...requestDetails, emailMessage: e.target.value })}
-                placeholder="إذا كتبت هنا، سيتم إرسال هذه الرسالة إلى بريد العميل مع حالة الطلب والملاحظة"
+                placeholder="اكتب النص الذي سيتم إرساله لبريد العميل مع حالة الطلب"
                 className="min-h-[120px] w-full rounded border border-slate-300 px-3 py-2"
               />
             </div>
