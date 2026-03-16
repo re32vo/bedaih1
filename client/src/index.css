@@ -210,6 +210,13 @@ select,
   user-select: text !important;
 }
 
+/* السماح بتحديد النص في لوحة تحكم الموظفين */
+.allow-text-select,
+.allow-text-select * {
+  -webkit-user-select: text !important;
+  user-select: text !important;
+}
+
 h3 {
   font-family: 'Cairo', Arial, sans-serif;
   font-weight: 700;
