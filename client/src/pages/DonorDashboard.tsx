@@ -51,7 +51,6 @@ export default function DonorDashboard() {
   const [volunteerRequests, setVolunteerRequests] = useState<VolunteerRequest[]>([]);
   const [beneficiaryRequests, setBeneficiaryRequests] = useState<BeneficiaryRequest[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeSection, setActiveSection] = useState<"donations" | "volunteers" | "beneficiaries">("donations");
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [verificationMode, setVerificationMode] = useState(false);
@@ -424,29 +423,23 @@ export default function DonorDashboard() {
               transition={{ delay: 0.4 }}
               className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 border border-slate-200"
             >
-              <div className="flex flex-wrap gap-2 mb-6">
-                <Button
-                  onClick={() => setActiveSection("donations")}
-                  className={activeSection === "donations" ? "bg-emerald-600 hover:bg-emerald-700 text-white" : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"}
-                >
-                  التبرعات
-                </Button>
-                <Button
-                  onClick={() => setActiveSection("volunteers")}
-                  className={activeSection === "volunteers" ? "bg-emerald-600 hover:bg-emerald-700 text-white" : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"}
-                >
-                  التطوع
-                </Button>
-                <Button
-                  onClick={() => setActiveSection("beneficiaries")}
-                  className={activeSection === "beneficiaries" ? "bg-emerald-600 hover:bg-emerald-700 text-white" : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"}
-                >
-                  المستفيدين
-                </Button>
+              <div className="grid gap-3 sm:grid-cols-3 mb-8">
+                <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+                  <p className="text-xs text-emerald-700">عدد التبرعات</p>
+                  <p className="mt-1 text-2xl font-black text-emerald-800">{donations.length}</p>
+                </div>
+                <div className="rounded-xl border border-sky-200 bg-sky-50 p-4">
+                  <p className="text-xs text-sky-700">طلبات التطوع</p>
+                  <p className="mt-1 text-2xl font-black text-sky-800">{volunteerRequests.length}</p>
+                </div>
+                <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
+                  <p className="text-xs text-amber-700">طلبات المستفيد</p>
+                  <p className="mt-1 text-2xl font-black text-amber-800">{beneficiaryRequests.length}</p>
+                </div>
               </div>
 
-              {activeSection === "donations" && (
-                <>
+              <div className="space-y-10">
+                <div>
                   <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
                     <Gift className="w-6 h-6 text-emerald-500" />
                     سجل التبرعات
@@ -504,11 +497,9 @@ export default function DonorDashboard() {
                       </div>
                     )}
                   </div>
-                </>
-              )}
+                </div>
 
-              {activeSection === "volunteers" && (
-                <>
+                <div>
                   <h2 className="text-2xl font-bold text-slate-900 mb-6">طلبات التطوع</h2>
                   <div className="space-y-4">
                     {volunteerRequests.length > 0 ? volunteerRequests.map((item) => (
@@ -529,11 +520,9 @@ export default function DonorDashboard() {
                       <p className="text-center text-slate-600 py-8">لا توجد طلبات تطوع مرتبطة بهذا البريد.</p>
                     )}
                   </div>
-                </>
-              )}
+                </div>
 
-              {activeSection === "beneficiaries" && (
-                <>
+                <div>
                   <h2 className="text-2xl font-bold text-slate-900 mb-6">طلبات المستفيد</h2>
                   <div className="space-y-4">
                     {beneficiaryRequests.length > 0 ? beneficiaryRequests.map((item) => (
@@ -554,8 +543,8 @@ export default function DonorDashboard() {
                       <p className="text-center text-slate-600 py-8">لا توجد طلبات مستفيد مرتبطة بهذا البريد.</p>
                     )}
                   </div>
-                </>
-              )}
+                </div>
+              </div>
             </motion.div>
           </div>
 
