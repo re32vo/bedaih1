@@ -60,6 +60,7 @@ interface VolunteerClientRequest {
 interface BeneficiaryClientRequest {
   id: string;
   fullName: string;
+  nationalId: string;
   email: string;
   phone: string;
   assistanceType: string;
@@ -621,6 +622,7 @@ export default function DonorsManagement() {
               <thead className="bg-slate-100 border-b border-slate-200">
                 <tr>
                   <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">الاسم</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">رقم الهوية</th>
                   <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">البريد</th>
                   <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">نوع المساعدة</th>
                   <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">الحالة</th>
@@ -630,7 +632,7 @@ export default function DonorsManagement() {
               <tbody className="divide-y divide-slate-200">
                 {beneficiaryRequests.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-4 py-8 text-center text-slate-500">لا توجد طلبات مستفيدين</td>
+                    <td colSpan={6} className="px-4 py-8 text-center text-slate-500">لا توجد طلبات مستفيدين</td>
                   </tr>
                 ) : beneficiaryRequests.map((item) => {
                   return (
@@ -639,6 +641,7 @@ export default function DonorsManagement() {
                         <p className="font-semibold">{item.fullName}</p>
                         <p className="text-xs text-slate-500">{new Date(item.createdAt).toLocaleDateString("ar-SA")}</p>
                       </td>
+                      <td className="px-4 py-3 text-sm text-slate-700">{item.nationalId || "-"}</td>
                       <td className="px-4 py-3 text-sm text-slate-700">{item.email}</td>
                       <td className="px-4 py-3 text-sm text-slate-700">{translateAssistanceType(item.assistanceType) || "-"}</td>
                       <td className="px-4 py-3 text-sm text-slate-700">
@@ -701,6 +704,12 @@ export default function DonorsManagement() {
                 <p className="text-xs text-slate-500 mb-1">رقم الجوال</p>
                 <p className="font-semibold text-slate-900">{requestDetails.item.phone}</p>
               </div>
+              {requestDetails.requestType === "beneficiary" && (
+                <div className="rounded-lg border border-slate-200 p-4">
+                  <p className="text-xs text-slate-500 mb-1">رقم الهوية</p>
+                  <p className="font-semibold text-slate-900">{requestDetails.item.nationalId || "-"}</p>
+                </div>
+              )}
               <div className="rounded-lg border border-slate-200 p-4">
                 <p className="text-xs text-slate-500 mb-1">تاريخ الطلب</p>
                 <p className="font-semibold text-slate-900">{new Date(requestDetails.item.createdAt).toLocaleString("ar-SA")}</p>
