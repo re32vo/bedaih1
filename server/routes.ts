@@ -218,6 +218,22 @@ export async function registerRoutes(
   app.post(api.volunteers.create.path, async (req, res) => {
     try {
       const input = api.volunteers.create.input.parse(req.body);
+
+      const existingClient = await getDonorByEmail(input.email);
+      if (!existingClient) {
+        return res.status(400).json({
+          message: "لا يمكن إرسال طلب التطوع بدون حساب في لوحة تحكم العملاء. أنشئ حساباً أولاً ثم أعد المحاولة.",
+        });
+      }
+
+      const normalizedClientPhone = String(existingClient.phone || "").replace(/\D/g, "");
+      const normalizedInputPhone = String(input.phone || "").replace(/\D/g, "");
+      if (!normalizedClientPhone || normalizedClientPhone !== normalizedInputPhone) {
+        return res.status(400).json({
+          message: "رقم الجوال في طلب التطوع يجب أن يطابق رقم الجوال المسجل في حساب العميل.",
+        });
+      }
+
       const volunteer = await createVolunteer(input);
       
       // Log audit entry
@@ -2017,9 +2033,23 @@ export async function registerRoutes(
         requestId: z.string().min(2),
         status: z.enum(REQUEST_STATUS_VALUES),
         note: z.string().max(500).optional(),
+        emailMessage: z.string().max(2000).optional(),
       });
 
       const input = schema.parse(req.body);
+
+      const [allVolunteers, allBeneficiaries] = await Promise.all([
+        getAllVolunteers(1000),
+        getAllBeneficiaries(1000),
+      ]);
+
+      const targetRequest = input.requestType === "volunteer"
+        ? allVolunteers.find((item: any) => String(item.id) === input.requestId)
+        : allBeneficiaries.find((item: any) => String(item.id) === input.requestId);
+
+      if (!targetRequest) {
+        return res.status(404).json({ message: "الطلب المطلوب غير موجود" });
+      }
 
       logAuditEntry({
         actor: `موظف: ${employee.name} (${empEmail})`,
@@ -2029,10 +2059,35 @@ export async function registerRoutes(
           requestId: input.requestId,
           status: input.status,
           note: input.note || "",
+          emailMessage: input.emailMessage || "",
           updatedBy: empEmail,
           updatedByName: employee.name,
         },
       });
+
+      const volunteerRequest = input.requestType === "volunteer" ? targetRequest as any : null;
+      const beneficiaryRequest = input.requestType === "beneficiary" ? targetRequest as any : null;
+      const requestLabel = input.requestType === "volunteer"
+        ? (volunteerRequest?.opportunityTitle || "طلب تطوع")
+        : (beneficiaryRequest?.assistanceType || "طلب مستفيد");
+      const clientName = input.requestType === "volunteer"
+        ? (volunteerRequest?.name || "العميل")
+        : (beneficiaryRequest?.fullName || "العميل");
+
+      await sendEmail(
+        targetRequest.email,
+        `تحديث حالة طلبك - ${requestStatusLabels[input.status]}`,
+        `<div style="font-family: Arial, sans-serif; direction: rtl;">
+          <h2>مرحباً ${escapeHtml(clientName)}</h2>
+          <p>تم تحديث حالة طلبك في جمعية بداية.</p>
+          <p><strong>نوع الطلب:</strong> ${escapeHtml(input.requestType === "volunteer" ? "تطوع" : "مستفيد")}</p>
+          <p><strong>تفاصيل الطلب:</strong> ${escapeHtml(requestLabel)}</p>
+          <p><strong>الحالة الجديدة:</strong> ${escapeHtml(requestStatusLabels[input.status])}</p>
+          ${input.note ? `<p><strong>ملاحظة الموظف:</strong> ${escapeHtml(input.note)}</p>` : ""}
+          ${input.emailMessage ? `<p><strong>رسالة إضافية:</strong> ${escapeHtml(input.emailMessage)}</p>` : ""}
+          <p>يمكنك مراجعة لوحة تحكم العميل لمتابعة آخر التحديثات.</p>
+        </div>`
+      );
 
       res.json({
         success: true,

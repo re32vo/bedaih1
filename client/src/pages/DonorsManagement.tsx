@@ -56,6 +56,23 @@ interface BeneficiaryClientRequest {
   status: RequestStatus;
 }
 
+type RequestDetailsState =
+  | {
+      requestType: "volunteer";
+      item: VolunteerClientRequest;
+      status: RequestStatus["value"];
+      note: string;
+      emailMessage: string;
+    }
+  | {
+      requestType: "beneficiary";
+      item: BeneficiaryClientRequest;
+      status: RequestStatus["value"];
+      note: string;
+      emailMessage: string;
+    }
+  | null;
+
 export default function DonorsManagement() {
   const [donors, setDonors] = useState<Donor[]>([]);
   const [filteredDonors, setFilteredDonors] = useState<Donor[]>([]);
@@ -69,8 +86,8 @@ export default function DonorsManagement() {
   const [activeTab, setActiveTab] = useState<"donors" | "volunteers" | "beneficiaries">("donors");
   const [volunteerRequests, setVolunteerRequests] = useState<VolunteerClientRequest[]>([]);
   const [beneficiaryRequests, setBeneficiaryRequests] = useState<BeneficiaryClientRequest[]>([]);
-  const [statusDrafts, setStatusDrafts] = useState<Record<string, { status: RequestStatus["value"]; note: string }>>({});
   const [updatingStatusKey, setUpdatingStatusKey] = useState<string | null>(null);
+  const [requestDetails, setRequestDetails] = useState<RequestDetailsState>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -199,27 +216,11 @@ export default function DonorsManagement() {
     }
   };
 
-  const getDraftKey = (requestType: "volunteer" | "beneficiary", requestId: string) => `${requestType}:${requestId}`;
-
-  const getStatusDraft = (
-    requestType: "volunteer" | "beneficiary",
-    requestId: string,
-    currentStatus: RequestStatus["value"],
-    currentNote?: string
-  ) => {
-    const key = getDraftKey(requestType, requestId);
-    return statusDrafts[key] || { status: currentStatus, note: currentNote || "" };
-  };
-
   const handleUpdateRequestStatus = async (
-    requestType: "volunteer" | "beneficiary",
-    requestId: string,
-    currentStatus: RequestStatus["value"],
-    currentNote?: string
+    details: NonNullable<RequestDetailsState>
   ) => {
     const token = sessionStorage.getItem("authToken");
-    const key = getDraftKey(requestType, requestId);
-    const draft = getStatusDraft(requestType, requestId, currentStatus, currentNote);
+    const key = `${details.requestType}:${details.item.id}`;
 
     try {
       setUpdatingStatusKey(key);
@@ -230,10 +231,11 @@ export default function DonorsManagement() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          requestType,
-          requestId,
-          status: draft.status,
-          note: draft.note,
+          requestType: details.requestType,
+          requestId: details.item.id,
+          status: details.status,
+          note: details.note,
+          emailMessage: details.emailMessage,
         }),
       });
 
@@ -244,10 +246,11 @@ export default function DonorsManagement() {
 
       toast({
         title: "تم تحديث الحالة",
-        description: "تم حفظ حالة الطلب بنجاح",
+        description: "تم حفظ حالة الطلب وإرسال التحديث للعميل بنجاح",
       });
 
       await fetchClientRequests();
+      setRequestDetails(null);
     } catch (error) {
       toast({
         title: "خطأ",
@@ -257,6 +260,10 @@ export default function DonorsManagement() {
     } finally {
       setUpdatingStatusKey(null);
     }
+  };
+
+  const openRequestDetails = (details: NonNullable<RequestDetailsState>) => {
+    setRequestDetails(details);
   };
 
   const handleEdit = (donor: Donor) => {
@@ -550,18 +557,15 @@ export default function DonorsManagement() {
                   <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">البريد</th>
                   <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">المشروع</th>
                   <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">الحالة</th>
-                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">ملاحظة</th>
                   <th className="px-4 py-3 text-center text-sm font-semibold text-slate-700">إجراء</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
                 {volunteerRequests.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="px-4 py-8 text-center text-slate-500">لا توجد طلبات تطوع</td>
+                    <td colSpan={5} className="px-4 py-8 text-center text-slate-500">لا توجد طلبات تطوع</td>
                   </tr>
                 ) : volunteerRequests.map((item) => {
-                  const key = getDraftKey("volunteer", item.id);
-                  const draft = getStatusDraft("volunteer", item.id, item.status?.value || "pending", item.status?.note);
                   return (
                     <tr key={item.id} className="hover:bg-slate-50 transition-colors align-top">
                       <td className="px-4 py-3 text-sm text-slate-900">
@@ -570,34 +574,23 @@ export default function DonorsManagement() {
                       </td>
                       <td className="px-4 py-3 text-sm text-slate-700">{item.email}</td>
                       <td className="px-4 py-3 text-sm text-slate-700">{item.opportunityTitle || "-"}</td>
-                      <td className="px-4 py-3">
-                        <select
-                          value={draft.status}
-                          onChange={(e) => setStatusDrafts((prev) => ({ ...prev, [key]: { ...draft, status: e.target.value as RequestStatus["value"] } }))}
-                          className="w-full rounded border border-slate-300 px-2 py-1 text-sm"
-                        >
-                          <option value="pending">قيد الانتظار</option>
-                          <option value="under_review">تحت المراجعة</option>
-                          <option value="approved">مقبول</option>
-                          <option value="rejected">مرفوض</option>
-                          <option value="completed">مكتمل</option>
-                        </select>
-                      </td>
-                      <td className="px-4 py-3">
-                        <input
-                          value={draft.note}
-                          onChange={(e) => setStatusDrafts((prev) => ({ ...prev, [key]: { ...draft, note: e.target.value } }))}
-                          placeholder="ملاحظة للعميل"
-                          className="w-full rounded border border-slate-300 px-2 py-1 text-sm"
-                        />
+                      <td className="px-4 py-3 text-sm text-slate-700">
+                        <span className={`inline-flex rounded-full px-2 py-1 text-xs font-bold ${item.status?.value === "approved" ? "bg-emerald-100 text-emerald-700" : item.status?.value === "rejected" ? "bg-red-100 text-red-700" : item.status?.value === "under_review" ? "bg-amber-100 text-amber-700" : item.status?.value === "completed" ? "bg-blue-100 text-blue-700" : "bg-slate-100 text-slate-700"}`}>
+                          {item.status?.label || "قيد الانتظار"}
+                        </span>
                       </td>
                       <td className="px-4 py-3 text-center">
                         <Button
-                          onClick={() => handleUpdateRequestStatus("volunteer", item.id, item.status?.value || "pending", item.status?.note)}
-                          disabled={updatingStatusKey === key}
-                          className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                          onClick={() => openRequestDetails({
+                            requestType: "volunteer",
+                            item,
+                            status: item.status?.value || "pending",
+                            note: item.status?.note || "",
+                            emailMessage: "",
+                          })}
+                          className="bg-slate-900 hover:bg-slate-800 text-white"
                         >
-                          {updatingStatusKey === key ? "جارٍ الحفظ..." : "حفظ"}
+                          عرض التفاصيل
                         </Button>
                       </td>
                     </tr>
@@ -619,18 +612,15 @@ export default function DonorsManagement() {
                   <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">البريد</th>
                   <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">نوع المساعدة</th>
                   <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">الحالة</th>
-                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">ملاحظة</th>
                   <th className="px-4 py-3 text-center text-sm font-semibold text-slate-700">إجراء</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
                 {beneficiaryRequests.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="px-4 py-8 text-center text-slate-500">لا توجد طلبات مستفيدين</td>
+                    <td colSpan={5} className="px-4 py-8 text-center text-slate-500">لا توجد طلبات مستفيدين</td>
                   </tr>
                 ) : beneficiaryRequests.map((item) => {
-                  const key = getDraftKey("beneficiary", item.id);
-                  const draft = getStatusDraft("beneficiary", item.id, item.status?.value || "pending", item.status?.note);
                   return (
                     <tr key={item.id} className="hover:bg-slate-50 transition-colors align-top">
                       <td className="px-4 py-3 text-sm text-slate-900">
@@ -639,34 +629,23 @@ export default function DonorsManagement() {
                       </td>
                       <td className="px-4 py-3 text-sm text-slate-700">{item.email}</td>
                       <td className="px-4 py-3 text-sm text-slate-700">{item.assistanceType || "-"}</td>
-                      <td className="px-4 py-3">
-                        <select
-                          value={draft.status}
-                          onChange={(e) => setStatusDrafts((prev) => ({ ...prev, [key]: { ...draft, status: e.target.value as RequestStatus["value"] } }))}
-                          className="w-full rounded border border-slate-300 px-2 py-1 text-sm"
-                        >
-                          <option value="pending">قيد الانتظار</option>
-                          <option value="under_review">تحت المراجعة</option>
-                          <option value="approved">مقبول</option>
-                          <option value="rejected">مرفوض</option>
-                          <option value="completed">مكتمل</option>
-                        </select>
-                      </td>
-                      <td className="px-4 py-3">
-                        <input
-                          value={draft.note}
-                          onChange={(e) => setStatusDrafts((prev) => ({ ...prev, [key]: { ...draft, note: e.target.value } }))}
-                          placeholder="ملاحظة للعميل"
-                          className="w-full rounded border border-slate-300 px-2 py-1 text-sm"
-                        />
+                      <td className="px-4 py-3 text-sm text-slate-700">
+                        <span className={`inline-flex rounded-full px-2 py-1 text-xs font-bold ${item.status?.value === "approved" ? "bg-emerald-100 text-emerald-700" : item.status?.value === "rejected" ? "bg-red-100 text-red-700" : item.status?.value === "under_review" ? "bg-amber-100 text-amber-700" : item.status?.value === "completed" ? "bg-blue-100 text-blue-700" : "bg-slate-100 text-slate-700"}`}>
+                          {item.status?.label || "قيد الانتظار"}
+                        </span>
                       </td>
                       <td className="px-4 py-3 text-center">
                         <Button
-                          onClick={() => handleUpdateRequestStatus("beneficiary", item.id, item.status?.value || "pending", item.status?.note)}
-                          disabled={updatingStatusKey === key}
-                          className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                          onClick={() => openRequestDetails({
+                            requestType: "beneficiary",
+                            item,
+                            status: item.status?.value || "pending",
+                            note: item.status?.note || "",
+                            emailMessage: "",
+                          })}
+                          className="bg-slate-900 hover:bg-slate-800 text-white"
                         >
-                          {updatingStatusKey === key ? "جارٍ الحفظ..." : "حفظ"}
+                          عرض التفاصيل
                         </Button>
                       </td>
                     </tr>
@@ -675,6 +654,112 @@ export default function DonorsManagement() {
               </tbody>
             </table>
           </div>
+        </div>
+      )}
+
+      {requestDetails && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-xl bg-white p-6"
+          >
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900">
+                  {requestDetails.requestType === "volunteer" ? "تفاصيل طلب التطوع" : "تفاصيل طلب المستفيد"}
+                </h2>
+                <p className="text-sm text-slate-500">
+                  {requestDetails.requestType === "volunteer" ? requestDetails.item.name : requestDetails.item.fullName}
+                </p>
+              </div>
+              <Button variant="outline" onClick={() => setRequestDetails(null)}>إغلاق</Button>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="rounded-lg border border-slate-200 p-4">
+                <p className="text-xs text-slate-500 mb-1">الاسم</p>
+                <p className="font-semibold text-slate-900">{requestDetails.requestType === "volunteer" ? requestDetails.item.name : requestDetails.item.fullName}</p>
+              </div>
+              <div className="rounded-lg border border-slate-200 p-4">
+                <p className="text-xs text-slate-500 mb-1">البريد الإلكتروني</p>
+                <p className="font-semibold text-slate-900">{requestDetails.item.email}</p>
+              </div>
+              <div className="rounded-lg border border-slate-200 p-4">
+                <p className="text-xs text-slate-500 mb-1">رقم الجوال</p>
+                <p className="font-semibold text-slate-900">{requestDetails.item.phone}</p>
+              </div>
+              <div className="rounded-lg border border-slate-200 p-4">
+                <p className="text-xs text-slate-500 mb-1">تاريخ الطلب</p>
+                <p className="font-semibold text-slate-900">{new Date(requestDetails.item.createdAt).toLocaleString("ar-SA")}</p>
+              </div>
+            </div>
+
+            <div className="mt-4 rounded-lg border border-slate-200 p-4">
+              <p className="text-xs text-slate-500 mb-1">
+                {requestDetails.requestType === "volunteer" ? "المشروع" : "نوع المساعدة"}
+              </p>
+              <p className="font-semibold text-slate-900">
+                {requestDetails.requestType === "volunteer" ? requestDetails.item.opportunityTitle : requestDetails.item.assistanceType}
+              </p>
+            </div>
+
+            <div className="mt-4 rounded-lg border border-slate-200 p-4">
+              <p className="text-xs text-slate-500 mb-1">
+                {requestDetails.requestType === "volunteer" ? "بيانات التطوع" : "العنوان / وصف الحالة"}
+              </p>
+              <p className="whitespace-pre-wrap text-slate-800">
+                {requestDetails.requestType === "volunteer" ? requestDetails.item.experience : requestDetails.item.address}
+              </p>
+            </div>
+
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-slate-700">حالة الطلب</label>
+                <select
+                  value={requestDetails.status}
+                  onChange={(e) => setRequestDetails({ ...requestDetails, status: e.target.value as RequestStatus["value"] })}
+                  className="w-full rounded border border-slate-300 px-3 py-2"
+                >
+                  <option value="pending">قيد الانتظار</option>
+                  <option value="under_review">تحت المراجعة</option>
+                  <option value="approved">مقبول</option>
+                  <option value="rejected">مرفوض</option>
+                  <option value="completed">مكتمل</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-slate-700">ملاحظة العميل</label>
+                <input
+                  value={requestDetails.note}
+                  onChange={(e) => setRequestDetails({ ...requestDetails, note: e.target.value })}
+                  placeholder="هذه الملاحظة ستظهر للعميل داخل اللوحة"
+                  className="w-full rounded border border-slate-300 px-3 py-2"
+                />
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <label className="mb-1 block text-sm font-medium text-slate-700">رسالة البريد للعميل</label>
+              <textarea
+                value={requestDetails.emailMessage}
+                onChange={(e) => setRequestDetails({ ...requestDetails, emailMessage: e.target.value })}
+                placeholder="إذا كتبت هنا، سيتم إرسال هذه الرسالة إلى بريد العميل مع حالة الطلب والملاحظة"
+                className="min-h-[120px] w-full rounded border border-slate-300 px-3 py-2"
+              />
+            </div>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <Button variant="outline" onClick={() => setRequestDetails(null)}>إلغاء</Button>
+              <Button
+                onClick={() => handleUpdateRequestStatus(requestDetails)}
+                disabled={updatingStatusKey === `${requestDetails.requestType}:${requestDetails.item.id}`}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white"
+              >
+                {updatingStatusKey === `${requestDetails.requestType}:${requestDetails.item.id}` ? "جارٍ الحفظ..." : "حفظ التحديث"}
+              </Button>
+            </div>
+          </motion.div>
         </div>
       )}
 
