@@ -23,7 +23,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => setIsMenuOpen(false), [location]);
 
-  const isEmployeePage = ["/dashboard", "/admin", "/login", "/logs"].includes(location);
+  const isEmployeePage = ["/dashboard", "/admin", "/login", "/logs", "/donors-management"].includes(location);
   const isDonorPage = ["/donor-dashboard", "/donor-login"].includes(location);
 
   const navLinks = [
