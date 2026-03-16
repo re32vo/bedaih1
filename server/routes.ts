@@ -119,6 +119,9 @@ export async function registerRoutes(
           field: err.errors[0].path.join('.'),
         });
       }
+      if (err instanceof Error) {
+        return res.status(400).json({ message: err.message });
+      }
       throw err;
     }
   });

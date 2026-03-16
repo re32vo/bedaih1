@@ -281,17 +281,24 @@ export async function createBeneficiary(beneficiary: any) {
   if (!supabase) {
     throw new Error('Supabase غير مهيأ - تحقق من SUPABASE_URL و SUPABASE_SERVICE_ROLE_KEY');
   }
-  
-  // التحقق من وجود الرقم الوطني مسبقاً
-  if (beneficiary.nationalId) {
-    const { data: existing, error: checkError } = await supabase
+
+  // التحقق من قاعدة 30 يوم: نفس رقم الهوية + نفس نوع المساعدة
+  if (beneficiary.nationalId && beneficiary.assistanceType) {
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+
+    const { data: recentSameType } = await supabase
       .from('beneficiaries')
-      .select('id')
+      .select('id, created_at')
       .eq('national_id', beneficiary.nationalId)
-      .maybeSingle();
-    
-    if (existing) {
-      throw new Error('الرقم الوطني مسجل بالفعل في النظام');
+      .eq('assistance_type', beneficiary.assistanceType)
+      .gte('created_at', thirtyDaysAgo)
+      .limit(1);
+
+    if (recentSameType && recentSameType.length > 0) {
+      const submittedAt = new Date(recentSameType[0].created_at);
+      const nextAllowed = new Date(submittedAt.getTime() + 30 * 24 * 60 * 60 * 1000);
+      const daysLeft = Math.ceil((nextAllowed.getTime() - Date.now()) / (24 * 60 * 60 * 1000));
+      throw new Error(`لقد قدّمت طلب لنفس نوع المساعدة مؤخراً. يمكنك إعادة الطلب بعد ${daysLeft} يوم`);
     }
   }
   
@@ -308,6 +315,10 @@ export async function createBeneficiary(beneficiary: any) {
     .select();
 
   if (error) {
+    // معالجة خطأ قيد unique على رقم الهوية (قبل تشغيل migration)
+    if ((error as any).code === '23505' || error.message?.includes('unique') || error.message?.includes('national_id')) {
+      throw new Error('لقد قدّمت طلباً بهذا النوع من المساعدة مؤخراً. يُرجى الانتظار 30 يوماً قبل إعادة الطلب بنفس النوع');
+    }
     throw new Error(`فشل حفظ طلب المستفيد: ${error.message}`);
   }
   if (!data || data.length === 0) {
