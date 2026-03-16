@@ -231,7 +231,14 @@ export default function Logs() {
   };
 
   if (loading) {
-    return null;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50" dir="rtl">
+        <div className="flex items-center gap-2 text-sm text-slate-600">
+          <RefreshCw className="h-4 w-4 animate-spin" />
+          جاري التحقق من الصلاحيات...
+        </div>
+      </div>
+    );
   }
 
   const isPresident = role === "president";

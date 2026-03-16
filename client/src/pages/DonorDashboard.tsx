@@ -57,6 +57,9 @@ export default function DonorDashboard() {
         return;
       }
 
+      // Stop blocking render once session token exists; data can stream in after.
+      setLoading(false);
+
       const res = await fetch('/api/donors/dashboard', {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -82,8 +85,6 @@ export default function DonorDashboard() {
         description: "فشل تحميل البيانات",
         variant: "destructive"
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -278,7 +279,11 @@ export default function DonorDashboard() {
   };
 
   if (loading) {
-    return null;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50" dir="rtl">
+        <p className="text-sm text-slate-600">جاري التحضير...</p>
+      </div>
+    );
   }
 
   return (

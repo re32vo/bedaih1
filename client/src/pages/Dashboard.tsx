@@ -91,7 +91,12 @@ export default function Dashboard() {
       setUserName(data.name || "");
       setUserEmail(data.email || "");
 
-      await Promise.all([fetchStats(token), fetchRecent(token)]);
+      // Render the dashboard immediately after token validation, then load data in background.
+      setLoading(false);
+      Promise.all([fetchStats(token), fetchRecent(token)]).catch(() => {
+        // Keep page visible with default values if one data request fails.
+      });
+      return;
     } catch (_err) {
       setIsAuthenticated(false);
       sessionStorage.removeItem("authToken");
@@ -298,7 +303,14 @@ export default function Dashboard() {
   // ...existing code...
 
   if (loading) {
-    return null;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50" dir="rtl">
+        <div className="flex items-center gap-2 text-sm text-slate-600">
+          <RefreshCw className="h-4 w-4 animate-spin" />
+          جاري التحقق من الجلسة...
+        </div>
+      </div>
+    );
   }
 
   if (!isAuthenticated) {

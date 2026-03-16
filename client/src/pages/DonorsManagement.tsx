@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Users, Edit2, Trash2, Search, X, Check, Gift, TrendingUp } from "lucide-react";
+import { Users, Edit2, Trash2, Search, X, Check, Gift, TrendingUp, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -287,7 +287,14 @@ export default function DonorsManagement() {
   };
 
   if (loading) {
-    return null;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50" dir="rtl">
+        <div className="flex items-center gap-2 text-sm text-slate-600">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          جاري تحميل بيانات المتبرعين...
+        </div>
+      </div>
+    );
   }
 
   return (
