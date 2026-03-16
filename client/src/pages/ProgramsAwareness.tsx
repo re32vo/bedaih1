@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import BeneficiaryRequestForm from "@/components/BeneficiaryRequestForm";
 import { BookOpen, Radio, Users, CheckCircle2 } from "lucide-react";
 
 export default function ProgramsAwareness() {
@@ -81,6 +82,17 @@ export default function ProgramsAwareness() {
             </ul>
           </CardContent>
         </Card>
+
+        <BeneficiaryRequestForm
+          title="استمارة مستفيد للبرامج التوعوية"
+          description="إذا كنت ترغب بالاستفادة من برامج التوعية أو التدريب أو الدعم المعرفي، عبئ البيانات التالية وسيتم فرز طلبك من فريق الجمعية."
+          assistanceOptions={[
+            { value: "education", label: "دعم تعليمي وتوعوي" },
+            { value: "financial", label: "دعم رسوم برامج تدريبية" },
+            { value: "food", label: "مساندة أسرية مرتبطة بالبرنامج" },
+            { value: "medical", label: "إحالة لبرنامج توعية صحية" },
+          ]}
+        />
       </div>
     </div>
   );

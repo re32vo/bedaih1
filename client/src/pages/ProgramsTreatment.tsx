@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import BeneficiaryRequestForm from "@/components/BeneficiaryRequestForm";
 import { Heart, Users, Target, TrendingUp } from "lucide-react";
 
 export default function ProgramsTreatment() {
@@ -86,6 +87,17 @@ export default function ProgramsTreatment() {
             </p>
           </CardContent>
         </Card>
+
+        <BeneficiaryRequestForm
+          title="استمارة مستفيد للبرامج العلاجية"
+          description="إذا كنت بحاجة إلى دعم علاجي أو صحي، عبئ النموذج التالي وسيتولى فريق الجمعية مراجعة الحالة والتواصل معك."
+          assistanceOptions={[
+            { value: "medical", label: "علاج ودواء" },
+            { value: "financial", label: "مساعدة مالية للعلاج" },
+            { value: "housing", label: "تجهيزات صحية منزلية" },
+            { value: "education", label: "تثقيف صحي وتأهيل" },
+          ]}
+        />
       </div>
     </div>
   );
