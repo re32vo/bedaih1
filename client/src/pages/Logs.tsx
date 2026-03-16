@@ -90,7 +90,7 @@ export default function Logs() {
     { label: "الطلبات الوظيفية", value: "create_job" },
     { label: "رسائل التواصل", value: "create_contact" },
     { label: "طلبات المتطوعين", value: "create_volunteer" },
-    { label: "إدارة المتبرعين", value: "update_donor" },
+    { label: "إدارة العملاء", value: "update_donor" },
     { label: "حذف متبرع", value: "delete_donor" },
   ];
 

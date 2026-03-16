@@ -429,8 +429,8 @@ export default function Dashboard() {
                   className="w-full lg:w-auto bg-black text-white hover:bg-gray-800 flex items-center gap-2 text-xs sm:text-sm h-10 sm:h-auto"
                 >
                   <Users className="w-3 h-3 sm:w-4 sm:h-4" />
-                  <span className="hidden sm:inline">إدارة المتبرعين</span>
-                  <span className="sm:hidden">متبرعين</span>
+                  <span className="hidden sm:inline">إدارة العملاء</span>
+                  <span className="sm:hidden">عملاء</span>
                 </Button>
               )}              {(userRole === 'president' || userPermissions.includes('audit:view')) && (
                 <Button

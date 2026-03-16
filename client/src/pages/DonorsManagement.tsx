@@ -25,6 +25,37 @@ interface Donor {
   totalDonations: number;
 }
 
+interface RequestStatus {
+  value: "pending" | "under_review" | "approved" | "rejected" | "completed";
+  label: string;
+  color: string;
+  note?: string;
+  updatedBy?: string;
+  updatedAt?: string;
+}
+
+interface VolunteerClientRequest {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  opportunityTitle: string;
+  experience: string;
+  createdAt: string;
+  status: RequestStatus;
+}
+
+interface BeneficiaryClientRequest {
+  id: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  assistanceType: string;
+  address: string;
+  createdAt: string;
+  status: RequestStatus;
+}
+
 export default function DonorsManagement() {
   const [donors, setDonors] = useState<Donor[]>([]);
   const [filteredDonors, setFilteredDonors] = useState<Donor[]>([]);
@@ -35,6 +66,11 @@ export default function DonorsManagement() {
   const [editForm, setEditForm] = useState({ name: "", phone: "", email: "" });
   const [verificationMode, setVerificationMode] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
+  const [activeTab, setActiveTab] = useState<"donors" | "volunteers" | "beneficiaries">("donors");
+  const [volunteerRequests, setVolunteerRequests] = useState<VolunteerClientRequest[]>([]);
+  const [beneficiaryRequests, setBeneficiaryRequests] = useState<BeneficiaryClientRequest[]>([]);
+  const [statusDrafts, setStatusDrafts] = useState<Record<string, { status: RequestStatus["value"]; note: string }>>({});
+  const [updatingStatusKey, setUpdatingStatusKey] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -80,15 +116,15 @@ export default function DonorsManagement() {
       if (!hasPermission) {
         toast({
           title: "غير مصرح",
-          description: "ليس لديك صلاحية إدارة المتبرعين",
+          description: "ليس لديك صلاحية إدارة العملاء",
           variant: "destructive",
         });
         window.location.href = "/dashboard";
         return;
       }
 
-      // If verified, fetch donors
-      fetchDonors();
+      // If verified, fetch clients data
+      await Promise.all([fetchDonors(), fetchClientRequests()]);
     } catch (error) {
       toast({
         title: "خطأ",
@@ -134,6 +170,92 @@ export default function DonorsManagement() {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchClientRequests = async () => {
+    try {
+      const token = sessionStorage.getItem("authToken");
+      const res = await fetch("/api/admin/clients/requests", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || "فشل جلب طلبات العملاء");
+      }
+
+      const data = await res.json();
+      setVolunteerRequests(Array.isArray(data.volunteers) ? data.volunteers : []);
+      setBeneficiaryRequests(Array.isArray(data.beneficiaries) ? data.beneficiaries : []);
+    } catch (error) {
+      toast({
+        title: "خطأ",
+        description: error instanceof Error ? error.message : "فشل تحميل طلبات العملاء",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const getDraftKey = (requestType: "volunteer" | "beneficiary", requestId: string) => `${requestType}:${requestId}`;
+
+  const getStatusDraft = (
+    requestType: "volunteer" | "beneficiary",
+    requestId: string,
+    currentStatus: RequestStatus["value"],
+    currentNote?: string
+  ) => {
+    const key = getDraftKey(requestType, requestId);
+    return statusDrafts[key] || { status: currentStatus, note: currentNote || "" };
+  };
+
+  const handleUpdateRequestStatus = async (
+    requestType: "volunteer" | "beneficiary",
+    requestId: string,
+    currentStatus: RequestStatus["value"],
+    currentNote?: string
+  ) => {
+    const token = sessionStorage.getItem("authToken");
+    const key = getDraftKey(requestType, requestId);
+    const draft = getStatusDraft(requestType, requestId, currentStatus, currentNote);
+
+    try {
+      setUpdatingStatusKey(key);
+      const res = await fetch("/api/admin/clients/requests/status", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          requestType,
+          requestId,
+          status: draft.status,
+          note: draft.note,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || "فشل تحديث حالة الطلب");
+      }
+
+      toast({
+        title: "تم تحديث الحالة",
+        description: "تم حفظ حالة الطلب بنجاح",
+      });
+
+      await fetchClientRequests();
+    } catch (error) {
+      toast({
+        title: "خطأ",
+        description: error instanceof Error ? error.message : "فشل تحديث الحالة",
+        variant: "destructive",
+      });
+    } finally {
+      setUpdatingStatusKey(null);
     }
   };
 
@@ -303,9 +425,9 @@ export default function DonorsManagement() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <Users className="w-8 h-8 text-blue-600" />
-          <h1 className="text-3xl font-bold text-slate-900">إدارة المتبرعين</h1>
+          <h1 className="text-3xl font-bold text-slate-900">إدارة العملاء</h1>
         </div>
-        <p className="text-slate-600">عرض وتعديل وحذف حسابات المتبرعين</p>
+        <p className="text-slate-600">إدارة المتبرعين والمتطوعين والمستفيدين وحالات الطلبات</p>
         <div className="mt-4 w-full lg:w-auto">
           <Button
             className="bg-black hover:bg-gray-800 text-white w-full lg:w-auto"
@@ -316,85 +438,245 @@ export default function DonorsManagement() {
         </div>
       </div>
 
+      <div className="mb-6 flex flex-wrap gap-2">
+        <Button
+          onClick={() => setActiveTab("donors")}
+          className={activeTab === "donors" ? "bg-black text-white hover:bg-gray-800" : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"}
+        >
+          المتبرعين
+        </Button>
+        <Button
+          onClick={() => setActiveTab("volunteers")}
+          className={activeTab === "volunteers" ? "bg-black text-white hover:bg-gray-800" : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"}
+        >
+          المتطوعين
+        </Button>
+        <Button
+          onClick={() => setActiveTab("beneficiaries")}
+          className={activeTab === "beneficiaries" ? "bg-black text-white hover:bg-gray-800" : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"}
+        >
+          المستفيدين
+        </Button>
+      </div>
+
       {/* Search */}
-      <div className="mb-6">
+      <div className={`mb-6 ${activeTab !== "donors" ? "hidden" : ""}`}>
         <div className="relative">
           <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="ابحث بالاسم أو البريد أو الهاتف..."
+            placeholder="ابحث في المتبرعين بالاسم أو البريد أو الهاتف..."
             className="w-full pr-10 pl-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
       </div>
 
-      {/* Donors Table */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-slate-100 border-b border-slate-200">
-              <tr>
-                <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">الاسم</th>
-                <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">البريد الإلكتروني</th>
-                <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">الهاتف</th>
-                <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">التبرعات</th>
-                <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">المبلغ الكلي</th>
-                <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">تاريخ التسجيل</th>
-                <th className="px-4 py-3 text-center text-sm font-semibold text-slate-700">الإجراءات</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-200">
-              {filteredDonors.length === 0 ? (
+      {activeTab === "donors" && (
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-slate-100 border-b border-slate-200">
                 <tr>
-                  <td colSpan={7} className="px-4 py-8 text-center text-slate-500">
-                    لا توجد نتائج
-                  </td>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">الاسم</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">البريد الإلكتروني</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">الهاتف</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">التبرعات</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">المبلغ الكلي</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">تاريخ التسجيل</th>
+                  <th className="px-4 py-3 text-center text-sm font-semibold text-slate-700">الإجراءات</th>
                 </tr>
-              ) : (
-                filteredDonors.map((donor) => (
-                  <motion.tr
-                    key={donor.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="hover:bg-slate-50 transition-colors"
-                  >
-                    <td className="px-4 py-3 text-sm font-medium text-slate-900">{donor.name}</td>
-                    <td className="px-4 py-3 text-sm text-slate-600">{donor.email}</td>
-                    <td className="px-4 py-3 text-sm text-slate-600">{donor.phone}</td>
-                    <td className="px-4 py-3 text-sm text-slate-600">{donor.donationsCount}</td>
-                    <td className="px-4 py-3 text-sm font-semibold text-green-600">
-                      {donor.totalDonations.toLocaleString()} ر.س
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                {filteredDonors.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="px-4 py-8 text-center text-slate-500">
+                      لا توجد نتائج
                     </td>
-                    <td className="px-4 py-3 text-sm text-slate-600">
-                      {new Date(donor.created_at).toLocaleDateString("ar-SA")}
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center justify-center gap-2">
-                        <button
-                          onClick={() => handleEdit(donor)}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                          title="تعديل"
-                        >
-                          <Edit2 className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => setDeletingDonor(donor)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                          title="حذف"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </motion.tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                  </tr>
+                ) : (
+                  filteredDonors.map((donor) => (
+                    <motion.tr
+                      key={donor.id}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="hover:bg-slate-50 transition-colors"
+                    >
+                      <td className="px-4 py-3 text-sm font-medium text-slate-900">{donor.name}</td>
+                      <td className="px-4 py-3 text-sm text-slate-600">{donor.email}</td>
+                      <td className="px-4 py-3 text-sm text-slate-600">{donor.phone}</td>
+                      <td className="px-4 py-3 text-sm text-slate-600">{donor.donationsCount}</td>
+                      <td className="px-4 py-3 text-sm font-semibold text-green-600">
+                        {donor.totalDonations.toLocaleString()} ر.س
+                      </td>
+                      <td className="px-4 py-3 text-sm text-slate-600">
+                        {new Date(donor.created_at).toLocaleDateString("ar-SA")}
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center justify-center gap-2">
+                          <button
+                            onClick={() => handleEdit(donor)}
+                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            title="تعديل"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => setDeletingDonor(donor)}
+                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            title="حذف"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </motion.tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      )}
+
+      {activeTab === "volunteers" && (
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-slate-100 border-b border-slate-200">
+                <tr>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">الاسم</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">البريد</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">المشروع</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">الحالة</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">ملاحظة</th>
+                  <th className="px-4 py-3 text-center text-sm font-semibold text-slate-700">إجراء</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                {volunteerRequests.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="px-4 py-8 text-center text-slate-500">لا توجد طلبات تطوع</td>
+                  </tr>
+                ) : volunteerRequests.map((item) => {
+                  const key = getDraftKey("volunteer", item.id);
+                  const draft = getStatusDraft("volunteer", item.id, item.status?.value || "pending", item.status?.note);
+                  return (
+                    <tr key={item.id} className="hover:bg-slate-50 transition-colors align-top">
+                      <td className="px-4 py-3 text-sm text-slate-900">
+                        <p className="font-semibold">{item.name}</p>
+                        <p className="text-xs text-slate-500">{new Date(item.createdAt).toLocaleDateString("ar-SA")}</p>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-slate-700">{item.email}</td>
+                      <td className="px-4 py-3 text-sm text-slate-700">{item.opportunityTitle || "-"}</td>
+                      <td className="px-4 py-3">
+                        <select
+                          value={draft.status}
+                          onChange={(e) => setStatusDrafts((prev) => ({ ...prev, [key]: { ...draft, status: e.target.value as RequestStatus["value"] } }))}
+                          className="w-full rounded border border-slate-300 px-2 py-1 text-sm"
+                        >
+                          <option value="pending">قيد الانتظار</option>
+                          <option value="under_review">تحت المراجعة</option>
+                          <option value="approved">مقبول</option>
+                          <option value="rejected">مرفوض</option>
+                          <option value="completed">مكتمل</option>
+                        </select>
+                      </td>
+                      <td className="px-4 py-3">
+                        <input
+                          value={draft.note}
+                          onChange={(e) => setStatusDrafts((prev) => ({ ...prev, [key]: { ...draft, note: e.target.value } }))}
+                          placeholder="ملاحظة للعميل"
+                          className="w-full rounded border border-slate-300 px-2 py-1 text-sm"
+                        />
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        <Button
+                          onClick={() => handleUpdateRequestStatus("volunteer", item.id, item.status?.value || "pending", item.status?.note)}
+                          disabled={updatingStatusKey === key}
+                          className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                        >
+                          {updatingStatusKey === key ? "جارٍ الحفظ..." : "حفظ"}
+                        </Button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {activeTab === "beneficiaries" && (
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-slate-100 border-b border-slate-200">
+                <tr>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">الاسم</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">البريد</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">نوع المساعدة</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">الحالة</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">ملاحظة</th>
+                  <th className="px-4 py-3 text-center text-sm font-semibold text-slate-700">إجراء</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                {beneficiaryRequests.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="px-4 py-8 text-center text-slate-500">لا توجد طلبات مستفيدين</td>
+                  </tr>
+                ) : beneficiaryRequests.map((item) => {
+                  const key = getDraftKey("beneficiary", item.id);
+                  const draft = getStatusDraft("beneficiary", item.id, item.status?.value || "pending", item.status?.note);
+                  return (
+                    <tr key={item.id} className="hover:bg-slate-50 transition-colors align-top">
+                      <td className="px-4 py-3 text-sm text-slate-900">
+                        <p className="font-semibold">{item.fullName}</p>
+                        <p className="text-xs text-slate-500">{new Date(item.createdAt).toLocaleDateString("ar-SA")}</p>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-slate-700">{item.email}</td>
+                      <td className="px-4 py-3 text-sm text-slate-700">{item.assistanceType || "-"}</td>
+                      <td className="px-4 py-3">
+                        <select
+                          value={draft.status}
+                          onChange={(e) => setStatusDrafts((prev) => ({ ...prev, [key]: { ...draft, status: e.target.value as RequestStatus["value"] } }))}
+                          className="w-full rounded border border-slate-300 px-2 py-1 text-sm"
+                        >
+                          <option value="pending">قيد الانتظار</option>
+                          <option value="under_review">تحت المراجعة</option>
+                          <option value="approved">مقبول</option>
+                          <option value="rejected">مرفوض</option>
+                          <option value="completed">مكتمل</option>
+                        </select>
+                      </td>
+                      <td className="px-4 py-3">
+                        <input
+                          value={draft.note}
+                          onChange={(e) => setStatusDrafts((prev) => ({ ...prev, [key]: { ...draft, note: e.target.value } }))}
+                          placeholder="ملاحظة للعميل"
+                          className="w-full rounded border border-slate-300 px-2 py-1 text-sm"
+                        />
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        <Button
+                          onClick={() => handleUpdateRequestStatus("beneficiary", item.id, item.status?.value || "pending", item.status?.note)}
+                          disabled={updatingStatusKey === key}
+                          className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                        >
+                          {updatingStatusKey === key ? "جارٍ الحفظ..." : "حفظ"}
+                        </Button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
       {/* Edit Dialog */}
       {editingDonor && (

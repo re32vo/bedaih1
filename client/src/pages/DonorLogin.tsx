@@ -161,7 +161,7 @@ export default function DonorLogin() {
         localStorage.setItem("donorEmail", formData.email.trim().toLowerCase());
       }
 
-      setTimeout(() => setLocation('/donor-dashboard?login=true'), 500);
+      setLocation('/donor-dashboard?login=true');
     } catch (error) {
       toast({
         title: "خطأ",

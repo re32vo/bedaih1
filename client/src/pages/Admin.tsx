@@ -30,7 +30,7 @@ const AVAILABLE_PERMISSIONS = [
   { id: "employees:add", label: "إضافة موظفين جدد" },
   { id: "employees:remove", label: "حذف موظفين" },
   { id: "employees:edit", label: "تعديل بيانات الموظفين" },
-  { id: "manage_donors", label: "إدارة المتبرعين" },
+  { id: "manage_donors", label: "إدارة العملاء" },
   { id: "audit:view", label: "عرض سجلات النظام" },
 ];
 

@@ -459,7 +459,7 @@ export default function Donate() {
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0" />
-                  <span>حفظ سجل تبرعاتك في لوحة المتبرعين</span>
+                  <span>حفظ سجل تبرعاتك في لوحة تحكم العميل</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0" />

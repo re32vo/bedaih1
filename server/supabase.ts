@@ -356,6 +356,65 @@ export async function getRecentBeneficiaries(limit = 10) {
   }
 }
 
+export async function getBeneficiariesByEmail(email: string, limit = 50) {
+  try {
+    if (!supabase) return [];
+
+    const { data } = await supabase
+      .from('beneficiaries')
+      .select('*')
+      .eq('email', normalizeEmail(email))
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (!data) return [];
+
+    return data.map((item: any) => ({
+      id: String(item.id || ''),
+      fullName: String(item.full_name || ''),
+      nationalId: String(item.national_id || ''),
+      address: String(item.address || ''),
+      phone: String(item.phone || ''),
+      email: String(item.email || ''),
+      assistanceType: String(item.assistance_type || ''),
+      createdAt: String(item.created_at || ''),
+      type: 'beneficiary'
+    }));
+  } catch (err) {
+    console.error("Error in getBeneficiariesByEmail:", err);
+    return [];
+  }
+}
+
+export async function getAllBeneficiaries(limit = 500) {
+  try {
+    if (!supabase) return [];
+
+    const { data } = await supabase
+      .from('beneficiaries')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (!data) return [];
+
+    return data.map((item: any) => ({
+      id: String(item.id || ''),
+      fullName: String(item.full_name || ''),
+      nationalId: String(item.national_id || ''),
+      address: String(item.address || ''),
+      phone: String(item.phone || ''),
+      email: String(item.email || ''),
+      assistanceType: String(item.assistance_type || ''),
+      createdAt: String(item.created_at || ''),
+      type: 'beneficiary'
+    }));
+  } catch (err) {
+    console.error("Error in getAllBeneficiaries:", err);
+    return [];
+  }
+}
+
 export async function createJobApplication(application: any) {
   if (!supabase) {
     throw new Error('Supabase غير مهيأ - تحقق من SUPABASE_URL و SUPABASE_SERVICE_ROLE_KEY');
@@ -546,6 +605,63 @@ export async function getRecentVolunteers(limit = 10) {
     }));
   } catch (err) {
     console.error("Error in getRecentVolunteers:", err);
+    return [];
+  }
+}
+
+export async function getVolunteersByEmail(email: string, limit = 50) {
+  try {
+    if (!supabase) return [];
+
+    const { data } = await supabase
+      .from('volunteers')
+      .select('*')
+      .eq('email', normalizeEmail(email))
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (!data) return [];
+
+    return data.map((item: any) => ({
+      id: String(item.id || ''),
+      name: String(item.full_name || ''),
+      email: String(item.email || ''),
+      phone: String(item.phone || ''),
+      experience: String(item.skills || ''),
+      opportunityTitle: String(item.availability || ''),
+      createdAt: String(item.created_at || ''),
+      type: 'volunteer'
+    }));
+  } catch (err) {
+    console.error("Error in getVolunteersByEmail:", err);
+    return [];
+  }
+}
+
+export async function getAllVolunteers(limit = 500) {
+  try {
+    if (!supabase) return [];
+
+    const { data } = await supabase
+      .from('volunteers')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (!data) return [];
+
+    return data.map((item: any) => ({
+      id: String(item.id || ''),
+      name: String(item.full_name || ''),
+      email: String(item.email || ''),
+      phone: String(item.phone || ''),
+      experience: String(item.skills || ''),
+      opportunityTitle: String(item.availability || ''),
+      createdAt: String(item.created_at || ''),
+      type: 'volunteer'
+    }));
+  } catch (err) {
+    console.error("Error in getAllVolunteers:", err);
     return [];
   }
 }

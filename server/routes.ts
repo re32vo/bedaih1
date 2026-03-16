@@ -38,6 +38,10 @@ import {
   createVolunteer,
   getVolunteersCount,
   getRecentVolunteers,
+  getVolunteersByEmail,
+  getAllVolunteers,
+  getBeneficiariesByEmail,
+  getAllBeneficiaries,
   getEmployeeByEmail,
   getAllEmployees,
   createEmployee,
@@ -234,7 +238,7 @@ export async function registerRoutes(
         "شكراً لرغبتك بالتطوع",
         `<div style="font-family: Arial, sans-serif; direction: rtl;">
           <h2>مرحباً ${input.name}</h2>
-          <p>شكراً لك على اهتمامك بالتطوع معنا في جمعية بَدَائِح الخيرية.</p>
+          <p>شكراً لك على اهتمامك بالتطوع معنا في جمعية بداية الخيرية.</p>
           <p>تم استقبال طلبك بنجاح وسنتواصل معك قريباً.</p>
           <p>بارك الله فيك</p>
         </div>`
@@ -1517,7 +1521,86 @@ export async function registerRoutes(
     }
   });
 
-  // Get donor dashboard data (profile + donations)
+  const REQUEST_STATUS_ACTION = "request_status_update";
+  const REQUEST_STATUS_VALUES = ["pending", "under_review", "approved", "rejected", "completed"] as const;
+
+  const requestStatusLabels: Record<string, string> = {
+    pending: "قيد الانتظار",
+    under_review: "تحت المراجعة",
+    approved: "مقبول",
+    rejected: "مرفوض",
+    completed: "مكتمل",
+  };
+
+  const requestStatusColors: Record<string, string> = {
+    pending: "slate",
+    under_review: "amber",
+    approved: "green",
+    rejected: "red",
+    completed: "blue",
+  };
+
+  function getRequestStatusKey(requestType: string, requestId: string) {
+    return `${requestType}:${requestId}`;
+  }
+
+  async function getLatestRequestStatuses() {
+    const entries = await getAuditEntries(5000);
+    const statusMap = new Map<string, any>();
+
+    for (const entry of entries) {
+      if (entry.action !== REQUEST_STATUS_ACTION) continue;
+
+      const details = (entry.details || {}) as Record<string, any>;
+      const requestType = String(details.requestType || "");
+      const requestId = String(details.requestId || "");
+      const status = String(details.status || "");
+
+      if (!requestType || !requestId || !status) continue;
+
+      const key = getRequestStatusKey(requestType, requestId);
+      if (statusMap.has(key)) continue;
+
+      statusMap.set(key, {
+        value: status,
+        label: requestStatusLabels[status] || status,
+        color: requestStatusColors[status] || "slate",
+        note: details.note ? String(details.note) : "",
+        updatedBy: details.updatedByName ? String(details.updatedByName) : (details.updatedBy ? String(details.updatedBy) : ""),
+        updatedAt: entry.timestamp,
+      });
+    }
+
+    return statusMap;
+  }
+
+  function withRequestStatus(requestType: "volunteer" | "beneficiary", item: any, statusMap: Map<string, any>) {
+    const key = getRequestStatusKey(requestType, String(item.id || ""));
+    const status = statusMap.get(key);
+
+    if (status) {
+      return {
+        ...item,
+        requestType,
+        status,
+      };
+    }
+
+    return {
+      ...item,
+      requestType,
+      status: {
+        value: "pending",
+        label: requestStatusLabels.pending,
+        color: requestStatusColors.pending,
+        note: "",
+        updatedBy: "",
+        updatedAt: item.createdAt || new Date().toISOString(),
+      },
+    };
+  }
+
+  // Get client dashboard data (profile + donations + volunteer/beneficiary requests)
   app.get("/api/donors/dashboard", async (req, res) => {
     try {
       const token = req.headers.authorization?.split(' ')[1];
@@ -1542,6 +1625,11 @@ export async function registerRoutes(
       }
 
       const donations = await getDonationsByEmail(email);
+      const [volunteerRequests, beneficiaryRequests, statusMap] = await Promise.all([
+        getVolunteersByEmail(email, 100),
+        getBeneficiariesByEmail(email, 100),
+        getLatestRequestStatuses(),
+      ]);
 
       res.json({
         donor: {
@@ -1560,6 +1648,10 @@ export async function registerRoutes(
           totalDonations: donations.reduce((sum: number, d: any) => sum + d.amount, 0),
           donationCount: donations.length,
           avgDonation: donations.length > 0 ? Math.round(donations.reduce((sum: number, d: any) => sum + d.amount, 0) / donations.length) : 0
+        },
+        clientRequests: {
+          volunteers: volunteerRequests.map((item: any) => withRequestStatus("volunteer", item, statusMap)),
+          beneficiaries: beneficiaryRequests.map((item: any) => withRequestStatus("beneficiary", item, statusMap)),
         }
       });
     } catch (err) {
@@ -1831,6 +1923,135 @@ export async function registerRoutes(
     } catch (err) {
       logger.error("Update donor profile error", err);
       res.status(500).json({ message: "خطأ في تحديث البيانات" });
+    }
+  });
+
+  // ============= Admin: Clients Management =============
+  app.get("/api/admin/clients/requests", async (req, res) => {
+    try {
+      const token = req.headers.authorization?.split(' ')[1];
+
+      if (!token) {
+        return res.status(401).json({ message: "غير مصرح" });
+      }
+
+      let empEmail = verifyToken(token);
+      if (!empEmail) {
+        empEmail = await verifyTokenAsync(token);
+      }
+      if (!empEmail) {
+        return res.status(401).json({ message: "رمز غير صالح" });
+      }
+
+      const employee = await getEmployeeByEmail(empEmail);
+      if (!employee || !employee.active) {
+        return res.status(403).json({ message: "غير مصرح" });
+      }
+
+      const hasClientPermission = employee.role === "president" ||
+        (employee.permissions && employee.permissions.includes('manage_donors'));
+
+      if (!hasClientPermission) {
+        return res.status(403).json({ message: "ليس لديك صلاحية إدارة العملاء" });
+      }
+
+      const [donors, volunteers, beneficiaries, statusMap] = await Promise.all([
+        getAllDonors(),
+        getAllVolunteers(1000),
+        getAllBeneficiaries(1000),
+        getLatestRequestStatuses(),
+      ]);
+
+      const donorsWithStats = await Promise.all(
+        donors.map(async (donor: any) => {
+          const donations = await getDonationsByEmail(donor.email);
+          return {
+            ...donor,
+            donationsCount: donations.length,
+            totalDonations: donations.reduce((sum: number, d: any) => sum + d.amount, 0),
+          };
+        })
+      );
+
+      res.json({
+        donors: donorsWithStats,
+        volunteers: volunteers.map((item: any) => withRequestStatus("volunteer", item, statusMap)),
+        beneficiaries: beneficiaries.map((item: any) => withRequestStatus("beneficiary", item, statusMap)),
+        statusOptions: REQUEST_STATUS_VALUES,
+      });
+    } catch (err) {
+      logger.error("Get clients requests error", err);
+      res.status(500).json({ message: "خطأ في جلب بيانات العملاء" });
+    }
+  });
+
+  app.put("/api/admin/clients/requests/status", async (req, res) => {
+    try {
+      const token = req.headers.authorization?.split(' ')[1];
+      if (!token) {
+        return res.status(401).json({ message: "غير مصرح" });
+      }
+
+      let empEmail = verifyToken(token);
+      if (!empEmail) {
+        empEmail = await verifyTokenAsync(token);
+      }
+      if (!empEmail) {
+        return res.status(401).json({ message: "رمز غير صالح" });
+      }
+
+      const employee = await getEmployeeByEmail(empEmail);
+      if (!employee || !employee.active) {
+        return res.status(403).json({ message: "غير مصرح" });
+      }
+
+      const hasClientPermission = employee.role === "president" ||
+        (employee.permissions && employee.permissions.includes('manage_donors'));
+
+      if (!hasClientPermission) {
+        return res.status(403).json({ message: "ليس لديك صلاحية إدارة العملاء" });
+      }
+
+      const schema = z.object({
+        requestType: z.enum(["volunteer", "beneficiary"]),
+        requestId: z.string().min(2),
+        status: z.enum(REQUEST_STATUS_VALUES),
+        note: z.string().max(500).optional(),
+      });
+
+      const input = schema.parse(req.body);
+
+      logAuditEntry({
+        actor: `موظف: ${employee.name} (${empEmail})`,
+        action: REQUEST_STATUS_ACTION,
+        details: {
+          requestType: input.requestType,
+          requestId: input.requestId,
+          status: input.status,
+          note: input.note || "",
+          updatedBy: empEmail,
+          updatedByName: employee.name,
+        },
+      });
+
+      res.json({
+        success: true,
+        message: "تم تحديث حالة الطلب",
+        status: {
+          value: input.status,
+          label: requestStatusLabels[input.status],
+          color: requestStatusColors[input.status],
+          note: input.note || "",
+          updatedBy: employee.name,
+          updatedAt: new Date().toISOString(),
+        },
+      });
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({ message: err.errors[0]?.message || "بيانات غير صحيحة" });
+      }
+      logger.error("Update client request status error", err);
+      res.status(500).json({ message: "خطأ في تحديث الحالة" });
     }
   });
 

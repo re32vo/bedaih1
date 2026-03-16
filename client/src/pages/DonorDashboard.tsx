@@ -20,10 +20,38 @@ interface DonorProfile {
   phone: string;
 }
 
+interface RequestStatus {
+  value: string;
+  label: string;
+  color: string;
+  note?: string;
+  updatedBy?: string;
+  updatedAt?: string;
+}
+
+interface VolunteerRequest {
+  id: string;
+  opportunityTitle: string;
+  experience: string;
+  createdAt: string;
+  status: RequestStatus;
+}
+
+interface BeneficiaryRequest {
+  id: string;
+  assistanceType: string;
+  address: string;
+  createdAt: string;
+  status: RequestStatus;
+}
+
 export default function DonorDashboard() {
   const [, setLocation] = useLocation();
   const [donations, setDonations] = useState<Donation[]>([]);
+  const [volunteerRequests, setVolunteerRequests] = useState<VolunteerRequest[]>([]);
+  const [beneficiaryRequests, setBeneficiaryRequests] = useState<BeneficiaryRequest[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeSection, setActiveSection] = useState<"donations" | "volunteers" | "beneficiaries">("donations");
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [verificationMode, setVerificationMode] = useState(false);
@@ -79,6 +107,8 @@ export default function DonorDashboard() {
       setProfileData(data.donor);
       setDonations(data.donations);
       setStats(data.stats);
+      setVolunteerRequests(data?.clientRequests?.volunteers || []);
+      setBeneficiaryRequests(data?.clientRequests?.beneficiaries || []);
     } catch (error) {
       toast({
         title: "خطأ",
@@ -134,6 +164,14 @@ export default function DonorDashboard() {
   const handleBrowseSite = () => {
     // العودة للموقع بدون تسجيل خروج - المتبرع يظل مسجل دخول
     setLocation('/');
+  };
+
+  const statusClassMap: Record<string, string> = {
+    pending: "bg-slate-100 text-slate-700",
+    under_review: "bg-amber-100 text-amber-700",
+    approved: "bg-emerald-100 text-emerald-700",
+    rejected: "bg-red-100 text-red-700",
+    completed: "bg-blue-100 text-blue-700",
   };
 
   const handleSaveProfile = async () => {
@@ -299,7 +337,7 @@ export default function DonorDashboard() {
                 className="w-24 h-24 object-contain"
               />
               <div className="text-center sm:text-right">
-                <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">لوحة المتبرعين</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">لوحة تحكم العميل</h1>
                 <p className="text-slate-600 text-sm">مرحباً بك {profileData.name}</p>
               </div>
             </div>
@@ -380,71 +418,144 @@ export default function DonorDashboard() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Panel */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Donations List */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
               className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 border border-slate-200"
             >
-              <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-                <Gift className="w-6 h-6 text-emerald-500" />
-                سجل التبرعات
-              </h2>
-
-              <div className="space-y-4">
-                {donations.length > 0 ? (
-                  donations.map((donation, index) => (
-                    <motion.div
-                      key={donation.id}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.5 + index * 0.1 }}
-                      className="border border-slate-200 rounded-xl p-4 hover:shadow-md transition-shadow bg-slate-50"
-                    >
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                            <svg viewBox="0 0 100 100" className="w-6 h-6">
-                              <path d="M50 30 L50 70 M30 50 L70 50" stroke="#10b981" strokeWidth="10" strokeLinecap="round"/>
-                              <circle cx="50" cy="50" r="35" fill="none" stroke="#10b981" strokeWidth="6"/>
-                            </svg>
-                          </div>
-                          <div>
-                            <p className="font-bold text-emerald-700">{donation.amount} ريال</p>
-                            <p className="text-sm text-slate-600">{donation.method}</p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-sm text-slate-600">{donation.date}</p>
-                        </div>
-                      </div>
-
-                      <div className="bg-slate-100 rounded-lg p-3 flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-mono text-slate-800">{donation.code}</span>
-                          <span className="text-xs text-slate-600">كود التبرع</span>
-                        </div>
-                        <button
-                          onClick={() => copyToClipboard(donation.code)}
-                          className="p-2 hover:bg-slate-200 rounded transition-colors"
-                        >
-                          {copiedCode === donation.code ? (
-                            <Check className="w-4 h-4 text-green-600" />
-                          ) : (
-                            <Copy className="w-4 h-4 text-slate-600" />
-                          )}
-                        </button>
-                      </div>
-                    </motion.div>
-                  ))
-                ) : (
-                  <div className="text-center py-8">
-                    <Heart className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-                    <p className="text-slate-600">لا توجد تبرعات حتى الآن</p>
-                  </div>
-                )}
+              <div className="flex flex-wrap gap-2 mb-6">
+                <Button
+                  onClick={() => setActiveSection("donations")}
+                  className={activeSection === "donations" ? "bg-emerald-600 hover:bg-emerald-700 text-white" : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"}
+                >
+                  التبرعات
+                </Button>
+                <Button
+                  onClick={() => setActiveSection("volunteers")}
+                  className={activeSection === "volunteers" ? "bg-emerald-600 hover:bg-emerald-700 text-white" : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"}
+                >
+                  التطوع
+                </Button>
+                <Button
+                  onClick={() => setActiveSection("beneficiaries")}
+                  className={activeSection === "beneficiaries" ? "bg-emerald-600 hover:bg-emerald-700 text-white" : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"}
+                >
+                  المستفيدين
+                </Button>
               </div>
+
+              {activeSection === "donations" && (
+                <>
+                  <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                    <Gift className="w-6 h-6 text-emerald-500" />
+                    سجل التبرعات
+                  </h2>
+                  <div className="space-y-4">
+                    {donations.length > 0 ? (
+                      donations.map((donation, index) => (
+                        <motion.div
+                          key={donation.id}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.5 + index * 0.1 }}
+                          className="border border-slate-200 rounded-xl p-4 hover:shadow-md transition-shadow bg-slate-50"
+                        >
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-4">
+                              <div className="w-12 h-12 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                                <svg viewBox="0 0 100 100" className="w-6 h-6">
+                                  <path d="M50 30 L50 70 M30 50 L70 50" stroke="#10b981" strokeWidth="10" strokeLinecap="round"/>
+                                  <circle cx="50" cy="50" r="35" fill="none" stroke="#10b981" strokeWidth="6"/>
+                                </svg>
+                              </div>
+                              <div>
+                                <p className="font-bold text-emerald-700">{donation.amount} ريال</p>
+                                <p className="text-sm text-slate-600">{donation.method}</p>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-sm text-slate-600">{donation.date}</p>
+                            </div>
+                          </div>
+
+                          <div className="bg-slate-100 rounded-lg p-3 flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-mono text-slate-800">{donation.code}</span>
+                              <span className="text-xs text-slate-600">كود التبرع</span>
+                            </div>
+                            <button
+                              onClick={() => copyToClipboard(donation.code)}
+                              className="p-2 hover:bg-slate-200 rounded transition-colors"
+                            >
+                              {copiedCode === donation.code ? (
+                                <Check className="w-4 h-4 text-green-600" />
+                              ) : (
+                                <Copy className="w-4 h-4 text-slate-600" />
+                              )}
+                            </button>
+                          </div>
+                        </motion.div>
+                      ))
+                    ) : (
+                      <div className="text-center py-8">
+                        <Heart className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+                        <p className="text-slate-600">لا توجد تبرعات حتى الآن</p>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+
+              {activeSection === "volunteers" && (
+                <>
+                  <h2 className="text-2xl font-bold text-slate-900 mb-6">طلبات التطوع</h2>
+                  <div className="space-y-4">
+                    {volunteerRequests.length > 0 ? volunteerRequests.map((item) => (
+                      <div key={item.id} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="font-bold text-slate-900">{item.opportunityTitle || "فرصة تطوع"}</p>
+                          <span className={`px-2 py-1 text-xs font-bold rounded-full ${statusClassMap[item.status?.value] || "bg-slate-100 text-slate-700"}`}>
+                            {item.status?.label || "قيد الانتظار"}
+                          </span>
+                        </div>
+                        <p className="text-sm text-slate-700 whitespace-pre-wrap">{item.experience || "لا توجد تفاصيل"}</p>
+                        <div className="mt-2 text-xs text-slate-500">
+                          <p>تاريخ الطلب: {item.createdAt ? new Date(item.createdAt).toLocaleDateString('ar-SA') : "-"}</p>
+                          {item.status?.note ? <p>ملاحظة الموظف: {item.status.note}</p> : null}
+                        </div>
+                      </div>
+                    )) : (
+                      <p className="text-center text-slate-600 py-8">لا توجد طلبات تطوع مرتبطة بهذا البريد.</p>
+                    )}
+                  </div>
+                </>
+              )}
+
+              {activeSection === "beneficiaries" && (
+                <>
+                  <h2 className="text-2xl font-bold text-slate-900 mb-6">طلبات المستفيد</h2>
+                  <div className="space-y-4">
+                    {beneficiaryRequests.length > 0 ? beneficiaryRequests.map((item) => (
+                      <div key={item.id} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="font-bold text-slate-900">{item.assistanceType || "طلب مستفيد"}</p>
+                          <span className={`px-2 py-1 text-xs font-bold rounded-full ${statusClassMap[item.status?.value] || "bg-slate-100 text-slate-700"}`}>
+                            {item.status?.label || "قيد الانتظار"}
+                          </span>
+                        </div>
+                        <p className="text-sm text-slate-700">{item.address || "لا يوجد عنوان"}</p>
+                        <div className="mt-2 text-xs text-slate-500">
+                          <p>تاريخ الطلب: {item.createdAt ? new Date(item.createdAt).toLocaleDateString('ar-SA') : "-"}</p>
+                          {item.status?.note ? <p>ملاحظة الموظف: {item.status.note}</p> : null}
+                        </div>
+                      </div>
+                    )) : (
+                      <p className="text-center text-slate-600 py-8">لا توجد طلبات مستفيد مرتبطة بهذا البريد.</p>
+                    )}
+                  </div>
+                </>
+              )}
             </motion.div>
           </div>
 
