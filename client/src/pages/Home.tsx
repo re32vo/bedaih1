@@ -214,7 +214,7 @@ export default function Home() {
   const heroProjectSection = (
     <section className="rounded-xl md:rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 md:p-6 shadow-sm">
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-5 md:gap-6 items-center">
-        <div className="space-y-3">
+        <div className="space-y-3 lg:order-2">
           <div className="inline-flex items-center rounded-full bg-sky-50 px-3 py-1 text-xs sm:text-sm font-bold text-sky-700">
             المشروع المرتبط بالبانر الحالي
           </div>
@@ -238,7 +238,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 sm:p-4">
+        <div className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 sm:p-4 lg:order-1">
           <p className="mb-3 text-center text-sm sm:text-base font-extrabold text-slate-800">تبرع لهذا المشروع</p>
 
           <div className="relative mb-3">
@@ -252,10 +252,10 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-2 gap-2">
-            <Button type="button" onClick={donateFromHero} className="h-10 sm:h-11 bg-sky-500 hover:bg-sky-600 text-white font-bold">
+            <Button type="button" onClick={donateFromHero} className="h-10 sm:h-11 bg-sky-500 hover:bg-sky-600 text-white font-bold lg:order-2">
               تبرع
             </Button>
-            <Button type="button" onClick={() => setLocation(`/donate/opportunities/${currentHeroProject.id}`)} className="h-10 sm:h-11 bg-indigo-900 hover:bg-indigo-800 text-white font-bold">
+            <Button type="button" onClick={() => setLocation(`/donate/opportunities/${currentHeroProject.id}`)} className="h-10 sm:h-11 bg-indigo-900 hover:bg-indigo-800 text-white font-bold lg:order-1">
               تفاصيل المشروع
             </Button>
           </div>
