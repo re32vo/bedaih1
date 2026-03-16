@@ -1,11 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
 import { insertBeneficiarySchema, insertJobApplicationSchema, insertContactMessageSchema } from "@shared/schema";
+import { api } from "@shared/routes";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 
 type InsertBeneficiary = z.infer<typeof insertBeneficiarySchema>;
 type InsertJobApplication = z.infer<typeof insertJobApplicationSchema>;
 type InsertContactMessage = z.infer<typeof insertContactMessageSchema>;
+type InsertVolunteerApplication = z.infer<typeof api.volunteers.create.input>;
 
 async function parseResponseBody(response: Response) {
   const text = await response.text();
@@ -150,6 +152,49 @@ export function useContactMessage() {
     onError: (error) => {
       toast({
         title: "خطأ",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  });
+}
+
+export function useVolunteerApplication() {
+  const { toast } = useToast();
+  return useMutation({
+    mutationFn: async (data: InsertVolunteerApplication) => {
+      const parsed = api.volunteers.create.input.safeParse(data);
+      if (!parsed.success) {
+        throw new Error(parsed.error.errors[0]?.message || "بيانات غير صحيحة");
+      }
+
+      const response = await fetch(api.volunteers.create.path, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const body = await parseResponseBody(response);
+
+      if (!response.ok) {
+        throw new Error(getErrorMessage(body, response, "فشل إرسال طلب التطوع"));
+      }
+
+      return body;
+    },
+    onSuccess: () => {
+      toast({
+        title: "تم إرسال طلب التطوع",
+        description: "تم تحويل بياناتك إلى لوحة تحكم الموظفين وسيتم التواصل معك قريباً.",
+        variant: "default",
+        className: "bg-green-600 text-white border-none"
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "خطأ في الإرسال",
         description: error.message,
         variant: "destructive",
       });
