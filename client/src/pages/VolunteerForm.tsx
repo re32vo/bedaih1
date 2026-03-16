@@ -260,9 +260,6 @@ export default function VolunteerForm() {
                           );
                         })}
                       </div>
-                      <p className="text-xs text-slate-500 mt-1">
-                        عند الإرسال سيتم تحويل الطلب تلقائياً إلى لوحة تحكم الموظفين.
-                      </p>
                       <FormMessage />
                     </FormItem>
                   )}
