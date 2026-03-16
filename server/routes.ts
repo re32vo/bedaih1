@@ -20,6 +20,7 @@ import { Logger } from "./logger";
 import {
   upsertDonor,
   createDonation,
+  createRecurringDonation,
   getDonationsByEmail,
   getDonorByEmail,
   getAllDonors,
@@ -522,10 +523,15 @@ export async function registerRoutes(
     }
   });
 
-  const otpLoginDisabled = process.env.DISABLE_OTP_LOGIN !== "false";
+  const otpLoginDisabled = process.env.DISABLE_OTP_LOGIN === "true";
+  const directLoginEnabled = process.env.ALLOW_DIRECT_LOGIN === "true";
 
   // Employee Login - Direct Login (temporary while OTP disabled)
   app.post("/api/auth/direct-login", async (req, res) => {
+    if (!directLoginEnabled) {
+      return res.status(403).json({ message: "تم تعطيل الدخول المباشر. استخدم كود التحقق" });
+    }
+
     try {
       const rawEmail = req.body.email;
       const email = typeof rawEmail === "string" ? rawEmail.trim().toLowerCase() : rawEmail;
@@ -555,6 +561,60 @@ export async function registerRoutes(
       });
     } catch (err) {
       res.status(500).json({ message: "حدث خطأ أثناء تسجيل الدخول" });
+    }
+  });
+
+  // Recurring donation request (without payment gateway)
+  app.post("/api/donors/recurring", async (req, res) => {
+    try {
+      const schema = z.object({
+        fullName: z.string().min(2).max(100),
+        phone: z.string().regex(/^[0-9]{9,15}$/),
+        project: z.string().min(2).max(100),
+        frequency: z.enum(["daily", "weekly", "monthly", "yearly"]),
+        amount: z.number().positive(),
+      });
+
+      const input = schema.parse(req.body);
+      const recurring = await createRecurringDonation(input);
+
+      logAuditEntry({
+        actor: `متبرع دوري: ${input.phone}`,
+        action: "create_recurring_donation_request",
+        details: {
+          fullName: input.fullName,
+          phone: input.phone,
+          project: input.project,
+          frequency: input.frequency,
+          amount: input.amount,
+          requestId: recurring?.id,
+        },
+      });
+
+      if (process.env.ADMIN_EMAIL) {
+        await sendEmail(
+          process.env.ADMIN_EMAIL,
+          "طلب تبرع دوري جديد",
+          `<div dir="rtl" style="font-family:Arial,sans-serif;line-height:1.8">
+            <h2>طلب تبرع دوري جديد</h2>
+            <p><strong>الاسم:</strong> ${escapeHtml(input.fullName)}</p>
+            <p><strong>الجوال:</strong> ${escapeHtml(input.phone)}</p>
+            <p><strong>المشروع:</strong> ${escapeHtml(input.project)}</p>
+            <p><strong>التكرار:</strong> ${escapeHtml(input.frequency)}</p>
+            <p><strong>المبلغ:</strong> ${input.amount} ريال</p>
+          </div>`
+        );
+      }
+
+      res.status(201).json({
+        success: true,
+        message: "تم استلام طلب التبرع الدوري بنجاح",
+      });
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({ message: err.errors[0]?.message || "بيانات غير صالحة" });
+      }
+      return res.status(400).json({ message: err instanceof Error ? err.message : "تعذر حفظ الطلب" });
     }
   });
 
@@ -1538,6 +1598,42 @@ export async function registerRoutes(
       logger.error("Donation save error", err);
       res.status(500).json({ message: "خطأ في تسجيل التبرع" });
     }
+  });
+
+  const reportFiles = [
+    { id: "annual-2025", title: "التقرير السنوي 2025", date: "ديسمبر 2025", pages: 120, size: "TXT" },
+    { id: "semiannual-2025", title: "التقرير نصف السنوي 2025", date: "يونيو 2025", pages: 85, size: "TXT" },
+    { id: "annual-2024", title: "التقرير السنوي 2024", date: "ديسمبر 2024", pages: 110, size: "TXT" },
+    { id: "monthly-2026-03", title: "التقرير الشهري - مارس 2026", date: "مارس 2026", pages: 25, size: "TXT" },
+    { id: "financial-2025", title: "التقرير المالي السنوي 2025", date: "يناير 2026", pages: 45, size: "TXT" },
+    { id: "impact-2025", title: "تقرير التأثير الاجتماعي 2025", date: "فبراير 2026", pages: 60, size: "TXT" },
+  ];
+
+  app.get("/api/media-reports", (_req, res) => {
+    res.json(reportFiles.map((item) => ({
+      ...item,
+      downloadUrl: `/api/media-reports/${item.id}/download`,
+    })));
+  });
+
+  app.get("/api/media-reports/:id/download", (req, res) => {
+    const report = reportFiles.find((item) => item.id === req.params.id);
+    if (!report) {
+      return res.status(404).send("التقرير غير موجود");
+    }
+
+    const content = [
+      `جمعية بداية - ${report.title}`,
+      `التاريخ: ${report.date}`,
+      `عدد الصفحات (المرجعية): ${report.pages}`,
+      "",
+      "هذا ملف تقرير نصي للتحميل المباشر من الموقع.",
+      "يمكن استبداله بملف PDF رسمي لاحقاً بدون تغيير الواجهة.",
+    ].join("\n");
+
+    res.setHeader("Content-Type", "text/plain; charset=utf-8");
+    res.setHeader("Content-Disposition", `attachment; filename=report-${report.id}.txt`);
+    return res.send(content);
   });
 
   const REQUEST_STATUS_ACTION = "request_status_update";

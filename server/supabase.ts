@@ -242,6 +242,37 @@ export async function createDonation(donation: { email: string; amount: number; 
   return data?.[0] || null;
 }
 
+export async function createRecurringDonation(recurring: {
+  fullName: string;
+  phone: string;
+  project: string;
+  frequency: "daily" | "weekly" | "monthly" | "yearly";
+  amount: number;
+  status?: string;
+}) {
+  if (!supabase) {
+    throw new Error('Supabase غير مهيأ - تحقق من SUPABASE_URL و SUPABASE_SERVICE_ROLE_KEY');
+  }
+
+  const { data, error } = await supabase
+    .from('recurring_donations')
+    .insert({
+      full_name: recurring.fullName,
+      phone: recurring.phone,
+      project: recurring.project,
+      frequency: recurring.frequency,
+      amount: Number(recurring.amount) || 0,
+      status: recurring.status || 'pending',
+    })
+    .select();
+
+  if (error) {
+    throw new Error(`فشل حفظ طلب التبرع الدوري: ${error.message}`);
+  }
+
+  return data?.[0] || null;
+}
+
 export async function getDonationsByEmail(email: string, limit = 20) {
   if (!supabase) return [];
   

@@ -126,6 +126,18 @@ CREATE TABLE IF NOT EXISTS outgoing_emails (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- جدول طلبات التبرع الدوري (تشغيلي حتى يتم ربط بوابة الدفع)
+CREATE TABLE IF NOT EXISTS recurring_donations (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  full_name TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  project TEXT NOT NULL,
+  frequency TEXT NOT NULL,
+  amount NUMERIC NOT NULL,
+  status TEXT DEFAULT 'pending',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- ============================================================
 -- قسم 2: إزالة قيود UNIQUE القديمة (migrations)
 -- ============================================================
@@ -183,6 +195,10 @@ CREATE INDEX IF NOT EXISTS idx_audit_log_action ON audit_log(action, created_at 
 CREATE INDEX IF NOT EXISTS idx_tokens_token ON tokens(token);
 CREATE INDEX IF NOT EXISTS idx_tokens_email ON tokens(email, expires_at);
 
+-- recurring_donations
+CREATE INDEX IF NOT EXISTS idx_recurring_donations_created_at ON recurring_donations(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_recurring_donations_status ON recurring_donations(status, created_at DESC);
+
 -- ============================================================
 -- قسم 4: تعطيل RLS (Row Level Security)
 -- الخادم يتحكم في الصلاحيات بنفسه
@@ -199,3 +215,4 @@ ALTER TABLE otp_tokens DISABLE ROW LEVEL SECURITY;
 ALTER TABLE tokens DISABLE ROW LEVEL SECURITY;
 ALTER TABLE audit_log DISABLE ROW LEVEL SECURITY;
 ALTER TABLE outgoing_emails DISABLE ROW LEVEL SECURITY;
+ALTER TABLE recurring_donations DISABLE ROW LEVEL SECURITY;

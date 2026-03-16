@@ -494,6 +494,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <li><Link href="/donate"><span className="text-white">تبرع</span></Link></li>
                 <li><Link href="/faq"><span className="text-white">الأسئلة الشائعة</span></Link></li>
                 <li><Link href="/contact"><span className="text-white">اتصل بنا</span></Link></li>
+                <li><Link href="/privacy-policy"><span className="text-white">سياسة الخصوصية</span></Link></li>
+                <li><Link href="/terms"><span className="text-white">الشروط والأحكام</span></Link></li>
               </ul>
             </div>
 

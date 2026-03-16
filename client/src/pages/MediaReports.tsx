@@ -3,12 +3,12 @@ import { BarChart3, TrendingUp, FileText, Download } from "lucide-react";
 
 export default function MediaReports() {
   const reports = [
-    { title: "التقرير السنوي 2025", date: "ديسمبر 2025", pages: 120, size: "5.2 MB" },
-    { title: "التقرير نصف السنوي 2025", date: "يونيو 2025", pages: 85, size: "3.8 MB" },
-    { title: "التقرير السنوي 2024", date: "ديسمبر 2024", pages: 110, size: "4.9 MB" },
-    { title: "التقرير الشهري - مارس 2026", date: "مارس 2026", pages: 25, size: "1.2 MB" },
-    { title: "التقرير المالي السنوي 2025", date: "يناير 2026", pages: 45, size: "2.1 MB" },
-    { title: "تقرير التأثير الاجتماعي 2025", date: "فبراير 2026", pages: 60, size: "2.8 MB" },
+    { id: "annual-2025", title: "التقرير السنوي 2025", date: "ديسمبر 2025", pages: 120, size: "TXT" },
+    { id: "semiannual-2025", title: "التقرير نصف السنوي 2025", date: "يونيو 2025", pages: 85, size: "TXT" },
+    { id: "annual-2024", title: "التقرير السنوي 2024", date: "ديسمبر 2024", pages: 110, size: "TXT" },
+    { id: "monthly-2026-03", title: "التقرير الشهري - مارس 2026", date: "مارس 2026", pages: 25, size: "TXT" },
+    { id: "financial-2025", title: "التقرير المالي السنوي 2025", date: "يناير 2026", pages: 45, size: "TXT" },
+    { id: "impact-2025", title: "تقرير التأثير الاجتماعي 2025", date: "فبراير 2026", pages: 60, size: "TXT" },
   ];
 
   return (
@@ -39,9 +39,14 @@ export default function MediaReports() {
                     <p className="text-sm text-slate-600">{report.pages} صفحة</p>
                     <p className="text-sm text-slate-600">الحجم: {report.size}</p>
                   </div>
-                  <button className="p-2 hover:bg-slate-100 rounded-lg transition">
+                  <a
+                    href={`/api/media-reports/${report.id}/download`}
+                    download
+                    className="p-2 hover:bg-slate-100 rounded-lg transition"
+                    aria-label={`تحميل ${report.title}`}
+                  >
                     <Download className="w-5 h-5 text-emerald-500" />
-                  </button>
+                  </a>
                 </div>
               </CardContent>
             </Card>

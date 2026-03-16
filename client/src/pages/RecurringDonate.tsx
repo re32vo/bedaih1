@@ -3,16 +3,19 @@ import { User, Phone, FolderOpen, CalendarDays, Banknote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 
 type Frequency = "daily" | "weekly" | "monthly" | "yearly";
 
 export default function RecurringDonate() {
+  const { toast } = useToast();
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [project, setProject] = useState("");
   const [frequency, setFrequency] = useState<Frequency>("daily");
   const [selectedAmount, setSelectedAmount] = useState<number>(10);
   const [customAmount, setCustomAmount] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const frequencies: { key: Frequency; label: string }[] = [
     { key: "daily", label: "يومي" },
@@ -24,13 +27,55 @@ export default function RecurringDonate() {
   const amountOptions = [10, 50, 100];
   const finalAmount = customAmount ? Number(customAmount) || 0 : selectedAmount;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!fullName.trim() || !phone.trim() || !project || finalAmount <= 0) {
-      alert("الرجاء تعبئة جميع الحقول واختيار مبلغ صحيح");
+      toast({
+        title: "بيانات ناقصة",
+        description: "الرجاء تعبئة جميع الحقول واختيار مبلغ صحيح",
+        variant: "destructive",
+      });
       return;
     }
 
-    alert("تم استلام طلب الاستقطاع الدوري بنجاح");
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/donors/recurring", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: fullName.trim(),
+          phone: phone.trim(),
+          project,
+          frequency,
+          amount: finalAmount,
+        }),
+      });
+
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(body.message || "تعذر إرسال الطلب");
+      }
+
+      toast({
+        title: "تم استلام الطلب",
+        description: "سيتم التواصل معك لتفعيل الاستقطاع الدوري",
+      });
+
+      setFullName("");
+      setPhone("");
+      setProject("");
+      setFrequency("daily");
+      setSelectedAmount(10);
+      setCustomAmount("");
+    } catch (error) {
+      toast({
+        title: "حدث خطأ",
+        description: error instanceof Error ? error.message : "تعذر إرسال الطلب",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -167,9 +212,10 @@ export default function RecurringDonate() {
 
             <Button
               onClick={handleSubmit}
+              disabled={submitting}
               className="mt-2 h-11 w-full justify-center rounded-2xl bg-sky-500 text-center text-base font-extrabold text-white hover:bg-sky-600 md:h-12 md:text-lg"
             >
-              تبرع الآن
+              {submitting ? "جاري الإرسال..." : "إرسال طلب التبرع الدوري"}
             </Button>
           </div>
         </div>

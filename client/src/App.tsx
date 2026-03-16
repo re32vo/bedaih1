@@ -55,6 +55,8 @@ const Cart = lazy(() => import("@/pages/Cart"));
 const Faq = lazy(() => import("@/pages/Faq"));
 const BannerDonate = lazy(() => import("@/pages/BannerDonate"));
 const Checkout = lazy(() => import("@/pages/Checkout"));
+const PrivacyPolicy = lazy(() => import("@/pages/PrivacyPolicy"));
+const Terms = lazy(() => import("@/pages/Terms"));
 
 function Router() {
   return (
@@ -113,6 +115,8 @@ function Router() {
           <Route path="/faq" component={Faq} />
           <Route path="/banner-donate" component={BannerDonate} />
           <Route path="/checkout" component={Checkout} />
+          <Route path="/privacy-policy" component={PrivacyPolicy} />
+          <Route path="/terms" component={Terms} />
           
           <Route component={NotFound} />
         </Switch>
