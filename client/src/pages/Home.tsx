@@ -220,7 +220,12 @@ export default function Home() {
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">{currentHeroProject.title}</h2>
           <p className="text-sm sm:text-base leading-7 text-slate-600 max-w-3xl">{currentHeroProject.description}</p>
-          <div className="flex flex-wrap gap-2 pt-1">
+        </div>
+
+        <div className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 sm:p-4 lg:order-1">
+          <p className="mb-3 text-center text-sm sm:text-base font-extrabold text-slate-800">تبرع لهذا المشروع</p>
+
+          <div className="mb-3 flex flex-wrap justify-center gap-2">
             {heroQuickAmounts.map((amount) => (
               <button
                 key={amount}
@@ -236,10 +241,6 @@ export default function Home() {
               </button>
             ))}
           </div>
-        </div>
-
-        <div className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 sm:p-4 lg:order-1">
-          <p className="mb-3 text-center text-sm sm:text-base font-extrabold text-slate-800">تبرع لهذا المشروع</p>
 
           <div className="relative mb-3">
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs sm:text-sm font-bold text-slate-500">ر.س</span>
