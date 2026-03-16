@@ -4,7 +4,6 @@ import { insertBeneficiarySchema, type InsertBeneficiary } from "@shared/schema"
 import { useCreateBeneficiary } from "@/hooks/use-charity";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -128,20 +127,20 @@ export default function BeneficiaryRequestForm({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-slate-900">نوع المساعدة المطلوبة</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="h-11 bg-white">
-                          <SelectValue placeholder="اختر نوع المساعدة" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
+                    <FormControl>
+                      <select
+                        value={field.value}
+                        onChange={(e) => field.onChange(e.target.value)}
+                        className="h-11 w-full rounded-md border border-input bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                      >
+                        <option value="" disabled>اختر نوع المساعدة</option>
                         {assistanceOptions.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
+                          <option key={option.value} value={option.value}>
                             {option.label}
-                          </SelectItem>
+                          </option>
                         ))}
-                      </SelectContent>
-                    </Select>
+                      </select>
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

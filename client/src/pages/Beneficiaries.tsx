@@ -4,7 +4,6 @@ import { insertBeneficiarySchema, type InsertBeneficiary } from "@shared/schema"
 import { useCreateBeneficiary } from "@/hooks/use-charity";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2 } from "lucide-react";
@@ -113,20 +112,20 @@ export default function Beneficiaries() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-black">نوع المساعدة المطلوبة</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger className="h-12 bg-white border-gray-300 text-black">
-                              <SelectValue placeholder="اختر نوع المساعدة" />
-                            </SelectTrigger>
+                            <select
+                              value={field.value}
+                              onChange={(e) => field.onChange(e.target.value)}
+                              className="h-12 w-full rounded-md border border-gray-300 bg-white px-3 text-black focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                            >
+                              <option value="" disabled>اختر نوع المساعدة</option>
+                              <option value="financial">مساعدة مالية</option>
+                              <option value="food">سلة غذائية</option>
+                              <option value="medical">علاج ودواء</option>
+                              <option value="housing">ترميم منازل</option>
+                              <option value="education">دعم تعليمي</option>
+                            </select>
                           </FormControl>
-                          <SelectContent className="bg-white border-gray-300">
-                            <SelectItem value="financial" className="text-black hover:bg-gray-100">مساعدة مالية</SelectItem>
-                            <SelectItem value="food" className="text-black hover:bg-gray-100">سلة غذائية</SelectItem>
-                            <SelectItem value="medical" className="text-black hover:bg-gray-100">علاج ودواء</SelectItem>
-                            <SelectItem value="housing" className="text-black hover:bg-gray-100">ترميم منازل</SelectItem>
-                            <SelectItem value="education" className="text-black hover:bg-gray-100">دعم تعليمي</SelectItem>
-                          </SelectContent>
-                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
