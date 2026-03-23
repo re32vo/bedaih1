@@ -34,7 +34,7 @@ export default function SmileStory() {
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 mb-4">قصة ابتسامة</h1>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">قصة بداية</h1>
           <p className="text-xl text-slate-600">قصص نجاح حقيقية من الأشخاص الذين ساعدناهم</p>
         </div>
 
@@ -74,7 +74,7 @@ export default function SmileStory() {
           <Card>
             <CardHeader>
               <Smile className="w-6 h-6 text-yellow-500 mb-3" />
-              <CardTitle>ابتسامة عادت</CardTitle>
+              <CardTitle>بداية عادت</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-3xl font-bold text-slate-900">+75</p>
@@ -98,7 +98,7 @@ export default function SmileStory() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-slate-700">
-              كل تبرع يساهم في تغيير حياة شخص ما. شارك في صنع قصة ابتسامة جديدة اليوم.
+              كل تبرع يساهم في تغيير حياة شخص ما. شارك في صنع قصة بداية جديدة اليوم.
             </p>
             <div className="flex gap-3 flex-col sm:flex-row">
               <button className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-lg transition">

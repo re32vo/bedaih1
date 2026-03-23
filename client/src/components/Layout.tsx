@@ -57,7 +57,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     { href: "/media/news", label: "الأخبار" },
     { href: "/media/testimonials", label: "قالوا عن الجمعية" },
     { href: "/media/announcements", label: "إعلانات" },
-    { href: "/media/smile-story", label: "قصة ابتسامة" },
+    { href: "/media/smile-story", label: "قصة بداية" },
     { href: "/media/reports", label: "التقارير الدورية" },
     { href: "/jobs", label: "التوظيف" },
   ];
