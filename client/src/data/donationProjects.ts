@@ -103,4 +103,12 @@ export const donationProjects: DonationProject[] = [
     image: "/3.jpg",
     amounts: [],
   },
+  {
+    id: "13",
+    title: "المتطوع المتعافي",
+    description:
+      "برنامج يهدف إلى مشاركة المستفيد في برامج تطوعية تخدم المجتمع.",
+    image: "/1.jpg",
+    amounts: [500, 300, 100],
+  },
 ];
