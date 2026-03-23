@@ -7,6 +7,7 @@ import { Layout } from "@/components/Layout";
 import ScrollToTop from "@/components/ScrollToTop";
 import { ThemeProvider } from "@/hooks/use-theme.tsx";
 import { CartProvider } from "@/hooks/use-cart";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const NotFound = lazy(() => import("@/pages/not-found"));
 const Home = lazy(() => import("@/pages/Home"));
@@ -133,6 +134,7 @@ function App() {
           <Toaster />
           <ScrollToTop />
           <Router />
+          <SpeedInsights />
         </CartProvider>
       </ThemeProvider>
     </QueryClientProvider>
