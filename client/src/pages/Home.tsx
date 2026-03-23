@@ -72,15 +72,15 @@ const heroSlides = [
   {
     id: "h1",
     image: "/12344.png",
-    title: "بركاتك يبتسم",
-    subtitle: "ادفع زكاتك لعلاج الفقراء والمساكين",
+    title: "أهداف الجمعية",
+    subtitle: "نسعى إلى الوقاية والتأهيل والتوعية وبناء مجتمع أكثر وعيًا واستقرارًا.",
     projectId: "6",
   },
   {
     id: "h2",
     image: "/oz.png",
-    title: "خير الأعمال في خير الليالي",
-    subtitle: "العشر الأواخر",
+    title: "رسالة الجمعية",
+    subtitle: "تقديم برامج نوعية للمستفيد وأسرته تعزز الأمان والتعافي والاندماج وخدمة المجتمع.",
     projectId: "12",
   },
 ];
@@ -268,21 +268,13 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-slate-100 py-4 md:py-8" dir="rtl">
       <div className="container mx-auto space-y-6 px-3 sm:px-4 md:space-y-10 lg:space-y-14">
-        <section className="relative overflow-hidden rounded-xl md:rounded-2xl min-h-[440px] sm:min-h-[520px]">
-          <img
-            src={heroSlides[currentHeroIndex].image}
-            alt={heroSlides[currentHeroIndex].title}
-            loading="eager"
-            fetchPriority="high"
-            decoding="sync"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-slate-900/25" />
+        <section className="relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm min-h-[320px] sm:min-h-[360px]">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(59,130,246,0.12),_transparent_32%),radial-gradient(circle_at_bottom_left,_rgba(14,165,233,0.10),_transparent_28%)]" />
 
           <button
             type="button"
             onClick={goToPrevHero}
-            className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-white/75 text-slate-700 hover:bg-white flex items-center justify-center"
+            className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 flex items-center justify-center shadow-sm"
             aria-label="السابق"
           >
             <ChevronRight className="h-4 w-4" />
@@ -290,21 +282,30 @@ export default function Home() {
           <button
             type="button"
             onClick={goToNextHero}
-            className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-white/75 text-slate-700 hover:bg-white flex items-center justify-center"
+            className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 flex items-center justify-center shadow-sm"
             aria-label="التالي"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
 
-          <div className="relative z-10 min-h-[440px] sm:min-h-[520px] p-4 sm:p-6 md:p-8 flex items-center">
-            <div className="w-full flex flex-col lg:flex-row-reverse lg:items-center lg:justify-between gap-5 sm:gap-7">
-              <div className="text-white max-w-2xl">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-3">
+          <div className="relative z-10 min-h-[320px] sm:min-h-[360px] p-6 sm:p-8 md:p-10 flex items-center justify-center text-center">
+            <div className="w-full max-w-4xl">
+              <div className="mx-auto mb-5 inline-flex items-center rounded-full border border-sky-100 bg-sky-50 px-4 py-2 text-sm font-bold text-sky-700">
+                جمعية بداية
+              </div>
+              <div className="mx-auto max-w-3xl">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-4 text-slate-900">
                   {heroSlides[currentHeroIndex].title}
                 </h1>
-                <p className="inline-block bg-sky-500/75 px-3 py-2 text-lg sm:text-2xl font-bold">
+                <p className="text-base sm:text-xl md:text-2xl font-bold leading-8 text-slate-600">
                   {heroSlides[currentHeroIndex].subtitle}
                 </p>
+                <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+                  <span className="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700">وقاية</span>
+                  <span className="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700">تأهيل</span>
+                  <span className="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700">إرشاد</span>
+                  <span className="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700">توعية</span>
+                </div>
               </div>
             </div>
           </div>
@@ -316,7 +317,7 @@ export default function Home() {
                 type="button"
                 onClick={() => setCurrentHeroIndex(index)}
                 className={`h-2.5 rounded-full transition-all ${
-                  index === currentHeroIndex ? "w-6 bg-white" : "w-2.5 bg-white/60 hover:bg-white/80"
+                  index === currentHeroIndex ? "w-6 bg-sky-500" : "w-2.5 bg-slate-300 hover:bg-slate-400"
                 }`}
                 aria-label={`الانتقال للبنر ${index + 1}`}
               />
