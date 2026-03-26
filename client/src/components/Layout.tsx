@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Heart, Menu, X, Phone, MapPin, Mail, User, ChevronDown, ChevronUp, MessageCircle, Clock3, CalendarDays, Gift, Rocket, ShoppingCart, Home, LayoutGrid } from "lucide-react";
+import { Heart, Menu, X, Phone, MapPin, Mail, User, ChevronDown, ChevronUp, MessageCircle, Clock3, CalendarDays, Gift, Rocket, ShoppingCart, LayoutGrid } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
@@ -122,13 +122,26 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
           <div className="flex items-center gap-2">
             <button
-              className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 text-white bg-slate-800 rounded-lg border border-slate-700 shadow-sm hover:bg-slate-700 touch-manipulation"
+              className="md:hidden flex items-center gap-2 p-2 sm:px-3 sm:py-2 text-white bg-slate-800 rounded-lg border border-slate-700 shadow-sm hover:bg-slate-700 touch-manipulation"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="فتح قائمة التصنيفات"
             >
               {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               <span className="hidden sm:inline text-sm font-semibold">التصنيفات</span>
             </button>
+
+            <button
+              className="hidden md:flex items-center gap-2 p-2 sm:px-3 sm:py-2 text-white bg-slate-800 rounded-lg border border-slate-700 shadow-sm hover:bg-slate-700 touch-manipulation"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="فتح قائمة التصنيفات"
+            >
+              <LayoutGrid className="w-5 h-5" />
+              <span className="text-sm font-semibold">التصنيفات</span>
+            </button>
+
+            <Button onClick={handleDonateClick} className="text-white text-sm font-bold rounded-full px-4 lg:px-5 h-9 lg:h-10 bg-gradient-to-r from-primary to-secondary touch-manipulation">
+              <Heart className="w-4 h-4 mr-2" /> تبرع معنا
+            </Button>
           </div>
         </div>
       </header>
@@ -227,34 +240,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
       <main className="flex-grow bg-white pb-20">{children}</main>
 
-      <nav className="fixed bottom-0 inset-x-0 z-50 border-t border-slate-500 bg-slate-700 text-white">
+      <nav className="fixed bottom-0 inset-x-0 z-50 border-t border-slate-800 bg-[#0a1230] text-white">
         <div className="container mx-auto px-2 sm:px-4">
-          <div className="grid grid-cols-5 items-center">
-            <Link href="/">
-              <span className="flex flex-col items-center justify-center py-2 text-xs sm:text-sm font-bold opacity-90 hover:opacity-100">
-                <Home className="w-5 h-5 mb-1" />
-                الرئيسية
-              </span>
-            </Link>
-
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="flex flex-col items-center justify-center py-2 text-xs sm:text-sm font-bold opacity-90 hover:opacity-100"
-              aria-label="فتح التصنيفات"
-            >
-              <LayoutGrid className="w-5 h-5 mb-1" />
-              التصنيفات
-            </button>
-
-            <button
-              onClick={handleDonateClick}
-              className="flex flex-col items-center justify-center py-2 text-xs sm:text-sm font-bold opacity-90 hover:opacity-100"
-              aria-label="تبرع معنا"
-            >
-              <Heart className="w-5 h-5 mb-1" />
-              تبرع معنا
-            </button>
-
+          <div className="mx-auto grid max-w-md grid-cols-2 items-center">
             <Link href="/cart">
               <span className="relative flex flex-col items-center justify-center py-2 text-xs sm:text-sm font-bold opacity-90 hover:opacity-100">
                 <ShoppingCart className="w-5 h-5 mb-1" />
