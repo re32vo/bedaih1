@@ -106,9 +106,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
               />
               <div className="flex items-center gap-2 sm:gap-3 bg-white px-2 py-1">
                 <img src={logoImg} alt="شعار جمعية بداية" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
-                <div className="flex flex-col rounded-lg bg-[#0a1230] px-2 py-1">
-                  <h1 className="text-sm sm:text-base md:text-lg font-bold text-white">جمعية بداية</h1>
-                  <p className="text-xs text-slate-100">جمعية خيرية موثوقة</p>
+                <div className="flex flex-col rounded-lg bg-white px-2 py-1">
+                  <h1 className="text-sm sm:text-base md:text-lg font-bold text-slate-900">جمعية بداية</h1>
+                  <p className="text-xs text-slate-700">جمعية خيرية موثوقة</p>
                 </div>
               </div>
             </div>
@@ -116,7 +116,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
           <div className="hidden md:flex absolute left-1/2 -translate-x-1/2">
             <button
-              className="flex items-center gap-2 px-4 py-2 text-white bg-[#0a1230] rounded-xl border border-slate-700 shadow-sm hover:bg-[#111d47] touch-manipulation"
+              className="flex items-center gap-2 px-4 py-2 text-slate-900 bg-white rounded-xl border border-slate-300 shadow-sm hover:bg-slate-50 touch-manipulation"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="فتح قائمة التصنيفات"
             >
@@ -127,7 +127,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
           <div className="flex items-center gap-2">
             <button
-              className="md:hidden flex items-center gap-2 p-2 sm:px-3 sm:py-2 text-white bg-slate-800 rounded-lg border border-slate-700 shadow-sm hover:bg-slate-700 touch-manipulation"
+              className="md:hidden flex items-center gap-2 p-2 sm:px-3 sm:py-2 text-slate-900 bg-white rounded-lg border border-slate-300 shadow-sm hover:bg-slate-50 touch-manipulation"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="فتح قائمة التصنيفات"
             >
@@ -135,7 +135,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <span className="hidden sm:inline text-sm font-semibold">التصنيفات</span>
             </button>
 
-            <Button onClick={handleDonateClick} className="text-white text-sm font-bold rounded-full px-4 lg:px-5 h-9 lg:h-10 bg-gradient-to-r from-primary to-secondary touch-manipulation">
+            <Button onClick={handleDonateClick} className="text-slate-900 text-sm font-bold rounded-full px-4 lg:px-5 h-9 lg:h-10 bg-slate-100 border border-slate-300 hover:bg-slate-200 touch-manipulation">
               <Heart className="w-4 h-4 mr-2" /> تبرع معنا
             </Button>
           </div>
@@ -236,11 +236,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
       <main className="flex-grow bg-white pb-20">{children}</main>
 
-      <nav className="fixed bottom-0 inset-x-0 z-50 border-t border-slate-200 bg-white text-white">
+      <nav className="fixed bottom-0 inset-x-0 z-50 border-t border-slate-200 bg-white text-slate-900">
         <div className="container mx-auto px-2 sm:px-4">
           <div className="mx-auto grid max-w-md grid-cols-2 items-center gap-2 py-2">
             <Link href="/cart">
-              <span className="relative flex flex-col items-center justify-center py-2 text-xs sm:text-sm font-bold rounded-xl bg-[#0a1230] opacity-95 hover:opacity-100">
+              <span className="relative flex flex-col items-center justify-center py-2 text-xs sm:text-sm font-bold rounded-xl bg-white border border-slate-300 hover:bg-slate-50">
                 <ShoppingCart className="w-5 h-5 mb-1" />
                 السلة
                 {getTotalItems() > 0 && (
@@ -252,7 +252,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </Link>
 
             <Link href={isDonorLoggedIn ? "/donor-dashboard" : "/donor-login"}>
-              <span className="flex flex-col items-center justify-center py-2 text-xs sm:text-sm font-bold rounded-xl bg-[#0a1230] opacity-95 hover:opacity-100">
+              <span className="flex flex-col items-center justify-center py-2 text-xs sm:text-sm font-bold rounded-xl bg-white border border-slate-300 hover:bg-slate-50">
                 <User className="w-5 h-5 mb-1" />
                 حسابي
               </span>
