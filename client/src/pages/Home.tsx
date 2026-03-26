@@ -62,6 +62,7 @@ type PublicStatsResponse = {
   totalDonationsAmount: number;
   donationsCount: number;
   donorsCount: number;
+  volunteerOpportunitiesCount: number;
   lastUpdatedAt: string;
 };
 
@@ -106,6 +107,7 @@ export default function Home() {
     totalDonationsAmount: 0,
     donationsCount: 0,
     donorsCount: 0,
+    volunteerOpportunitiesCount: 0,
     lastUpdatedAt: "",
   });
 
@@ -148,6 +150,7 @@ export default function Home() {
           totalDonationsAmount: Number(data.totalDonationsAmount) || 0,
           donationsCount: Number(data.donationsCount) || 0,
           donorsCount: Number(data.donorsCount) || 0,
+          volunteerOpportunitiesCount: Number(data.volunteerOpportunitiesCount) || 0,
           lastUpdatedAt: data.lastUpdatedAt || new Date().toISOString(),
         });
       } catch {
@@ -175,10 +178,10 @@ export default function Home() {
   const stats = [
     { id: "s1", title: "إجمالي التبرعات (ر.س)", value: publicStats.totalDonationsAmount, icon: HeartPulse },
     { id: "s2", title: "عدد عمليات التبرع", value: publicStats.donationsCount, icon: TrendingUp },
-    { id: "s3", title: "يتيم ويتيمة", value: 2369, icon: Users },
-    { id: "s4", title: "ساعة تطوعية", value: 8459, icon: Clock3 },
-    { id: "s5", title: "فرصة تطوعية", value: 323, icon: Users },
-    { id: "s6", title: "خدمة علاجية لعمليات التخدير الكامل", value: 1195, icon: TrendingUp },
+    { id: "s3", title: "يتيم ويتيمة", value: 0, icon: Users },
+    { id: "s4", title: "ساعة تطوعية", value: 0, icon: Clock3 },
+    { id: "s5", title: "فرصة تطوعية", value: publicStats.volunteerOpportunitiesCount, icon: Users },
+    { id: "s6", title: "خدمة علاجية لعمليات التخدير الكامل", value: 0, icon: TrendingUp },
     { id: "s7", title: "عدد المتبرعين", value: publicStats.donorsCount, icon: UserRound },
   ];
 

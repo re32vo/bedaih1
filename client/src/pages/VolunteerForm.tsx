@@ -9,29 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useVolunteerApplication } from "@/hooks/use-charity";
 import { FileText, Users, Clock, MapPin, Loader2, HeartHandshake } from "lucide-react";
-
-const volunteerProjects = [
-  {
-    id: "p1",
-    title: "مشروع السلال الغذائية",
-    summary: "مساندة الفرق الميدانية في تجهيز وتوزيع السلال للأسر المحتاجة.",
-  },
-  {
-    id: "p2",
-    title: "مشروع كسوة الشتاء",
-    summary: "تنظيم وفرز المواد الشتوية وتسليمها للمستفيدين في الوقت المناسب.",
-  },
-  {
-    id: "p3",
-    title: "مشروع التوعية المجتمعية",
-    summary: "المشاركة في حملات التوعية والأنشطة الميدانية داخل الأحياء.",
-  },
-  {
-    id: "p4",
-    title: "مشروع الدعم الإداري",
-    summary: "المساعدة في إدخال البيانات والمتابعة التنظيمية داخل مقر الجمعية.",
-  },
-];
+import { volunteerOpportunities } from "@shared/volunteer-opportunities";
 
 const volunteerFormSchema = z.object({
   name: z.string().min(2, "الاسم يجب أن لا يقل عن حرفين"),
@@ -68,7 +46,7 @@ export default function VolunteerForm() {
   };
 
   const handleSelectProject = (projectId: string) => {
-    const project = volunteerProjects.find((item) => item.id === projectId);
+    const project = volunteerOpportunities.find((item) => item.id === projectId);
     if (!project) return;
 
     setSelectedProjectId(projectId);
@@ -241,7 +219,7 @@ export default function VolunteerForm() {
                     <FormItem>
                       <FormLabel>اختر المشروع التطوعي</FormLabel>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {volunteerProjects.map((project) => {
+                        {volunteerOpportunities.map((project) => {
                           const isSelected = selectedProjectId === project.id;
                           return (
                             <button

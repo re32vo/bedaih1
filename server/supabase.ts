@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { randomUUID } from "crypto";
+import { volunteerOpportunities } from "../shared/volunteer-opportunities";
 
 // إنشاء Supabase client
 const supabaseUrl = process.env.SUPABASE_URL || '';
@@ -93,7 +94,7 @@ export async function upsertDonor(donor: { email: string; name?: string; phone?:
   if (!supabase) return null;
   
   const email = normalizeEmail(donor.email);
-  
+
   const { data: existing } = await supabase
     .from('donors')
     .select('*')
@@ -299,6 +300,7 @@ export async function getPublicDonationStats() {
       totalDonationsAmount: 0,
       donationsCount: 0,
       donorsCount: 0,
+      volunteerOpportunitiesCount: volunteerOpportunities.length,
       lastUpdatedAt: new Date().toISOString(),
     };
   }
@@ -328,6 +330,7 @@ export async function getPublicDonationStats() {
     totalDonationsAmount,
     donationsCount: donationsCount || 0,
     donorsCount,
+    volunteerOpportunitiesCount: volunteerOpportunities.length,
     lastUpdatedAt: new Date().toISOString(),
   };
 }
