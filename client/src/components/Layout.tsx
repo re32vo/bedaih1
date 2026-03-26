@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Heart, Menu, X, Phone, MapPin, Mail, LogIn, User, ChevronDown, ChevronUp, MessageCircle, Clock3, CalendarDays, Gift, Rocket, ShoppingCart } from "lucide-react";
+import { Heart, Menu, X, Phone, MapPin, Mail, User, ChevronDown, ChevronUp, MessageCircle, Clock3, CalendarDays, Gift, Rocket, ShoppingCart, Home, LayoutGrid } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
@@ -94,32 +94,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen font-body flex flex-col rtl bg-slate-900 overflow-x-hidden" dir="rtl">
       <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 shadow-sm w-full">
-        {/* شريط الأدوات العلوي - جوال فقط */}
-        <div className="md:hidden border-b border-slate-200 dark:border-slate-800">
-          <div className="container mx-auto px-3 sm:px-4 py-1.5 flex items-center justify-between">
-            {/* يمين: ملف تعريفي / تسجيل دخول */}
-            <Link href={isDonorLoggedIn ? "/donor-dashboard" : "/donor-login"}>
-              <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-slate-900 hover:bg-slate-100 text-sm font-semibold touch-manipulation border border-slate-300 shadow-sm transition-colors">
-                <User className="w-4 h-4" />
-                <span>{isDonorLoggedIn ? "الملف التعريفي" : "تسجيل الدخول"}</span>
-              </button>
-            </Link>
-            {/* يسار: السلة */}
-            {location !== '/cart' && (
-              <Link href="/cart">
-                <button className="relative overflow-visible flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-sm font-semibold touch-manipulation shadow-sm transition-colors">
-                  <ShoppingCart className="w-4 h-4" />
-                  <span>السلة</span>
-                  {getTotalItems() > 0 && (
-                    <span className="absolute -top-2 -left-2 bg-red-600 text-white text-[11px] font-extrabold rounded-full min-w-[20px] h-5 px-1 flex items-center justify-center border-2 border-white shadow leading-none">
-                      {getTotalItems()}
-                    </span>
-                  )}
-                </button>
-              </Link>
-            )}
-          </div>
-        </div>
         {/* الهيدر الرئيسي */}
         <div className="container mx-auto px-3 sm:px-4 py-2.5 sm:py-3 min-h-[56px] sm:min-h-[64px] flex items-center justify-between border-b border-slate-200 dark:border-slate-800">
           <Link href="/">
@@ -146,171 +120,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-2 relative">
-            {navLinks.map((link) => (
-              <Link key={link.href} href={link.href}>
-                <span className={`px-3 py-2 rounded-lg text-sm font-medium cursor-pointer transition-all ${location === link.href ? "font-semibold bg-emerald-500 text-white dark:bg-emerald-600" : "text-slate-700 dark:text-white hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/10 dark:hover:text-white"}`}>
-                  {link.label}
-                </span>
-              </Link>
-            ))}
-
-            {/* about dropdown trigger */}
-            <div className="relative">
-              <button
-                onClick={() => toggleDesktopDropdown("about")}
-                className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
-              >
-                من نحن <ChevronDown className="w-4 h-4 mr-1" />
-              </button>
-              {openDesktopDropdown === "about" && (
-                <div className="absolute right-0 mt-2 w-52 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-lg z-50">
-                  {aboutLinks.map((link) => (
-                    <Link key={link.href} href={link.href}>
-                      <span
-                        className={`block px-4 py-2 text-sm cursor-pointer transition-colors ${
-                          location === link.href
-                            ? "bg-emerald-500 text-white"
-                            : "text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
-                        }`}
-                        onClick={() => setOpenDesktopDropdown(null)}
-                      >
-                        {link.label}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* programs dropdown trigger */}
-            <div className="relative">
-              <button
-                onClick={() => toggleDesktopDropdown("programs")}
-                className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
-              >
-                برامجنا <ChevronDown className="w-4 h-4 mr-1" />
-              </button>
-              {openDesktopDropdown === "programs" && (
-                <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-lg z-50">
-                  {programsLinks.map((link) => (
-                    <Link key={link.href} href={link.href}>
-                      <span
-                        className={`block px-4 py-2 text-sm cursor-pointer transition-colors ${
-                          location === link.href
-                            ? "bg-emerald-500 text-white"
-                            : "text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
-                        }`}
-                        onClick={() => setOpenDesktopDropdown(null)}
-                      >
-                        {link.label}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* volunteer dropdown trigger */}
-            <div className="relative">
-              <button
-                onClick={() => toggleDesktopDropdown("volunteer")}
-                className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
-              >
-                المركز التطوعي <ChevronDown className="w-4 h-4 mr-1" />
-              </button>
-              {openDesktopDropdown === "volunteer" && (
-                <div className="absolute right-0 mt-2 w-52 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-lg z-50">
-                  {volunteerLinks.map((link) => (
-                    <Link key={link.href} href={link.href}>
-                      <span
-                        className={`block px-4 py-2 text-sm cursor-pointer transition-colors ${
-                          location === link.href
-                            ? "bg-emerald-500 text-white"
-                            : "text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
-                        }`}
-                        onClick={() => setOpenDesktopDropdown(null)}
-                      >
-                        {link.label}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* media center dropdown trigger */}
-            <div className="relative">
-              <button
-                onClick={() => toggleDesktopDropdown("media")}
-                className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
-              >
-                المركز الإعلامي <ChevronDown className="w-4 h-4 mr-1" />
-              </button>
-              {openDesktopDropdown === "media" && (
-                <div className="absolute right-0 mt-2 w-52 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-lg z-50">
-                  {mediaCenterLinks.map((link) => (
-                    <Link key={link.href} href={link.href}>
-                      <span
-                        className={`block px-4 py-2 text-sm cursor-pointer transition-colors ${
-                          location === link.href
-                            ? "bg-emerald-500 text-white"
-                            : "text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10"
-                        }`}
-                        onClick={() => setOpenDesktopDropdown(null)}
-                      >
-                        {link.label}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-
-
-          </nav>
-
           <div className="flex items-center gap-2">
-            {/* زر القائمة للجوال */}
             <button
-              className="md:hidden p-2 text-white bg-slate-800 rounded-lg border border-slate-700 shadow-sm hover:bg-slate-700 touch-manipulation"
+              className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 text-white bg-slate-800 rounded-lg border border-slate-700 shadow-sm hover:bg-slate-700 touch-manipulation"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="فتح قائمة التصنيفات"
             >
               {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              <span className="hidden sm:inline text-sm font-semibold">التصنيفات</span>
             </button>
-            {/* ملف تعريفي - كمبيوتر فقط */}
-            <Link href={isDonorLoggedIn ? "/donor-dashboard" : "/donor-login"}>
-              <button className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-slate-900 hover:bg-slate-100 text-sm font-semibold touch-manipulation border border-slate-300 shadow-sm transition-colors">
-                <User className="w-4 h-4" />
-                <span>{isDonorLoggedIn ? "الملف التعريفي" : "تسجيل الدخول"}</span>
-              </button>
-            </Link>
-            {/* السلة - كمبيوتر فقط */}
-            {location !== '/cart' && (
-              <Link href="/cart">
-                <button className="hidden md:flex relative overflow-visible items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-sm font-semibold touch-manipulation shadow-sm transition-colors">
-                  <ShoppingCart className="w-4 h-4" />
-                  <span>السلة</span>
-                  {getTotalItems() > 0 && (
-                    <span className="absolute -top-2 -left-2 bg-red-600 text-white text-[11px] font-extrabold rounded-full min-w-[20px] h-5 px-1 flex items-center justify-center border-2 border-white shadow leading-none">
-                      {getTotalItems()}
-                    </span>
-                  )}
-                </button>
-              </Link>
-            )}
-            {/* زر تبرع للكمبيوتر */}
-            <Button onClick={handleDonateClick} className="hidden md:flex text-white text-sm font-bold rounded-full px-4 lg:px-5 h-9 lg:h-10 bg-gradient-to-r from-primary to-secondary touch-manipulation">
-              <Heart className="w-4 h-4 mr-2" /> تبرع الآن
-            </Button>
           </div>
         </div>
       </header>
 
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="md:hidden z-40 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 overflow-hidden w-full max-h-[80vh] overflow-y-auto">
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="z-40 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 overflow-hidden w-full max-h-[80vh] overflow-y-auto">
             <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 flex flex-col gap-1.5 sm:gap-2">
               {navLinks.map((link) => (
                 <Link key={link.href} href={link.href}>
@@ -395,24 +220,62 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   ))}
                 </div>
               )}
-
-
-
-              <Link href={isDonorLoggedIn ? "/donor-dashboard" : "/donor-login"}>
-                <Button className="w-full mt-2 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-full flex items-center justify-center gap-2 h-11 touch-manipulation">
-                  {isDonorLoggedIn ? <><User className="w-4 h-4" /> الملف التعريفي</> : <><LogIn className="w-4 h-4" /> دخول المتبرع</>}
-                </Button>
-              </Link>
-
-              <Button onClick={handleDonateClick} className="w-full mt-2 bg-accent text-accent-foreground font-bold rounded-full h-11 touch-manipulation">
-                <Heart className="w-4 h-4 mr-2" /> تبرع الآن
-              </Button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <main className="flex-grow bg-white">{children}</main>
+      <main className="flex-grow bg-white pb-20">{children}</main>
+
+      <nav className="fixed bottom-0 inset-x-0 z-50 border-t border-slate-500 bg-slate-700 text-white">
+        <div className="container mx-auto px-2 sm:px-4">
+          <div className="grid grid-cols-5 items-center">
+            <Link href="/">
+              <span className="flex flex-col items-center justify-center py-2 text-xs sm:text-sm font-bold opacity-90 hover:opacity-100">
+                <Home className="w-5 h-5 mb-1" />
+                الرئيسية
+              </span>
+            </Link>
+
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="flex flex-col items-center justify-center py-2 text-xs sm:text-sm font-bold opacity-90 hover:opacity-100"
+              aria-label="فتح التصنيفات"
+            >
+              <LayoutGrid className="w-5 h-5 mb-1" />
+              التصنيفات
+            </button>
+
+            <button
+              onClick={handleDonateClick}
+              className="flex flex-col items-center justify-center py-2 text-xs sm:text-sm font-bold opacity-90 hover:opacity-100"
+              aria-label="تبرع معنا"
+            >
+              <Heart className="w-5 h-5 mb-1" />
+              تبرع معنا
+            </button>
+
+            <Link href="/cart">
+              <span className="relative flex flex-col items-center justify-center py-2 text-xs sm:text-sm font-bold opacity-90 hover:opacity-100">
+                <ShoppingCart className="w-5 h-5 mb-1" />
+                السلة
+                {getTotalItems() > 0 && (
+                  <span className="absolute top-1 right-[28%] bg-red-600 text-white text-[10px] font-extrabold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center leading-none">
+                    {getTotalItems()}
+                  </span>
+                )}
+              </span>
+            </Link>
+
+            <Link href={isDonorLoggedIn ? "/donor-dashboard" : "/donor-login"}>
+              <span className="flex flex-col items-center justify-center py-2 text-xs sm:text-sm font-bold opacity-90 hover:opacity-100">
+                <User className="w-5 h-5 mb-1" />
+                حسابي
+              </span>
+            </Link>
+          </div>
+        </div>
+      </nav>
 
       {/* Right-side donation shortcuts - hidden on donation pages */}
       {isDonationWidgetVisible && 
@@ -477,7 +340,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         href="https://wa.me/966533170903"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-50 bg-green-500 hover:bg-green-600 text-white rounded-full p-3 sm:p-4 shadow-lg transition-all duration-300 hover:scale-110 flex items-center justify-center group touch-manipulation"
+        className="fixed bottom-24 sm:bottom-24 right-4 sm:right-6 z-50 bg-green-500 hover:bg-green-600 text-white rounded-full p-3 sm:p-4 shadow-lg transition-all duration-300 hover:scale-110 flex items-center justify-center group touch-manipulation"
         aria-label="تواصل عبر واتساب"
       >
         <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />
