@@ -93,9 +93,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen font-body flex flex-col rtl bg-slate-900 overflow-x-hidden" dir="rtl">
-      <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 shadow-sm w-full">
+      <header className="sticky top-0 z-50 bg-white shadow-sm w-full">
         {/* الهيدر الرئيسي */}
-        <div className="container mx-auto px-3 sm:px-4 py-2.5 sm:py-3 min-h-[56px] sm:min-h-[64px] flex items-center justify-between border-b border-slate-200 dark:border-slate-800">
+        <div className="container relative mx-auto px-3 sm:px-4 py-2.5 sm:py-3 min-h-[56px] sm:min-h-[64px] flex items-center justify-between border-b border-slate-200">
           <Link href="/">
             <div className="flex items-center gap-0 cursor-pointer">
               <img
@@ -104,15 +104,26 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto object-contain"
                 loading="lazy"
               />
-              <div className="flex items-center gap-2 sm:gap-3 bg-white px-2 py-1 dark:bg-slate-900/60">
+              <div className="flex items-center gap-2 sm:gap-3 bg-white px-2 py-1">
                 <img src={logoImg} alt="شعار جمعية بداية" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
-                <div className="flex flex-col">
-                  <h1 className="text-sm sm:text-base md:text-lg font-bold text-slate-900 dark:text-white">جمعية بداية</h1>
-                  <p className="text-xs text-slate-600 dark:text-slate-300">جمعية خيرية موثوقة</p>
+                <div className="flex flex-col rounded-lg bg-[#0a1230] px-2 py-1">
+                  <h1 className="text-sm sm:text-base md:text-lg font-bold text-white">جمعية بداية</h1>
+                  <p className="text-xs text-slate-100">جمعية خيرية موثوقة</p>
                 </div>
               </div>
             </div>
           </Link>
+
+          <div className="hidden md:flex absolute left-1/2 -translate-x-1/2">
+            <button
+              className="flex items-center gap-2 px-4 py-2 text-white bg-[#0a1230] rounded-xl border border-slate-700 shadow-sm hover:bg-[#111d47] touch-manipulation"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="فتح قائمة التصنيفات"
+            >
+              <LayoutGrid className="w-5 h-5" />
+              <span className="text-base font-bold">التصنيفات</span>
+            </button>
+          </div>
 
           <div className="flex items-center gap-2">
             <button
@@ -122,15 +133,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
             >
               {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               <span className="hidden sm:inline text-sm font-semibold">التصنيفات</span>
-            </button>
-
-            <button
-              className="hidden md:flex items-center gap-2 p-2 sm:px-3 sm:py-2 text-white bg-slate-800 rounded-lg border border-slate-700 shadow-sm hover:bg-slate-700 touch-manipulation"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="فتح قائمة التصنيفات"
-            >
-              <LayoutGrid className="w-5 h-5" />
-              <span className="text-sm font-semibold">التصنيفات</span>
             </button>
 
             <Button onClick={handleDonateClick} className="text-white text-sm font-bold rounded-full px-4 lg:px-5 h-9 lg:h-10 bg-gradient-to-r from-primary to-secondary touch-manipulation">
@@ -234,11 +236,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
       <main className="flex-grow bg-white pb-20">{children}</main>
 
-      <nav className="fixed bottom-0 inset-x-0 z-50 border-t border-slate-800 bg-[#0a1230] text-white">
+      <nav className="fixed bottom-0 inset-x-0 z-50 border-t border-slate-200 bg-white text-white">
         <div className="container mx-auto px-2 sm:px-4">
-          <div className="mx-auto grid max-w-md grid-cols-2 items-center">
+          <div className="mx-auto grid max-w-md grid-cols-2 items-center gap-2 py-2">
             <Link href="/cart">
-              <span className="relative flex flex-col items-center justify-center py-2 text-xs sm:text-sm font-bold opacity-90 hover:opacity-100">
+              <span className="relative flex flex-col items-center justify-center py-2 text-xs sm:text-sm font-bold rounded-xl bg-[#0a1230] opacity-95 hover:opacity-100">
                 <ShoppingCart className="w-5 h-5 mb-1" />
                 السلة
                 {getTotalItems() > 0 && (
@@ -250,7 +252,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </Link>
 
             <Link href={isDonorLoggedIn ? "/donor-dashboard" : "/donor-login"}>
-              <span className="flex flex-col items-center justify-center py-2 text-xs sm:text-sm font-bold opacity-90 hover:opacity-100">
+              <span className="flex flex-col items-center justify-center py-2 text-xs sm:text-sm font-bold rounded-xl bg-[#0a1230] opacity-95 hover:opacity-100">
                 <User className="w-5 h-5 mb-1" />
                 حسابي
               </span>
