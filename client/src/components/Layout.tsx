@@ -98,12 +98,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div className="container relative mx-auto px-3 sm:px-4 py-2.5 sm:py-3 min-h-[56px] sm:min-h-[64px] flex items-center justify-between border-b border-slate-200">
           <Link href="/">
             <div className="flex items-center gap-0 cursor-pointer">
-              <img
-                src="/arev.png"
-                alt="شهادة ترخيص الجمعية"
-                className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto object-contain"
-                loading="lazy"
-              />
               <div className="flex items-center gap-2 sm:gap-3 bg-white px-2 py-1">
                 <img src={logoImg} alt="شعار جمعية بداية" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
                 <div className="flex flex-col rounded-lg bg-white px-2 py-1">
@@ -111,18 +105,113 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   <p className="text-xs text-slate-700">جمعية خيرية موثوقة</p>
                 </div>
               </div>
+              <img
+                src="/arev.png"
+                alt="شهادة ترخيص الجمعية"
+                className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto object-contain"
+                loading="lazy"
+              />
             </div>
           </Link>
 
-          <div className="hidden md:flex absolute left-1/2 -translate-x-1/2">
-            <button
-              className="flex items-center gap-2 px-4 py-2 text-slate-900 bg-white rounded-xl border border-slate-300 shadow-sm hover:bg-slate-50 touch-manipulation"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="فتح قائمة التصنيفات"
-            >
-              <LayoutGrid className="w-5 h-5" />
-              <span className="text-base font-bold">التصنيفات</span>
-            </button>
+          <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-2">
+            <Link href="/">
+              <span className={`px-3 py-2 rounded-lg text-sm font-bold cursor-pointer transition-all ${location === "/" ? "bg-slate-900 text-white" : "text-slate-900 hover:bg-slate-100"}`}>
+                الرئيسية
+              </span>
+            </Link>
+
+            <div className="relative">
+              <button
+                onClick={() => toggleDesktopDropdown("about")}
+                className="flex items-center px-3 py-2 rounded-lg text-sm font-bold text-slate-900 hover:bg-slate-100"
+              >
+                من نحن <ChevronDown className="w-4 h-4 mr-1" />
+              </button>
+              {openDesktopDropdown === "about" && (
+                <div className="absolute right-0 mt-2 w-52 bg-white border border-slate-200 rounded-lg shadow-lg z-50">
+                  {aboutLinks.map((link) => (
+                    <Link key={link.href} href={link.href}>
+                      <span
+                        className={`block px-4 py-2 text-sm cursor-pointer transition-colors ${location === link.href ? "bg-emerald-500 text-white" : "text-slate-700 hover:bg-slate-100"}`}
+                        onClick={() => setOpenDesktopDropdown(null)}
+                      >
+                        {link.label}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="relative">
+              <button
+                onClick={() => toggleDesktopDropdown("programs")}
+                className="flex items-center px-3 py-2 rounded-lg text-sm font-bold text-slate-900 hover:bg-slate-100"
+              >
+                برامجنا <ChevronDown className="w-4 h-4 mr-1" />
+              </button>
+              {openDesktopDropdown === "programs" && (
+                <div className="absolute right-0 mt-2 w-44 bg-white border border-slate-200 rounded-lg shadow-lg z-50">
+                  {programsLinks.map((link) => (
+                    <Link key={link.href} href={link.href}>
+                      <span
+                        className={`block px-4 py-2 text-sm cursor-pointer transition-colors ${location === link.href ? "bg-emerald-500 text-white" : "text-slate-700 hover:bg-slate-100"}`}
+                        onClick={() => setOpenDesktopDropdown(null)}
+                      >
+                        {link.label}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="relative">
+              <button
+                onClick={() => toggleDesktopDropdown("volunteer")}
+                className="flex items-center px-3 py-2 rounded-lg text-sm font-bold text-slate-900 hover:bg-slate-100"
+              >
+                المركز التطوعي <ChevronDown className="w-4 h-4 mr-1" />
+              </button>
+              {openDesktopDropdown === "volunteer" && (
+                <div className="absolute right-0 mt-2 w-56 bg-white border border-slate-200 rounded-lg shadow-lg z-50">
+                  {volunteerLinks.map((link) => (
+                    <Link key={link.href} href={link.href}>
+                      <span
+                        className={`block px-4 py-2 text-sm cursor-pointer transition-colors ${location === link.href ? "bg-emerald-500 text-white" : "text-slate-700 hover:bg-slate-100"}`}
+                        onClick={() => setOpenDesktopDropdown(null)}
+                      >
+                        {link.label}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="relative">
+              <button
+                onClick={() => toggleDesktopDropdown("media")}
+                className="flex items-center px-3 py-2 rounded-lg text-sm font-bold text-slate-900 hover:bg-slate-100"
+              >
+                المركز الإعلامي <ChevronDown className="w-4 h-4 mr-1" />
+              </button>
+              {openDesktopDropdown === "media" && (
+                <div className="absolute right-0 mt-2 w-56 bg-white border border-slate-200 rounded-lg shadow-lg z-50">
+                  {mediaCenterLinks.map((link) => (
+                    <Link key={link.href} href={link.href}>
+                      <span
+                        className={`block px-4 py-2 text-sm cursor-pointer transition-colors ${location === link.href ? "bg-emerald-500 text-white" : "text-slate-700 hover:bg-slate-100"}`}
+                        onClick={() => setOpenDesktopDropdown(null)}
+                      >
+                        {link.label}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="flex items-center gap-2">
