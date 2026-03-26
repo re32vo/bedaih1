@@ -22,6 +22,7 @@ import {
   createDonation,
   createRecurringDonation,
   getDonationsByEmail,
+  getPublicDonationStats,
   getDonorByEmail,
   getAllDonors,
   updateDonor,
@@ -77,6 +78,17 @@ export async function registerRoutes(
   await ensurePresidentExists();
 
   const logger = new Logger("Routes");
+
+  // Public live stats for home page counters.
+  app.get("/api/public/stats", async (_req, res) => {
+    try {
+      const stats = await getPublicDonationStats();
+      res.json(stats);
+    } catch (err) {
+      logger.error("Public stats error", err);
+      res.status(500).json({ message: "تعذر جلب الإحصائيات" });
+    }
+  });
 
   // Beneficiary Form
   app.post(api.beneficiaries.create.path, async (req, res) => {

@@ -58,15 +58,12 @@ const partners = [
   { id: "p1", name: "وزارة الصحة", image: "/asr.png" },
 ];
 
-const stats = [
-  { id: "s1", title: "خدمة علاجية", value: 39081, icon: HeartPulse },
-  { id: "s2", title: "مستفيدو الجمعية", value: 40210, icon: TrendingUp },
-  { id: "s3", title: "يتيم ويتيمة", value: 2369, icon: Users },
-  { id: "s4", title: "ساعة تطوعية", value: 8459, icon: Clock3 },
-  { id: "s5", title: "فرصة تطوعية", value: 323, icon: Users },
-  { id: "s6", title: "خدمة علاجية لعمليات التخدير الكامل", value: 1195, icon: TrendingUp },
-  { id: "s7", title: "متطوعو الجمعية", value: 1141, icon: UserRound },
-];
+type PublicStatsResponse = {
+  totalDonationsAmount: number;
+  donationsCount: number;
+  donorsCount: number;
+  lastUpdatedAt: string;
+};
 
 const heroSlides = [
   {
@@ -105,6 +102,12 @@ export default function Home() {
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
   const [heroAmount, setHeroAmount] = useState("100");
+  const [publicStats, setPublicStats] = useState<PublicStatsResponse>({
+    totalDonationsAmount: 0,
+    donationsCount: 0,
+    donorsCount: 0,
+    lastUpdatedAt: "",
+  });
 
   const currentHeroSlide = heroSlides[currentHeroIndex];
   const currentHeroProject = donationProjects.find((project) => project.id === currentHeroSlide.projectId) || donationProjects[0];
@@ -129,6 +132,55 @@ export default function Home() {
       img.src = slide.image;
     });
   }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchPublicStats = async () => {
+      try {
+        const response = await fetch("/api/public/stats", { cache: "no-store" });
+        if (!response.ok) return;
+
+        const data = (await response.json()) as PublicStatsResponse;
+        if (!isMounted) return;
+
+        setPublicStats({
+          totalDonationsAmount: Number(data.totalDonationsAmount) || 0,
+          donationsCount: Number(data.donationsCount) || 0,
+          donorsCount: Number(data.donorsCount) || 0,
+          lastUpdatedAt: data.lastUpdatedAt || new Date().toISOString(),
+        });
+      } catch {
+        // Keep latest rendered values if stats endpoint is temporarily unavailable.
+      }
+    };
+
+    fetchPublicStats();
+    const intervalId = window.setInterval(fetchPublicStats, 20000);
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        fetchPublicStats();
+      }
+    };
+
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    return () => {
+      isMounted = false;
+      window.clearInterval(intervalId);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+    };
+  }, []);
+
+  const stats = [
+    { id: "s1", title: "إجمالي التبرعات (ر.س)", value: publicStats.totalDonationsAmount, icon: HeartPulse },
+    { id: "s2", title: "عدد عمليات التبرع", value: publicStats.donationsCount, icon: TrendingUp },
+    { id: "s3", title: "يتيم ويتيمة", value: 2369, icon: Users },
+    { id: "s4", title: "ساعة تطوعية", value: 8459, icon: Clock3 },
+    { id: "s5", title: "فرصة تطوعية", value: 323, icon: Users },
+    { id: "s6", title: "خدمة علاجية لعمليات التخدير الكامل", value: 1195, icon: TrendingUp },
+    { id: "s7", title: "عدد المتبرعين", value: publicStats.donorsCount, icon: UserRound },
+  ];
 
   const updateProjectAmount = (projectId: string, selected: number, custom: string = "") => {
     setProjectAmounts((prev) => ({ ...prev, [projectId]: { selected, custom } }));

@@ -293,6 +293,45 @@ export async function getDonationsByEmail(email: string, limit = 20) {
   }));
 }
 
+export async function getPublicDonationStats() {
+  if (!supabase) {
+    return {
+      totalDonationsAmount: 0,
+      donationsCount: 0,
+      donorsCount: 0,
+      lastUpdatedAt: new Date().toISOString(),
+    };
+  }
+
+  const [{ count: donationsCount }, { data, error }] = await Promise.all([
+    supabase
+      .from('donations')
+      .select('*', { count: 'exact', head: true }),
+    supabase
+      .from('donations')
+      .select('amount, email')
+  ]);
+
+  if (error) {
+    throw new Error(`فشل جلب إحصائيات التبرعات: ${error.message}`);
+  }
+
+  const rows = data || [];
+  const totalDonationsAmount = rows.reduce((sum: number, row: any) => sum + (Number(row.amount) || 0), 0);
+  const donorsCount = new Set(
+    rows
+      .map((row: any) => normalizeEmail(String(row.email || '')))
+      .filter((email: string) => email.length > 0)
+  ).size;
+
+  return {
+    totalDonationsAmount,
+    donationsCount: donationsCount || 0,
+    donorsCount,
+    lastUpdatedAt: new Date().toISOString(),
+  };
+}
+
 export async function logAuditToSupabase(entry: { actor: string; action: string; details?: any }) {
   if (!supabase) return null;
   
