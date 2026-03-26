@@ -132,13 +132,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 </div>
               </div>
               <img
-                src="/bedaih.jpg"
+                src="/arev.png"
                 alt="شهادة ترخيص الجمعية"
                 className="hidden sm:block h-12 md:h-14 lg:h-16 w-auto rounded-lg border border-slate-200 bg-white object-contain shadow-sm dark:border-slate-700"
                 loading="lazy"
               />
               <img
-                src="/bedaih.jpg"
+                src="/arev.png"
                 alt="شهادة ترخيص الجمعية"
                 className="block sm:hidden h-10 w-auto rounded-lg border border-slate-200 bg-white object-contain shadow-sm dark:border-slate-700"
                 loading="lazy"
