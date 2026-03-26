@@ -66,6 +66,13 @@ type PublicStatsResponse = {
   lastUpdatedAt: string;
 };
 
+type HomeStat = {
+  id: string;
+  title: string;
+  value: number | null;
+  icon: any;
+};
+
 const heroSlides = [
   {
     id: "h1",
@@ -175,13 +182,13 @@ export default function Home() {
     };
   }, []);
 
-  const stats = [
+  const stats: HomeStat[] = [
     { id: "s1", title: "إجمالي التبرعات (ر.س)", value: publicStats.totalDonationsAmount, icon: HeartPulse },
     { id: "s2", title: "عدد عمليات التبرع", value: publicStats.donationsCount, icon: TrendingUp },
-    { id: "s3", title: "يتيم ويتيمة", value: 0, icon: Users },
-    { id: "s4", title: "ساعة تطوعية", value: 0, icon: Clock3 },
+    { id: "s3", title: "يتيم ويتيمة", value: null, icon: Users },
+    { id: "s4", title: "ساعة تطوعية", value: null, icon: Clock3 },
     { id: "s5", title: "فرصة تطوعية", value: publicStats.volunteerOpportunitiesCount, icon: Users },
-    { id: "s6", title: "خدمة علاجية لعمليات التخدير الكامل", value: 0, icon: TrendingUp },
+    { id: "s6", title: "خدمة علاجية لعمليات التخدير الكامل", value: null, icon: TrendingUp },
     { id: "s7", title: "عدد المتبرعين", value: publicStats.donorsCount, icon: UserRound },
   ];
 
@@ -397,7 +404,7 @@ export default function Home() {
                   <div className="min-w-0 flex-1">
                     <p className="text-xs sm:text-sm md:text-base font-semibold text-slate-500 leading-tight mb-1">{item.title}</p>
                     <p className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900">
-                      {statsInView ? <CountUp end={item.value} duration={1.6} separator="," /> : 0}
+                      {item.value === null ? "-" : statsInView ? <CountUp end={item.value} duration={1.6} separator="," /> : 0}
                     </p>
                   </div>
                   <div className="rounded-xl md:rounded-2xl bg-sky-500 p-2 sm:p-2.5 md:p-3 text-white flex-shrink-0">
@@ -416,7 +423,7 @@ export default function Home() {
                   <div className="min-w-0 flex-1">
                     <p className="text-xs sm:text-sm md:text-base font-semibold text-slate-500 leading-tight mb-1">{item.title}</p>
                     <p className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900">
-                      {statsInView ? <CountUp end={item.value} duration={1.6} separator="," /> : 0}
+                      {item.value === null ? "-" : statsInView ? <CountUp end={item.value} duration={1.6} separator="," /> : 0}
                     </p>
                   </div>
                   <div className="rounded-xl md:rounded-2xl bg-sky-500 p-2 sm:p-2.5 md:p-3 text-white flex-shrink-0">
@@ -434,7 +441,7 @@ export default function Home() {
                 <div className="min-w-0 flex-1">
                   <p className="text-xs sm:text-sm md:text-base font-semibold leading-tight sm:leading-7 text-slate-500 mb-1">{stats[6].title}</p>
                   <p className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900">
-                    {statsInView ? <CountUp end={stats[6].value} duration={1.6} separator="," /> : 0}
+                    {stats[6].value === null ? "-" : statsInView ? <CountUp end={stats[6].value} duration={1.6} separator="," /> : 0}
                   </p>
                 </div>
                 <div className="rounded-xl md:rounded-2xl bg-sky-500 p-2 sm:p-2.5 md:p-3 text-white flex-shrink-0">
