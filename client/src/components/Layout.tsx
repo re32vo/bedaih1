@@ -124,11 +124,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div className="container mx-auto px-3 sm:px-4 py-2.5 sm:py-3 min-h-[56px] sm:min-h-[64px] flex items-center justify-between border-b border-slate-200 dark:border-slate-800">
           <Link href="/">
             <div className="flex items-center gap-2 sm:gap-3 cursor-pointer">
-              <img src={logoImg} alt="شعار جمعية بداية" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
-              <div className="flex flex-col">
-                <h1 className="text-sm sm:text-base md:text-lg font-bold text-slate-900 dark:text-white">جمعية بداية</h1>
-                <p className="text-xs text-slate-600 dark:text-slate-300">جمعية خيرية موثوقة</p>
+              <div className="flex items-center gap-2 sm:gap-3 rounded-xl border border-slate-200 bg-white px-2 py-1 shadow-sm dark:border-slate-700 dark:bg-slate-900/60">
+                <img src={logoImg} alt="شعار جمعية بداية" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
+                <div className="flex flex-col">
+                  <h1 className="text-sm sm:text-base md:text-lg font-bold text-slate-900 dark:text-white">جمعية بداية</h1>
+                  <p className="text-xs text-slate-600 dark:text-slate-300">جمعية خيرية موثوقة</p>
+                </div>
               </div>
+              <img
+                src="/bedaih.jpg"
+                alt="شهادة ترخيص الجمعية"
+                className="hidden sm:block h-12 md:h-14 lg:h-16 w-auto rounded-lg border border-slate-200 bg-white object-contain shadow-sm dark:border-slate-700"
+                loading="lazy"
+              />
+              <img
+                src="/bedaih.jpg"
+                alt="شهادة ترخيص الجمعية"
+                className="block sm:hidden h-10 w-auto rounded-lg border border-slate-200 bg-white object-contain shadow-sm dark:border-slate-700"
+                loading="lazy"
+              />
             </div>
           </Link>
 
