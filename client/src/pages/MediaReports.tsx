@@ -3,12 +3,8 @@ import { BarChart3, TrendingUp, FileText } from "lucide-react";
 
 export default function MediaReports() {
   const reports = [
-    { id: "annual-2025", title: "التقرير السنوي 2025", date: "ديسمبر 2025", pages: 120, size: "TXT" },
-    { id: "semiannual-2025", title: "التقرير نصف السنوي 2025", date: "يونيو 2025", pages: 85, size: "TXT" },
-    { id: "annual-2024", title: "التقرير السنوي 2024", date: "ديسمبر 2024", pages: 110, size: "TXT" },
-    { id: "monthly-2026-03", title: "التقرير الشهري - مارس 2026", date: "مارس 2026", pages: 25, size: "TXT" },
-    { id: "financial-2025", title: "التقرير المالي السنوي 2025", date: "يناير 2026", pages: 45, size: "TXT" },
-    { id: "impact-2025", title: "تقرير التأثير الاجتماعي 2025", date: "فبراير 2026", pages: 60, size: "TXT" },
+    { id: "annual-2025", title: "التقرير السنوي 2025", date: "ديسمبر 2025" },
+    { id: "financial-2025", title: "التقرير المالي السنوي 2025", date: "يناير 2026" },
   ];
 
   return (
@@ -33,14 +29,7 @@ export default function MediaReports() {
                   <FileText className="w-6 h-6 text-blue-500 flex-shrink-0" />
                 </div>
               </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <div className="space-y-1">
-                    <p className="text-sm text-slate-600">{report.pages} صفحة</p>
-                    <p className="text-sm text-slate-600">الحجم: {report.size}</p>
-                  </div>
-                </div>
-              </CardContent>
+              <CardContent />
             </Card>
           ))}
         </div>
