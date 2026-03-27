@@ -31,8 +31,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
   ];
 
   const aboutLinks = [
-    { href: "/about", label: "نبذه علي الجمعية" },
-    { href: "/members", label: "أعضاء الجمعية" },
+    { href: "/about", label: "نبذة علي الجمعية" },
+    { href: "/members", label: "الفريق التنفيذي" },
     { href: "/governance", label: "الحوكمة" },
     { href: "/awards", label: "الجوائز" },
     { href: "/director-contact", label: "بيانات التواصل مع المدير" },
