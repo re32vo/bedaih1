@@ -15,7 +15,7 @@ export default function Members() {
     id: index + 1,
     name: `عضو الجمعية العمومية ${index + 1}`,
     role: "عضو الجمعية العمومية",
-    image: "",
+    image: `/now/${index + 1}.jpg`,
   }));
 
   const [activeSection, setActiveSection] = useState<"general-assembly" | "executive-team" | "experience">("general-assembly");
