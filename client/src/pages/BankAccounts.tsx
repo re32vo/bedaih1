@@ -1,25 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Building2, Copy } from "lucide-react";
+import { Copy } from "lucide-react";
 
 export default function BankAccounts() {
   const accounts = [
     {
-      bank: "البنك الأهلي السعودي",
+      bank: "بنك الإنماء",
       accountName: "جمعية بداية",
-      accountNumber: "1234567890123456",
-      iban: "SA0310000001234567890123",
-    },
-    {
-      bank: "البنك السعودي للاستثمار",
-      accountName: "جمعية بداية",
-      accountNumber: "9876543210123456",
-      iban: "SA9850000002345678901234",
-    },
-    {
-      bank: "بنك الراجين",
-      accountName: "جمعية بداية",
-      accountNumber: "1111222233334444",
-      iban: "SA6350000003456789012345",
+      accountNumber: "68206457616000",
+      iban: "SA7705000068206457616000",
     },
   ];
 
@@ -42,9 +30,14 @@ export default function BankAccounts() {
           {accounts.map((account, index) => (
             <Card key={index} className="overflow-hidden">
               <CardHeader className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white">
-                <div className="flex items-center space-x-3">
-                  <Building2 className="w-6 h-6" />
+                <div className="flex items-center justify-between gap-3">
                   <CardTitle className="text-white">{account.bank}</CardTitle>
+                  <img
+                    src="/Alinma-Bank-Symbol.png"
+                    alt="شعار بنك الإنماء"
+                    className="h-10 w-auto object-contain"
+                    loading="lazy"
+                  />
                 </div>
               </CardHeader>
               <CardContent className="pt-6 space-y-4">

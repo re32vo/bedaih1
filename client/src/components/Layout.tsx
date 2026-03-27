@@ -467,9 +467,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <div>
               <h4 className="text-sm sm:text-base font-bold mb-2 sm:mb-3">تواصل معنا</h4>
               <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm">
-                <li className="flex items-center gap-2"><MapPin className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" /> <span className="leading-relaxed">المملكة العربية السعودية، الرياض</span></li>
-                <li className="flex items-center gap-2"><Phone className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" /> <a href="tel:+966-555-0000" className="text-white hover:text-emerald-400 transition-colors">+966-555-0000</a></li>
-                <li className="flex items-center gap-2"><Mail className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" /> <a href="mailto:info@bedaya.org" className="text-white hover:text-emerald-400 transition-colors break-all">info@bedaya.org</a></li>
+                <li className="flex items-center gap-2"><MapPin className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" /> <span className="leading-relaxed">المملكة العربية السعودية، جده</span></li>
+                <li className="flex items-center gap-2"><Phone className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" /> <a href="tel:+966-555-0000" className="text-white hover:text-emerald-400 transition-colors">+966596282033</a></li>
+                <li className="flex items-center gap-2"><Mail className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" /> <a href="mailto:info@bedaya.org" className="text-white hover:text-emerald-400 transition-colors break-all">bedaya.org.sa@gmail.com</a></li>
               </ul>
             </div>
           </div>
