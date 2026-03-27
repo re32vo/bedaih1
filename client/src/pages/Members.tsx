@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, BriefcaseBusiness, BadgeCheck } from "lucide-react";
-import logoImg from "@/assets/logo.png";
 
 export default function Members() {
   const executiveTeam = [
@@ -13,8 +12,6 @@ export default function Members() {
 
   const generalAssemblyMembers = Array.from({ length: 21 }, (_, index) => ({
     id: index + 1,
-    name: `عضو الجمعية العمومية ${index + 1}`,
-    role: "عضو الجمعية العمومية",
     image: `/now/${index + 1}.jpg`,
   }));
 
@@ -84,28 +81,13 @@ export default function Members() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {generalAssemblyMembers.map((member) => (
-                    <div key={member.id} className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white min-h-[340px] shadow-sm">
-                      <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-r from-emerald-200/80 via-lime-200/60 to-sky-200/80" />
-                      <div className="absolute inset-x-0 top-[52px] h-8 bg-white" style={{ clipPath: "polygon(0 0, 100% 0, 50% 100%)" }} />
-
-                      <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-r from-emerald-200/80 via-sky-200/70 to-lime-200/70" />
-                      <div className="absolute inset-x-0 bottom-[46px] h-8 bg-white" style={{ clipPath: "polygon(0 100%, 100% 100%, 50% 0)" }} />
-
-                      <div className="relative z-10 flex h-full flex-col items-center px-4 pt-10 pb-14 text-center">
-                        <img src={logoImg} alt="شعار الجمعية" className="h-16 w-auto object-contain mb-6" />
-
-                        <div className="w-28 h-28 rounded-full border-4 border-white shadow-md bg-slate-100 overflow-hidden flex items-center justify-center mb-4">
-                          {member.image ? (
-                            <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
-                          ) : (
-                            <span className="text-3xl font-black text-slate-500">{member.id}</span>
-                          )}
-                        </div>
-
-                        <p className="text-xl font-extrabold text-slate-700 leading-none mb-2">(عضو)</p>
-                        <p className="text-xl font-black text-slate-800 leading-9">{member.name}</p>
-                        <p className="text-lg font-semibold text-slate-500 mt-2">{member.role}</p>
-                      </div>
+                    <div key={member.id} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                      <img
+                        src={member.image}
+                        alt={`عضو الجمعية العمومية ${member.id}`}
+                        className="w-full h-auto object-contain"
+                        loading="lazy"
+                      />
                     </div>
                   ))}
                 </div>
