@@ -42,7 +42,6 @@ const VolunteerReports = lazy(() => import("@/pages/VolunteerReports"));
 // المركز الإعلامي
 const MediaLibrary = lazy(() => import("@/pages/MediaLibrary"));
 const News = lazy(() => import("@/pages/News"));
-const Testimonials = lazy(() => import("@/pages/Testimonials"));
 const Announcements = lazy(() => import("@/pages/Announcements"));
 const SmileStory = lazy(() => import("@/pages/SmileStory"));
 const MediaReports = lazy(() => import("@/pages/MediaReports"));
@@ -101,7 +100,6 @@ function Router() {
           {/* المركز الإعلامي routes */}
           <Route path="/media/library" component={MediaLibrary} />
           <Route path="/media/news" component={News} />
-          <Route path="/media/testimonials" component={Testimonials} />
           <Route path="/media/announcements" component={Announcements} />
           <Route path="/media/smile-story" component={SmileStory} />
           <Route path="/media/reports" component={MediaReports} />
