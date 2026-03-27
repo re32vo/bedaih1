@@ -345,17 +345,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
         )}
       </AnimatePresence>
 
-      <main className="flex-grow bg-white pb-20">{children}</main>
+      <main className="flex-grow bg-white pb-14">{children}</main>
 
       <nav className="fixed bottom-0 inset-x-0 z-50 border-t border-slate-200 bg-white text-slate-900">
-        <div className="container mx-auto px-2 sm:px-4">
-          <div className="mx-auto grid max-w-md grid-cols-2 items-center gap-2 py-2">
+        <div className="container mx-auto px-2">
+          <div className="mx-auto grid max-w-sm grid-cols-2 items-center gap-1.5 py-1.5">
             <Link href="/cart">
-              <span className="relative flex flex-col items-center justify-center py-2 text-xs sm:text-sm font-bold rounded-xl bg-white border border-slate-300 hover:bg-slate-50">
-                <ShoppingCart className="w-5 h-5 mb-1" />
+              <span className="relative flex flex-col items-center justify-center py-1 text-[11px] font-bold rounded-lg bg-white border border-slate-300 hover:bg-slate-50 leading-tight">
+                <ShoppingCart className="w-4 h-4 mb-0.5" />
                 السلة
                 {getTotalItems() > 0 && (
-                  <span className="absolute top-1 right-[28%] bg-red-600 text-white text-[10px] font-extrabold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center leading-none">
+                  <span className="absolute top-0.5 right-[30%] bg-red-600 text-white text-[9px] font-extrabold rounded-full min-w-[14px] h-3.5 px-1 flex items-center justify-center leading-none">
                     {getTotalItems()}
                   </span>
                 )}
@@ -363,8 +363,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </Link>
 
             <Link href={isDonorLoggedIn ? "/donor-dashboard" : "/donor-login"}>
-              <span className="flex flex-col items-center justify-center py-2 text-xs sm:text-sm font-bold rounded-xl bg-white border border-slate-300 hover:bg-slate-50">
-                <User className="w-5 h-5 mb-1" />
+              <span className="flex flex-col items-center justify-center py-1 text-[11px] font-bold rounded-lg bg-white border border-slate-300 hover:bg-slate-50 leading-tight">
+                <User className="w-4 h-4 mb-0.5" />
                 حسابي
               </span>
             </Link>
