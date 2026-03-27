@@ -3,10 +3,10 @@ import { Trophy, Star } from "lucide-react";
 
 export default function Awards() {
   const awards = [
-    { year: 2023, title: "جائزة أفضل جمعية خيرية", issuer: "وزارة الموارد البشرية والتنمية الاجتماعية" },
-    { year: 2022, title: "شهادة التميز في العمل الإنساني", issuer: "المنظمة الوطنية للتنمية الاجتماعية" },
-    { year: 2021, title: "جائزة الشفافية المالية", issuer: "جمعية المراجعين الداخليين" },
-    { year: 2020, title: "شهادة الاعتماد الدولي ISO 9001", issuer: "هيئة الاعتماد الدولية" },
+    { year: 2023, title: "-", issuer: "-" },
+    { year: 2022, title: "-", issuer: "-" },
+    { year: 2021, title: "-", issuer: "-" },
+    { year: 2020, title: "-", issuer: "-" },
   ];
 
   return (
