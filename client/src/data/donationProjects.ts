@@ -73,7 +73,7 @@ export const donationProjects: DonationProject[] = [
   },
   {
     id: "9",
-    title: "بيت أمن",
+    title: "بيت آمن",
     description:
       "برنامج توعوي تثقيفي يهدف إلى توفير الأمان للمستفيد وأسرته.",
     image: "/3.jpg",
@@ -97,7 +97,7 @@ export const donationProjects: DonationProject[] = [
   },
   {
     id: "12",
-    title: "إرشادني",
+    title: "إرشدني",
     description:
       "تقديم استشارات نفسية واجتماعية للمستفيد وأسرته.",
     image: "/3.jpg",
