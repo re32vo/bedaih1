@@ -219,11 +219,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </Button>
 
             <button
-              className="md:hidden flex items-center gap-1 px-3 py-2 text-slate-900 bg-white rounded-lg border border-slate-300 shadow-sm hover:bg-slate-50 touch-manipulation text-sm font-semibold"
+              className="md:hidden p-2 text-slate-900 hover:bg-slate-50 rounded-lg touch-manipulation"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="فتح قائمة التصنيفات"
             >
-              التصنيفات
+              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
