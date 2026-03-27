@@ -101,7 +101,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <div className="flex items-center gap-2 sm:gap-3 bg-white px-2 py-1">
                 <img src={logoImg} alt="شعار جمعية بداية" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
                 <div className="flex flex-col rounded-lg bg-white px-2 py-1">
-                  <h1 className="text-sm sm:text-base md:text-lg font-bold text-slate-900">جمعية بداية</h1>
+                  <h1 className="text-sm sm:text-base md:text-lg font-bold text-slate-900 whitespace-nowrap">جمعية بداية</h1>
                 </div>
               </div>
               <img
@@ -214,18 +214,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className="flex items-center gap-2">
-            <button
-              className="md:hidden flex items-center gap-2 p-2 sm:px-3 sm:py-2 text-slate-900 bg-white rounded-lg border border-slate-300 shadow-sm hover:bg-slate-50 touch-manipulation"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="فتح قائمة التصنيفات"
-            >
-              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              <span className="hidden sm:inline text-sm font-semibold">التصنيفات</span>
-            </button>
-
             <Button onClick={handleDonateClick} className="text-slate-900 text-sm font-bold rounded-full px-5 lg:px-7 h-9 lg:h-10 bg-slate-100 border border-slate-300 hover:bg-slate-200 touch-manipulation">
               تبرع معنا
             </Button>
+
+            <button
+              className="md:hidden flex items-center gap-1 px-3 py-2 text-slate-900 bg-white rounded-lg border border-slate-300 shadow-sm hover:bg-slate-50 touch-manipulation text-sm font-semibold"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="فتح قائمة التصنيفات"
+            >
+              التصنيفات
+            </button>
           </div>
         </div>
       </header>
