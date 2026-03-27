@@ -3,9 +3,10 @@ import { BarChart3, FileText, TrendingUp, Calendar } from "lucide-react";
 
 export default function VolunteerReports() {
   const reports = [
-    { month: "ديسمبر 2025", volunteers: "-", hours: "-", projects: "-" },
-    { month: "نوفمبر 2025", volunteers: "-", hours: "-", projects: "-" },
-    { month: "أكتوبر 2025", volunteers: "-", hours: "-", projects: "-" },
+    { month: "الربع الأول 2026", volunteers: "-", hours: "-", projects: "-" },
+    { month: "الربع الثاني 2026", volunteers: "-", hours: "-", projects: "-" },
+    { month: "الربع الثالث 2026", volunteers: "-", hours: "-", projects: "-" },
+    { month: "الربع الرابع 2026", volunteers: "-", hours: "-", projects: "-" },
   ];
 
   return (
@@ -59,7 +60,7 @@ export default function VolunteerReports() {
 
         {/* Monthly Reports */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-slate-900 mb-6">التقارير الشهرية</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-6">التقارير الربعية</h2>
           <div className="space-y-4">
             {reports.map((report, index) => (
               <Card key={index}>
