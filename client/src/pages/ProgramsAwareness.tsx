@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import BeneficiaryRequestForm from "@/components/BeneficiaryRequestForm";
-import { BookOpen, Radio, Users, CheckCircle2 } from "lucide-react";
+import { Radio, Users, CheckCircle2 } from "lucide-react";
 
 export default function ProgramsAwareness() {
   const activities = [
@@ -35,32 +35,6 @@ export default function ProgramsAwareness() {
             </Card>
           ))}
         </div>
-
-        {/* Topics */}
-        <Card className="mb-12">
-          <CardHeader>
-            <div className="flex items-center space-x-3">
-              <BookOpen className="w-6 h-6 text-blue-500" />
-              <CardTitle>المواضيع الرئيسية</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {[
-                "الصحة العامة",
-                "الصحة النفسية",
-                "التعليم والتطوير",
-                "المهارات الحياتية",
-                "حقوق الطفل",
-                "تمكين المرأة",
-              ].map((topic, index) => (
-                <div key={index} className="bg-gradient-to-br from-emerald-100 to-blue-100 p-3 rounded-lg text-center">
-                  <p className="text-slate-900 font-semibold">{topic}</p>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
 
         {/* Details */}
         <Card>
