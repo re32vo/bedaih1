@@ -7,8 +7,8 @@ export default function DirectorContact() {
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 mb-4">بيانات التواصل مع المدير</h1>
-          <p className="text-xl text-slate-600">للتواصل مع مدير الجمعية واستقبال آرائكم واقتراحاتكم</p>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">بيانات التواصل مع الجمعية</h1>
+          <p className="text-xl text-slate-600">للتواصل مع  جمعية بداية واستقبال آرائكم واقتراحاتكم</p>
         </div>
 
         {/* Contact Methods */}
@@ -66,24 +66,6 @@ export default function DirectorContact() {
           </Card>
         </div>
 
-        {/* Director Info */}
-        <Card>
-          <CardHeader>
-            <CardTitle>المدير التنفيذي</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center space-x-4">
-              <div className="w-20 h-20 bg-gradient-to-br from-emerald-400 to-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">
-                أ.د
-              </div>
-              <div>
-                <p className="text-xl font-bold text-slate-900">أحمد محمد علي</p>
-                <p className="text-slate-600">المدير التنفيذي - جمعية بداية</p>
-                <p className="text-sm text-slate-500 mt-1">خبرة 20+ سنة في العمل الخيري</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );
