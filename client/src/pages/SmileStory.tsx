@@ -4,27 +4,27 @@ import { Smile, Heart, Users, Award } from "lucide-react";
 export default function SmileStory() {
   const stories = [
     {
-      name: "محمد",
+      name: "-",
       age: 8,
-      story: "كان محمد يحلم بالذهاب للمدرسة لكن والداه لم يستطيعا تحمل النفقات. ساعدناه والآن أصبح من أفضل الطلاب في صفه!",
+      story: "-",
       image: "🎓",
     },
     {
-      name: "أم علي",
+      name: "-",
       age: 45,
-      story: "عاني من مرض خطير وليس لدينا مال للعلاج. جمعية بداية وفرت لي العملية الضرورية وعدت للحياة الطبيعية.",
+      story: "-",
       image: "❤️",
     },
     {
-      name: "سارة",
+      name: "-",
       age: 16,
-      story: "أحلامي كانت بعيدة المنال. برنامج تطوير المهارات في الجمعية ساعدني على الالتحاق بدورة تدريبية وأصبحت موظفة الآن!",
+      story: "-",
       image: "🌟",
     },
     {
-      name: "عائلة أحمد",
+      name: "-",
       size: 6,
-      story: "عندما فقدنا المعيل، كنا على وشك فقدان بيتنا. دعم جمعية بداية ساعدنا على البقاء معاً وبدء حياة جديدة.",
+      story: "-",
       image: "🏠",
     },
   ];
@@ -65,51 +65,32 @@ export default function SmileStory() {
           <Card>
             <CardHeader>
               <Heart className="w-6 h-6 text-red-500 mb-3" />
-              <CardTitle>حياة تحسنت</CardTitle>
+              <CardTitle>-</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900">+50</p>
+              <p className="text-3xl font-bold text-slate-900">-</p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader>
               <Smile className="w-6 h-6 text-yellow-500 mb-3" />
-              <CardTitle>بداية عادت</CardTitle>
+              <CardTitle></CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900">+75</p>
+              <p className="text-3xl font-bold text-slate-900">-</p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader>
               <Award className="w-6 h-6 text-purple-500 mb-3" />
-              <CardTitle>أحلام تحققت</CardTitle>
+              <CardTitle>-</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900">+120</p>
+              <p className="text-3xl font-bold text-slate-900">-</p>
             </CardContent>
           </Card>
         </div>
 
-        {/* Invitation */}
-        <Card>
-          <CardHeader>
-            <CardTitle>كن جزءاً من هذه القصص</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-slate-700">
-              كل تبرع يساهم في تغيير حياة شخص ما. شارك في صنع قصة بداية جديدة اليوم.
-            </p>
-            <div className="flex gap-3 flex-col sm:flex-row">
-              <button className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-lg transition">
-                تبرع الآن
-              </button>
-              <button className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition">
-                شارك قصتك
-              </button>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );
