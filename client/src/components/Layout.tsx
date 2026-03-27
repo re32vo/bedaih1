@@ -43,7 +43,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const volunteerLinks = [
     { href: "/volunteer/form", label: "استمارة التطوع" },
     { href: "/volunteer/health-platform", label: "منصة التطوع الصحي" },
-    { href: "/volunteer/donation-platform", label: "منصة التبرع" },
     { href: "/volunteer/reports", label: "التقارير التطوعية" },
   ];
 
