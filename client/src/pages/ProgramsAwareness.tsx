@@ -48,12 +48,6 @@ export default function ProgramsAwareness() {
             <p>
               نستهدف مختلف فئات المجتمع بمحتوى توعوي متخصص يتناول القضايا الصحية والاجتماعية والاقتصادية ذات الأهمية الحيوية.
             </p>
-            <ul className="list-disc list-inside space-y-2 mt-4">
-              <li>أكثر من 100 ندوة تثقيفية سنوياً</li>
-              <li>برامج إذاعية أسبوعية</li>
-              <li>شراكات مع المؤسسات التعليمية</li>
-              <li>محتوى توعوي رقمي منتظم</li>
-            </ul>
           </CardContent>
         </Card>
 

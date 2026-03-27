@@ -123,11 +123,11 @@ export default function Members() {
             <>
               <CardHeader>
                 <CardTitle>الإعتمادات</CardTitle>
-                <CardDescription>-</CardDescription>
+                <CardDescription>تراخيص وشهادات الجودة الرسمية للجمعية</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4 text-slate-700">
                 <div className="rounded-xl border border-slate-200 bg-slate-50 p-6">
-                  <p className="text-lg font-bold text-slate-900 mb-3">تراخيص وشهادات الجودة الرسمية للجمعية:-</p>
+                  <p className="text-lg font-bold text-slate-900 mb-3">-:-</p>
                   <p className="text-slate-600">-</p>
                 </div>
               </CardContent>
