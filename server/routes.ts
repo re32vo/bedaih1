@@ -11,6 +11,7 @@ import {
   getContactConfirmationEmail,
   getAdminNotificationEmail,
   sendDonationReceipt,
+  sendDonationReviewRequest,
   escapeHtml,
 } from "./email";
 import { logAuditEntry, getAuditEntries } from "./audit";
@@ -52,6 +53,8 @@ import {
   storeOTPToken,
   verifyOTPToken,
   ensurePresidentExists,
+  createPublicReview,
+  getPublicReviews,
 } from "./supabase";
 import { activityMonitor } from "./activity-monitor";
 import { appLogger } from "./advanced-logger";
@@ -87,6 +90,39 @@ export async function registerRoutes(
     } catch (err) {
       logger.error("Public stats error", err);
       res.status(500).json({ message: "تعذر جلب الإحصائيات" });
+    }
+  });
+
+  app.get("/api/public/reviews", async (_req, res) => {
+    try {
+      const reviews = await getPublicReviews(30);
+      res.json({ reviews });
+    } catch (err) {
+      logger.error("Public reviews error", err);
+      res.status(500).json({ message: "تعذر جلب التقييمات" });
+    }
+  });
+
+  app.post("/api/public/reviews", async (req, res) => {
+    try {
+      const input = z.object({
+        name: z.string().min(2).max(100).optional(),
+        email: z.string().email().optional(),
+        rating: z.number().int().min(1).max(5),
+        comment: z.string().min(5).max(1000),
+      }).parse(req.body || {});
+
+      const created = await createPublicReview(input);
+      res.status(201).json({ success: true, review: created });
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({
+          message: err.errors[0]?.message || "بيانات تقييم غير صحيحة",
+          field: err.errors[0]?.path?.join("."),
+        });
+      }
+      logger.error("Create public review error", err);
+      res.status(500).json({ message: "تعذر حفظ التقييم" });
     }
   });
 
@@ -1599,6 +1635,17 @@ export async function registerRoutes(
               error: emailErr instanceof Error ? emailErr.message : String(emailErr)
             }
           });
+        }
+
+        try {
+          const forwardedProto = String(req.headers["x-forwarded-proto"] || "").split(",")[0].trim();
+          const protocol = forwardedProto || req.protocol || "https";
+          const host = req.get("host") || "";
+          const baseUrl = process.env.APP_URL || (host ? `${protocol}://${host}` : "");
+          const reviewUrl = `${baseUrl}/thank-you?rate=1&email=${encodeURIComponent(donorEmail)}`;
+          await sendDonationReviewRequest(donorEmail, donorName, reviewUrl);
+        } catch (reviewEmailErr) {
+          logger.error("Failed to send donation review request", reviewEmailErr);
         }
       }
 

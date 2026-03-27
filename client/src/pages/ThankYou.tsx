@@ -1,12 +1,65 @@
 import { motion } from "framer-motion";
-import { Heart, CheckCircle, ArrowRight, Home } from "lucide-react";
+import { Heart, CheckCircle, ArrowRight, Home, Star } from "lucide-react";
 import { Link, useSearch } from "wouter";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function ThankYou() {
   const search = useSearch();
+  const { toast } = useToast();
   const isLoggedIn = new URLSearchParams(search).get('login') === 'true';
   const isRegistered = new URLSearchParams(search).get('registered') === 'true';
+  const initialEmail = new URLSearchParams(search).get('email') || localStorage.getItem('donorEmail') || '';
+
+  const [rating, setRating] = useState(0);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState(initialEmail);
+  const [comment, setComment] = useState('');
+  const [submittingReview, setSubmittingReview] = useState(false);
+
+  const handleSubmitReview = async () => {
+    if (rating < 1) {
+      toast({ title: "اختر التقييم", description: "الرجاء اختيار عدد النجوم", variant: "destructive" });
+      return;
+    }
+
+    if (comment.trim().length < 5) {
+      toast({ title: "التعليق قصير", description: "أدخل تعليقًا لا يقل عن 5 أحرف", variant: "destructive" });
+      return;
+    }
+
+    setSubmittingReview(true);
+    try {
+      const res = await fetch('/api/public/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name.trim() || 'متبرع',
+          email: email.trim() || undefined,
+          rating,
+          comment: comment.trim(),
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.message || 'تعذر إرسال التقييم');
+      }
+
+      setRating(0);
+      setComment('');
+      toast({ title: "شكرًا لك", description: "تم إرسال تقييمك بنجاح" });
+    } catch (err) {
+      toast({
+        title: "تعذر إرسال التقييم",
+        description: err instanceof Error ? err.message : "حاول مرة أخرى",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmittingReview(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white flex items-center justify-center px-4 py-16">
@@ -87,6 +140,46 @@ export default function ThankYou() {
           transition={{ delay: (isLoggedIn || isRegistered) ? 0.8 : 0.6 }}
           className="space-y-6"
         >
+          <div className="max-w-2xl mx-auto rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 text-right shadow-sm">
+            <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-3">قيّم تجربة التبرع</h3>
+            <p className="text-slate-600 text-sm sm:text-base mb-4">يسعدنا تقييمك، وسيظهر تلقائيًا في الصفحة الرئيسية بعد الإرسال.</p>
+
+            <div className="flex items-center justify-center gap-1 mb-4" dir="ltr">
+              {[1, 2, 3, 4, 5].map((value) => (
+                <button key={value} type="button" onClick={() => setRating(value)} className="p-1" aria-label={`تقييم ${value}`}>
+                  <Star className={`w-7 h-7 ${value <= rating ? "fill-amber-400 text-amber-400" : "text-slate-300"}`} />
+                </button>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="الاسم (اختياري)"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900"
+              />
+              <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="البريد الإلكتروني (اختياري)"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900"
+              />
+            </div>
+
+            <textarea
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              rows={4}
+              placeholder="اكتب تقييمك هنا"
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 mb-3"
+            />
+
+            <Button onClick={handleSubmitReview} disabled={submittingReview} className="w-full bg-sky-600 hover:bg-sky-700 text-white">
+              {submittingReview ? "جاري الإرسال..." : "إرسال التقييم"}
+            </Button>
+          </div>
+
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/">
               <Button 

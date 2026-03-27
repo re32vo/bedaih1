@@ -279,3 +279,44 @@ export async function sendDonationReceipt(
 
   await sendEmail(donorEmail, "إيصال تبرع - جمعية بداية الخيرية", receiptHtml);
 }
+
+export async function sendDonationReviewRequest(
+  donorEmail: string,
+  donorName: string,
+  reviewUrl: string
+) {
+  const safeName = escapeHtml(donorName || "متبرع");
+  const safeUrl = escapeHtml(reviewUrl);
+
+  const html = `
+    <!DOCTYPE html>
+    <html dir="rtl" lang="ar">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>شاركنا تقييمك</title>
+    </head>
+    <body style="font-family: Arial, sans-serif; background:#f8fafc; margin:0; padding:24px;">
+      <div style="max-width:600px; margin:0 auto; background:#fff; border:1px solid #e2e8f0; border-radius:14px; overflow:hidden;">
+        <div style="background:#0ea5e9; color:#fff; padding:24px; text-align:center;">
+          <h1 style="margin:0; font-size:24px;">شكرا لك على تبرعك</h1>
+        </div>
+        <div style="padding:24px; text-align:right; color:#0f172a;">
+          <p style="margin:0 0 12px; font-size:16px;">الأخ/الأخت ${safeName}</p>
+          <p style="margin:0 0 16px; line-height:1.9; color:#334155;">
+            يسعدنا تقييمك لتجربة التبرع، رأيك يساعدنا على تحسين الخدمة.
+          </p>
+          <div style="text-align:center; margin:28px 0;">
+            <a href="${safeUrl}" style="display:inline-block; background:#0f172a; color:#fff; text-decoration:none; padding:12px 22px; border-radius:10px; font-weight:bold;">قيّم تجربتك الآن</a>
+          </div>
+          <p style="margin:0; color:#64748b; font-size:13px;">
+            في حال لم يعمل الزر، استخدم هذا الرابط: ${safeUrl}
+          </p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  await sendEmail(donorEmail, "شاركنا تقييم تجربة التبرع", html);
+}

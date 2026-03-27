@@ -121,7 +121,8 @@ export default function Checkout() {
           : "تم تسجيل تبرعك وإرسال إيصال على البريد",
       });
 
-      setLocation("/thank-you");
+      const thankYouEmail = !isQuick ? authEmail.trim().toLowerCase() : "";
+      setLocation(thankYouEmail ? `/thank-you?email=${encodeURIComponent(thankYouEmail)}` : "/thank-you");
     } catch (error) {
       toast({
         title: "خطأ",

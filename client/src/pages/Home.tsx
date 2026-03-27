@@ -9,51 +9,6 @@ import { donationProjects } from "@/data/donationProjects";
 import { useCart } from "@/hooks/use-cart";
 import { useToast } from "@/hooks/use-toast";
 
-const testimonials = [
-  {
-    id: "t1",
-    name: "أم محمد",
-    role: "متبرعة",
-    rating: 5,
-    text: "بداية صراحة تستاهل كل خير، لي سنين أتبرع معهم ومرتاحه مرة من وضوحهم. أحس تبرعي فعلًا يوصل للي يحتاجه.",
-  },
-  {
-    id: "t2",
-    name: "عبدالله العمري",
-    role: "متبرع",
-    rating: 5,
-    text: "التبرع عن طريق الموقع سهل جدًا وما ياخذ وقت، وبعدها يجيني إشعار مباشرة. تعاملهم ممتاز والله يجزاهم خير.",
-  },
-  {
-    id: "t3",
-    name: "سارة القحطاني",
-    role: "متبرعة",
-    rating: 5,
-    text: "جربت أتـبرع من الموقع وكانت التجربة سلسة وسريعة، اخترت المشروع ودفعته خلال دقايق. كل التفاصيل كانت واضحة.",
-  },
-  {
-    id: "t4",
-    name: "خالد الزهراني",
-    role: "متبرع",
-    rating: 5,
-    text: "أكثر شي عجبني عندهم الشفافية في المشاريع والمبالغ. هالشي خلاني أكرر التبرع وأنا مطمّن إن المبلغ يروح لمكانه الصح.",
-  },
-  {
-    id: "t5",
-    name: "نورة السلمي",
-    role: "متبرعة",
-    rating: 5,
-    text: "حتى عيالي صاروا يشاركوني باختيار مشاريع التبرع في بداية، وهذا الشي خلانا نتعلم قيمة العطاء من بدري.",
-  },
-  {
-    id: "t6",
-    name: "فهد البقمي",
-    role: "متبرع",
-    rating: 5,
-    text: "تبرعت معهم بأكثر من حملة، وكل مرة نفس الجودة والترتيب. دعمهم سريع وتقاريرهم واضحة وهذا يعطيك ثقة كبيرة.",
-  },
-];
-
 const partners = [
   { id: "p1", name: "وزارة الصحة", image: "/asr1.png" },
 ];
@@ -64,6 +19,14 @@ type PublicStatsResponse = {
   donorsCount: number;
   volunteerOpportunitiesCount: number;
   lastUpdatedAt: string;
+};
+
+type PublicReview = {
+  id: string;
+  name: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
 };
 
 type HomeStat = {
@@ -107,6 +70,7 @@ export default function Home() {
     }, {} as Record<string, { selected: number; custom: string }>)
   );
   const [currentPartnerIndex, setCurrentPartnerIndex] = useState(0);
+  const [reviews, setReviews] = useState<PublicReview[]>([]);
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
   const [heroAmount, setHeroAmount] = useState("100");
@@ -123,12 +87,14 @@ export default function Home() {
   const heroQuickAmounts = currentHeroProject.amounts.length > 0 ? currentHeroProject.amounts.slice(0, 3) : [500, 300, 100];
 
   useEffect(() => {
+    if (reviews.length <= 1) return;
+
     const interval = setInterval(() => {
-      setCurrentTestimonialIndex((prev) => (prev + 1) % testimonials.length);
+      setCurrentTestimonialIndex((prev) => (prev + 1) % reviews.length);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [reviews.length]);
 
   useEffect(() => {
     setHeroAmount(String(heroQuickAmounts[0] || 100));
@@ -179,6 +145,46 @@ export default function Home() {
       isMounted = false;
       window.clearInterval(intervalId);
       document.removeEventListener("visibilitychange", onVisibilityChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchPublicReviews = async () => {
+      try {
+        const response = await fetch("/api/public/reviews", { cache: "no-store" });
+        if (!response.ok) return;
+
+        const data = (await response.json()) as { reviews?: PublicReview[] };
+        if (!isMounted) return;
+
+        const nextReviews = Array.isArray(data.reviews)
+          ? data.reviews.map((r) => ({
+              id: String(r.id),
+              name: String(r.name || "متبرع"),
+              rating: Math.max(1, Math.min(5, Number(r.rating) || 5)),
+              comment: String(r.comment || ""),
+              createdAt: String(r.createdAt || ""),
+            }))
+          : [];
+
+        setReviews(nextReviews);
+        setCurrentTestimonialIndex((prev) => {
+          if (nextReviews.length === 0) return 0;
+          return prev % nextReviews.length;
+        });
+      } catch {
+        // keep current rendered reviews on temporary API failures
+      }
+    };
+
+    fetchPublicReviews();
+    const intervalId = window.setInterval(fetchPublicReviews, 20000);
+
+    return () => {
+      isMounted = false;
+      window.clearInterval(intervalId);
     };
   }, []);
 
@@ -238,11 +244,13 @@ export default function Home() {
   };
 
   const goToNextTestimonial = () => {
-    setCurrentTestimonialIndex((prev) => (prev + 1) % testimonials.length);
+    if (reviews.length <= 1) return;
+    setCurrentTestimonialIndex((prev) => (prev + 1) % reviews.length);
   };
 
   const goToPrevTestimonial = () => {
-    setCurrentTestimonialIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    if (reviews.length <= 1) return;
+    setCurrentTestimonialIndex((prev) => (prev - 1 + reviews.length) % reviews.length);
   };
 
   const goToNextHero = () => {
@@ -569,63 +577,67 @@ export default function Home() {
             <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900">ماذا قالوا عنّا</h2>
             <div className="h-px w-8 sm:w-16 md:w-20 lg:w-56 bg-slate-300" />
           </div>
-          <p className="text-center text-slate-500 text-sm sm:text-base mb-6 sm:mb-8">آراء متبرعين حول تجربتهم مع جمعية بداية</p>
+          {reviews.length === 0 ? (
+            <div className="max-w-3xl mx-auto rounded-xl border border-dashed border-slate-300 bg-slate-50 p-8 sm:p-10 text-center">
+              <p className="text-slate-600 text-base sm:text-lg font-semibold">بانتظار تقييماتكم</p>
+            </div>
+          ) : (
+            <div className="max-w-3xl mx-auto">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <button
+                  type="button"
+                  onClick={goToPrevTestimonial}
+                  className="h-10 w-10 rounded-full border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 flex items-center justify-center shrink-0"
+                  aria-label="التقييم السابق"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
 
-          <div className="max-w-3xl mx-auto">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <button
-                type="button"
-                onClick={goToPrevTestimonial}
-                className="h-10 w-10 rounded-full border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 flex items-center justify-center shrink-0"
-                aria-label="التقييم السابق"
-              >
-                <ChevronRight className="h-5 w-5" />
-              </button>
+                <div className="flex-1 rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm flex flex-col gap-3 min-h-[210px] sm:min-h-[190px]">
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: reviews[currentTestimonialIndex].rating }).map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    ))}
+                  </div>
+                  <p className="text-slate-700 text-sm sm:text-base leading-relaxed flex-1">
+                    {reviews[currentTestimonialIndex].comment}
+                  </p>
+                  <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
+                    <div className="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-sm">
+                      {reviews[currentTestimonialIndex].name.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="font-bold text-slate-900 text-sm">{reviews[currentTestimonialIndex].name}</p>
+                      <p className="text-xs text-slate-500">متبرع</p>
+                    </div>
+                  </div>
+                </div>
 
-              <div className="flex-1 rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm flex flex-col gap-3 min-h-[210px] sm:min-h-[190px]">
-                <div className="flex items-center gap-1">
-                  {Array.from({ length: testimonials[currentTestimonialIndex].rating }).map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  ))}
-                </div>
-                <p className="text-slate-700 text-sm sm:text-base leading-relaxed flex-1">
-                  {testimonials[currentTestimonialIndex].text}
-                </p>
-                <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
-                  <div className="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-sm">
-                    {testimonials[currentTestimonialIndex].name.charAt(0)}
-                  </div>
-                  <div>
-                    <p className="font-bold text-slate-900 text-sm">{testimonials[currentTestimonialIndex].name}</p>
-                    <p className="text-xs text-slate-500">{testimonials[currentTestimonialIndex].role}</p>
-                  </div>
-                </div>
+                <button
+                  type="button"
+                  onClick={goToNextTestimonial}
+                  className="h-10 w-10 rounded-full border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 flex items-center justify-center shrink-0"
+                  aria-label="التقييم التالي"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
               </div>
 
-              <button
-                type="button"
-                onClick={goToNextTestimonial}
-                className="h-10 w-10 rounded-full border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 flex items-center justify-center shrink-0"
-                aria-label="التقييم التالي"
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </button>
+              <div className="mt-3 flex items-center justify-center gap-1.5">
+                {reviews.map((item, index) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setCurrentTestimonialIndex(index)}
+                    className={`h-2.5 rounded-full transition-all ${
+                      index === currentTestimonialIndex ? "w-6 bg-emerald-500" : "w-2.5 bg-slate-300 hover:bg-slate-400"
+                    }`}
+                    aria-label={`الانتقال إلى التقييم ${index + 1}`}
+                  />
+                ))}
+              </div>
             </div>
-
-            <div className="mt-3 flex items-center justify-center gap-1.5">
-              {testimonials.map((item, index) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => setCurrentTestimonialIndex(index)}
-                  className={`h-2.5 rounded-full transition-all ${
-                    index === currentTestimonialIndex ? "w-6 bg-emerald-500" : "w-2.5 bg-slate-300 hover:bg-slate-400"
-                  }`}
-                  aria-label={`الانتقال إلى التقييم ${index + 1}`}
-                />
-              ))}
-            </div>
-          </div>
+          )}
         </section>
 
       </div>

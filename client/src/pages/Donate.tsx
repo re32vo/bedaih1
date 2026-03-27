@@ -131,7 +131,7 @@ export default function Donate() {
           })
         });
         
-        setLocation('/thank-you?registered=true');
+        setLocation(`/thank-you?registered=true&email=${encodeURIComponent(donorEmail)}`);
       } else {
         await fetch('/api/donors/donation', {
           method: 'POST',

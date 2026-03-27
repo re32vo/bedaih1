@@ -10,6 +10,15 @@ const supabase = supabaseUrl && supabaseKey
   ? createClient(supabaseUrl, supabaseKey)
   : null;
 
+const inMemoryPublicReviews: Array<{
+  id: string;
+  name: string;
+  email: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
+}> = [];
+
 function normalizeEmail(email?: string) {
   return (email || "").toLowerCase();
 }
@@ -333,6 +342,89 @@ export async function getPublicDonationStats() {
     volunteerOpportunitiesCount: volunteerOpportunities.length,
     lastUpdatedAt: new Date().toISOString(),
   };
+}
+
+export async function createPublicReview(input: {
+  name?: string;
+  email?: string;
+  rating: number;
+  comment: string;
+}) {
+  const safeRating = Math.max(1, Math.min(5, Number(input.rating) || 0));
+  const safeComment = String(input.comment || "").trim();
+  const safeName = String(input.name || "متبرع").trim() || "متبرع";
+  const safeEmail = normalizeEmail(input.email) || `anonymous-${Date.now()}@review.local`;
+
+  const payload = {
+    id: randomUUID(),
+    name: safeName,
+    email: safeEmail,
+    rating: safeRating,
+    comment: safeComment,
+    createdAt: new Date().toISOString(),
+  };
+
+  if (!supabase) {
+    inMemoryPublicReviews.unshift(payload);
+    return payload;
+  }
+
+  const { data, error } = await supabase
+    .from('audit_log')
+    .insert({
+      action: 'public_review',
+      user_email: safeEmail,
+      details: {
+        type: 'public_review',
+        reviewId: payload.id,
+        name: safeName,
+        rating: safeRating,
+        comment: safeComment,
+      },
+    })
+    .select('id, user_email, details, created_at')
+    .single();
+
+  if (error) {
+    throw new Error(`فشل حفظ التقييم: ${error.message}`);
+  }
+
+  return {
+    id: String(data?.id || payload.id),
+    name: String(data?.details?.name || safeName),
+    email: String(data?.user_email || safeEmail),
+    rating: Number(data?.details?.rating || safeRating),
+    comment: String(data?.details?.comment || safeComment),
+    createdAt: String(data?.created_at || payload.createdAt),
+  };
+}
+
+export async function getPublicReviews(limit = 20) {
+  if (!supabase) {
+    return inMemoryPublicReviews.slice(0, limit);
+  }
+
+  const { data, error } = await supabase
+    .from('audit_log')
+    .select('id, user_email, details, created_at')
+    .eq('action', 'public_review')
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    throw new Error(`فشل جلب التقييمات: ${error.message}`);
+  }
+
+  return (data || [])
+    .map((row: any) => ({
+      id: String(row.id),
+      name: String(row?.details?.name || "متبرع"),
+      email: String(row.user_email || ""),
+      rating: Number(row?.details?.rating || 0),
+      comment: String(row?.details?.comment || ""),
+      createdAt: String(row.created_at || new Date().toISOString()),
+    }))
+    .filter((row: any) => row.rating >= 1 && row.rating <= 5 && row.comment.trim().length > 0);
 }
 
 export async function logAuditToSupabase(entry: { actor: string; action: string; details?: any }) {
