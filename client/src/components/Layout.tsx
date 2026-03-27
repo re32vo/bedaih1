@@ -102,7 +102,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <img src={logoImg} alt="شعار جمعية بداية" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
                 <div className="flex flex-col rounded-lg bg-white px-2 py-1">
                   <h1 className="text-sm sm:text-base md:text-lg font-bold text-slate-900">جمعية بداية</h1>
-                  <p className="text-xs text-slate-700">جمعية خيرية موثوقة</p>
                 </div>
               </div>
               <img
@@ -224,8 +223,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <span className="hidden sm:inline text-sm font-semibold">التصنيفات</span>
             </button>
 
-            <Button onClick={handleDonateClick} className="text-slate-900 text-sm font-bold rounded-full px-4 lg:px-5 h-9 lg:h-10 bg-slate-100 border border-slate-300 hover:bg-slate-200 touch-manipulation">
-              <Heart className="w-4 h-4 mr-2" /> تبرع معنا
+            <Button onClick={handleDonateClick} className="text-slate-900 text-sm font-bold rounded-full px-5 lg:px-7 h-9 lg:h-10 bg-slate-100 border border-slate-300 hover:bg-slate-200 touch-manipulation">
+              تبرع معنا
             </Button>
           </div>
         </div>
@@ -430,7 +429,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <img src={logoImg} alt="شعار" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
                 <div>
                   <h3 className="text-base sm:text-lg font-bold">جمعية بداية</h3>
-                  <p className="text-xs sm:text-sm">جمعية خيرية موثوقة</p>
                 </div>
               </div>
               <p className="text-xs sm:text-sm leading-relaxed">نسعى لبناء مجتمع متكافل من خلال مبادرات خيرية مستدامة تصل للمستحقين بكرامة وشفافية.</p>
