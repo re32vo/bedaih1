@@ -475,7 +475,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className="border-t pt-3 sm:pt-4 mt-5 sm:mt-6 border-slate-800 text-center text-xs sm:text-sm font-semibold">
-            <p>&copy; {new Date().getFullYear()} جمعية بداية للأعمال الخيرية. جميع الحقوق محفوظة.</p>
+            <p>&copy; {new Date().getFullYear()} جمعية بداية. جميع الحقوق محفوظة.</p>
           </div>
         </div>
       </footer>

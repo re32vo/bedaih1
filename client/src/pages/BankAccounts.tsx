@@ -5,19 +5,19 @@ export default function BankAccounts() {
   const accounts = [
     {
       bank: "البنك الأهلي السعودي",
-      accountName: "جمعية بداية للأعمال الخيرية",
+      accountName: "جمعية بداية",
       accountNumber: "1234567890123456",
       iban: "SA0310000001234567890123",
     },
     {
       bank: "البنك السعودي للاستثمار",
-      accountName: "جمعية بداية للأعمال الخيرية",
+      accountName: "جمعية بداية",
       accountNumber: "9876543210123456",
       iban: "SA9850000002345678901234",
     },
     {
       bank: "بنك الراجين",
-      accountName: "جمعية بداية للأعمال الخيرية",
+      accountName: "جمعية بداية",
       accountNumber: "1111222233334444",
       iban: "SA6350000003456789012345",
     },
