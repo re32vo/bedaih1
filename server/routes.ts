@@ -360,7 +360,12 @@ export async function registerRoutes(
     const token = authHeader.substring(7);
     const email = verifyToken(token);
     const employee = email ? await getEmployeeByEmail(email) : null;
-    if (!employee || !employee.active) {
+    if (!employee) {
+      res.status(403).json({ message: "غير مصرح" });
+      return null;
+    }
+    // السماح للرئيس بدخول حتى لو لم يكن مفعلاً
+    if (!employee.active && employee.role !== "president") {
       res.status(403).json({ message: "غير مصرح" });
       return null;
     }
