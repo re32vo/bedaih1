@@ -3,9 +3,9 @@ import { BarChart3, FileText, TrendingUp, Calendar } from "lucide-react";
 
 export default function VolunteerReports() {
   const reports = [
-    { month: "ديسمبر 2025", volunteers: 450, hours: 1800, projects: 12 },
-    { month: "نوفمبر 2025", volunteers: 420, hours: 1680, projects: 11 },
-    { month: "أكتوبر 2025", volunteers: 410, hours: 1640, projects: 10 },
+    { month: "ديسمبر 2025", volunteers: "-", hours: "-", projects: "-" },
+    { month: "نوفمبر 2025", volunteers: "-", hours: "-", projects: "-" },
+    { month: "أكتوبر 2025", volunteers: "-", hours: "-", projects: "-" },
   ];
 
   return (
@@ -25,7 +25,7 @@ export default function VolunteerReports() {
               <CardTitle className="text-lg">إجمالي المتطوعين</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900">{reports.reduce((s, r) => s + r.volunteers, 0).toLocaleString()}</p>
+              <p className="text-3xl font-bold text-slate-900">-</p>
             </CardContent>
           </Card>
           <Card>
@@ -34,7 +34,7 @@ export default function VolunteerReports() {
               <CardTitle className="text-lg">إجمالي ساعات التطوع</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900">{reports.reduce((s, r) => s + r.hours, 0).toLocaleString()}</p>
+              <p className="text-3xl font-bold text-slate-900">-</p>
             </CardContent>
           </Card>
           <Card>
@@ -43,7 +43,7 @@ export default function VolunteerReports() {
               <CardTitle className="text-lg">عدد المشاريع</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900">{reports.reduce((s, r) => s + r.projects, 0)}</p>
+              <p className="text-3xl font-bold text-slate-900">-</p>
             </CardContent>
           </Card>
           <Card>
@@ -52,7 +52,7 @@ export default function VolunteerReports() {
               <CardTitle className="text-lg">متوسط المتطوعين شهرياً</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900">{Math.round(reports.reduce((s, r) => s + r.volunteers, 0) / reports.length).toLocaleString()}</p>
+              <p className="text-3xl font-bold text-slate-900">-</p>
             </CardContent>
           </Card>
         </div>
@@ -73,11 +73,11 @@ export default function VolunteerReports() {
                   <div className="grid grid-cols-3 gap-6">
                     <div>
                       <p className="text-slate-600 text-sm mb-1">عدد المتطوعين</p>
-                      <p className="text-2xl font-bold text-slate-900">{report.volunteers.toLocaleString()}</p>
+                      <p className="text-2xl font-bold text-slate-900">{report.volunteers}</p>
                     </div>
                     <div>
                       <p className="text-slate-600 text-sm mb-1">ساعات التطوع</p>
-                      <p className="text-2xl font-bold text-slate-900">{report.hours.toLocaleString()}</p>
+                      <p className="text-2xl font-bold text-slate-900">{report.hours}</p>
                     </div>
                     <div>
                       <p className="text-slate-600 text-sm mb-1">عدد المشاريع</p>
