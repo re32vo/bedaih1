@@ -27,7 +27,7 @@ function translateAssistanceType(value: string) {
 }
 
 interface Donor {
-  id: number;
+  id: number | string;
   email: string;
   name: string;
   phone: string;
@@ -35,6 +35,19 @@ interface Donor {
   last_login_at?: string;
   donationsCount: number;
   totalDonations: number;
+}
+
+function normalizeDonor(raw: any): Donor {
+  return {
+    id: raw?.id ?? "",
+    email: String(raw?.email || "").trim(),
+    name: String(raw?.name || "غير محدد").trim() || "غير محدد",
+    phone: String(raw?.phone || "-").trim() || "-",
+    created_at: String(raw?.created_at || raw?.createdAt || new Date().toISOString()),
+    last_login_at: raw?.last_login_at ? String(raw.last_login_at) : undefined,
+    donationsCount: Number(raw?.donationsCount) || 0,
+    totalDonations: Number(raw?.totalDonations) || 0,
+  };
 }
 
 interface RequestStatus {
@@ -169,9 +182,9 @@ export default function DonorsManagement() {
   useEffect(() => {
     const filtered = donors.filter(
       (d) =>
-        d.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        d.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        d.phone.includes(searchTerm)
+        String(d.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+        String(d.email || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+        String(d.phone || "").includes(searchTerm)
     );
     setFilteredDonors(filtered);
   }, [searchTerm, donors]);
@@ -220,7 +233,7 @@ export default function DonorsManagement() {
       const includeBeneficiaries = options?.includeBeneficiaries ?? true;
 
       if (includeDonors) {
-        const incomingDonors = Array.isArray(data.donors) ? data.donors : [];
+        const incomingDonors = Array.isArray(data.donors) ? data.donors.map(normalizeDonor) : [];
         setDonors(incomingDonors);
         setFilteredDonors(incomingDonors);
       }
@@ -547,12 +560,12 @@ export default function DonorsManagement() {
                       animate={{ opacity: 1 }}
                       className="hover:bg-slate-50 transition-colors"
                     >
-                      <td className="px-4 py-3 text-sm font-medium text-slate-900">{donor.name}</td>
-                      <td className="px-4 py-3 text-sm text-slate-600">{donor.email}</td>
-                      <td className="px-4 py-3 text-sm text-slate-600">{donor.phone}</td>
+                      <td className="px-4 py-3 text-sm font-medium text-slate-900">{donor.name || "غير محدد"}</td>
+                      <td className="px-4 py-3 text-sm text-slate-600">{donor.email || "-"}</td>
+                      <td className="px-4 py-3 text-sm text-slate-600">{donor.phone || "-"}</td>
                       <td className="px-4 py-3 text-sm text-slate-600">{donor.donationsCount}</td>
                       <td className="px-4 py-3 text-sm font-semibold text-green-600">
-                        {donor.totalDonations.toLocaleString()} ر.س
+                        {(Number(donor.totalDonations) || 0).toLocaleString()} ر.س
                       </td>
                       <td className="px-4 py-3 text-sm text-slate-600">
                         {new Date(donor.created_at).toLocaleDateString("ar-SA")}
