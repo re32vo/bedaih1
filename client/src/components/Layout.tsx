@@ -35,7 +35,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     { href: "/members", label: "الفريق التنفيذي" },
     { href: "/governance", label: "الحوكمة" },
     { href: "/awards", label: "الجوائز" },
-    { href: "/director-contact", label: "بيانات التواصل مع المدير" },
+    { href: "/director-contact", label: "بيانات التواصل مع الجمعية" },
     { href: "/donation-methods", label: "طرق التبرع" },
     { href: "/bank-accounts", label: "الحسابات البنكية" },
   ];

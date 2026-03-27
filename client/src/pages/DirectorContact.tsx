@@ -21,7 +21,8 @@ export default function DirectorContact() {
               </div>
             </CardHeader>
             <CardContent>
-                <p className="text-slate-700">+966596282033</p>
+                <p className="text-slate-700">966596282033+</p>
+                <p className="text-slate-600 text-sm mt-2">مباشر من الساعة 9 صباحاً حتى 5 مساءً</p>
             </CardContent>
           </Card>
 
@@ -34,6 +35,7 @@ export default function DirectorContact() {
             </CardHeader>
             <CardContent>
               <p className="text-slate-700">bedaya.org.sa@gmail.com</p>
+              <p className="text-slate-600 text-sm mt-2">ساعات العمل الرسمية: 8:00 ص - 4:00 م</p>
             </CardContent>
           </Card>
 

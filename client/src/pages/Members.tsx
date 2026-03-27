@@ -33,8 +33,8 @@ export default function Members() {
               <CardHeader className="flex flex-row items-center justify-between gap-4">
                 <Users className="w-8 h-8 text-emerald-500" />
                 <div>
-                  <CardTitle>21 عضو</CardTitle>
-                  <CardDescription>الجمعية العمومية</CardDescription>
+                  <CardTitle>الجمعية العمومية</CardTitle>
+                  <CardDescription>عدد أعضاء الجمعية العمومية الحالي</CardDescription>
                 </div>
               </CardHeader>
             </Card>
