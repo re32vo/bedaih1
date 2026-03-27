@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart3, TrendingUp, FileText, Download } from "lucide-react";
+import { BarChart3, TrendingUp, FileText } from "lucide-react";
 
 export default function MediaReports() {
   const reports = [
@@ -39,14 +39,6 @@ export default function MediaReports() {
                     <p className="text-sm text-slate-600">{report.pages} صفحة</p>
                     <p className="text-sm text-slate-600">الحجم: {report.size}</p>
                   </div>
-                  <a
-                    href={`/api/media-reports/${report.id}/download`}
-                    download
-                    className="p-2 hover:bg-slate-100 rounded-lg transition"
-                    aria-label={`تحميل ${report.title}`}
-                  >
-                    <Download className="w-5 h-5 text-emerald-500" />
-                  </a>
                 </div>
               </CardContent>
             </Card>
@@ -77,7 +69,7 @@ export default function MediaReports() {
           </Card>
           <Card>
             <CardHeader>
-              <Download className="w-6 h-6 text-purple-500 mb-3" />
+              <FileText className="w-6 h-6 text-purple-500 mb-3" />
               <CardTitle>أعداد التقارير</CardTitle>
             </CardHeader>
             <CardContent>

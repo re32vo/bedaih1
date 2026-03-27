@@ -22,37 +22,37 @@ export default function VolunteerReports() {
           <Card>
             <CardHeader className="pb-3">
               <TrendingUp className="w-6 h-6 text-emerald-500 mb-2" />
-              <CardTitle className="text-lg">متطوع نشط</CardTitle>
+              <CardTitle className="text-lg">إجمالي المتطوعين</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900">450</p>
+              <p className="text-3xl font-bold text-slate-900">{reports.reduce((s, r) => s + r.volunteers, 0).toLocaleString()}</p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-3">
               <Calendar className="w-6 h-6 text-blue-500 mb-2" />
-              <CardTitle className="text-lg">ساعات في الشهر</CardTitle>
+              <CardTitle className="text-lg">إجمالي ساعات التطوع</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900">1,800</p>
+              <p className="text-3xl font-bold text-slate-900">{reports.reduce((s, r) => s + r.hours, 0).toLocaleString()}</p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-3">
               <FileText className="w-6 h-6 text-purple-500 mb-2" />
-              <CardTitle className="text-lg">مشروع</CardTitle>
+              <CardTitle className="text-lg">عدد المشاريع</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900">12</p>
+              <p className="text-3xl font-bold text-slate-900">{reports.reduce((s, r) => s + r.projects, 0)}</p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-3">
               <BarChart3 className="w-6 h-6 text-orange-500 mb-2" />
-              <CardTitle className="text-lg">معدل الرضا</CardTitle>
+              <CardTitle className="text-lg">متوسط المتطوعين شهرياً</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900">94%</p>
+              <p className="text-3xl font-bold text-slate-900">{Math.round(reports.reduce((s, r) => s + r.volunteers, 0) / reports.length).toLocaleString()}</p>
             </CardContent>
           </Card>
         </div>
@@ -73,11 +73,11 @@ export default function VolunteerReports() {
                   <div className="grid grid-cols-3 gap-6">
                     <div>
                       <p className="text-slate-600 text-sm mb-1">عدد المتطوعين</p>
-                      <p className="text-2xl font-bold text-slate-900">{report.volunteers}</p>
+                      <p className="text-2xl font-bold text-slate-900">{report.volunteers.toLocaleString()}</p>
                     </div>
                     <div>
-                      <p className="text-slate-600 text-sm mb-1">ساعات العمل</p>
-                      <p className="text-2xl font-bold text-slate-900">{report.hours}</p>
+                      <p className="text-slate-600 text-sm mb-1">ساعات التطوع</p>
+                      <p className="text-2xl font-bold text-slate-900">{report.hours.toLocaleString()}</p>
                     </div>
                     <div>
                       <p className="text-slate-600 text-sm mb-1">عدد المشاريع</p>
@@ -90,28 +90,7 @@ export default function VolunteerReports() {
           </div>
         </div>
 
-        {/* Download Reports */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center space-x-3">
-              <FileText className="w-6 h-6 text-blue-500" />
-              <CardTitle>تحميل التقارير الكاملة</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <p className="text-slate-700 mb-4">
-              يمكنك تحميل التقارير الشاملة بصيغة PDF للاطلاع على التفاصيل الكاملة لأنشطتنا التطوعية.
-            </p>
-            <div className="space-y-2">
-              <button className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-lg transition">
-                تحميل التقرير السنوي 2025
-              </button>
-              <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition">
-                تحميل التقرير النصف سنوي
-              </button>
-            </div>
-          </CardContent>
-        </Card>
+
       </div>
     </div>
   );
