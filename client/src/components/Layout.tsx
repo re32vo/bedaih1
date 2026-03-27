@@ -102,6 +102,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <img src={logoImg} alt="شعار جمعية بداية" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
                 <div className="flex flex-col rounded-lg bg-white px-2 py-1">
                   <h1 className="text-sm sm:text-base md:text-lg font-bold text-slate-900 whitespace-nowrap">جمعية بداية</h1>
+                  <p className="text-[10px] text-slate-500 whitespace-nowrap">جمعية موثوقة</p>
                 </div>
               </div>
               <img
