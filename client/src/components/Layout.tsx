@@ -244,7 +244,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 الانتقال للصفحة الرئيسية
               </span>
             </Link>
-            <a href="https://es.ncnp.gov.sa/v5/nonprofits/view_license/18732" target="_blank" rel="noopener noreferrer" onClick={() => setShowLogoModal(false)}>
+            <a href="https://www.dropbox.com/scl/fi/vqokgqcbl1btjkb8ua25s/shtr-1.pdf?rlkey=0sljefcr9ttvq7xo6txu7xw0c&st=kwy9af41&raw=1" target="_blank" rel="noopener noreferrer" onClick={() => setShowLogoModal(false)}>
               <span className="block w-full text-center bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 rounded-xl transition-colors cursor-pointer">
                 عرض تصريح الجمعية
               </span>
@@ -372,38 +372,32 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </nav>
 
-      {/* Right-side donation shortcuts - hidden on donation pages */}
-      {isDonationWidgetVisible && 
-       location !== '/donate' && 
-       location !== '/donate/recurring' && 
-       location !== '/donate/tribute' && 
-       location !== '/donate/campaign' && 
-       location !== '/cart' && 
-       !location.startsWith('/donate/opportunities') ? (
-        <div className="fixed top-20 sm:top-24 right-1.5 sm:right-2 z-50 w-[88px] sm:w-[92px] rounded-lg sm:rounded-xl bg-white/95 shadow-xl border border-slate-200 backdrop-blur-sm">
+      {/* Right-side donation shortcuts */}
+      {isDonationWidgetVisible ? (
+        <div className="fixed top-1/2 -translate-y-1/2 right-1 sm:right-2 z-50 w-[68px] sm:w-[74px] rounded-md sm:rounded-lg bg-white/95 shadow-lg border border-slate-200 backdrop-blur-sm">
           <button
             onClick={() => setIsDonationWidgetVisible(false)}
-            className="absolute -top-2 -left-2 w-7 h-7 rounded-full bg-sky-500 text-white flex items-center justify-center shadow-md hover:bg-sky-600 transition-colors touch-manipulation"
+            className="absolute -top-1.5 -left-1.5 w-5 h-5 rounded-full bg-sky-500 text-white flex items-center justify-center shadow-md hover:bg-sky-600 transition-colors touch-manipulation"
             aria-label="إخفاء خيارات التبرع"
           >
-            <X className="w-3.5 h-3.5" />
+            <X className="w-3 h-3" />
           </button>
 
-          <div className="py-1.5 sm:py-2">
+          <div className="py-1">
             {donationOptionsLinks.map((link, index) => {
               const icon =
-                index === 0 ? <Clock3 className="w-5 h-5 text-slate-700" /> :
-                index === 1 ? <CalendarDays className="w-5 h-5 text-slate-700" /> :
-                index === 2 ? <Gift className="w-5 h-5 text-slate-700" /> :
-                index === 3 ? <Rocket className="w-5 h-5 text-slate-700" /> :
-                <Heart className="w-5 h-5 text-slate-700" />;
+                index === 0 ? <Clock3 className="w-4 h-4 text-slate-700" /> :
+                index === 1 ? <CalendarDays className="w-4 h-4 text-slate-700" /> :
+                index === 2 ? <Gift className="w-4 h-4 text-slate-700" /> :
+                index === 3 ? <Rocket className="w-4 h-4 text-slate-700" /> :
+                <Heart className="w-4 h-4 text-slate-700" />;
 
               return (
                 <Link key={link.href} href={link.href}>
-                  <span className="block px-1.5 sm:px-2 py-1.5 text-center cursor-pointer hover:bg-slate-50 transition-colors touch-manipulation">
-                    <span className="flex justify-center mb-1 sm:mb-1.5">{icon}</span>
-                    <span className="block h-px bg-sky-300 mx-0.5 sm:mx-1 mb-1 sm:mb-1.5" />
-                    <span className={`block text-[13px] sm:text-[14px] leading-5 font-medium ${location === link.href ? "text-sky-600" : "text-slate-800"}`}>
+                  <span className="block px-1 py-1 text-center cursor-pointer hover:bg-slate-50 transition-colors touch-manipulation">
+                    <span className="flex justify-center mb-0.5">{icon}</span>
+                    <span className="block h-px bg-sky-300 mx-1 mb-0.5" />
+                    <span className={`block text-[11px] sm:text-[12px] leading-4 font-medium ${location === link.href ? "text-sky-600" : "text-slate-800"}`}>
                       {link.label}
                     </span>
                   </span>
@@ -414,19 +408,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </div>
       ) : null}
       
-      {!isDonationWidgetVisible && 
-       location !== '/donate' && 
-       location !== '/donate/recurring' && 
-       location !== '/donate/tribute' && 
-       location !== '/donate/campaign' && 
-       location !== '/cart' && 
-       !location.startsWith('/donate/opportunities') && (
+      {!isDonationWidgetVisible && (
         <button
           onClick={() => setIsDonationWidgetVisible(true)}
-          className="fixed top-24 sm:top-28 right-0.5 sm:right-1 z-50 bg-sky-500 text-white rounded-l-lg rounded-r-md px-1.5 py-2.5 shadow-lg hover:bg-sky-600 transition-colors touch-manipulation"
+          className="fixed top-1/2 -translate-y-1/2 right-0 z-50 bg-sky-500 text-white rounded-l-md rounded-r-sm px-1 py-2 shadow-md hover:bg-sky-600 transition-colors touch-manipulation"
           aria-label="إظهار خيارات التبرع"
         >
-          <Heart className="w-4 h-4" />
+          <Heart className="w-3.5 h-3.5" />
         </button>
       )}
 
