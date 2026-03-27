@@ -21,8 +21,7 @@ export default function DirectorContact() {
               </div>
             </CardHeader>
             <CardContent>
-                <p className="text-slate-700">011 1234 5678</p>
-                <p className="text-slate-600 text-sm mt-2">مباشر من الساعة 9 صباحاً حتى 5 مساءً</p>
+                <p className="text-slate-700">+966596282033</p>
             </CardContent>
           </Card>
 
@@ -34,8 +33,7 @@ export default function DirectorContact() {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-700">director@bidayah.org</p>
-              <p className="text-slate-600 text-sm mt-2">نرد على جميع الرسائل خلال 24 ساعة</p>
+              <p className="text-slate-700">bedaya.org.sa@gmail.com</p>
             </CardContent>
           </Card>
 
@@ -47,8 +45,8 @@ export default function DirectorContact() {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-700">شارع الملك عبدالله</p>
-              <p className="text-slate-600 text-sm">الرياض، المملكة العربية السعودية</p>
+              <p className="text-slate-700">حي الربوة طريق الملك فهد الفرعي</p>
+              <p className="text-slate-600 text-sm">جده، المملكة العربية السعودية</p>
             </CardContent>
           </Card>
 
@@ -66,6 +64,24 @@ export default function DirectorContact() {
           </Card>
         </div>
 
+        {/* Director Info */}
+        <Card>
+          <CardHeader>
+            <CardTitle>المدير التنفيذي</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center space-x-4">
+              <div className="w-20 h-20 bg-gradient-to-br from-emerald-400 to-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                أ.د
+              </div>
+              <div>
+                <p className="text-xl font-bold text-slate-900">أحمد محمد علي</p>
+                <p className="text-slate-600">المدير التنفيذي - جمعية بداية</p>
+                <p className="text-sm text-slate-500 mt-1">خبرة 20+ سنة في العمل الخيري</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
