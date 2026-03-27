@@ -303,6 +303,53 @@ export async function getDonationsByEmail(email: string, limit = 20) {
   }));
 }
 
+export async function getDonationStatsByEmails(emails: string[]) {
+  const normalized = Array.from(
+    new Set(
+      (emails || [])
+        .map((email) => normalizeEmail(email))
+        .filter((email) => email.length > 0)
+    )
+  );
+
+  if (normalized.length === 0) {
+    return new Map<string, { donationsCount: number; totalDonations: number }>();
+  }
+
+  if (!supabase) {
+    const fallback = new Map<string, { donationsCount: number; totalDonations: number }>();
+    normalized.forEach((email) => fallback.set(email, { donationsCount: 0, totalDonations: 0 }));
+    return fallback;
+  }
+
+  const statsMap = new Map<string, { donationsCount: number; totalDonations: number }>();
+  normalized.forEach((email) => statsMap.set(email, { donationsCount: 0, totalDonations: 0 }));
+
+  const chunkSize = 400;
+  for (let i = 0; i < normalized.length; i += chunkSize) {
+    const chunk = normalized.slice(i, i + chunkSize);
+    const { data, error } = await supabase
+      .from('donations')
+      .select('email, amount')
+      .in('email', chunk);
+
+    if (error) {
+      throw new Error(`فشل جلب إحصائيات التبرعات: ${error.message}`);
+    }
+
+    for (const row of data || []) {
+      const email = normalizeEmail(String((row as any).email || ""));
+      if (!email) continue;
+      const current = statsMap.get(email) || { donationsCount: 0, totalDonations: 0 };
+      current.donationsCount += 1;
+      current.totalDonations += Number((row as any).amount) || 0;
+      statsMap.set(email, current);
+    }
+  }
+
+  return statsMap;
+}
+
 export async function getPublicDonationStats() {
   if (!supabase) {
     return {

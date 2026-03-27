@@ -23,6 +23,7 @@ import {
   createDonation,
   createRecurringDonation,
   getDonationsByEmail,
+  getDonationStatsByEmails,
   getPublicDonationStats,
   getDonorByEmail,
   getAllDonors,
@@ -2138,16 +2139,19 @@ export async function registerRoutes(
         getLatestRequestStatuses(),
       ]);
 
-      const donorsWithStats = await Promise.all(
-        donors.map(async (donor: any) => {
-          const donations = await getDonationsByEmail(donor.email);
-          return {
-            ...donor,
-            donationsCount: donations.length,
-            totalDonations: donations.reduce((sum: number, d: any) => sum + d.amount, 0),
-          };
-        })
-      );
+      const statsMap = await getDonationStatsByEmails(donors.map((donor: any) => donor.email));
+      const donorsWithStats = donors.map((donor: any) => {
+        const stats = statsMap.get(String(donor.email || "").toLowerCase()) || {
+          donationsCount: 0,
+          totalDonations: 0,
+        };
+
+        return {
+          ...donor,
+          donationsCount: stats.donationsCount,
+          totalDonations: stats.totalDonations,
+        };
+      });
 
       res.json({
         donors: donorsWithStats,
@@ -2301,17 +2305,19 @@ export async function registerRoutes(
 
       const donors = await getAllDonors();
       
-      // Get donations count for each donor
-      const donorsWithStats = await Promise.all(
-        donors.map(async (donor: any) => {
-          const donations = await getDonationsByEmail(donor.email);
-          return {
-            ...donor,
-            donationsCount: donations.length,
-            totalDonations: donations.reduce((sum: number, d: any) => sum + d.amount, 0)
-          };
-        })
-      );
+      const statsMap = await getDonationStatsByEmails(donors.map((donor: any) => donor.email));
+      const donorsWithStats = donors.map((donor: any) => {
+        const stats = statsMap.get(String(donor.email || "").toLowerCase()) || {
+          donationsCount: 0,
+          totalDonations: 0,
+        };
+
+        return {
+          ...donor,
+          donationsCount: stats.donationsCount,
+          totalDonations: stats.totalDonations,
+        };
+      });
 
       res.json({ donors: donorsWithStats });
     } catch (err) {

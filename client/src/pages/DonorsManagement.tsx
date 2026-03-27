@@ -153,8 +153,8 @@ export default function DonorsManagement() {
         return;
       }
 
-      // If verified, fetch clients data
-      await Promise.all([fetchDonors(), fetchClientRequests()]);
+      // If verified, fetch all clients data in one request (includes donors)
+      await fetchClientRequests();
     } catch (error) {
       toast({
         title: "خطأ",
@@ -218,6 +218,9 @@ export default function DonorsManagement() {
       }
 
       const data = await res.json();
+      const incomingDonors = Array.isArray(data.donors) ? data.donors : [];
+      setDonors(incomingDonors);
+      setFilteredDonors(incomingDonors);
       setVolunteerRequests(Array.isArray(data.volunteers) ? data.volunteers : []);
       setBeneficiaryRequests(Array.isArray(data.beneficiaries) ? data.beneficiaries : []);
     } catch (error) {
@@ -226,6 +229,8 @@ export default function DonorsManagement() {
         description: error instanceof Error ? error.message : "فشل تحميل طلبات العملاء",
         variant: "destructive",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
