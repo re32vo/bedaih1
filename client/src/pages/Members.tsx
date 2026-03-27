@@ -98,14 +98,16 @@ export default function Members() {
                   <p className="text-4xl font-extrabold text-slate-900">21 عضو</p>
                 </div>
 
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
                   {generalAssemblyMembers.map((memberName, index) => (
-                    <Card key={memberName} className="border-slate-200">
-                      <CardContent className="px-3 py-3 text-center">
-                        <p className="text-xs text-slate-500 mb-1">عضو #{index + 1}</p>
-                        <p className="text-sm font-bold text-slate-900 leading-6">{memberName}</p>
-                      </CardContent>
-                    </Card>
+                    <div key={memberName} className="relative overflow-hidden rounded-lg border border-slate-300 bg-white px-3 py-2.5 min-h-[92px] shadow-sm">
+                      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-l from-emerald-500 via-sky-500 to-indigo-500" />
+                      <div className="flex items-center justify-between pt-1">
+                        <span className="text-[11px] text-slate-500">الجمعية العمومية</span>
+                        <span className="text-[11px] font-bold text-slate-700">#{index + 1}</span>
+                      </div>
+                      <p className="mt-2 text-sm font-bold text-slate-900 leading-6 text-right">{memberName}</p>
+                    </div>
                   ))}
                 </div>
               </CardContent>
