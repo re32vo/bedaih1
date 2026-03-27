@@ -76,6 +76,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     else window.location.href = "/#donate-section";
   };
 
+  const [showLogoModal, setShowLogoModal] = useState(false);
   const [openDesktopDropdown, setOpenDesktopDropdown] = useState<"about" | "programs" | "volunteer" | "media" | "donation" | null>(null);
   const [openMobileDropdown, setOpenMobileDropdown] = useState<"about" | "programs" | "volunteer" | "media" | "donation" | null>(null);
 
@@ -96,13 +97,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-50 bg-white shadow-sm w-full">
         {/* الهيدر الرئيسي */}
         <div className="container mx-auto px-3 sm:px-4 py-2.5 sm:py-3 min-h-[56px] sm:min-h-[64px] flex items-center justify-between border-b border-slate-200 gap-4 lg:gap-8">
-          <Link href="/">
-            <div className="flex items-center gap-0 cursor-pointer">
+          <button onClick={() => setShowLogoModal(true)} className="flex items-center gap-0 cursor-pointer bg-transparent border-0 p-0">
+            <div className="flex items-center gap-0">
               <div className="flex items-center gap-2 sm:gap-3 bg-white px-2 py-1">
                 <img src={logoImg} alt="شعار جمعية بداية" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
                 <div className="flex flex-col rounded-lg bg-white px-2 py-1">
                   <h1 className="text-sm sm:text-base md:text-lg font-bold text-slate-900 whitespace-nowrap">جمعية بداية</h1>
-                  <p className="text-[10px] text-slate-500 whitespace-nowrap">جمعية موثوقة</p>
+                  <p className="text-[10px] text-slate-900 whitespace-nowrap">جمعية موثوقة</p>
                 </div>
               </div>
               <img
@@ -112,7 +113,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 loading="lazy"
               />
             </div>
-          </Link>
+          </button>
 
           <div className="hidden md:flex flex-1 items-center justify-start gap-2 pr-6 lg:pr-12 xl:pr-16">
             <Link href="/">
@@ -229,6 +230,28 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </header>
+
+      {/* مودال الشعار والترخيص */}
+      {showLogoModal && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50" onClick={() => setShowLogoModal(false)}>
+          <div className="bg-white rounded-2xl shadow-2xl w-80 max-w-[90vw] p-6 flex flex-col gap-4" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-1">
+              <h2 className="text-lg font-bold text-slate-900">أين تريد الانتقال ؟</h2>
+              <button onClick={() => setShowLogoModal(false)} className="text-slate-400 hover:text-slate-700 text-xl leading-none">×</button>
+            </div>
+            <Link href="/" onClick={() => setShowLogoModal(false)}>
+              <span className="block w-full text-center bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 rounded-xl transition-colors cursor-pointer">
+                الانتقال للصفحة الرئيسية
+              </span>
+            </Link>
+            <a href="/shtr.pdf" target="_blank" rel="noopener noreferrer" onClick={() => setShowLogoModal(false)}>
+              <span className="block w-full text-center bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 rounded-xl transition-colors cursor-pointer">
+                عرض تصريح الجمعية
+              </span>
+            </a>
+          </div>
+        </div>
+      )}
 
       <AnimatePresence>
         {isMenuOpen && (
