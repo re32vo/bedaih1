@@ -55,7 +55,7 @@ const testimonials = [
 ];
 
 const partners = [
-  { id: "p1", name: "وزارة الصحة", image: "/asr.png" },
+  { id: "p1", name: "وزارة الصحة", image: "/asr1.png" },
 ];
 
 type PublicStatsResponse = {
@@ -453,7 +453,7 @@ export default function Home() {
         </section>
 
         <section>
-          <h2 className="mb-4 sm:mb-6 md:mb-8 text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-slate-900">من مشاريع الجمعية</h2>
+          <h2 className="mb-4 sm:mb-6 md:mb-8 text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-slate-900">مشاريع الجمعية</h2>
           <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-4">
             {featuredProjects.map((project) => {
               const amounts = project.amounts.slice(0, 3);
@@ -549,7 +549,6 @@ export default function Home() {
                 loading="lazy"
                 className="h-16 w-full object-contain"
               />
-              <p className="text-center text-sm sm:text-base font-bold text-slate-600 leading-snug">{partners[currentPartnerIndex].name}</p>
             </div>
 
             <button
