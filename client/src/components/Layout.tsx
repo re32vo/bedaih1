@@ -244,7 +244,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 الانتقال للصفحة الرئيسية
               </span>
             </Link>
-            <a href="/shtr.pdf" target="_blank" rel="noopener noreferrer" onClick={() => setShowLogoModal(false)}>
+            <a href="https://es.ncnp.gov.sa/v5/nonprofits/view_license/18732" target="_blank" rel="noopener noreferrer" onClick={() => setShowLogoModal(false)}>
               <span className="block w-full text-center bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 rounded-xl transition-colors cursor-pointer">
                 عرض تصريح الجمعية
               </span>
