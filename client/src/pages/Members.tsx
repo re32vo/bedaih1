@@ -10,6 +10,30 @@ export default function Members() {
     { name: "نورا سارة", position: "مديرة الموارد البشرية", department: "الموارد البشرية" },
   ];
 
+  const generalAssemblyMembers = [
+    "عضو الجمعية العمومية 1",
+    "عضو الجمعية العمومية 2",
+    "عضو الجمعية العمومية 3",
+    "عضو الجمعية العمومية 4",
+    "عضو الجمعية العمومية 5",
+    "عضو الجمعية العمومية 6",
+    "عضو الجمعية العمومية 7",
+    "عضو الجمعية العمومية 8",
+    "عضو الجمعية العمومية 9",
+    "عضو الجمعية العمومية 10",
+    "عضو الجمعية العمومية 11",
+    "عضو الجمعية العمومية 12",
+    "عضو الجمعية العمومية 13",
+    "عضو الجمعية العمومية 14",
+    "عضو الجمعية العمومية 15",
+    "عضو الجمعية العمومية 16",
+    "عضو الجمعية العمومية 17",
+    "عضو الجمعية العمومية 18",
+    "عضو الجمعية العمومية 19",
+    "عضو الجمعية العمومية 20",
+    "عضو الجمعية العمومية 21",
+  ];
+
   const [activeSection, setActiveSection] = useState<"general-assembly" | "executive-team" | "experience">("general-assembly");
 
   return (
@@ -72,6 +96,17 @@ export default function Members() {
                 <div className="rounded-xl border border-slate-200 bg-slate-50 p-6 text-center">
                   <p className="text-sm text-slate-500 mb-2">عدد الأعضاء</p>
                   <p className="text-4xl font-extrabold text-slate-900">21 عضو</p>
+                </div>
+
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                  {generalAssemblyMembers.map((memberName, index) => (
+                    <Card key={memberName} className="border-slate-200">
+                      <CardContent className="px-3 py-3 text-center">
+                        <p className="text-xs text-slate-500 mb-1">عضو #{index + 1}</p>
+                        <p className="text-sm font-bold text-slate-900 leading-6">{memberName}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
               </CardContent>
             </>
