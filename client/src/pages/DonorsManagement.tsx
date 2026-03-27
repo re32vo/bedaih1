@@ -97,6 +97,7 @@ export default function DonorsManagement() {
   const [verificationMode, setVerificationMode] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
   const [activeTab, setActiveTab] = useState<"donors" | "volunteers" | "beneficiaries">("donors");
+  const [loadedTabs, setLoadedTabs] = useState({ donors: false, volunteers: false, beneficiaries: false });
   const [volunteerRequests, setVolunteerRequests] = useState<VolunteerClientRequest[]>([]);
   const [beneficiaryRequests, setBeneficiaryRequests] = useState<BeneficiaryClientRequest[]>([]);
   const [updatingStatusKey, setUpdatingStatusKey] = useState<string | null>(null);
@@ -153,8 +154,8 @@ export default function DonorsManagement() {
         return;
       }
 
-      // If verified, fetch all clients data in one request (includes donors)
-      await fetchClientRequests();
+      // Initial load: donors only for fastest first render.
+      await fetchClientRequests({ includeDonors: true, includeVolunteers: false, includeBeneficiaries: false });
     } catch (error) {
       toast({
         title: "خطأ",
@@ -175,38 +176,33 @@ export default function DonorsManagement() {
     setFilteredDonors(filtered);
   }, [searchTerm, donors]);
 
-  const fetchDonors = async () => {
-    try {
-      const token = sessionStorage.getItem("authToken");
-      const res = await fetch("/api/admin/donors", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.message || "فشل جلب البيانات");
-      }
-
-      const data = await res.json();
-      setDonors(data.donors);
-      setFilteredDonors(data.donors);
-    } catch (error) {
-      toast({
-        title: "خطأ",
-        description: error instanceof Error ? error.message : "فشل تحميل البيانات",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    if (activeTab === "volunteers" && !loadedTabs.volunteers) {
+      fetchClientRequests({ includeDonors: false, includeVolunteers: true, includeBeneficiaries: false });
     }
+
+    if (activeTab === "beneficiaries" && !loadedTabs.beneficiaries) {
+      fetchClientRequests({ includeDonors: false, includeVolunteers: false, includeBeneficiaries: true });
+    }
+  }, [activeTab, loadedTabs.volunteers, loadedTabs.beneficiaries]);
+
+  const fetchDonors = async () => {
+    await fetchClientRequests({ includeDonors: true, includeVolunteers: false, includeBeneficiaries: false });
   };
 
-  const fetchClientRequests = async () => {
+  const fetchClientRequests = async (options?: {
+    includeDonors?: boolean;
+    includeVolunteers?: boolean;
+    includeBeneficiaries?: boolean;
+  }) => {
     try {
       const token = sessionStorage.getItem("authToken");
-      const res = await fetch("/api/admin/clients/requests", {
+      const query = new URLSearchParams();
+      query.set("includeDonors", String(options?.includeDonors ?? true));
+      query.set("includeVolunteers", String(options?.includeVolunteers ?? true));
+      query.set("includeBeneficiaries", String(options?.includeBeneficiaries ?? true));
+
+      const res = await fetch(`/api/admin/clients/requests?${query.toString()}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -218,11 +214,30 @@ export default function DonorsManagement() {
       }
 
       const data = await res.json();
-      const incomingDonors = Array.isArray(data.donors) ? data.donors : [];
-      setDonors(incomingDonors);
-      setFilteredDonors(incomingDonors);
-      setVolunteerRequests(Array.isArray(data.volunteers) ? data.volunteers : []);
-      setBeneficiaryRequests(Array.isArray(data.beneficiaries) ? data.beneficiaries : []);
+
+      const includeDonors = options?.includeDonors ?? true;
+      const includeVolunteers = options?.includeVolunteers ?? true;
+      const includeBeneficiaries = options?.includeBeneficiaries ?? true;
+
+      if (includeDonors) {
+        const incomingDonors = Array.isArray(data.donors) ? data.donors : [];
+        setDonors(incomingDonors);
+        setFilteredDonors(incomingDonors);
+      }
+
+      if (includeVolunteers) {
+        setVolunteerRequests(Array.isArray(data.volunteers) ? data.volunteers : []);
+      }
+
+      if (includeBeneficiaries) {
+        setBeneficiaryRequests(Array.isArray(data.beneficiaries) ? data.beneficiaries : []);
+      }
+
+      setLoadedTabs((prev) => ({
+        donors: prev.donors || includeDonors,
+        volunteers: prev.volunteers || includeVolunteers,
+        beneficiaries: prev.beneficiaries || includeBeneficiaries,
+      }));
     } catch (error) {
       toast({
         title: "خطأ",
@@ -267,7 +282,11 @@ export default function DonorsManagement() {
         description: "تم حفظ حالة الطلب وإرسال التحديث للعميل بنجاح",
       });
 
-      await fetchClientRequests();
+      await fetchClientRequests({
+        includeDonors: false,
+        includeVolunteers: details.requestType === "volunteer",
+        includeBeneficiaries: details.requestType === "beneficiary",
+      });
       setRequestDetails(null);
     } catch (error) {
       toast({

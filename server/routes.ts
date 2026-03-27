@@ -2132,15 +2132,30 @@ export async function registerRoutes(
         return res.status(403).json({ message: "ليس لديك صلاحية إدارة العملاء" });
       }
 
+      const parseInclude = (value: unknown, defaultValue: boolean) => {
+        if (typeof value !== "string") return defaultValue;
+        const normalized = value.trim().toLowerCase();
+        if (["1", "true", "yes", "on"].includes(normalized)) return true;
+        if (["0", "false", "no", "off"].includes(normalized)) return false;
+        return defaultValue;
+      };
+
+      const includeDonors = parseInclude(req.query.includeDonors, true);
+      const includeVolunteers = parseInclude(req.query.includeVolunteers, true);
+      const includeBeneficiaries = parseInclude(req.query.includeBeneficiaries, true);
+
       const [donors, volunteers, beneficiaries, statusMap] = await Promise.all([
-        getAllDonors(),
-        getAllVolunteers(1000),
-        getAllBeneficiaries(1000),
-        getLatestRequestStatuses(),
+        includeDonors ? getAllDonors() : Promise.resolve([]),
+        includeVolunteers ? getAllVolunteers(1000) : Promise.resolve([]),
+        includeBeneficiaries ? getAllBeneficiaries(1000) : Promise.resolve([]),
+        (includeVolunteers || includeBeneficiaries) ? getLatestRequestStatuses() : Promise.resolve(new Map()),
       ]);
 
-      const statsMap = await getDonationStatsByEmails(donors.map((donor: any) => donor.email));
-      const donorsWithStats = donors.map((donor: any) => {
+      const statsMap = includeDonors
+        ? await getDonationStatsByEmails((donors as any[]).map((donor: any) => donor.email))
+        : new Map<string, { donationsCount: number; totalDonations: number }>();
+
+      const donorsWithStats = (donors as any[]).map((donor: any) => {
         const stats = statsMap.get(String(donor.email || "").toLowerCase()) || {
           donationsCount: 0,
           totalDonations: 0,
@@ -2155,8 +2170,8 @@ export async function registerRoutes(
 
       res.json({
         donors: donorsWithStats,
-        volunteers: volunteers.map((item: any) => withRequestStatus("volunteer", item, statusMap)),
-        beneficiaries: beneficiaries.map((item: any) => withRequestStatus("beneficiary", item, statusMap)),
+        volunteers: (volunteers as any[]).map((item: any) => withRequestStatus("volunteer", item, statusMap as Map<string, any>)),
+        beneficiaries: (beneficiaries as any[]).map((item: any) => withRequestStatus("beneficiary", item, statusMap as Map<string, any>)),
         statusOptions: REQUEST_STATUS_VALUES,
       });
     } catch (err) {
