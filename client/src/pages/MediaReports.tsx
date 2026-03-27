@@ -53,8 +53,8 @@ export default function MediaReports() {
               <CardTitle>النمو السنوي</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900">+24%</p>
-              <p className="text-sm text-slate-600 mt-2">زيادة في البرامج والخدمات</p>
+              <p className="text-3xl font-bold text-slate-900">-</p>
+              <p className="text-sm text-slate-600 mt-2">-</p>
             </CardContent>
           </Card>
           <Card>
@@ -63,8 +63,8 @@ export default function MediaReports() {
               <CardTitle>الاستثمار في المجتمع</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900">4.2M ر.س</p>
-              <p className="text-sm text-slate-600 mt-2">ر.س استثمر في البرامج</p>
+              <p className="text-3xl font-bold text-slate-900">-</p>
+              <p className="text-sm text-slate-600 mt-2">-</p>
             </CardContent>
           </Card>
           <Card>
@@ -73,8 +73,8 @@ export default function MediaReports() {
               <CardTitle>أعداد التقارير</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-slate-900">36</p>
-              <p className="text-sm text-slate-600 mt-2">تقرير دوري منشور</p>
+              <p className="text-3xl font-bold text-slate-900">-</p>
+              <p className="text-sm text-slate-600 mt-2">-</p>
             </CardContent>
           </Card>
         </div>
