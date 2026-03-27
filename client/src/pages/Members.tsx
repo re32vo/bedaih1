@@ -57,7 +57,7 @@ export default function Members() {
               <CardHeader className="flex flex-row items-center justify-between gap-4">
                 <BadgeCheck className="w-8 h-8 text-amber-500" />
               <div>
-                <CardTitle>الخبرة</CardTitle>
+                <CardTitle>الإعتمادات</CardTitle>
                 <CardDescription>-</CardDescription>
               </div>
               </CardHeader>
