@@ -2645,7 +2645,7 @@ export async function registerRoutes(
               </div>
 
               <center>
-                <a href="https://bedaih.com/login" class="cta-button">دخول لوحة التحكم</a>
+                <a href="https://www.bedaih.org.sa/dashboard" class="cta-button">دخول لوحة التحكم</a>
               </center>
 
               <div class="info-section" style="background: #fef3c7; border-right: 4px solid #f59e0b; padding: 15px; border-radius: 8px; margin: 20px 0;">
