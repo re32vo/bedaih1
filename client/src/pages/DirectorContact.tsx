@@ -60,30 +60,12 @@ export default function DirectorContact() {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-700">من 9 ص إلى 5 م</p>
-              <p className="text-slate-600 text-sm">مغلق أيام الجمعة والسبت</p>
+              <p className="text-slate-700">ساعات العمل الرسمية: 8:00 ص - 4:00 م</p>
+              <p className="text-slate-600 text-sm">ايام العمل الرسمية من الأحد إلى الخميس</p>
             </CardContent>
           </Card>
         </div>
 
-        {/* Director Info */}
-        <Card>
-          <CardHeader>
-            <CardTitle>المدير التنفيذي</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center space-x-4">
-              <div className="w-20 h-20 bg-gradient-to-br from-emerald-400 to-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">
-                أ.د
-              </div>
-              <div>
-                <p className="text-xl font-bold text-slate-900">أحمد محمد علي</p>
-                <p className="text-slate-600">المدير التنفيذي - جمعية بداية</p>
-                <p className="text-sm text-slate-500 mt-1">خبرة 20+ سنة في العمل الخيري</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );
