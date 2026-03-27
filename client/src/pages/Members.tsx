@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, BriefcaseBusiness, BadgeCheck } from "lucide-react";
+import logoImg from "@/assets/logo.png";
 
 export default function Members() {
   const executiveTeam = [
@@ -10,29 +11,12 @@ export default function Members() {
     { name: "نورا سارة", position: "مديرة الموارد البشرية", department: "الموارد البشرية" },
   ];
 
-  const generalAssemblyMembers = [
-    "عضو الجمعية العمومية 1",
-    "عضو الجمعية العمومية 2",
-    "عضو الجمعية العمومية 3",
-    "عضو الجمعية العمومية 4",
-    "عضو الجمعية العمومية 5",
-    "عضو الجمعية العمومية 6",
-    "عضو الجمعية العمومية 7",
-    "عضو الجمعية العمومية 8",
-    "عضو الجمعية العمومية 9",
-    "عضو الجمعية العمومية 10",
-    "عضو الجمعية العمومية 11",
-    "عضو الجمعية العمومية 12",
-    "عضو الجمعية العمومية 13",
-    "عضو الجمعية العمومية 14",
-    "عضو الجمعية العمومية 15",
-    "عضو الجمعية العمومية 16",
-    "عضو الجمعية العمومية 17",
-    "عضو الجمعية العمومية 18",
-    "عضو الجمعية العمومية 19",
-    "عضو الجمعية العمومية 20",
-    "عضو الجمعية العمومية 21",
-  ];
+  const generalAssemblyMembers = Array.from({ length: 21 }, (_, index) => ({
+    id: index + 1,
+    name: `عضو الجمعية العمومية ${index + 1}`,
+    role: "عضو الجمعية العمومية",
+    image: "",
+  }));
 
   const [activeSection, setActiveSection] = useState<"general-assembly" | "executive-team" | "experience">("general-assembly");
 
@@ -98,15 +82,30 @@ export default function Members() {
                   <p className="text-4xl font-extrabold text-slate-900">21 عضو</p>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
-                  {generalAssemblyMembers.map((memberName, index) => (
-                    <div key={memberName} className="relative overflow-hidden rounded-lg border border-slate-300 bg-white px-3 py-2.5 min-h-[92px] shadow-sm">
-                      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-l from-emerald-500 via-sky-500 to-indigo-500" />
-                      <div className="flex items-center justify-between pt-1">
-                        <span className="text-[11px] text-slate-500">الجمعية العمومية</span>
-                        <span className="text-[11px] font-bold text-slate-700">#{index + 1}</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {generalAssemblyMembers.map((member) => (
+                    <div key={member.id} className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white min-h-[340px] shadow-sm">
+                      <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-r from-emerald-200/80 via-lime-200/60 to-sky-200/80" />
+                      <div className="absolute inset-x-0 top-[52px] h-8 bg-white" style={{ clipPath: "polygon(0 0, 100% 0, 50% 100%)" }} />
+
+                      <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-r from-emerald-200/80 via-sky-200/70 to-lime-200/70" />
+                      <div className="absolute inset-x-0 bottom-[46px] h-8 bg-white" style={{ clipPath: "polygon(0 100%, 100% 100%, 50% 0)" }} />
+
+                      <div className="relative z-10 flex h-full flex-col items-center px-4 pt-10 pb-14 text-center">
+                        <img src={logoImg} alt="شعار الجمعية" className="h-16 w-auto object-contain mb-6" />
+
+                        <div className="w-28 h-28 rounded-full border-4 border-white shadow-md bg-slate-100 overflow-hidden flex items-center justify-center mb-4">
+                          {member.image ? (
+                            <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <span className="text-3xl font-black text-slate-500">{member.id}</span>
+                          )}
+                        </div>
+
+                        <p className="text-xl font-extrabold text-slate-700 leading-none mb-2">(عضو)</p>
+                        <p className="text-xl font-black text-slate-800 leading-9">{member.name}</p>
+                        <p className="text-lg font-semibold text-slate-500 mt-2">{member.role}</p>
                       </div>
-                      <p className="mt-2 text-sm font-bold text-slate-900 leading-6 text-right">{memberName}</p>
                     </div>
                   ))}
                 </div>
