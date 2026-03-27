@@ -3,10 +3,10 @@ import { Trophy, Star } from "lucide-react";
 
 export default function Awards() {
   const awards = [
-    { year: 2023, title: "-", issuer: "-" },
-    { year: 2022, title: "-", issuer: "-" },
-    { year: 2021, title: "-", issuer: "-" },
-    { year: 2020, title: "-", issuer: "-" },
+    { year: 2026, title: "-", issuer: "-" },
+    { year: 2026, title: "-", issuer: "-" },
+    { year: 2026, title: "-", issuer: "-" },
+    { year: 2026, title: "-", issuer: "-" },
   ];
 
   return (
@@ -51,11 +51,11 @@ export default function Awards() {
               تمثل هذه الجوائز والشهادات اعترافاً بالتزامنا المستمر بتقديم خدمات ذات جودة عالية وشفافية في العمل الخيري.
             </p>
             <ul className="list-disc list-inside space-y-2">
-              <li>تدريب أكثر من 5000 متطوع</li>
-              <li>استفادة أكثر من 50,000 مستفيد من برامجنا</li>
-              <li>تنفيذ أكثر من 100 مشروع خيري</li>
-              <li>شراكات مع 20 منظمة دولية</li>
-              <li>الحفاظ على معدل رضا المستفيدين 95%</li>
+              <li>-</li>
+              <li>-</li>
+              <li>-</li>
+              <li>-</li>
+              <li>-</li>
             </ul>
           </CardContent>
         </Card>
