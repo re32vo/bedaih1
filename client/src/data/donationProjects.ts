@@ -1,0 +1,114 @@
+export type DonationProject = {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  amounts: number[];
+};
+
+export const donationProjects: DonationProject[] = [
+  {
+    id: "1",
+    title: "المنطقة الآمنة",
+    description:
+      "هو برنامج توعوي وقائي يهدف إلى توعية المراهقين في دور الملاحظة والأحداث من خطر المخدرات.",
+    image: "/toto/toto10.jpg",
+    amounts: [500, 240, 120],
+  },
+  {
+    id: "2",
+    title: "بناء",
+    description:
+      "وهو برنامج تدريبي يقدم دورات في تحسين نفسية المستفيد للابتعاد عن السلوكيات السلبية.",
+    image: "/toto/toto9.jpg",
+    amounts: [500, 300, 100],
+  },
+  {
+    id: "3",
+    title: "نادي الرعاية اللاحقة",
+    description:
+      "إعادة تأهيل المستفيد وضمان سلامة عودته للاندماج مرة أخرى.",
+    image: "/toto/toto8.jpg",
+    amounts: [500, 360, 90],
+  },
+  {
+    id: "4",
+    title: "جيل واعي",
+    description:
+      "برنامج توعوي يضمن صناعة جيل واعي بكل ما يدور حوله.",
+    image: "/toto/toto7.jpg",
+    amounts: [500, 300, 50],
+  },
+  {
+    id: "5",
+    title: "حماية الأجيال",
+    description:
+      "يهدف إلى تعزيز القيم والمبادئ لدى أبناء اليوم وقادة المستقبل.",
+    image: "/toto/toto6.jpg",
+    amounts: [500, 265, 95],
+  },
+  {
+    id: "6",
+    title: "القرار الصحيح",
+    description:
+      "تعزيز القيم لدى الطلاب لاختيار القرارات الصحيحة في حياتهم المستقبلية.",
+    image: "/toto/toto5.jpg",
+    amounts: [],
+  },
+  {
+    id: "7",
+    title: "مشروع إحياء",
+    description:
+      "برنامج علاجي يهدف إلى معالجة آثار التعاطي وإعادة التوجيه نحو الاستقرار النفسي والاجتماعي والمهني.",
+    image: "/toto/toto4.jpg",
+    amounts: [300, 100, 50],
+  },
+  {
+    id: "8",
+    title: "معًا نحو غدًا مشرق",
+    description:
+      "برنامج توعوي يهدف إلى توعية المستفيد ورفع مستوى الوعي في اختيار الصحبة الصالحة.",
+    image: "/toto/toto3.jpg",
+    amounts: [500, 300, 100],
+  },
+  {
+    id: "9",
+    title: "بيت آمن",
+    description:
+      "برنامج توعوي تثقيفي يهدف إلى توفير الأمان للمستفيد وأسرته.",
+    image: "/toto/toto2.jpg",
+    amounts: [800, 500, 50],
+  },
+  {
+    id: "10",
+    title: "الشفاء المشترك",
+    description:
+      "يهدف إلى تقبل الأسرة للمستفيد بعد عودته من رحلة الشفاء.",
+    image: "/toto/toto1.jpg",
+    amounts: [300, 100, 50],
+  },
+  {
+    id: "11",
+    title: "خلك واعي",
+    description:
+      "برنامج يهدف إلى المشاركة في الفعاليات والمؤتمرات وذلك لتوعية المجتمع من خطورة وأضرار المخدرات.",
+    image: "/toto/toto13.jpg",
+    amounts: [],
+  },
+  {
+    id: "12",
+    title: "إرشدني",
+    description:
+      "تقديم استشارات نفسية واجتماعية للمستفيد وأسرته.",
+    image: "/toto/toto12.jpg",
+    amounts: [],
+  },
+  {
+    id: "13",
+    title: "المتطوع المتعافي",
+    description:
+      "برنامج يهدف إلى مشاركة المستفيد في برامج تطوعية تخدم المجتمع.",
+    image: "/toto/toto11.jpg",
+    amounts: [500, 300, 100],
+  },
+];
