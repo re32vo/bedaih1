@@ -1318,7 +1318,7 @@ export async function registerRoutes(
         return res.status(403).json({ message: "غير مصرح" });
       }
 
-      const email = req.body.email || "bedaihsa@gmail.com";
+      const email = req.body.email || "bedaya.org.sa@gmail.com";
       const employee = await getEmployeeByEmail(email);
       if (!employee) {
         return res.status(404).json({ message: "الموظف غير موجود" });

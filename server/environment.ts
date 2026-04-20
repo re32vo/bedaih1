@@ -37,7 +37,7 @@ export function validateAndLoadEnvironment(): EnvironmentConfig {
     .map((o) => o.trim())
     .filter(Boolean);
 
-  const presidentEmail = process.env.PRESIDENT_EMAIL || process.env.HEAD_EMAIL || 'bedaihsa@gmail.com';
+  const presidentEmail = process.env.PRESIDENT_EMAIL || process.env.HEAD_EMAIL || 'bedaya.org.sa@gmail.com';
 
   // التحقق من صحة الإعدادات المهمة
   if (!Number.isFinite(port) || port < 1 || port > 65535) {

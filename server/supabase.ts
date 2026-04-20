@@ -37,7 +37,7 @@ const ALL_EMPLOYEE_PERMISSIONS = [
 ];
 
 function getOwnerEmail() {
-  return normalizeEmail(process.env.PRESIDENT_EMAIL || process.env.HEAD_EMAIL || "bedaihsa@gmail.com");
+  return normalizeEmail(process.env.PRESIDENT_EMAIL || process.env.HEAD_EMAIL || "bedaya.org.sa@gmail.com");
 }
 
 function normalizePermissions(value: any): string[] {
