@@ -4,10 +4,10 @@ import { Heart, Users, Target, TrendingUp } from "lucide-react";
 
 export default function ProgramsTreatment() {
   const programs = [
-    { title: "الرعاية الطبية", description: "توفير الرعاية الطبية الشاملة للمحتاجين" },
-    { title: "البرامج الدوائية", description: "توزيع الأدوية والدعم الطبي للعائلات المحتاجة" },
-    { title: "العمليات الجراحية", description: "تمويل العمليات الجراحية الضرورية" },
-    { title: "الفحوصات الطبية", description: "توفير الفحوصات الطبية الدورية والكشف المبكر" },
+    { title: "الرعاية الطبية", description: "متابعة صحية متخصصة تدعم رحلة العلاج والتعافي" },
+    { title: "البرامج الدوائية", description: "مساندة علاجية ودوائية حسب احتياج الحالة وخطة المختصين" },
+    { title: "الفحوصات الطبية", description: "فحوصات وتقييمات صحية تساعد على بناء الخطة العلاجية" },
+    { title: "الرعاية اللاحقة", description: "متابعة مستمرة للمتعافي بعد البرنامج لدعم الثبات والاندماج" },
   ];
 
   return (
@@ -16,7 +16,7 @@ export default function ProgramsTreatment() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">البرامج العلاجية</h1>
-          <p className="text-xl text-slate-600">رعاية صحية شاملة للمحتاجين</p>
+          <p className="text-xl text-slate-600">مساعدة المتعافي للتخلص من الإدمان والعودة عنصراً فعالاً في المجتمع</p>
         </div>
 
         {/* Stats */}
@@ -80,17 +80,17 @@ export default function ProgramsTreatment() {
           </CardHeader>
           <CardContent className="space-y-4 text-slate-700">
             <p>
-              تركز البرامج العلاجية في جمعية بداية على توفير الرعاية الصحية الشاملة والعالية الجودة للأفراد والعائلات المحتاجة، بما يساهم في تحسين جودة حياتهم.
+              تركز البرامج العلاجية في جمعية بداية على مساعدة المتعافي للتخلص من الإدمان والتشافي والعودة عنصراً فعالاً في المجتمع.
             </p>
             <p>
-              نعمل على تقديم خدمات طبية متخصصة وشاملة تشمل الكشف الطبي والفحوصات والعمليات الجراحية والمتابعة الدورية.
+              نعمل من خلال برامج متخصصة تشمل الرعاية الطبية والبرامج الدوائية والفحوصات والمتابعة والرعاية اللاحقة.
             </p>
           </CardContent>
         </Card>
 
         <BeneficiaryRequestForm
           title="استمارة مستفيد للبرامج العلاجية"
-          description="إذا كنت بحاجة إلى دعم علاجي أو صحي، عبئ النموذج التالي وسيتولى فريق الجمعية مراجعة الحالة والتواصل معك."
+          description="إذا كنت بحاجة إلى دعم علاجي أو صحي، عبئ النموذج التالي وسيتولى فريق الجمعية مراجعة الحالة والتواصل معك بسرية واهتمام."
           assistanceOptions={[
             { value: "medical", label: "علاج ودواء" },
             { value: "financial", label: "مساعدة مالية للعلاج" },
@@ -102,7 +102,6 @@ export default function ProgramsTreatment() {
     </div>
   );
 }
-
 
 
 

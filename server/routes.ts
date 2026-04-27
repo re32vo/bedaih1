@@ -88,6 +88,9 @@ export async function registerRoutes(
   const logger = new Logger("Routes");
 
   const getGovernanceCategory = (fileName: string) => {
+    if (fileName.includes("محضر") || fileName.includes("محاضر") || fileName.includes("اجتماع") || fileName.includes("اجتماعات")) {
+      return "محاضر الاجتماعات";
+    }
     if (fileName.includes("لائحة") || fileName.includes("اللائحة")) {
       return "اللوائح";
     }

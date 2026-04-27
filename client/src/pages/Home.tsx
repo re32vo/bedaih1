@@ -42,16 +42,16 @@ type HomeStat = {
 const heroSlides = [
   {
     id: "h1",
-    image: "/12344.png",
+    image: "/hero-therapy-desktop.jpg",
     title: "أهداف الجمعية",
-    subtitle: "نسعى إلى الوقاية والتأهيل والتوعية وبناء مجتمع أكثر وعيًا واستقرارًا.",
+    subtitle: "وقاية، إرشاد، تعافٍ، وتأهيل لبناء مجتمع أكثر وعيًا واستقرارًا.",
     projectId: "6",
   },
   {
     id: "h2",
-    image: "/oz.png",
+    image: "/hero-therapy-desktop.jpg",
     title: "رسالة الجمعية",
-    subtitle: "تقديم برامج نوعية للمستفيد وأسرته تعزز الأمان والتعافي والاندماج وخدمة المجتمع.",
+    subtitle: "نأخذ بيد المتعاطي ونوفر له الرعاية والتأهيل ليعود لبنة صالحة في وطنه.",
     projectId: "12",
   },
 ];
@@ -368,7 +368,7 @@ export default function Home() {
               <div className="flex flex-col items-center mb-5 gap-2">
                 <img src={logoImg} alt="شعار جمعية بداية" className="w-32 h-32 sm:w-40 sm:h-40 object-contain drop-shadow-md" />
                 <div className="inline-flex items-center rounded-full border border-sky-100 bg-sky-50 px-4 py-2 text-sm font-bold text-sky-700">
-                  جمعية بداية
+                  جمعية بداية لعلاج ورعاية وتأهيل مرضى الإدمان وأسرهم
                 </div>
               </div>
               <div className="mx-auto max-w-3xl">
@@ -380,9 +380,9 @@ export default function Home() {
                 </p>
                 <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
                   <span className="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700">وقاية</span>
-                  <span className="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700">تأهيل</span>
                   <span className="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700">إرشاد</span>
-                  <span className="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700">توعية</span>
+                  <span className="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700">تعافٍ</span>
+                  <span className="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700">تأهيل</span>
                 </div>
               </div>
             </div>
@@ -656,8 +656,6 @@ export default function Home() {
     </div>
   );
 }
-
-
 
 
 

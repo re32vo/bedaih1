@@ -3,10 +3,10 @@ import { Heart, Stethoscope, Users, CheckCircle2 } from "lucide-react";
 
 export default function HealthPlatform() {
   const services = [
-    { title: "الفحوصات الطبية", description: "فحوصات صحية دورية ومتخصصة" },
-    { title: "الاستشارات الطبية", description: "استشارات طبية مع أطباء متخصصين عبر الإنترنت" },
-    { title: "البرامج التشجيرية", description: "برامج للوقاية من الأمراض المزمنة" },
-    { title: "المتابعة الصحية", description: "متابعة دورية للمصابين والمرضى" },
+    { title: "التوعية الوقائية", description: "مشاركة المتطوعين في حملات ومحاضرات توعوية عن أضرار المخدرات" },
+    { title: "الإرشاد والمساندة", description: "دعم المستفيدين وأسرهم بالتوجيه الأولي والإحالة المناسبة" },
+    { title: "الرعاية اللاحقة", description: "مساندة المتعافين في برامج المتابعة والثبات على التعافي" },
+    { title: "تنظيم المبادرات", description: "المشاركة في المعارض وورش العمل والفعاليات المجتمعية" },
   ];
 
   return (
@@ -15,7 +15,7 @@ export default function HealthPlatform() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">منصة التطوع الصحي</h1>
-          <p className="text-xl text-slate-600">فرصة صحية متطوعة لكل مجتمع</p>
+          <p className="text-xl text-slate-600">مسار تطوعي لدعم الوقاية والتعافي وخدمة المستفيدين وأسرهم</p>
         </div>
 
         {/* Services */}
@@ -41,13 +41,13 @@ export default function HealthPlatform() {
             <CardHeader>
               <div className="flex items-center space-x-3">
                 <Heart className="w-6 h-6 text-red-500" />
-                <CardTitle>متطوعونا الطبيون</CardTitle>
+                <CardTitle>مجالات التطوع</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="space-y-2 text-slate-700">
-              <p>أطباء وممرضون متطوعون</p>
-              <p>متخصصون في مجالات مختلفة</p>
-              <p>مكرسون لخدمة المجتمع</p>
+              <p>التوعية والوقاية</p>
+              <p>الإرشاد والمساندة الأسرية</p>
+              <p>تنظيم المبادرات والفعاليات</p>
             </CardContent>
           </Card>
           <Card>
@@ -58,9 +58,9 @@ export default function HealthPlatform() {
               </div>
             </CardHeader>
             <CardContent className="space-y-2 text-slate-700">
-              <p>الأطفال والأمهات</p>
-              <p>كبار السن</p>
-              <p>الأسر المحتاجة</p>
+              <p>مرضى الإدمان وأسرهم</p>
+              <p>المتعافون في مرحلة الرعاية اللاحقة</p>
+              <p>فئات المجتمع المستهدفة بالتوعية الوقائية</p>
             </CardContent>
           </Card>
         </div>
@@ -74,12 +74,12 @@ export default function HealthPlatform() {
             </div>
           </CardHeader>
           <CardContent className="space-y-4 text-slate-700">
-            <p>إذا كنت متخصصاً صحياً وترغب في التطوع:</p>
+            <p>إذا كنت ترغب في التطوع ضمن برامج جمعية بداية:</p>
             <ol className="list-decimal list-inside space-y-2">
-              <li>تواصل معنا على health@bedaya.org</li>
-              <li>أرسل سيرتك الذاتية والشهادات</li>
-              <li>اجتز المقابلة والتقييم</li>
-              <li>انضم لفريقنا الصحي</li>
+              <li>عبئ استمارة التطوع من الموقع</li>
+              <li>حدد المجال التطوعي المناسب لخبرتك واهتمامك</li>
+              <li>ينسق معك فريق الجمعية للتعريف بالمهام</li>
+              <li>انضم للمبادرات والبرامج حسب الاحتياج</li>
             </ol>
           </CardContent>
         </Card>
@@ -87,7 +87,6 @@ export default function HealthPlatform() {
     </div>
   );
 }
-
 
 
 

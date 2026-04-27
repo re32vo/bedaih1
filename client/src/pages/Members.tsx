@@ -15,7 +15,7 @@ export default function Members() {
     image: `/now/${index + 1}.jpg`,
   }));
 
-  const [activeSection, setActiveSection] = useState<"general-assembly" | "executive-team" | "experience">("general-assembly");
+  const [activeSection, setActiveSection] = useState<"general-assembly" | "board" | "executive-team">("general-assembly");
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" dir="rtl">
@@ -23,7 +23,7 @@ export default function Members() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">الهيكل الإداري</h1>
-          <p className="text-xl text-slate-600">تعرف على الجمعية العمومية والفريق التنفيذي والخبرة</p>
+          <p className="text-xl text-slate-600">تعرف على الجمعية العمومية ومجلس الإدارة والفريق التنفيذي</p>
         </div>
 
         {/* Toggle Buttons */}
@@ -40,6 +40,18 @@ export default function Members() {
             </Card>
           </button>
 
+          <button type="button" onClick={() => setActiveSection("board")} className="text-right">
+            <Card className={`transition-all ${activeSection === "board" ? "border-slate-900 shadow-md" : "hover:shadow-sm"}`}>
+              <CardHeader className="flex flex-row items-center justify-between gap-4">
+                <BadgeCheck className="w-8 h-8 text-amber-500" />
+                <div>
+                  <CardTitle>مجلس الإدارة</CardTitle>
+                  <CardDescription>الإشراف والحوكمة وتوجيه أعمال الجمعية</CardDescription>
+                </div>
+              </CardHeader>
+            </Card>
+          </button>
+
           <button type="button" onClick={() => setActiveSection("executive-team")} className="text-right">
             <Card className={`transition-all ${activeSection === "executive-team" ? "border-slate-900 shadow-md" : "hover:shadow-sm"}`}>
               <CardHeader className="flex flex-row items-center justify-between gap-4">
@@ -48,18 +60,6 @@ export default function Members() {
                   <CardTitle>الفريق التنفيذي</CardTitle>
                   <CardDescription>كوادر تقود العمل اليومي للجمعية</CardDescription>
                 </div>
-              </CardHeader>
-            </Card>
-          </button>
-
-          <button type="button" onClick={() => setActiveSection("experience")} className="text-right">
-            <Card className={`transition-all ${activeSection === "experience" ? "border-slate-900 shadow-md" : "hover:shadow-sm"}`}>
-              <CardHeader className="flex flex-row items-center justify-between gap-4">
-                <BadgeCheck className="w-8 h-8 text-amber-500" />
-              <div>
-                <CardTitle>الإعتمادات</CardTitle>
-                <CardDescription>عدد أعضاء الجمعية العمومية الحالي</CardDescription>
-              </div>
               </CardHeader>
             </Card>
           </button>
@@ -95,6 +95,21 @@ export default function Members() {
             </>
           )}
 
+          {activeSection === "board" && (
+            <>
+              <CardHeader>
+                <CardTitle>مجلس الإدارة</CardTitle>
+                <CardDescription>جهة إشرافية تتابع الحوكمة وتوجه أعمال الجمعية وبرامجها</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4 text-slate-700">
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-6">
+                  <p className="text-lg font-bold text-slate-900 mb-3">بيانات أعضاء مجلس الإدارة</p>
+                  <p className="text-slate-600">سيتم عرض أسماء أعضاء المجلس ومناصبهم عند توفر البيانات الرسمية.</p>
+                </div>
+              </CardContent>
+            </>
+          )}
+
           {activeSection === "executive-team" && (
             <>
               <CardHeader>
@@ -118,27 +133,11 @@ export default function Members() {
               </CardContent>
             </>
           )}
-
-          {activeSection === "experience" && (
-            <>
-              <CardHeader>
-                <CardTitle>الإعتمادات</CardTitle>
-                <CardDescription>تراخيص وشهادات الجودة الرسمية للجمعية</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4 text-slate-700">
-                <div className="rounded-xl border border-slate-200 bg-slate-50 p-6">
-                  <p className="text-lg font-bold text-slate-900 mb-3">-:-</p>
-                  <p className="text-slate-600">-</p>
-                </div>
-              </CardContent>
-            </>
-          )}
         </Card>
       </div>
     </div>
   );
 }
-
 
 
 

@@ -34,7 +34,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     { href: "/about", label: "نبذة عن الجمعية" },
     { href: "/members", label: "الفريق التنفيذي" },
     { href: "/governance", label: "الحوكمة" },
-    { href: "/awards", label: "الجوائز" },
+    { href: "/awards", label: "الجوائز والتكريم" },
     { href: "/director-contact", label: "بيانات التواصل مع الجمعية" },
     { href: "/donation-methods", label: "طرق التبرع" },
     { href: "/bank-accounts", label: "الحسابات البنكية" },
@@ -480,4 +480,3 @@ export function Layout({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-

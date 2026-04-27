@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Heart, Target, Users, Lightbulb, CheckCircle, Globe, Award, Handshake, TrendingUp } from "lucide-react";
+import { Heart, Target, Users, Lightbulb, CheckCircle, Award, Handshake, ShieldCheck, Puzzle, UserPlus } from "lucide-react";
 
 export default function About() {
   return (
@@ -22,10 +22,10 @@ export default function About() {
               <span className="text-black text-sm font-medium">نبذة عن الجمعية</span>
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-black leading-tight">
-              جمعية بداية الخيرية
+              جمعية بداية لعلاج ورعاية وتأهيل مرضى الإدمان وأسرهم
             </h1>
             <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-black max-w-3xl mx-auto">
-              نبني الأمل ونصنع الفرق في حياة المحتاجين
+              نبني الأمل ونصنع الفرق في حياة المستفيدين
             </h2>
           </motion.div>
         </div>
@@ -44,17 +44,17 @@ export default function About() {
               <h2 className="text-3xl sm:text-4xl font-bold text-black mb-4">نبذة عن الجمعية</h2>
               <div className="w-24 h-1 bg-black mx-auto rounded-full mb-8" />
               <p className="text-lg text-black leading-relaxed">
-                جمعية بداية الخيرية منظمة غير ربحية تأسست لخدمة المحتاجين وتمكينهم من العيش بكرامة. 
-                نعمل على توفير الدعم الشامل للأسر المحتاجة من خلال برامج خيرية متنوعة ومستدامة.
+                جمعية خيرية تهدف إلى رفع مستوى الوعي لدى جميع شرائح المجتمع عن أضرار المخدرات والمؤثرات العقلية،
+                وعلاج ورعاية وتأهيل مرضى الإدمان وأسرهم عبر برامج متخصصة ومستدامة.
               </p>
             </motion.div>
 
             <div className="grid sm:grid-cols-2 gap-6 mb-12">
               {[
-                { icon: CheckCircle, text: "متخصصة في دعم الفئات الضعيفة والمهمشة" },
-                { icon: CheckCircle, text: "نعمل بشفافية كاملة وأمانة عالية" },
-                { icon: CheckCircle, text: "نركز على الحلول المستدامة والتمكين" },
-                { icon: CheckCircle, text: "شراكة حقيقية مع المجتمع والجهات الحكومية" }
+                { icon: CheckCircle, text: "رفع الوعي بأضرار المخدرات والمؤثرات العقلية" },
+                { icon: CheckCircle, text: "رعاية مرضى الإدمان وأسرهم باحتواء وسرية" },
+                { icon: CheckCircle, text: "برامج علاجية وتأهيلية متخصصة" },
+                { icon: CheckCircle, text: "شراكة فاعلة مع المجتمع والجهات ذات العلاقة" }
               ].map((item, i) => (
                 <motion.div 
                   key={i}
@@ -91,17 +91,17 @@ export default function About() {
               {
                 icon: Lightbulb,
                 title: "رؤيتنا",
-                desc: "مجتمع متكافل خالٍ من الفقر، حيث يحظى كل فرد بحقوقه الإنسانية ويعيش بكرامة واستقرار"
+                desc: "مجتمع آمن خالٍ من الإدمان"
               },
               {
                 icon: Heart,
                 title: "رسالتنا",
-                desc: "توفير الدعم المتكامل للمحتاجين من خلال برامج فعالة تمكنهم من الاعتماد على أنفسهم"
+                desc: "أن يكون مجتمعنا واعياً، وأن نأخذ بيد المتعاطي ونوفر له العلاج والتأهيل ليعود لبنة صالحة تسهم في بناء وطنه"
               },
               {
                 icon: Target,
                 title: "أهدافنا",
-                desc: "تحسين مستوى معيشة الأسر المحتاجة وتوفير فرص التعليم والتدريب والصحة"
+                desc: "تقديم الرعاية لمرضى الإدمان وتأهيلهم من خلال برامج علاجية متخصصة"
               }
             ].map((item, idx) => (
               <motion.div 
@@ -139,12 +139,16 @@ export default function About() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: Heart, title: "الشفقة والرحمة", desc: "نتعامل مع المحتاجين برحمة واحترام كامل" },
-              { icon: CheckCircle, title: "الشفافية والأمانة", desc: "كل ريال يُنفق بأمانة وشفافية كاملة" },
-              { icon: Users, title: "التكافل الاجتماعي", desc: "نؤمن بقيمة الترابط بين أفراد المجتمع" },
-              { icon: Lightbulb, title: "الابتكار", desc: "حلول مبتكرة تضمن تأثيراً طويل الأجل" },
-              { icon: Handshake, title: "الشراكة", desc: "نعمل مع الجميع لتحقيق أهداف مشتركة" },
-              { icon: Award, title: "العدالة", desc: "وصول الخدمات بعدل لكل من يستحقها" }
+              { icon: ShieldCheck, title: "السرية", desc: "نحفظ خصوصية المستفيدين وأسرهم في جميع مراحل الخدمة" },
+              { icon: Award, title: "المهنية", desc: "نلتزم بالممارسات المتخصصة والجودة في تقديم البرامج" },
+              { icon: Heart, title: "الشغف", desc: "نؤمن برسالتنا ونبادر لصناعة أثر حقيقي" },
+              { icon: Users, title: "التقبل", desc: "نتعامل مع المستفيد باحترام واحتواء دون وصم" },
+              { icon: Puzzle, title: "التكامل", desc: "ننسق الجهود العلاجية والاجتماعية لتحقيق تعافٍ مستدام" },
+              { icon: Lightbulb, title: "التأهيل", desc: "نساعد المستفيد على استعادة دوره الفاعل في المجتمع" },
+              { icon: UserPlus, title: "الدمج", desc: "ندعم عودة المتعافي للمجتمع والأسرة والعمل" },
+              { icon: CheckCircle, title: "الاحتواء", desc: "نساند المستفيد وأسرته في بيئة آمنة وداعمة" },
+              { icon: Target, title: "التعزيز", desc: "نعزز السلوك الإيجابي وخطوات التعافي المستمرة" },
+              { icon: Handshake, title: "الشراكة", desc: "نعمل مع الجهات والمجتمع لتحقيق أهداف مشتركة" }
             ].map((value, idx) => (
               <motion.div 
                 key={idx}
@@ -176,30 +180,30 @@ export default function About() {
           >
             <h2 className="text-3xl sm:text-4xl font-bold text-black mb-4">مجالات عملنا</h2>
             <div className="w-24 h-1 bg-black mx-auto rounded-full mb-4" />
-            <p className="text-black max-w-2xl mx-auto">نعمل في عدة مجالات حيوية لتحسين حياة المحتاجين</p>
+            <p className="text-black max-w-2xl mx-auto">نعمل في مسارات متكاملة تخدم الوقاية والعلاج والتأهيل والدعم المستمر</p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-8">
             {[
               { 
                 emoji: "❤️", 
-                title: "الخدمات الصحية", 
-                items: ["الفحوصات الطبية المجانية", "توفير الأدوية", "البرامج الوقائية", "الاستشارات الطبية"] 
+                title: "التوعية الوقائية", 
+                items: ["حملات توعوية", "محاضرات وندوات", "ورش عمل", "مواد تثقيفية"] 
               },
               { 
                 emoji: "📚", 
-                title: "التعليم والتدريب", 
-                items: ["منح دراسية", "تدريب مهني", "برامج محو الأمية", "دورات تطوير المهارات"] 
+                title: "المساعدة في العلاج والرعاية", 
+                items: ["إحالة للجهات المختصة", "متابعة علاجية", "دعم الأسرة", "خدمات مساندة"] 
               },
               { 
                 emoji: "🏠", 
-                title: "الدعم السكني والمعيشي", 
-                items: ["مساعدات السكن", "توفير المواد الغذائية", "دعم فواتير الكهرباء", "مساعدات الإيجار"] 
+                title: "التأهيل للمستفيدين", 
+                items: ["برامج تعافٍ", "مهارات حياتية", "إرشاد اجتماعي", "تهيئة للاندماج"] 
               },
               { 
                 emoji: "👨‍👩‍👧", 
-                title: "الرعاية الاجتماعية", 
-                items: ["كفالة الأيتام", "دعم الأسر المتفككة", "الاستشارات النفسية", "برامج إعادة التأهيل"] 
+                title: "الدعم والسند المستمر", 
+                items: ["رعاية لاحقة", "متابعة أسرية", "مجموعات دعم", "شراكات مجتمعية"] 
               }
             ].map((area, idx) => (
               <motion.div 
@@ -258,7 +262,6 @@ export default function About() {
     </>
   );
 }
-
 
 
 

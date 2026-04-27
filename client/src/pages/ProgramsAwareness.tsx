@@ -4,10 +4,10 @@ import { Radio, Users, CheckCircle2 } from "lucide-react";
 
 export default function ProgramsAwareness() {
   const activities = [
-    { title: "الندوات التثقيفية", description: "ندوات توعوية عن الصحة والسلامة والتنمية الاجتماعية" },
-    { title: "البرامج الإذاعية", description: "بث محتوى توعوي مباشر على المحطات الإذاعية" },
-    { title: "المقالات التثقيفية", description: "نشر مقالات توعوية في المنصات الإعلامية" },
-    { title: "الورش التدريبية", description: "تدريب عملي على مهارات حياتية ومهنية" },
+    { title: "المحاضرات والندوات", description: "لقاءات توعوية ترفع الوعي بأضرار المخدرات والمؤثرات العقلية" },
+    { title: "ورش العمل", description: "برامج تفاعلية لتنمية مهارات الوقاية والتعامل مع المخاطر" },
+    { title: "المعارض", description: "أركان ومعارض توعوية تصل للمدارس والجامعات والجهات المجتمعية" },
+    { title: "المسابقات", description: "مبادرات تشجع المشاركة ونشر الرسائل الوقائية بأساليب جاذبة" },
   ];
 
   return (
@@ -16,7 +16,7 @@ export default function ProgramsAwareness() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">البرامج التوعوية</h1>
-          <p className="text-xl text-slate-600">تعزيز الوعي والمعرفة في المجتمع</p>
+          <p className="text-xl text-slate-600">وقاية مجتمعية تبدأ بالمعرفة والمشاركة</p>
         </div>
 
         {/* Activities */}
@@ -43,10 +43,10 @@ export default function ProgramsAwareness() {
           </CardHeader>
           <CardContent className="space-y-4 text-slate-700">
             <p>
-              تؤمن جمعية بداية بأن التوعية والتثقيف هما أساس التطور المجتمعي والاستدامة. نعمل على نشر الوعي من خلال برامج متنوعة وفعالة.
+              تؤمن جمعية بداية بأن التوعية الوقائية أساس لحماية المجتمع من أضرار المخدرات والمؤثرات العقلية.
             </p>
             <p>
-              نستهدف مختلف فئات المجتمع بمحتوى توعوي متخصص يتناول القضايا الصحية والاجتماعية والاقتصادية ذات الأهمية الحيوية.
+              نستهدف مختلف فئات المجتمع من خلال المحاضرات والندوات وورش العمل والمعارض والمسابقات، بمحتوى واضح ومناسب لكل فئة.
             </p>
           </CardContent>
         </Card>
@@ -65,7 +65,6 @@ export default function ProgramsAwareness() {
     </div>
   );
 }
-
 
 
 
