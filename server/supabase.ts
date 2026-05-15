@@ -284,6 +284,18 @@ export async function createDonation(donation: { email: string; amount: number; 
   return data?.[0] || null;
 }
 
+export async function getDonationByCode(code: string) {
+  if (!supabase || !code) return null;
+
+  const { data } = await supabase
+    .from('donations')
+    .select('*')
+    .eq('code', code)
+    .maybeSingle();
+
+  return data || null;
+}
+
 export async function createRecurringDonation(recurring: {
   fullName: string;
   phone: string;

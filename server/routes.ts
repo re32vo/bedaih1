@@ -23,6 +23,7 @@ import { Logger } from "./logger";
 import {
   upsertDonor,
   createDonation,
+  getDonationByCode,
   createRecurringDonation,
   getDonationsByEmail,
   getDonationStatsByEmails,
@@ -3377,6 +3378,130 @@ export async function registerRoutes(
     return `Basic ${Buffer.from(`${secretKey}:`).toString("base64")}`;
   };
 
+  const getRequestBaseUrl = (req: Request | any) => {
+    const configuredBaseUrl = (process.env.APP_URL || process.env.PUBLIC_APP_URL || "").replace(/\/+$/, "");
+    if (configuredBaseUrl) return configuredBaseUrl;
+
+    const forwardedProto = String(req.headers["x-forwarded-proto"] || "").split(",")[0].trim();
+    const forwardedHost = String(req.headers["x-forwarded-host"] || "").split(",")[0].trim();
+    const protocol = forwardedProto || req.protocol || "https";
+    const host = forwardedHost || req.get("host") || "";
+
+    return host ? `${protocol}://${host}` : "http://localhost:5000";
+  };
+
+  const buildUrl = (baseUrl: string, path: string, params?: Record<string, string | number | undefined>) => {
+    const url = new URL(path, baseUrl);
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+      if (value !== undefined && value !== "") {
+        url.searchParams.set(key, String(value));
+      }
+    });
+
+    return url.toString();
+  };
+
+  async function recordPaidMoyasarDonation(
+    req: Request | any,
+    payment: any,
+    fallback?: {
+      email?: string;
+      name?: string;
+      phone?: string;
+      method?: string;
+      amount?: number;
+    }
+  ) {
+    if (payment.status !== "paid") {
+      throw new Error("عملية الدفع لم تكتمل");
+    }
+
+    if (payment.currency !== "SAR") {
+      throw new Error("عملة الدفع غير صحيحة");
+    }
+
+    if (fallback?.amount && Number(payment.amount) !== Math.round(fallback.amount * 100)) {
+      throw new Error("مبلغ الدفع لا يطابق المبلغ المطلوب");
+    }
+
+    const metadata = payment.metadata || {};
+    const donorEmail =
+      fallback?.email ||
+      metadata.email ||
+      `${payment.id}@donation.local`;
+
+    const donorName =
+      fallback?.name ||
+      metadata.name ||
+      "فاعل خير";
+
+    const existingDonation = await getDonationByCode(String(payment.id || ""));
+    if (existingDonation) {
+      return {
+        paymentId: payment.id,
+        amount: Number(payment.amount || 0) / 100,
+        email: donorEmail,
+        method: existingDonation.method || payment.source?.type || fallback?.method || metadata.method || "moyasar",
+        alreadyRecorded: true,
+      };
+    }
+
+    await upsertDonor({
+      email: donorEmail,
+      name: donorName,
+      phone: fallback?.phone || metadata.phone || "",
+      lastLogin: false,
+    });
+
+    const amountInRiyal = Number(payment.amount || 0) / 100;
+    const method = payment.source?.type || fallback?.method || metadata.method || "moyasar";
+
+    await createDonation({
+      email: donorEmail,
+      amount: amountInRiyal,
+      method,
+      code: payment.id,
+    });
+
+    logSystemAudit(req, {
+      actor: `متبرع: ${donorEmail}`,
+      action: "donation_paid_moyasar",
+      eventCategory: "client_data",
+      entityType: "donation",
+      entityId: String(payment.id || ""),
+      actorRole: "client",
+      afterData: {
+        email: donorEmail,
+        amount: amountInRiyal,
+        method,
+        paymentId: payment.id,
+        status: payment.status,
+      },
+    });
+
+    if (!String(donorEmail).endsWith("@donation.local")) {
+      try {
+        await sendDonationReceipt(
+          donorEmail,
+          donorName,
+          amountInRiyal,
+          method,
+          payment.id
+        );
+      } catch (emailErr) {
+        logger.error("Failed to send Moyasar donation receipt", emailErr);
+      }
+    }
+
+    return {
+      paymentId: payment.id,
+      amount: amountInRiyal,
+      email: donorEmail,
+      method,
+    };
+  }
+
   async function getMoyasarPayment(paymentId: string) {
     const response = await fetch(
       `https://api.moyasar.com/v1/payments/${encodeURIComponent(paymentId)}`,
@@ -3398,6 +3523,144 @@ export async function registerRoutes(
     return data;
   }
 
+  app.post("/api/moyasar/create-payment", async (req, res) => {
+    try {
+      const schema = z.object({
+        amount: z.number().positive(),
+        method: z.string().max(80).optional(),
+        email: z.string().email().optional(),
+        name: z.string().min(2).max(100).optional(),
+        phone: z.string().max(30).optional(),
+      });
+
+      const input = schema.parse(req.body || {});
+      const amountInHalalas = Math.round(input.amount * 100);
+
+      if (amountInHalalas < 100) {
+        return res.status(400).json({
+          success: false,
+          message: "أقل مبلغ للتبرع هو 1 ريال",
+        });
+      }
+
+      const token = req.headers.authorization?.split(" ")[1];
+      let donorEmail = input.email || "";
+      let donorName = input.name || "فاعل خير";
+
+      if (token) {
+        const verifiedEmail = verifyToken(token);
+        if (verifiedEmail) {
+          donorEmail = verifiedEmail;
+          const donor = await getDonorByEmail(verifiedEmail);
+          donorName = donor?.name || donorName;
+        }
+      }
+
+      if (!donorEmail || donorEmail === "guest@donation.local") {
+        donorEmail = `anonymous-${Date.now()}-${randomBytes(4).toString("hex")}@donation.local`;
+      }
+
+      const baseUrl = getRequestBaseUrl(req);
+      const successUrl = buildUrl(baseUrl, "/thank-you", {
+        moyasar: "1",
+        invoice: "1",
+        amount: input.amount,
+        email: donorEmail.endsWith("@donation.local") ? undefined : donorEmail,
+      });
+      const backUrl = buildUrl(baseUrl, "/donate");
+      const callbackUrl = buildUrl(baseUrl, "/api/moyasar/invoice-callback");
+
+      const response = await fetch("https://api.moyasar.com/v1/invoices", {
+        method: "POST",
+        headers: {
+          Authorization: getMoyasarAuthHeader(),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: amountInHalalas,
+          currency: "SAR",
+          description: "تبرع لجمعية بداية الخيرية",
+          success_url: successUrl,
+          back_url: backUrl,
+          callback_url: callbackUrl,
+          metadata: {
+            email: donorEmail,
+            name: donorName,
+            phone: input.phone || "",
+            method: input.method || "moyasar",
+          },
+        }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        const message =
+          data?.message ||
+          data?.errors?.[0]?.message ||
+          "تعذر إنشاء رابط الدفع من ميسر";
+        throw new Error(message);
+      }
+
+      const paymentUrl = data?.url || data?.payment_url;
+      if (!paymentUrl) {
+        throw new Error("لم ترسل ميسر رابط دفع صالح");
+      }
+
+      res.status(201).json({
+        success: true,
+        paymentUrl,
+        invoiceId: data.id,
+      });
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({
+          success: false,
+          message: err.errors[0]?.message || "بيانات الدفع غير صحيحة",
+        });
+      }
+
+      logger.error("Moyasar create payment error", err);
+      res.status(500).json({
+        success: false,
+        message: err instanceof Error ? err.message : "تعذر تجهيز رابط الدفع",
+      });
+    }
+  });
+
+  app.post("/api/moyasar/invoice-callback", async (req, res) => {
+    try {
+      const invoice = req.body || {};
+      const paidPayment = Array.isArray(invoice.payments)
+        ? invoice.payments.find((payment: any) => payment?.status === "paid")
+        : null;
+
+      if (!paidPayment?.id) {
+        return res.json({
+          success: true,
+          ignored: true,
+          message: "لا توجد عملية مدفوعة في إشعار ميسر",
+        });
+      }
+
+      const payment = await getMoyasarPayment(String(paidPayment.id));
+      await recordPaidMoyasarDonation(req, payment, {
+        email: invoice.metadata?.email,
+        name: invoice.metadata?.name,
+        phone: invoice.metadata?.phone,
+        method: invoice.metadata?.method || "moyasar_invoice",
+      });
+
+      res.json({ success: true, paymentId: payment.id });
+    } catch (err) {
+      logger.error("Moyasar invoice callback error", err);
+      res.status(500).json({
+        success: false,
+        message: err instanceof Error ? err.message : "تعذر معالجة إشعار ميسر",
+      });
+    }
+  });
+
   app.post("/api/moyasar/verify-payment", async (req, res) => {
     try {
       const schema = z.object({
@@ -3410,91 +3673,13 @@ export async function registerRoutes(
 
       const input = schema.parse(req.body || {});
       const payment = await getMoyasarPayment(input.paymentId);
-
-      if (payment.status !== "paid") {
-        return res.status(400).json({
-          success: false,
-          message: "عملية الدفع لم تكتمل",
-          status: payment.status,
-        });
-      }
-
-      if (payment.currency !== "SAR") {
-        return res.status(400).json({
-          success: false,
-          message: "عملة الدفع غير صحيحة",
-        });
-      }
-
-      if (input.amount && Number(payment.amount) !== Math.round(input.amount * 100)) {
-        return res.status(400).json({
-          success: false,
-          message: "مبلغ الدفع لا يطابق المبلغ المطلوب",
-        });
-      }
-
-      const donorEmail =
-        input.email ||
-        payment.metadata?.email ||
-        `${payment.id}@donation.local`;
-
-      const donorName =
-        input.name ||
-        payment.metadata?.name ||
-        "فاعل خير";
-
-      await upsertDonor({
-        email: donorEmail,
-        name: donorName,
-        phone: input.phone || payment.metadata?.phone || "",
-        lastLogin: false,
-      });
-
-      const amountInRiyal = Number(payment.amount || 0) / 100;
-      const method = payment.source?.type || "moyasar";
-
-      await createDonation({
-        email: donorEmail,
-        amount: amountInRiyal,
-        method,
-        code: payment.id,
-      });
-
-      logSystemAudit(req, {
-        actor: `متبرع: ${donorEmail}`,
-        action: "donation_paid_moyasar",
-        eventCategory: "client_data",
-        entityType: "donation",
-        entityId: String(payment.id || ""),
-        actorRole: "client",
-        afterData: {
-          email: donorEmail,
-          amount: amountInRiyal,
-          method,
-          paymentId: payment.id,
-          status: payment.status,
-        },
-      });
-
-      if (!String(donorEmail).endsWith("@donation.local")) {
-        try {
-          await sendDonationReceipt(
-            donorEmail,
-            donorName,
-            amountInRiyal,
-            method,
-            payment.id
-          );
-        } catch (emailErr) {
-          logger.error("Failed to send Moyasar donation receipt", emailErr);
-        }
-      }
+      const donation = await recordPaidMoyasarDonation(req, payment, input);
 
       res.json({
         success: true,
         message: "تم التحقق من الدفع وتسجيل التبرع بنجاح",
-        paymentId: payment.id,
-        amount: amountInRiyal,
+        paymentId: donation.paymentId,
+        amount: donation.amount,
       });
     } catch (err) {
       if (err instanceof z.ZodError) {

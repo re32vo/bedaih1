@@ -29,7 +29,14 @@ export default function ThankYou() {
       params.get('paymentId') ||
       params.get('invoice_id');
 
-    if (!isMoyasarCallback || !paymentId) return;
+    if (!isMoyasarCallback) return;
+
+    if (!paymentId) {
+      sessionStorage.removeItem('pendingMoyasarDonation');
+      setPaymentVerificationStatus('success');
+      setPaymentVerificationMessage('تم الدفع بنجاح، وسيتم تسجيل التبرع آلياً عبر إشعار ميسر.');
+      return;
+    }
 
     const verificationKey = `moyasar_verified_${paymentId}`;
     if (sessionStorage.getItem(verificationKey)) {
@@ -313,7 +320,6 @@ export default function ThankYou() {
     </div>
   );
 }
-
 
 
 

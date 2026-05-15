@@ -141,6 +141,11 @@ export default function Donate() {
       }
 
       if (data.paymentUrl) {
+        sessionStorage.setItem('pendingMoyasarDonation', JSON.stringify({
+          amount: finalAmount,
+          email: donorEmail || undefined,
+          method: method?.title || 'ميسر',
+        }));
         window.location.href = data.paymentUrl;
         return;
       }
@@ -498,7 +503,6 @@ export default function Donate() {
     </div>
   );
 }
-
 
 
 
