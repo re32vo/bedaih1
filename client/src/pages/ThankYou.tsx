@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Heart, CheckCircle, ArrowRight, Home, Star } from "lucide-react";
 import { Link, useSearch } from "wouter";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function ThankYou() {
@@ -17,6 +17,75 @@ export default function ThankYou() {
   const [email, setEmail] = useState(initialEmail);
   const [comment, setComment] = useState('');
   const [submittingReview, setSubmittingReview] = useState(false);
+  const [paymentVerificationStatus, setPaymentVerificationStatus] = useState<'idle' | 'checking' | 'success' | 'error'>('idle');
+  const [paymentVerificationMessage, setPaymentVerificationMessage] = useState('');
+
+  useEffect(() => {
+    const params = new URLSearchParams(search);
+    const isMoyasarCallback = params.get('moyasar') === '1';
+    const paymentId =
+      params.get('id') ||
+      params.get('payment_id') ||
+      params.get('paymentId') ||
+      params.get('invoice_id');
+
+    if (!isMoyasarCallback || !paymentId) return;
+
+    const verificationKey = `moyasar_verified_${paymentId}`;
+    if (sessionStorage.getItem(verificationKey)) {
+      setPaymentVerificationStatus('success');
+      setPaymentVerificationMessage('تم تسجيل التبرع مسبقاً');
+      return;
+    }
+
+    const pendingDonationRaw = sessionStorage.getItem('pendingMoyasarDonation');
+    const pendingDonation = pendingDonationRaw ? JSON.parse(pendingDonationRaw) : {};
+
+    const verifyPayment = async () => {
+      setPaymentVerificationStatus('checking');
+
+      try {
+        const response = await fetch('/api/moyasar/verify-payment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            paymentId,
+            amount: Number(pendingDonation.amount || 0) || undefined,
+            email: pendingDonation.email || undefined,
+            name: pendingDonation.name || undefined,
+            phone: pendingDonation.phone || undefined,
+          }),
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.message || 'تعذر التحقق من عملية الدفع');
+        }
+
+        sessionStorage.setItem(verificationKey, 'true');
+        sessionStorage.removeItem('pendingMoyasarDonation');
+        setPaymentVerificationStatus('success');
+        setPaymentVerificationMessage('تم التحقق من الدفع وتسجيل التبرع بنجاح');
+        toast({
+          title: 'تم الدفع بنجاح',
+          description: 'تم تسجيل تبرعك بنجاح، جزاك الله خيراً.',
+        });
+      } catch (error) {
+        setPaymentVerificationStatus('error');
+        setPaymentVerificationMessage(error instanceof Error ? error.message : 'تعذر التحقق من عملية الدفع');
+        toast({
+          title: 'تعذر التحقق من الدفع',
+          description: error instanceof Error ? error.message : 'حاول التواصل مع الإدارة',
+          variant: 'destructive',
+        });
+      }
+    };
+
+    verifyPayment();
+  }, [search, toast]);
 
   const handleSubmitReview = async () => {
     if (rating < 1) {
@@ -80,6 +149,28 @@ export default function ThankYou() {
             <CheckCircle className="w-14 h-14 text-white" />
           </div>
         </motion.div>
+
+        {/* Moyasar payment verification message */}
+        {paymentVerificationStatus !== 'idle' && (
+          <div className={`mb-6 rounded-2xl border p-4 text-right ${
+            paymentVerificationStatus === 'success'
+              ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+              : paymentVerificationStatus === 'error'
+                ? 'border-red-200 bg-red-50 text-red-700'
+                : 'border-amber-200 bg-amber-50 text-amber-800'
+          }`}>
+            <p className="font-bold">
+              {paymentVerificationStatus === 'checking'
+                ? 'جاري التحقق من الدفع...'
+                : paymentVerificationStatus === 'success'
+                  ? 'تم تأكيد الدفع'
+                  : 'تنبيه بخصوص الدفع'}
+            </p>
+            {paymentVerificationMessage && (
+              <p className="text-sm mt-1">{paymentVerificationMessage}</p>
+            )}
+          </div>
+        )}
 
         {/* Main Message */}
         <motion.div
