@@ -14,6 +14,7 @@ import {
 import { motion } from "framer-motion";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
+import { startMoyasarPayment } from "@/lib/moyasar";
 
 const donationMethods = [
   {
@@ -119,38 +120,12 @@ export default function Donate() {
     }
 
     try {
-      const response = await fetch('/api/moyasar/create-payment', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(sessionStorage.getItem('donorToken')
-            ? { Authorization: `Bearer ${sessionStorage.getItem('donorToken')}` }
-            : {}),
-        },
-        body: JSON.stringify({
-          amount: finalAmount,
-          method: method?.title || 'ميسر',
-          email: donorEmail || 'guest@donation.local',
-        }),
+      await startMoyasarPayment({
+        amount: finalAmount || 0,
+        method: method?.title || 'ميسر',
+        email: donorEmail || undefined,
+        token: sessionStorage.getItem('donorToken') || undefined,
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'تعذر إنشاء عملية الدفع');
-      }
-
-      if (data.paymentUrl) {
-        sessionStorage.setItem('pendingMoyasarDonation', JSON.stringify({
-          amount: finalAmount,
-          email: donorEmail || undefined,
-          method: method?.title || 'ميسر',
-        }));
-        window.location.href = data.paymentUrl;
-        return;
-      }
-
-      throw new Error('لم يتم استلام رابط الدفع من ميسر');
     } catch (error) {
       toast({
         title: "خطأ",
@@ -503,7 +478,6 @@ export default function Donate() {
     </div>
   );
 }
-
 
 
 

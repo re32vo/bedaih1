@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useCart } from "@/hooks/use-cart";
 import { useToast } from "@/hooks/use-toast";
 import { donationProjects } from "@/data/donationProjects";
+import { startMoyasarPayment } from "@/lib/moyasar";
 
 const paymentMethods = [
   { id: "card", label: "بطاقة بنكية", icon: CreditCard },
@@ -17,7 +18,7 @@ type DonationFlowType = "quick" | "regular";
 
 export default function Checkout() {
   const [, setLocation] = useLocation();
-  const { items, getTotalAmount, getTotalItems, clearCart } = useCart();
+  const { items, getTotalAmount, getTotalItems } = useCart();
   const { toast } = useToast();
 
   const [method, setMethod] = useState("card");
@@ -65,8 +66,6 @@ export default function Checkout() {
     ? checkoutItems.reduce((acc, item) => acc + item.amount * item.quantity, 0)
     : getTotalAmount();
 
-  const generateDonationCode = () => `DON-${Date.now().toString().slice(-8)}`;
-
   const submitDonation = async (token?: string) => {
     if (totalAmount <= 0) {
       toast({
@@ -80,49 +79,26 @@ export default function Checkout() {
     setProcessing(true);
 
     try {
-      const donationCode = generateDonationCode();
       const isQuick = flowType === "quick";
       const anonymousEmail = `anonymous-${Date.now()}@donation.local`;
-
-      const headers: Record<string, string> = {
-        "Content-Type": "application/json",
-      };
-
       const authToken = token || sessionStorage.getItem("donorToken") || "";
-      if (!isQuick && authToken) {
-        headers.Authorization = `Bearer ${authToken}`;
+
+      if (method === "bank") {
+        toast({
+          title: "التحويل البنكي",
+          description: "استخدم بيانات الحساب البنكي لإكمال التحويل.",
+        });
+        setProcessing(false);
+        return;
       }
 
-      const res = await fetch("/api/donors/donation", {
-        method: "POST",
-        headers,
-        body: JSON.stringify({
-          email: isQuick ? anonymousEmail : authEmail.trim().toLowerCase(),
-          amount: totalAmount,
-          method: `${method}-${flowType}`,
-          code: donationCode,
-          name: isQuick ? "فاعل خير" : undefined,
-        }),
+      await startMoyasarPayment({
+        amount: totalAmount,
+        method: `${method}-${flowType}`,
+        email: isQuick ? anonymousEmail : authEmail.trim().toLowerCase(),
+        name: isQuick ? "فاعل خير" : undefined,
+        token: !isQuick ? authToken || undefined : undefined,
       });
-
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data.message || "فشل تنفيذ التبرع");
-      }
-
-      if (!isHeroCheckout) {
-        clearCart();
-      }
-
-      toast({
-        title: "تم التبرع بنجاح",
-        description: isQuick
-          ? "تم تسجيل تبرعك كفاعل خير"
-          : "تم تسجيل تبرعك وإرسال إيصال على البريد",
-      });
-
-      const thankYouEmail = !isQuick ? authEmail.trim().toLowerCase() : "";
-      setLocation(thankYouEmail ? `/thank-you?email=${encodeURIComponent(thankYouEmail)}` : "/thank-you");
     } catch (error) {
       toast({
         title: "خطأ",

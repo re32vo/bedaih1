@@ -15,14 +15,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import ResponsiveProjectImage from "@/components/ResponsiveProjectImage";
 import { donationProjects } from "@/data/donationProjects";
-import { useCart } from "@/hooks/use-cart";
 import { useToast } from "@/hooks/use-toast";
+import { startMoyasarPayment } from "@/lib/moyasar";
 
 export default function DonationOpportunityDetails() {
   const [, setLocation] = useLocation();
   const [match, params] = useRoute("/donate/opportunities/:id");
   const selectedProject = match ? donationProjects.find((project) => project.id === params.id) : undefined;
-  const { addItem } = useCart();
   const { toast } = useToast();
 
   const [selectedAmount, setSelectedAmount] = useState<number>(selectedProject?.amounts[0] || 30);
@@ -88,13 +87,18 @@ export default function DonationOpportunityDetails() {
       return;
     }
 
+    if (!selectedPaymentMethod) {
+      toast({
+        title: "اختر طريقة الدفع",
+        description: "حدد التحويل البنكي أو البطاقة أو Apple Pay للمتابعة",
+        variant: "destructive",
+      });
+      return;
+    }
+
     // تبرع سريع - بدون تسجيل دخول
     if (donationType === 'quick') {
-      // التوجه مباشرة للدفع
-      toast({
-        title: "تبرع",
-        description: "سيتم توجيهك لإتمام التبرع بمبلغ " + total + " ريال",
-      });
+      processDonation();
       return;
     }
 
@@ -111,36 +115,27 @@ export default function DonationOpportunityDetails() {
   };
 
   const processDonation = async () => {
-    const donationCode = Math.random().toString(36).substring(2, 10).toUpperCase();
-    const donationData = {
-      email: donorEmail || 'guest@donation.local',
-      amount: total,
-      method: selectedPaymentMethod ? paymentMethods.find(m => m.id === selectedPaymentMethod)?.title : 'غير محدد',
-      code: donationCode,
-      type: donationType,
-      recurringPeriod: donationType === 'recurring' ? recurringPeriod : undefined
-    };
+    const methodTitle = selectedPaymentMethod ? paymentMethods.find(m => m.id === selectedPaymentMethod)?.title : 'غير محدد';
+
+    if (selectedPaymentMethod === 1) {
+      toast({
+        title: "التحويل البنكي",
+        description: "استخدم بيانات الحساب البنكي لإكمال التحويل.",
+      });
+      return;
+    }
 
     try {
-      await fetch('/api/donors/donation', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          ...(isLoggedIn && { 'Authorization': `Bearer ${sessionStorage.getItem('donorToken')}` })
-        },
-        body: JSON.stringify(donationData)
+      await startMoyasarPayment({
+        amount: total,
+        method: `${methodTitle}-${donationType}`,
+        email: donorEmail || undefined,
+        token: isLoggedIn ? sessionStorage.getItem('donorToken') || undefined : undefined,
       });
-      
-      toast({
-        title: "تم التبرع بنجاح",
-        description: `شكراً لك على تبرعك بمبلغ ${total} ريال`,
-      });
-      
-      setLocation('/thank-you');
     } catch (error) {
       toast({
         title: "خطأ",
-        description: "حدث خطأ في تسجيل التبرع",
+        description: error instanceof Error ? error.message : "حدث خطأ أثناء تجهيز الدفع",
         variant: "destructive",
       });
     }
