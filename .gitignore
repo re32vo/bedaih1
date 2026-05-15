@@ -8,3 +8,4 @@ vite.config.ts.*
 .env.local
 .env.*.local
 firebase-service-account.json.env.vercel.all
+.vercel

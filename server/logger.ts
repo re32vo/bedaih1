@@ -103,5 +103,26 @@ export function validateEnvironment() {
     logger.warn("Optional environment variables not set:", missing);
   }
 
+  // ⚠️ تحذيرات حساسة لبوابات الدفع والإعدادات المهمة
+  const criticalWarnings: string[] = [];
+
+  if (!process.env.MOYASAR_SECRET_KEY) {
+    criticalWarnings.push("⚠️ MOYASAR_SECRET_KEY غير محدد - بوابة الدفع لن تعمل");
+  }
+
+  if (!process.env.APP_URL && !process.env.PUBLIC_APP_URL) {
+    criticalWarnings.push("⚠️ APP_URL و PUBLIC_APP_URL غير محدان - سيتم استخدام fallback من الـ request headers");
+  }
+
+  if (process.env.NODE_ENV === "production") {
+    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      criticalWarnings.push("⚠️ بيانات Supabase غير كاملة - قد لا تعمل قاعدة البيانات");
+    }
+  }
+
+  if (criticalWarnings.length > 0) {
+    criticalWarnings.forEach((warning) => logger.warn(warning));
+  }
+
   logger.info("Environment validated successfully");
 }
