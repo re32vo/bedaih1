@@ -103,57 +103,53 @@ export default function Donate() {
   const handleCompletePayment = async () => {
     if (!selectedMethod) return;
 
-    // إذا لم يكن مسجل دخول، اعرض الـ dialog
-    if (!isLoggedIn) {
-      setShowLoginDialog(true);
-      return;
-    }
-
-    // إذا كان مسجل دخول، أكمل التبرع مباشرة
     await processDonation();
   };
 
   const processDonation = async () => {
     const method = donationMethods.find(m => m.id === selectedMethod);
-    const donationCode = Math.random().toString(36).substring(2, 10).toUpperCase();
+
+    // التحويل البنكي يبقى يدوي، بدون تحويل لبوابة ميسر
+    if (selectedMethod === 1) {
+      toast({
+        title: "التحويل البنكي",
+        description: "انسخ بيانات الحساب البنكي وأكمل التحويل.",
+      });
+      return;
+    }
 
     try {
-      if (isLoggedIn && donorEmail) {
-        await fetch('/api/donors/donation', {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${sessionStorage.getItem('donorToken')}`
-          },
-          body: JSON.stringify({
-            email: donorEmail,
-            amount: finalAmount,
-            method: method?.title || 'غير محدد',
-            code: donationCode
-          })
-        });
-        
-        setLocation(`/thank-you?registered=true&email=${encodeURIComponent(donorEmail)}`);
-      } else {
-        await fetch('/api/donors/donation', {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            email: 'guest@donation.local',
-            amount: finalAmount,
-            method: method?.title || 'غير محدد',
-            code: donationCode
-          })
-        });
+      const response = await fetch('/api/moyasar/create-payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(sessionStorage.getItem('donorToken')
+            ? { Authorization: `Bearer ${sessionStorage.getItem('donorToken')}` }
+            : {}),
+        },
+        body: JSON.stringify({
+          amount: finalAmount,
+          method: method?.title || 'ميسر',
+          email: donorEmail || 'guest@donation.local',
+        }),
+      });
 
-        setLocation('/thank-you');
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'تعذر إنشاء عملية الدفع');
       }
+
+      if (data.paymentUrl) {
+        window.location.href = data.paymentUrl;
+        return;
+      }
+
+      throw new Error('لم يتم استلام رابط الدفع من ميسر');
     } catch (error) {
       toast({
         title: "خطأ",
-        description: "حدث خطأ في تسجيل التبرع",
+        description: error instanceof Error ? error.message : "حدث خطأ أثناء تجهيز الدفع",
         variant: "destructive",
       });
     }

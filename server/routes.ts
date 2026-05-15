@@ -3367,6 +3367,151 @@ export async function registerRoutes(
     }
   });
 
+  // ============= Moyasar Payment Gateway =============
+  const getMoyasarAuthHeader = () => {
+    const secretKey = process.env.MOYASAR_SECRET_KEY;
+    if (!secretKey) {
+      throw new Error("MOYASAR_SECRET_KEY is missing");
+    }
+
+    return `Basic ${Buffer.from(`${secretKey}:`).toString("base64")}`;
+  };
+
+  async function getMoyasarPayment(paymentId: string) {
+    const response = await fetch(
+      `https://api.moyasar.com/v1/payments/${encodeURIComponent(paymentId)}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: getMoyasarAuthHeader(),
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data?.message || "تعذر التحقق من عملية الدفع من ميسر");
+    }
+
+    return data;
+  }
+
+  app.post("/api/moyasar/verify-payment", async (req, res) => {
+    try {
+      const schema = z.object({
+        paymentId: z.string().min(8),
+        email: z.string().email().optional(),
+        name: z.string().min(2).max(100).optional(),
+        phone: z.string().max(30).optional(),
+        amount: z.number().positive().optional(),
+      });
+
+      const input = schema.parse(req.body || {});
+      const payment = await getMoyasarPayment(input.paymentId);
+
+      if (payment.status !== "paid") {
+        return res.status(400).json({
+          success: false,
+          message: "عملية الدفع لم تكتمل",
+          status: payment.status,
+        });
+      }
+
+      if (payment.currency !== "SAR") {
+        return res.status(400).json({
+          success: false,
+          message: "عملة الدفع غير صحيحة",
+        });
+      }
+
+      if (input.amount && Number(payment.amount) !== Math.round(input.amount * 100)) {
+        return res.status(400).json({
+          success: false,
+          message: "مبلغ الدفع لا يطابق المبلغ المطلوب",
+        });
+      }
+
+      const donorEmail =
+        input.email ||
+        payment.metadata?.email ||
+        `${payment.id}@donation.local`;
+
+      const donorName =
+        input.name ||
+        payment.metadata?.name ||
+        "فاعل خير";
+
+      await upsertDonor({
+        email: donorEmail,
+        name: donorName,
+        phone: input.phone || payment.metadata?.phone || "",
+        lastLogin: false,
+      });
+
+      const amountInRiyal = Number(payment.amount || 0) / 100;
+      const method = payment.source?.type || "moyasar";
+
+      await createDonation({
+        email: donorEmail,
+        amount: amountInRiyal,
+        method,
+        code: payment.id,
+      });
+
+      logSystemAudit(req, {
+        actor: `متبرع: ${donorEmail}`,
+        action: "donation_paid_moyasar",
+        eventCategory: "client_data",
+        entityType: "donation",
+        entityId: String(payment.id || ""),
+        actorRole: "client",
+        afterData: {
+          email: donorEmail,
+          amount: amountInRiyal,
+          method,
+          paymentId: payment.id,
+          status: payment.status,
+        },
+      });
+
+      if (!String(donorEmail).endsWith("@donation.local")) {
+        try {
+          await sendDonationReceipt(
+            donorEmail,
+            donorName,
+            amountInRiyal,
+            method,
+            payment.id
+          );
+        } catch (emailErr) {
+          logger.error("Failed to send Moyasar donation receipt", emailErr);
+        }
+      }
+
+      res.json({
+        success: true,
+        message: "تم التحقق من الدفع وتسجيل التبرع بنجاح",
+        paymentId: payment.id,
+        amount: amountInRiyal,
+      });
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({
+          success: false,
+          message: err.errors[0]?.message || "بيانات الدفع غير صحيحة",
+        });
+      }
+
+      logger.error("Moyasar verify payment error", err);
+      res.status(500).json({
+        success: false,
+        message: err instanceof Error ? err.message : "تعذر التحقق من الدفع",
+      });
+    }
+  });
+
   // Seed Data (Optional, for demo purposes)
   // You might want to remove this in production or check if data exists
   // For now, we leave it empty or add a manual seed endpoint if needed.
