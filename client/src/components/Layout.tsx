@@ -23,6 +23,100 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => setIsMenuOpen(false), [location]);
 
+  const routeMetadata: Record<string, { title: string; description: string; url: string }> = {
+    "/": {
+      title: "جمعية بداية لعلاج ورعاية وتأهيل مرضى الإدمان وأسرهم | بداية",
+      description: "جمعية بداية تقدم برامج علاجية متكاملة ودعمًا نفسيًا واجتماعيًا لمرضى الإدمان وأسرهم بهدف التعافي والاندماج بالمجتمع.",
+      url: "https://www.bedaih.org.sa/",
+    },
+    "/about": {
+      title: "نبذة عن الجمعية | جمعية بداية",
+      description: "اكتشف رؤيتنا ورسالتنا وخدمات الجمعية في علاج الإدمان وإعادة التأهيل ودعم الأسر المتضررة.",
+      url: "https://www.bedaih.org.sa/about",
+    },
+    "/donate": {
+      title: "تبرع الآن | جمعية بداية",
+      description: "ادعم برامج الجمعية لعلاج الإدمان وتأهيل الأسر عبر التبرع السريع أو الدوري أو إطلاق حملات تبرع جماعي.",
+      url: "https://www.bedaih.org.sa/donate",
+    },
+    "/contact": {
+      title: "تواصل معنا | جمعية بداية",
+      description: "اتصل بجمعية بداية للحصول على معلومات عن خدمات العلاج والدعم النفسي والاستشارات الأسرية وبرامج التأهيل.",
+      url: "https://www.bedaih.org.sa/contact",
+    },
+    "/programs/treatment": {
+      title: "البرامج العلاجية | جمعية بداية",
+      description: "تعرف على برامج الجمعية العلاجية لمرضى الإدمان والخدمات المتخصصة المقدمة للمتعافين وأسرهم.",
+      url: "https://www.bedaih.org.sa/programs/treatment",
+    },
+    "/programs/awareness": {
+      title: "البرامج التوعوية | جمعية بداية",
+      description: "شارك في حملات التوعية الصحية والاجتماعية التي تنظمها جمعية بداية لدعم الوقاية من الإدمان وتحسين الوعي المجتمعي.",
+      url: "https://www.bedaih.org.sa/programs/awareness",
+    },
+    "/volunteer/form": {
+      title: "استمارة التطوع | جمعية بداية",
+      description: "قدّم طلب تطوع مع جمعية بداية وساهم في برامج الرعاية والدعم المجتمعي لمرضى الإدمان وأسرهم.",
+      url: "https://www.bedaih.org.sa/volunteer/form",
+    },
+    "/media/news": {
+      title: "أخبار الجمعية | جمعية بداية",
+      description: "تابع أحدث الأخبار والإعلانات والتقارير الصحفية الخاصة بجمعية بداية والخدمات المجتمعية التي نقدمها.",
+      url: "https://www.bedaih.org.sa/media/news",
+    },
+  };
+
+  const getMetadata = () => {
+    if (routeMetadata[location]) return routeMetadata[location];
+    if (location.startsWith("/donate/opportunities/")) {
+      return {
+        title: "فرص التبرع | جمعية بداية",
+        description: "اكتشف فرص التبرع المتاحة في جمعية بداية لدعم برامج علاج الإدمان وتأهيل الأسر.",
+        url: `https://www.bedaih.org.sa${location}`,
+      };
+    }
+    if (location.startsWith("/media/")) {
+      return {
+        title: "المركز الإعلامي | جمعية بداية",
+        description: "تابع أخبار جمعية بداية، القصص الإعلامية، والإعلانات الخاصة بأنشطة الجمعية وخدماتها.",
+        url: `https://www.bedaih.org.sa${location}`,
+      };
+    }
+    if (location.startsWith("/volunteer/")) {
+      return {
+        title: "المركز التطوعي | جمعية بداية",
+        description: "اكتشف فرص التطوع والمبادرات التي تنظمها جمعية بداية لدعم الخدمات الاجتماعية والطبية.",
+        url: `https://www.bedaih.org.sa${location}`,
+      };
+    }
+    return routeMetadata["/"];
+  };
+
+  useEffect(() => {
+    const meta = getMetadata();
+
+    document.title = meta.title;
+
+    const updateMeta = (selector: string, attr: string, value: string) => {
+      const element = document.querySelector(selector);
+      if (element) {
+        element.setAttribute(attr, value);
+      }
+    };
+
+    updateMeta('meta[name="description"]', "content", meta.description);
+    updateMeta('meta[property="og:title"]', "content", meta.title);
+    updateMeta('meta[property="og:description"]', "content", meta.description);
+    updateMeta('meta[property="og:url"]', "content", meta.url);
+    updateMeta('meta[name="twitter:title"]', "content", meta.title);
+    updateMeta('meta[name="twitter:description"]', "content", meta.description);
+
+    const canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (canonicalLink) {
+      canonicalLink.setAttribute("href", meta.url);
+    }
+  }, [location]);
+
   const isEmployeePage = ["/dashboard", "/admin", "/login", "/logs", "/donors-management"].includes(location);
   const isDonorPage = ["/donor-dashboard", "/donor-login"].includes(location);
 
