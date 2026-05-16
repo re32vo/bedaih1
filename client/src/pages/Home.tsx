@@ -340,6 +340,43 @@ export default function Home() {
     </section>
   );
 
+  const seoIntroSection = (
+    <section className="rounded-xl md:rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
+      <div className="space-y-4">
+        <h2 className="text-2xl sm:text-3xl font-black text-slate-900">جمعية خيرية متكاملة لعلاج الإدمان ودعم الأسر في السعودية</h2>
+        <p className="text-base sm:text-lg leading-8 text-slate-600 max-w-4xl">
+          جمعية بداية هي جمعية خيرية متخصصة في علاج الإدمان وإعادة التأهيل، تقدم برامج متكاملة للعلاج النفسي، الدعم الاجتماعي، وتأهيل المتعافين للاندماج في المجتمع السعودي. نحن نعمل على حماية الأسرة، تمكين المتعافين، وتسهيل مسارات التبرع الآمنة والواضحة.
+        </p>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <h3 className="text-lg font-bold text-slate-900">علاج الإدمان</h3>
+            <p className="mt-2 text-sm leading-7 text-slate-600">
+              برامج علاج الإدمان لدى جمعية بداية تعتمد على أساليب حديثة، متابعة طبية، واستشارات نفسية فردية وجماعية لضمان تعافي آمن ومستدام.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <h3 className="text-lg font-bold text-slate-900">دعم الأسر</h3>
+            <p className="mt-2 text-sm leading-7 text-slate-600">
+              نقدم رعاية متكاملة لأسر المتعاطين، سواء عبر الاستشارات الأسرية أو برامج التوعية والدعم الاجتماعي التي تعزز بنية الأسرة واستقرارها.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <h3 className="text-lg font-bold text-slate-900">فرص التبرع</h3>
+            <p className="mt-2 text-sm leading-7 text-slate-600">
+              تبرعاتك تذهب مباشرة إلى برامج علاجية وتأهيلية وبرامج تطوعية، مع خيارات تبرع فوري، دوري، أو تكريمي حسب رغبتك.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <h3 className="text-lg font-bold text-slate-900">التطوع والمشاركة</h3>
+            <p className="mt-2 text-sm leading-7 text-slate-600">
+              انضم إلى فريق التطوع لتدعم مجتمعات الشفاء والتعافي في السعودية، عبر منصات صحية وتقارير تطوعية وبرامج إعلامية توعوية.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+
   return (
     <div className="min-h-screen bg-slate-100 py-4 md:py-8" dir="rtl">
       <div className="container mx-auto space-y-6 px-3 sm:px-4 md:space-y-10 lg:space-y-14">
@@ -410,6 +447,8 @@ export default function Home() {
         </section>
 
         {heroProjectSection}
+
+        {seoIntroSection}
 
         <section ref={statsRef} className="rounded-xl md:rounded-2xl border border-slate-200 bg-white p-3 sm:p-4 md:p-6">
           <div className="mb-4 sm:mb-6 md:mb-8 flex items-center justify-center gap-2 sm:gap-4">

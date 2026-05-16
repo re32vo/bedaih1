@@ -23,56 +23,186 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => setIsMenuOpen(false), [location]);
 
-  const routeMetadata: Record<string, { title: string; description: string; url: string }> = {
+  const routeMetadata: Record<string, { title: string; description: string; url: string; keywords: string }> = {
     "/": {
       title: "جمعية بداية لعلاج ورعاية وتأهيل مرضى الإدمان وأسرهم | بداية",
-      description: "جمعية بداية تقدم برامج علاجية متكاملة ودعمًا نفسيًا واجتماعيًا لمرضى الإدمان وأسرهم بهدف التعافي والاندماج بالمجتمع.",
+      description: "جمعية بداية خيرية متخصصة في علاج الإدمان والرعاية الأسرية، تقدم برامج تأهيلية ونفسية واجتماعية، وتدعو إلى التبرع لدعم التعافي المستدام.",
       url: "https://www.bedaih.org.sa/",
+      keywords: "جمعية خيرية, تبرع, علاج الإدمان, رعاية أسرية, تأهيل, دعم نفسي, جمعيات خيرية السعودية, جمعية بداية",
     },
     "/about": {
       title: "نبذة عن الجمعية | جمعية بداية",
-      description: "اكتشف رؤيتنا ورسالتنا وخدمات الجمعية في علاج الإدمان وإعادة التأهيل ودعم الأسر المتضررة.",
+      description: "اعرف أكثر عن جمعية بداية، مهمتنا، فريقنا، ورسالتنا في دعم مرضى الإدمان وأسرهم للتعافي والاندماج الاجتماعي.",
       url: "https://www.bedaih.org.sa/about",
+      keywords: "نبذة عن الجمعية, جمعية بداية, علاج الإدمان, الدعم الاجتماعي, التأهيل النفسي, جمعيات خيرية",
+    },
+    "/members": {
+      title: "الفريق التنفيذي | جمعية بداية",
+      description: "تعرف على الفريق القيادي والخبراء الذين يقودون جمعية بداية في برامج علاج الإدمان والرعاية الأسرية والتأهيل.",
+      url: "https://www.bedaih.org.sa/members",
+      keywords: "الفريق التنفيذي, جمعية بداية, خبراء علاج الإدمان, قيادة الجمعية, الرعاية الأسرية",
+    },
+    "/governance": {
+      title: "الحوكمة | جمعية بداية",
+      description: "اطلع على مبادئ الحوكمة والشفافية في جمعية بداية وكيف ندير الموارد والخدمات بما يفيد المستفيدين والمجتمع.",
+      url: "https://www.bedaih.org.sa/governance",
+      keywords: "حوكمة, شفافية, جمعية خيرية, جمعية بداية, إدارة الموارد, المسؤولية الاجتماعية",
+    },
+    "/awards": {
+      title: "الجوائز والتكريم | جمعية بداية",
+      description: "اكتشف الجوائز والتكريمات التي حصلت عليها جمعية بداية لدورها في علاج الإدمان ودعم الأسر والمجتمع.",
+      url: "https://www.bedaih.org.sa/awards",
+      keywords: "جوائز, تكريم, جمعية خيرية, جمعية بداية, علاج الإدمان, التقدير الاجتماعي",
+    },
+    "/director-contact": {
+      title: "بيانات التواصل مع الجمعية | جمعية بداية",
+      description: "احصل على أرقام الاتصال والبريد الإلكتروني الخاص بجمعية بداية لتواصل سريع حول التبرعات وبرامج العلاج والرعاية.",
+      url: "https://www.bedaih.org.sa/director-contact",
+      keywords: "تواصل, جمعية بداية, تبرع, خدمات الجمعية, معلومات الاتصال, رعاية أسرية",
+    },
+    "/donation-methods": {
+      title: "طرق التبرع | جمعية بداية",
+      description: "اكتشف طرق التبرع المختلفة مع جمعية بداية لدعم برامج العلاج والتأهيل والخدمات المجتمعية لمرضى الإدمان.",
+      url: "https://www.bedaih.org.sa/donation-methods",
+      keywords: "طرق التبرع, تبرع, جمعية خيرية, جمعية بداية, دعم العلاج, التبرع عبر البنك",
+    },
+    "/bank-accounts": {
+      title: "الحسابات البنكية للتبرع | جمعية بداية",
+      description: "تعرّف على الحسابات البنكية الرسمية لدفع التبرعات لجمعية بداية ودعم برامج علاج الإدمان والرعاية الأسرية.",
+      url: "https://www.bedaih.org.sa/bank-accounts",
+      keywords: "حسابات بنكية, تبرع, جمعية بداية, دعم الجمعيات, محفظة التبرع, تبرعات بنكية",
     },
     "/donate": {
       title: "تبرع الآن | جمعية بداية",
-      description: "ادعم برامج الجمعية لعلاج الإدمان وتأهيل الأسر عبر التبرع السريع أو الدوري أو إطلاق حملات تبرع جماعي.",
+      description: "ادعم برامج جمعية بداية لعلاج الإدمان وتقديم الرعاية الأسرية، تبرع الآن لتكون جزءًا من مبادرات التعافي والتأهيل.",
       url: "https://www.bedaih.org.sa/donate",
+      keywords: "تبرع الآن, جمعية خيرية, جمعية بداية, علاج الإدمان, دعم الأسرة, تأهيل الإدمان, تبرعات خيرية",
     },
-    "/contact": {
-      title: "تواصل معنا | جمعية بداية",
-      description: "اتصل بجمعية بداية للحصول على معلومات عن خدمات العلاج والدعم النفسي والاستشارات الأسرية وبرامج التأهيل.",
-      url: "https://www.bedaih.org.sa/contact",
+    "/donate/recurring": {
+      title: "تبرع دوري | جمعية بداية",
+      description: "انضم لبرنامج التبرع الدوري مع جمعية بداية وساهم بانتظام في دعم العلاج والتأهيل والخدمات المجتمعية.",
+      url: "https://www.bedaih.org.sa/donate/recurring",
+      keywords: "تبرع دوري, تبرع منتظم, جمعية بداية, دعم دائم, علاج الإدمان, تبرعات مستمرة",
+    },
+    "/donate/tribute": {
+      title: "تبرع بإسم شخص | جمعية بداية",
+      description: "قدم تبرعًا تكريميًا بإسم شخص عزيز وساعد جمعية بداية في توفير الدعم لعلاج الإدمان وتأهيل الأسر.",
+      url: "https://www.bedaih.org.sa/donate/tribute",
+      keywords: "تبرع إهداء, تبرع تكريمي, جمعية بداية, دعم مرضى الإدمان, تبرعات خيرية",
+    },
+    "/donate/campaign": {
+      title: "أطلق حملتك التبرعية | جمعية بداية",
+      description: "ابدأ حملة تبرعات خاصة لدعم برامج العلاج والتأهيل في جمعية بداية وادعُ المجتمع للمشاركة.",
+      url: "https://www.bedaih.org.sa/donate/campaign",
+      keywords: "حملة تبرعية, أطلق حملة, تبرعات جماعية, جمعية بداية, دعم الإدمان",
+    },
+    "/donate/opportunities": {
+      title: "فرص التبرع | جمعية بداية",
+      description: "اكتشف فرص التبرع المتاحة مع جمعية بداية لدعم مشاريع علاج الإدمان والتأهيل والخدمات المجتمعية.",
+      url: "https://www.bedaih.org.sa/donate/opportunities",
+      keywords: "فرص تبرع, جمعيات خيرية, جمعية بداية, دعم المشاريع, تبرعات علاج الإدمان",
     },
     "/programs/treatment": {
       title: "البرامج العلاجية | جمعية بداية",
-      description: "تعرف على برامج الجمعية العلاجية لمرضى الإدمان والخدمات المتخصصة المقدمة للمتعافين وأسرهم.",
+      description: "تعرف على برامج جمعية بداية العلاجية المتخصصة في علاج الإدمان، إعادة التأهيل، والدعم النفسي للمستفيدين وأسرهم.",
       url: "https://www.bedaih.org.sa/programs/treatment",
+      keywords: "البرامج العلاجية, علاج الإدمان, إعادة التأهيل, دعم نفسي, جمعية بداية",
     },
     "/programs/awareness": {
       title: "البرامج التوعوية | جمعية بداية",
-      description: "شارك في حملات التوعية الصحية والاجتماعية التي تنظمها جمعية بداية لدعم الوقاية من الإدمان وتحسين الوعي المجتمعي.",
+      description: "اكتشف برامج جمعية بداية التوعوية للتثقيف عن مخاطر الإدمان وطرق الوقاية ودعم الصحة النفسية في المجتمع.",
       url: "https://www.bedaih.org.sa/programs/awareness",
+      keywords: "برامج توعوية, الوقاية من الإدمان, التثقيف الصحي, جمعية بداية, الصحة النفسية",
     },
     "/volunteer/form": {
       title: "استمارة التطوع | جمعية بداية",
-      description: "قدّم طلب تطوع مع جمعية بداية وساهم في برامج الرعاية والدعم المجتمعي لمرضى الإدمان وأسرهم.",
+      description: "انضم إلى فريق التطوع في جمعية بداية وساهم في دعم برامج العلاج والرعاية الاجتماعية للمتعافين وأسرهم.",
       url: "https://www.bedaih.org.sa/volunteer/form",
+      keywords: "استمارة التطوع, تطوع, جمعية بداية, دعم المجتمعات, علاج الإدمان",
+    },
+    "/volunteer/health-platform": {
+      title: "منصة التطوع الصحي | جمعية بداية",
+      description: "شارك في منصة التطوع الصحي مع جمعية بداية وساعد في تقديم خدمات طبية ومساندة نفسية للمستفيدين.",
+      url: "https://www.bedaih.org.sa/volunteer/health-platform",
+      keywords: "منصة التطوع الصحي, تطوع, جمعية بداية, خدمات طبية, دعم نفسي",
+    },
+    "/volunteer/reports": {
+      title: "التقارير التطوعية | جمعية بداية",
+      description: "اطلع على تقارير الجمعية التطوعية وأثرها في دعم علاج الإدمان وخدمات الرعاية للأسر.",
+      url: "https://www.bedaih.org.sa/volunteer/reports",
+      keywords: "تقارير تطوعية, جمعية بداية, تطوع, تأثير اجتماعي, دعم الإدمان",
+    },
+    "/media/library": {
+      title: "المكتبة الإعلامية | جمعية بداية",
+      description: "استعرض مكتبة جمعية بداية الإعلامية من الصور والفيديوهات والتقارير عن أنشطة الجمعية وبرامج العلاج.",
+      url: "https://www.bedaih.org.sa/media/library",
+      keywords: "المكتبة الإعلامية, جمعية بداية, صور, فيديو, تقارير, أنشطة الجمعية",
+    },
+    "/media/announcements": {
+      title: "الإعلانات | جمعية بداية",
+      description: "تابع أحدث الإعلانات والأخبار الرسمية من جمعية بداية حول التبرعات والبرامج والخدمات المجتمعية.",
+      url: "https://www.bedaih.org.sa/media/announcements",
+      keywords: "إعلانات, جمعية بداية, أخبار الجمعية, فعاليات, تحديثات",
+    },
+    "/media/smile-story": {
+      title: "قصة بداية | جمعية بداية",
+      description: "اكتشف قصص النجاح والتعافي من خلال قصة بداية ودور الجمعية في دعم المتعافين وأسرهم.",
+      url: "https://www.bedaih.org.sa/media/smile-story",
+      keywords: "قصة بداية, قصص نجاح, تعافي, جمعية بداية, دعم المتعافين",
+    },
+    "/media/reports": {
+      title: "التقارير الدورية | جمعية بداية",
+      description: "اطلع على التقارير الدورية لجمعية بداية حول أثر برامج العلاج والتأهيل والتطوع في المجتمع.",
+      url: "https://www.bedaih.org.sa/media/reports",
+      keywords: "تقارير, جمعيات خيرية, جمعية بداية, تأثير اجتماعي, علاج الإدمان",
+    },
+    "/jobs": {
+      title: "التوظيف | جمعية بداية",
+      description: "تعرف على فرص التوظيف المتاحة في جمعية بداية وساهم في تقديم الدعم لبرامج علاج الإدمان وخدمات الأسر.",
+      url: "https://www.bedaih.org.sa/jobs",
+      keywords: "التوظيف, وظائف, جمعية بداية, فرص عمل, علاج الإدمان, دعم المجتمع",
+    },
+    "/contact": {
+      title: "تواصل معنا | جمعية بداية",
+      description: "اتصل بجمعية بداية للحصول على معلومات حول التبرع، العلاج، التأهيل والدعم النفسي للمستفيدين وأسرهم.",
+      url: "https://www.bedaih.org.sa/contact",
+      keywords: "تواصل معنا, جمعية بداية, تبرع, علاج الإدمان, الدعم النفسي, رعاية أسرية",
+    },
+    "/faq": {
+      title: "الأسئلة الشائعة | جمعية بداية",
+      description: "اطلع على الأسئلة المتكررة حول التبرع، العلاج، البرامج التأهيلية، التطوع وخدمات جمعية بداية.",
+      url: "https://www.bedaih.org.sa/faq",
+      keywords: "أسئلة شائعة, تبرع, علاج الإدمان, جمعية خيرية, جمعية بداية, التطوع",
+    },
+    "/privacy-policy": {
+      title: "سياسة الخصوصية | جمعية بداية",
+      description: "تعرف على سياسة الخصوصية الخاصة بجمعية بداية وكيف نحبس بيانات المتبرعين والمستفيدين ونحميها.",
+      url: "https://www.bedaih.org.sa/privacy-policy",
+      keywords: "سياسة الخصوصية, حماية البيانات, جمعية بداية, منصة التبرع, معلومات شخصية",
+    },
+    "/terms": {
+      title: "الشروط والأحكام | جمعية بداية",
+      description: "اطلع على الشروط والأحكام الخاصة باستخدام موقع جمعية بداية وخدمات التبرع والدعم المجتمعي.",
+      url: "https://www.bedaih.org.sa/terms",
+      keywords: "الشروط والأحكام, جمعية بداية, استخدام الموقع, التبرع، القوانين",
     },
     "/media/news": {
       title: "أخبار الجمعية | جمعية بداية",
-      description: "تابع أحدث الأخبار والإعلانات والتقارير الصحفية الخاصة بجمعية بداية والخدمات المجتمعية التي نقدمها.",
+      description: "تابع أحدث الأخبار والإعلانات والتقارير الخاصة بجمعية بداية ودورها في دعم علاج الإدمان والرعاية المجتمعية.",
       url: "https://www.bedaih.org.sa/media/news",
+      keywords: "أخبار الجمعية, جمعية بداية, الأخبار الصحفية, التبرعات, علاج الإدمان",
     },
   };
 
   const getMetadata = () => {
-    if (routeMetadata[location]) return routeMetadata[location];
-    if (location.startsWith("/donate/opportunities/")) {
+    const pathname = location.split("?")[0];
+    if (routeMetadata[pathname]) return routeMetadata[pathname];
+    if (pathname.startsWith("/donate/opportunities/")) {
       return {
         title: "فرص التبرع | جمعية بداية",
         description: "اكتشف فرص التبرع المتاحة في جمعية بداية لدعم برامج علاج الإدمان وتأهيل الأسر.",
-        url: `https://www.bedaih.org.sa${location}`,
+        url: `https://www.bedaih.org.sa${pathname}`,
+        keywords: "فرص تبرع, جمعية خيرية, تبرع, علاج الإدمان, دعم أسر",
       };
     }
     if (location.startsWith("/media/")) {
@@ -80,6 +210,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         title: "المركز الإعلامي | جمعية بداية",
         description: "تابع أخبار جمعية بداية، القصص الإعلامية، والإعلانات الخاصة بأنشطة الجمعية وخدماتها.",
         url: `https://www.bedaih.org.sa${location}`,
+        keywords: "مركز إعلامي, جمعية بداية, أخبار الجمعية, تقارير, إعلام",
       };
     }
     if (location.startsWith("/volunteer/")) {
@@ -87,6 +218,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         title: "المركز التطوعي | جمعية بداية",
         description: "اكتشف فرص التطوع والمبادرات التي تنظمها جمعية بداية لدعم الخدمات الاجتماعية والطبية.",
         url: `https://www.bedaih.org.sa${location}`,
+        keywords: "تطوع, مركز تطوعي, جمعية خيرية, جمعية بداية, فرص تطوع",
       };
     }
     return routeMetadata["/"];
@@ -105,6 +237,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     };
 
     updateMeta('meta[name="description"]', "content", meta.description);
+    updateMeta('meta[name="keywords"]', "content", meta.keywords);
     updateMeta('meta[property="og:title"]', "content", meta.title);
     updateMeta('meta[property="og:description"]', "content", meta.description);
     updateMeta('meta[property="og:url"]', "content", meta.url);

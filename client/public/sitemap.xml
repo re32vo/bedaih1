@@ -9,8 +9,88 @@
     <priority>0.80</priority>
   </url>
   <url>
+    <loc>https://www.bedaih.org.sa/members</loc>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/governance</loc>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/awards</loc>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/director-contact</loc>
+    <priority>0.65</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/donation-methods</loc>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/bank-accounts</loc>
+    <priority>0.70</priority>
+  </url>
+  <url>
     <loc>https://www.bedaih.org.sa/donate</loc>
     <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/donate/recurring</loc>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/donate/tribute</loc>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/donate/campaign</loc>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/donate/opportunities</loc>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/programs/treatment</loc>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/programs/awareness</loc>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/volunteer/form</loc>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/volunteer/health-platform</loc>
+    <priority>0.65</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/volunteer/reports</loc>
+    <priority>0.65</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/media/library</loc>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/media/announcements</loc>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/media/smile-story</loc>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/media/reports</loc>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/jobs</loc>
+    <priority>0.65</priority>
   </url>
   <url>
     <loc>https://www.bedaih.org.sa/contact</loc>
@@ -29,7 +109,35 @@
     <priority>0.70</priority>
   </url>
   <url>
+    <loc>https://www.bedaih.org.sa/volunteer/health-platform</loc>
+    <priority>0.65</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/volunteer/donation-platform</loc>
+    <priority>0.65</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/volunteer/reports</loc>
+    <priority>0.65</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/media/library</loc>
+    <priority>0.70</priority>
+  </url>
+  <url>
     <loc>https://www.bedaih.org.sa/media/news</loc>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/media/announcements</loc>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/media/smile-story</loc>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.bedaih.org.sa/media/reports</loc>
     <priority>0.70</priority>
   </url>
   <url>
