@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Sitemap: https://www.bedaih.org.sa/sitemap.xml
+Host: https://www.bedaih.org.sa

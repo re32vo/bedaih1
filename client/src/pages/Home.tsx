@@ -373,8 +373,14 @@ export default function Home() {
               </div>
               <div className="mx-auto max-w-3xl">
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-4 text-slate-900">
-                  {heroSlides[currentHeroIndex].title}
+                  جمعية بداية خيرية لعلاج الإدمان ورعاية وتأهيل الأسر
                 </h1>
+                <p className="text-base sm:text-xl md:text-2xl font-bold leading-8 text-slate-600 mb-4">
+                  أفضل جمعية خيرية لدعم التبرعات وبرامج علاج الإدمان، إعادة التأهيل، والرعاية النفسية والاجتماعية للأسر.
+                </p>
+                <h2 className="text-2xl sm:text-3xl font-black leading-tight mb-4 text-slate-900">
+                  {heroSlides[currentHeroIndex].title}
+                </h2>
                 <p className="text-base sm:text-xl md:text-2xl font-bold leading-8 text-slate-600">
                   {heroSlides[currentHeroIndex].subtitle}
                 </p>
