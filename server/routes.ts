@@ -3382,12 +3382,20 @@ export async function registerRoutes(
     const configuredBaseUrl = (process.env.APP_URL || process.env.PUBLIC_APP_URL || "").replace(/\/+$/, "");
     if (configuredBaseUrl) return configuredBaseUrl;
 
+    if (configuredBaseUrl) {
+      return configuredBaseUrl;
+    }
+
     const forwardedProto = String(req.headers["x-forwarded-proto"] || "").split(",")[0].trim();
     const forwardedHost = String(req.headers["x-forwarded-host"] || "").split(",")[0].trim();
     const protocol = forwardedProto || req.protocol || "https";
     const host = forwardedHost || req.get("host") || "";
 
-    return host ? `${protocol}://${host}` : "http://localhost:5000";
+    if (host) {
+      return `${protocol}://${host}`;
+    }
+
+    return "http://localhost:5000";
   };
 
   const buildUrl = (baseUrl: string, path: string, params?: Record<string, string | number | undefined>) => {
