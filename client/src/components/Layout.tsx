@@ -533,7 +533,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   <h3 className="text-base sm:text-lg font-bold">جمعية بداية</h3>
                 </div>
               </div>
-              <p className="text-xs sm:text-sm leading-relaxed">نسعى لبناء مجتمع متكافل من خلال مبادرات خيرية مستدامة تصل للمستحقين بكرامة وشفافية.</p>
+              <p className="text-xs sm:text-sm leading-relaxed">جمعية بداية لعلاج ورعاية وتأهيل مرضى الإدمان وأسرهم بكرامة وشفافية.</p>
             </div>
 
             <div>
