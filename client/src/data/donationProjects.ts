@@ -12,7 +12,7 @@ export const donationProjects: DonationProject[] = [
     title: "تأسيس الجمعية",
     description:
       "مساهمة مباشرة في تأسيس وتشغيل الجمعية لتقديم الخدمات والرعاية لمرضى الإدمان وأسرهم.",
-    image: "/apl.jpg",
+    image: "/pp/moh13.jpg",
     amounts: [2000, 1000, 500],
   },
   {
@@ -20,7 +20,7 @@ export const donationProjects: DonationProject[] = [
     title: "سند لدعم مرضى الإدمان وأسرهم",
     description:
       "صندوق لدعم العلاج، الاستشارات، وبرامج إعادة التأهيل للمستفيدين وأسرهم.",
-    image: "/api.jpg",
+    image: "/pp/moh12.jpg",
     amounts: [1000, 500, 200],
   },
   {
