@@ -2129,13 +2129,16 @@ export async function registerRoutes(
       }
 
       // Save to Supabase
-      await createDonation({
+      const donationRecord = await createDonation({
         email: donorEmail,
         amount: donationAmount,
         method: donationMethod,
         code: donationCode,
         status: donationStatus,
       });
+      if (!donationRecord) {
+        throw new Error('فشل حفظ التبرع في قاعدة البيانات');
+      }
       
       // Log the donation in audit log
       logSystemAudit(req, {

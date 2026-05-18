@@ -100,7 +100,9 @@ export async function getDonorByEmail(email: string) {
 }
 
 export async function upsertDonor(donor: { email: string; name?: string; phone?: string; lastLogin?: boolean }) {
-  if (!supabase) return null;
+  if (!supabase) {
+    throw new Error('Supabase client غير مهيأ');
+  }
   
   const email = normalizeEmail(donor.email);
 
@@ -273,15 +275,21 @@ export async function deleteVolunteerRequest(id: string) {
 }
 
 export async function createDonation(donation: { email: string; amount: number; method: string; code?: string; status?: string }) {
-  if (!supabase) return null;
+  if (!supabase) {
+    throw new Error('Supabase client غير مهيأ لإنشاء التبرع');
+  }
   
+  if (!donation.code || !donation.code.trim()) {
+    throw new Error('كود التبرع غير صالح');
+  }
+
   const { data, error } = await supabase
     .from('donations')
     .insert({
       email: normalizeEmail(donation.email),
       amount: Number(donation.amount) || 0,
       method: donation.method,
-      code: donation.code || null,
+      code: donation.code,
       status: donation.status || 'pending',
     })
     .select();
@@ -291,7 +299,11 @@ export async function createDonation(donation: { email: string; amount: number; 
     throw new Error(`فشل حفظ التبرع: ${error.message}`);
   }
     
-  return data?.[0] || null;
+  if (!data || !data[0]) {
+    throw new Error('فشل حفظ التبرع في قاعدة البيانات');
+  }
+
+  return data[0];
 }
 
 export async function getDonationByCode(code: string) {
