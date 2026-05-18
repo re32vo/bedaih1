@@ -141,14 +141,8 @@ export default function DonationOpportunityDetails() {
         throw new Error(data.message || 'حدث خطأ أثناء تسجيل التحويل البنكي');
       }
 
-      const query = new URLSearchParams();
-      query.set('status', 'under_review');
-      query.set('bank', '1');
-      if (donationType === 'single') {
-        query.set('donationType', donationType);
-      }
-
-      setLocation(`/thank-you?${query.toString()}`);
+      // صفحة الشكر مع رسالة تحت المراجعة
+      setLocation(`/thank-you?status=under_review&bank=1&donationType=${donationType}`);
     } catch (error) {
       toast({
         title: 'خطأ',
