@@ -31,17 +31,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
     },
     "/about": {
       title: "نبذة عن الجمعية | جمعية بداية",
-      description: "اكتشف رؤيتنا ورسالتنا وخدمات الجمعية في علاج الإدمان وإعادة التأهيل ودعم الأسر المتضررة.",
+      description: "اكتشف رؤيتنا ورسالتنا وخدمات الجمعية في علاج الإدمان وإعادة ودعم الأسر المتضررة.",
       url: "https://www.bedaih.org.sa/about",
     },
     "/donate": {
       title: "تبرع الآن | جمعية بداية",
-      description: "ادعم برامج الجمعية لعلاج الإدمان وتأهيل الأسر عبر التبرع السريع أو الدوري أو إطلاق حملات تبرع جماعي.",
+      description: "ادعم برامج الجمعية لعلاج الإدمان ومساعدةالأسر عبر التبرع السريع أو الدوري أو إطلاق حملات تبرع جماعي.",
       url: "https://www.bedaih.org.sa/donate",
     },
     "/contact": {
       title: "تواصل معنا | جمعية بداية",
-      description: "اتصل بجمعية بداية للحصول على معلومات عن خدمات العلاج والدعم النفسي والاستشارات الأسرية وبرامج التأهيل.",
+      description: "اتصل بجمعية بداية للحصول على معلومات عن خدمات العلاج والدعم النفسي والاستشارات الأسرية وبرامج العلاج.",
       url: "https://www.bedaih.org.sa/contact",
     },
     "/programs/treatment": {
@@ -71,7 +71,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     if (location.startsWith("/donate/opportunities/")) {
       return {
         title: "فرص التبرع | جمعية بداية",
-        description: "اكتشف فرص التبرع المتاحة في جمعية بداية لدعم برامج علاج الإدمان وتأهيل الأسر.",
+        description: "اكتشف فرص التبرع المتاحة في جمعية بداية لدعم برامج علاج الإدمان.",
         url: `https://www.bedaih.org.sa${location}`,
       };
     }
