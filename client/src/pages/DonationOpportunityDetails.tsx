@@ -27,11 +27,10 @@ export default function DonationOpportunityDetails() {
   const [selectedAmount, setSelectedAmount] = useState<number>(selectedProject?.amounts[0] || 30);
   const [customAmount, setCustomAmount] = useState<string>(selectedProject?.amounts[0] ? String(selectedProject.amounts[0]) : "30");
   const [customDonation, setCustomDonation] = useState<boolean>(false);
-  const [donationType, setDonationType] = useState<'single' | 'quick' | 'recurring'>('quick');
+  const [donationType, setDonationType] = useState<'single' | 'quick'>('quick');
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<number | null>(null);
   const [shareAmount, setShareAmount] = useState<number>(30);
   const [sharesCount, setSharesCount] = useState<number>(1);
-  const [recurringPeriod, setRecurringPeriod] = useState<string>("monthly");
   const [selectedShareType, setSelectedShareType] = useState<'good' | 'giving' | 'kindness' | 'custom'>('good');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [donorEmail, setDonorEmail] = useState('');
@@ -110,16 +109,15 @@ export default function DonationOpportunityDetails() {
       return;
     }
 
-    // تبرع واحد أو دوري - يتطلب تسجيل دخول
-    if (donationType === 'single' || donationType === 'recurring') {
-      if (!isLoggedIn) {
-        setShowLoginDialog(true);
-        return;
-      }
-      
-      // إذا كان مسجل دخول، أكمل التبرع
-      processDonation();
-    }
+    // تبرع عادي - يتطلب تسجيل دخول
+        if (donationType === 'single') {
+          if (!isLoggedIn) {
+            setLocation('/donor-login');
+            return;
+          }
+          
+          processDonation();
+        }
   };
 
   const handleBankTransferDonation = async () => {
@@ -146,7 +144,7 @@ export default function DonationOpportunityDetails() {
       const query = new URLSearchParams();
       query.set('status', 'under_review');
       query.set('bank', '1');
-      if (donationType !== 'quick') {
+      if (donationType === 'single') {
         query.set('donationType', donationType);
       }
 
@@ -244,32 +242,33 @@ export default function DonationOpportunityDetails() {
 
             <div className="mb-4 rounded-3xl border border-slate-200 bg-slate-50 p-4">
               <p className="mb-3 text-sm font-bold text-slate-700">نوع التبرع</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setDonationType('quick')}
-                  className={`rounded-2xl border p-4 text-right transition ${
-                    donationType === 'quick'
-                      ? 'border-[#26a1d0] bg-[#26a1d0]/10 text-[#0d6b82]'
-                      : 'border-slate-300 bg-white text-slate-700 hover:border-[#26a1d0]/50'
-                  }`}
-                >
-                  <p className="font-bold text-slate-900">تبرع سريع</p>
-                  <p className="text-xs text-slate-500 mt-2">بدون تسجيل دخول. يظهر لدى الجمعية باسم فاعل خير فقط.</p>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setDonationType('single')}
-                  className={`rounded-2xl border p-4 text-right transition ${
-                    donationType === 'single'
-                      ? 'border-[#26a1d0] bg-[#26a1d0]/10 text-[#0d6b82]'
-                      : 'border-slate-300 bg-white text-slate-700 hover:border-[#26a1d0]/50'
-                  }`}
-                >
-                  <p className="font-bold text-slate-900">تبرع عادي</p>
-                  <p className="text-xs text-slate-500 mt-2">يتطلب تحقق بالبريد. يسجل في لوحة المتبرع ويصلك إيصال.</p>
-                </button>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {[
+                  {
+                    id: 'quick',
+                    label: 'تبرع سريع',
+                    description: 'بدون تسجيل دخول، يظهر لدى الجمعية باسم فاعل خير فقط.',
+                  },
+                  {
+                    id: 'single',
+                    label: 'تبرع عادي',
+                    description: 'يتطلب تحقق بالبريد الإلكتروني، ويسجل في لوحة المتبرع ويصلك إيصال.',
+                  },
+                ].map((option) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    onClick={() => setDonationType(option.id as 'quick' | 'single')}
+                    className={`rounded-3xl border p-4 text-left transition ${
+                      donationType === option.id
+                        ? 'border-[#26a1d0] bg-[#26a1d0]/10 text-[#0d6b82]'
+                        : 'border-slate-300 bg-white text-slate-700 hover:border-[#26a1d0]/50'
+                    }`}
+                  >
+                    <p className="mb-1 text-sm font-bold">{option.label}</p>
+                    <p className="text-xs leading-relaxed text-slate-600">{option.description}</p>
+                  </button>
+                ))}
               </div>
             </div>
 
@@ -536,7 +535,7 @@ export default function DonationOpportunityDetails() {
           <AlertDialogHeader>
             <AlertDialogTitle className="text-2xl font-bold text-slate-900 flex items-center gap-2">
               <Heart className="w-6 h-6 text-emerald-500" />
-              {donationType === 'recurring' ? 'التبرع الدوري يتطلب تسجيل دخول' : 'شكراً لتبرعك!'}
+              {donationType === 'single' ? 'التبرع العادي يتطلب تسجيل دخول' : 'شكراً لتبرعك!'}
             </AlertDialogTitle>
             <AlertDialogDescription className="text-slate-700 text-base space-y-4 pt-4">
               <p className="font-semibold">سجل دخول للحصول على:</p>
@@ -553,14 +552,14 @@ export default function DonationOpportunityDetails() {
                   <Check className="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0" />
                   <span>متابعة تبرعاتك في أي وقت</span>
                 </li>
-                {donationType === 'recurring' && (
+                {donationType === 'single' && (
                   <li className="flex items-start gap-2">
                     <Check className="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0" />
-                    <span>إدارة تبرعاتك الدورية وإيقافها عند الحاجة</span>
+                    <span>يمكنك متابعة سجل تبرعاتك والإيصالات بعد تسجيل الدخول</span>
                   </li>
                 )}
               </ul>
-              {donationType !== 'recurring' && (
+              {donationType === 'quick' && (
                 <p className="text-sm text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-200">
                   أو يمكنك المتابعة بدون تسجيل دخول
                 </p>
@@ -568,7 +567,7 @@ export default function DonationOpportunityDetails() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="gap-2 sm:gap-2">
-            {donationType !== 'recurring' && (
+            {donationType === 'quick' && (
               <AlertDialogCancel 
                 onClick={() => {
                   setShowLoginDialog(false);
