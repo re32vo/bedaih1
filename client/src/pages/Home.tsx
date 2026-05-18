@@ -18,7 +18,7 @@ const partners = [
 type PublicStatsResponse = {
   totalDonationsAmount: number;
   donationsCount: number;
-  donorsCount: number;
+    projectId: "14",
   volunteerOpportunitiesCount: number;
   beneficiariesCompletedCount: number;
   lastUpdatedAt: string;

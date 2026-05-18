@@ -8,6 +8,22 @@ export type DonationProject = {
 
 export const donationProjects: DonationProject[] = [
   {
+    id: "14",
+    title: "تأسيس الجمعية",
+    description:
+      "مساهمة مباشرة في تأسيس وتشغيل الجمعية لتقديم الخدمات والرعاية لمرضى الإدمان وأسرهم.",
+    image: "/apl.svg",
+    amounts: [2000, 1000, 500],
+  },
+  {
+    id: "15",
+    title: "سند لدعم مرضى الإدمان وأسرهم",
+    description:
+      "صندوق لدعم العلاج، الاستشارات، وبرامج إعادة التأهيل للمستفيدين وأسرهم.",
+    image: "/sanad.svg",
+    amounts: [1000, 500, 200],
+  },
+  {
     id: "1",
     title: "المنطقة الآمنة",
     description:
