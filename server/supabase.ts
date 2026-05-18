@@ -116,6 +116,10 @@ export async function upsertDonor(donor: { email: string; name?: string; phone?:
     if (donor.name !== undefined && donor.name && donor.name !== "متبرع") updates.name = donor.name;
     if (donor.phone !== undefined && donor.phone && donor.phone.trim() !== "") updates.phone = donor.phone;
     
+    if (Object.keys(updates).length === 0) {
+      return existing;
+    }
+    
     const { data } = await supabase
       .from('donors')
       .update(updates)

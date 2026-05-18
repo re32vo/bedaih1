@@ -2076,6 +2076,14 @@ export async function registerRoutes(
       // Verify token if provided (for logged in donors)
       let donorEmail = typeof email === 'string' && email.trim() ? email.trim() : "guest@donation.local";
       let donorName = (typeof name === 'string' && name.trim()) ? name.trim() : "متبرع";
+
+      if (!donorEmail) {
+        donorEmail = "guest@donation.local";
+      }
+
+      if (donorEmail.endsWith('@donation.local') && donorName === "متبرع") {
+        donorName = "فاعل خير";
+      }
       
       if (token) {
         const verifiedEmail = verifyToken(token);

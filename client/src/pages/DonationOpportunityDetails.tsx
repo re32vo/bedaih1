@@ -132,7 +132,7 @@ export default function DonationOpportunityDetails() {
           amount: total,
           method: 'bank',
           status: 'under_review',
-          email: donorEmail || undefined,
+          email: donorEmail || 'guest@donation.local',
         }),
       });
 
