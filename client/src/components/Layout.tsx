@@ -25,7 +25,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   const routeMetadata: Record<string, { title: string; description: string; url: string }> = {
     "/": {
-      title: "جمعية بداية لعلاج ورعاية وتأهيل مرضى الإدمان وأسرهم | بداية",
+      title: "جمعية بداية لعلاج ورعاية مرضى الإدمان وأسرهم | بداية",
       description: "جمعية بداية تقدم برامج علاجية متكاملة ودعمًا نفسيًا واجتماعيًا لمرضى الإدمان وأسرهم بهدف التعافي والاندماج بالمجتمع.",
       url: "https://www.bedaih.org.sa/",
     },
@@ -533,7 +533,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   <h3 className="text-base sm:text-lg font-bold">جمعية بداية</h3>
                 </div>
               </div>
-              <p className="text-xs sm:text-sm leading-relaxed">جمعية بداية لعلاج ورعاية وتأهيل مرضى الإدمان وأسرهم بكرامة وشفافية.</p>
+              <p className="text-xs sm:text-sm leading-relaxed">جمعية بداية لعلاج ورعاية مرضى الإدمان وأسرهم بكرامة وشفافية.</p>
             </div>
 
             <div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, useRoute } from "wouter";
-import { Share2, Facebook, MessageCircle, Instagram, CreditCard, Landmark, Smartphone, LogIn, Check, Heart, ChevronDown } from "lucide-react";
+import { Share2, Facebook, MessageCircle, Instagram, CreditCard, Landmark, Smartphone, LogIn, Check, Heart, ChevronDown, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -36,6 +36,7 @@ export default function DonationOpportunityDetails() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [donorEmail, setDonorEmail] = useState('');
   const [showLoginDialog, setShowLoginDialog] = useState(false);
+  const [copiedDetail, setCopiedDetail] = useState<string | null>(null);
 
   useEffect(() => {
     const token = sessionStorage.getItem('donorToken');
@@ -70,6 +71,13 @@ export default function DonationOpportunityDetails() {
   }
 
   const total = customAmount ? Number(customAmount) || 0 : selectedAmount;
+
+  const bankTransferDetails = {
+    bank: "بنك الإنماء",
+    accountName: "جمعية بداية الخيرية",
+    accountNumber: "68206457616000",
+    iban: "SA7705000068206457616000",
+  };
 
   const paymentMethods = [
     { id: 1, title: "التحويل البنكي", icon: Landmark, emoji: "🏦" },
@@ -114,14 +122,49 @@ export default function DonationOpportunityDetails() {
     }
   };
 
+  const handleBankTransferDonation = async () => {
+    try {
+      const response = await fetch('/api/donors/donation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(isLoggedIn ? { Authorization: `Bearer ${sessionStorage.getItem('donorToken')}` } : {}),
+        },
+        body: JSON.stringify({
+          amount: total,
+          method: 'bank',
+          status: 'under_review',
+          email: donorEmail || undefined,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || 'حدث خطأ أثناء تسجيل التحويل البنكي');
+      }
+
+      const query = new URLSearchParams();
+      query.set('status', 'under_review');
+      query.set('bank', '1');
+      if (donationType !== 'quick') {
+        query.set('donationType', donationType);
+      }
+
+      setLocation(`/thank-you?${query.toString()}`);
+    } catch (error) {
+      toast({
+        title: 'خطأ',
+        description: error instanceof Error ? error.message : 'فشل تسجيل التبرع',
+        variant: 'destructive',
+      });
+    }
+  };
+
   const processDonation = async () => {
     const methodTitle = selectedPaymentMethod ? paymentMethods.find(m => m.id === selectedPaymentMethod)?.title : 'غير محدد';
 
     if (selectedPaymentMethod === 1) {
-      toast({
-        title: "التحويل البنكي",
-        description: "استخدم بيانات الحساب البنكي لإكمال التحويل.",
-      });
+      await handleBankTransferDonation();
       return;
     }
 
@@ -141,6 +184,50 @@ export default function DonationOpportunityDetails() {
     }
   };
 
+  const getShareData = () => {
+    const url = `${window.location.origin}/donate/opportunities/${selectedProject.id}`;
+    const text = `ادعم ${selectedProject.title} الآن عبر موقعنا: ${url}`;
+    return { url, text };
+  };
+
+  const handleShare = async () => {
+    const { url, text } = getShareData();
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: selectedProject.title, text, url });
+        return;
+      } catch (error) {
+        // إلغاء المستخدم أو خطأ بسيط
+      }
+    }
+
+    await navigator.clipboard.writeText(url);
+    toast({
+      title: "تم نسخ الرابط",
+      description: "يمكنك الآن لصق الرابط في أي تطبيق مشاركة.",
+    });
+  };
+
+  const handleShareWhatsApp = () => {
+    const { text } = getShareData();
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, "_blank");
+  };
+
+  const handleShareFacebook = () => {
+    const { url } = getShareData();
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, "_blank");
+  };
+
+  const handleCopyLink = async () => {
+    const { url } = getShareData();
+    await navigator.clipboard.writeText(url);
+    toast({
+      title: "تم نسخ الرابط",
+      description: "يمكنك لصق الرابط ومشاركته في أي تطبيق.",
+    });
+  };
+
   return (
     <div className="min-h-screen bg-slate-100 py-6 md:py-10" dir="rtl">
       <div className="container mx-auto px-4">
@@ -154,6 +241,37 @@ export default function DonationOpportunityDetails() {
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <div className="rounded-2xl border border-slate-200 bg-white p-5 order-2 lg:order-1">
             <h2 className="mb-4 text-xl font-extrabold text-slate-800">مبلغ التبرع</h2>
+
+            <div className="mb-4 rounded-3xl border border-slate-200 bg-slate-50 p-4">
+              <p className="mb-3 text-sm font-bold text-slate-700">نوع التبرع</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setDonationType('quick')}
+                  className={`rounded-2xl border p-4 text-right transition ${
+                    donationType === 'quick'
+                      ? 'border-[#26a1d0] bg-[#26a1d0]/10 text-[#0d6b82]'
+                      : 'border-slate-300 bg-white text-slate-700 hover:border-[#26a1d0]/50'
+                  }`}
+                >
+                  <p className="font-bold text-slate-900">تبرع سريع</p>
+                  <p className="text-xs text-slate-500 mt-2">بدون تسجيل دخول. يظهر لدى الجمعية باسم فاعل خير فقط.</p>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setDonationType('single')}
+                  className={`rounded-2xl border p-4 text-right transition ${
+                    donationType === 'single'
+                      ? 'border-[#26a1d0] bg-[#26a1d0]/10 text-[#0d6b82]'
+                      : 'border-slate-300 bg-white text-slate-700 hover:border-[#26a1d0]/50'
+                  }`}
+                >
+                  <p className="font-bold text-slate-900">تبرع عادي</p>
+                  <p className="text-xs text-slate-500 mt-2">يتطلب تحقق بالبريد. يسجل في لوحة المتبرع ويصلك إيصال.</p>
+                </button>
+              </div>
+            </div>
 
             {/* خيارات التبرع */}
             <div className="mb-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -307,13 +425,62 @@ export default function DonationOpportunityDetails() {
               ))}
             </div>
 
+            {selectedPaymentMethod === 1 && (
+              <>
+                <div className="mb-4 rounded-3xl border border-[#26a1d0] bg-[#f0fbff] p-4 shadow-sm">
+                  <div className="mb-3 flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-base font-bold text-slate-900">التحويل البنكي</p>
+                      <p className="text-sm text-slate-600">انسخ بيانات الحساب وأكمل التحويل من تطبيق البنك.</p>
+                    </div>
+                    <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#26a1d0]/10 text-[#26a1d0]">
+                      <Landmark className="h-5 w-5" />
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    {[
+                      { label: 'البنك', value: bankTransferDetails.bank },
+                      { label: 'اسم الحساب', value: bankTransferDetails.accountName },
+                      { label: 'رقم الحساب', value: bankTransferDetails.accountNumber },
+                      { label: 'آيبان', value: bankTransferDetails.iban },
+                      { label: 'المبلغ', value: `${total.toLocaleString()} ر.س` },
+                    ].map((item) => (
+                      <div key={item.label} className="flex items-center justify-between gap-3 rounded-2xl bg-white p-3 shadow-sm">
+                        <div>
+                          <p className="text-xs text-slate-500">{item.label}</p>
+                          <p className="font-semibold text-slate-900">{item.value}</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            await navigator.clipboard.writeText(String(item.value));
+                            setCopiedDetail(item.label);
+                            setTimeout(() => setCopiedDetail(null), 2000);
+                          }}
+                          className="inline-flex h-9 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-slate-600 transition hover:bg-slate-100"
+                        >
+                          <Copy className="h-4 w-4" />
+                          <span className="mr-2 text-xs font-semibold">{copiedDetail === item.label ? 'تم النسخ' : 'نسخ'}</span>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="mb-4 rounded-2xl border border-slate-200 bg-white p-4 text-right text-sm font-semibold text-slate-700">
+                  {donationType === 'quick'
+                    ? 'تبرعك بتحويل بنكي سيتم تسجيله تحت المراجعة. بعد التحقق سيُرسل لك الإيصال.'
+                    : 'تبرعك العادي بتحويل بنكي سيتم تسجيله تحت المراجعة. بعد الموافقة سيُرسل لك إشعار الإيصال.'}
+                </div>
+              </>
+            )}
+
             {/* زر التبرع */}
             <Button 
               type="button" 
               onClick={handleDonateClick}
               className="h-12 w-full rounded-xl bg-[#26a1d0] text-white hover:bg-[#26a1d0]/90 text-lg font-bold"
             >
-              تبرع
+              {selectedPaymentMethod === 1 ? 'تم التحويل' : 'تبرع'}
             </Button>
           </div>
 
@@ -321,10 +488,34 @@ export default function DonationOpportunityDetails() {
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-2xl font-extrabold text-slate-800">{selectedProject.title}</h2>
               <div className="flex items-center gap-2">
-                <button className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600"><Instagram className="h-4 w-4" /></button>
-                <button className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600"><MessageCircle className="h-4 w-4" /></button>
-                <button className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600"><Share2 className="h-4 w-4" /></button>
-                <button className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600"><Facebook className="h-4 w-4" /></button>
+                <button
+                  type="button"
+                  onClick={handleCopyLink}
+                  className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600"
+                >
+                  <Instagram className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleShareWhatsApp}
+                  className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleShare}
+                  className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600"
+                >
+                  <Share2 className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleShareFacebook}
+                  className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600"
+                >
+                  <Facebook className="h-4 w-4" />
+                </button>
               </div>
             </div>
 

@@ -8,6 +8,13 @@ import { useToast } from "@/hooks/use-toast";
 import { donationProjects } from "@/data/donationProjects";
 import { startMoyasarPayment } from "@/lib/moyasar";
 
+const bankTransferDetails = {
+  bank: "بنك الإنماء",
+  accountName: "جمعية بداية الخيرية",
+  accountNumber: "68206457616000",
+  iban: "SA7705000068206457616000",
+};
+
 const paymentMethods = [
   { id: "card", label: "بطاقة بنكية", icon: CreditCard },
   { id: "apple", label: "Apple Pay", icon: Smartphone },
@@ -24,6 +31,7 @@ export default function Checkout() {
   const [method, setMethod] = useState("card");
   const [flowType, setFlowType] = useState<DonationFlowType>("quick");
   const [processing, setProcessing] = useState(false);
+  const [copiedDetail, setCopiedDetail] = useState<string | null>(null);
 
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authStage, setAuthStage] = useState<"email" | "code">("email");
@@ -84,11 +92,7 @@ export default function Checkout() {
       const authToken = token || sessionStorage.getItem("donorToken") || "";
 
       if (method === "bank") {
-        toast({
-          title: "التحويل البنكي",
-          description: "استخدم بيانات الحساب البنكي لإكمال التحويل.",
-        });
-        setProcessing(false);
+        await handleBankTransferSubmission(isQuick, authToken);
         return;
       }
 
@@ -108,6 +112,43 @@ export default function Checkout() {
     } finally {
       setProcessing(false);
     }
+  };
+
+  const handleBankTransferSubmission = async (isQuick: boolean, authToken: string) => {
+    const email = isQuick ? `anonymous-${Date.now()}@donation.local` : authEmail.trim().toLowerCase();
+    const token = isQuick ? undefined : authToken || undefined;
+
+    if (!isQuick && !token && !authEmail.trim()) {
+      throw new Error("الرجاء تسجيل الدخول أو إدخال البريد الإلكتروني أولاً");
+    }
+
+    const response = await fetch('/api/donors/donation', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({
+        amount: totalAmount,
+        method: 'bank',
+        status: 'under_review',
+        email: email || undefined,
+      }),
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(data.message || 'فشل تسجيل التحويل البنكي');
+    }
+
+    const query = new URLSearchParams();
+    query.set('status', 'under_review');
+    query.set('bank', '1');
+    if (!isQuick) {
+      query.set('donationType', 'regular');
+    }
+
+    window.location.href = `/thank-you?${query.toString()}`;
   };
 
   const sendOtpForRegularDonation = async () => {
@@ -275,6 +316,50 @@ export default function Checkout() {
               </div>
             </div>
 
+            {method === 'bank' && (
+              <div className="mb-4 rounded-3xl border border-[#26a1d0] bg-[#f0fbff] p-4 shadow-sm">
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-base font-bold text-slate-900">التحويل البنكي</p>
+                    <p className="text-sm text-slate-600">انسخ بيانات الحساب وأكمل التحويل من خلال تطبيق البنك.</p>
+                  </div>
+                  <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#26a1d0]/10 text-[#26a1d0]">
+                    <Landmark className="h-5 w-5" />
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  {[
+                    { label: 'البنك', value: bankTransferDetails.bank },
+                    { label: 'اسم الحساب', value: bankTransferDetails.accountName },
+                    { label: 'رقم الحساب', value: bankTransferDetails.accountNumber },
+                    { label: 'آيبان', value: bankTransferDetails.iban },
+                    { label: 'المبلغ', value: `${totalAmount.toLocaleString()} ر.س` },
+                  ].map((item) => (
+                    <div key={item.label} className="flex items-center justify-between gap-3 rounded-2xl bg-white p-3 shadow-sm">
+                      <div>
+                        <p className="text-xs text-slate-500">{item.label}</p>
+                        <p className="font-semibold text-slate-900">{item.value}</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          await navigator.clipboard.writeText(String(item.value));
+                          setCopiedDetail(item.label);
+                          setTimeout(() => setCopiedDetail(null), 2000);
+                        }}
+                        className="inline-flex h-9 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-slate-600 transition hover:bg-slate-100"
+                      >
+                        <span className="text-xs font-semibold">{copiedDetail === item.label ? 'تم النسخ' : 'نسخ'}</span>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-4 rounded-2xl bg-white p-4 border border-slate-200 text-right">
+                  <p className="text-sm font-semibold text-slate-800">{flowType === 'quick' ? 'تبرعك تحت المراجعة وسيتم التعامل معه بعد التحقق من الإدارة.' : 'طلب التحويل البنكي تحت المراجعة وسيتم إرسال إيصال عند اكتمال الحالة.'}</p>
+                </div>
+              </div>
+            )}
+
             <div>
               <p className="mb-2 text-sm font-bold text-slate-700">نوع التبرع</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -312,7 +397,7 @@ export default function Checkout() {
               disabled={processing}
               className="w-full h-12 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-base font-extrabold"
             >
-              {processing ? "جارٍ التنفيذ..." : "تأكيد الدفع"}
+              {processing ? "جارٍ التنفيذ..." : method === 'bank' ? 'تم التحويل' : 'تأكيد الدفع'}
             </Button>
           </div>
         </div>

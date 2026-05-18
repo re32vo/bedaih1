@@ -268,18 +268,24 @@ export async function deleteVolunteerRequest(id: string) {
   return true;
 }
 
-export async function createDonation(donation: { email: string; amount: number; method: string; code?: string }) {
+export async function createDonation(donation: { email: string; amount: number; method: string; code?: string; status?: string }) {
   if (!supabase) return null;
   
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('donations')
     .insert({
       email: normalizeEmail(donation.email),
       amount: Number(donation.amount) || 0,
       method: donation.method,
       code: donation.code || null,
+      status: donation.status || 'pending',
     })
     .select();
+
+  if (error) {
+    console.error('Error creating donation:', error);
+    throw new Error(`فشل حفظ التبرع: ${error.message}`);
+  }
     
   return data?.[0] || null;
 }
@@ -294,6 +300,40 @@ export async function getDonationByCode(code: string) {
     .maybeSingle();
 
   return data || null;
+}
+
+export async function getAllDonations(limit = 1000) {
+  if (!supabase) return [];
+
+  const { data, error } = await supabase
+    .from('donations')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error('Error fetching donations:', error);
+    return [];
+  }
+
+  return data || [];
+}
+
+export async function updateDonationStatus(code: string, status: string) {
+  if (!supabase) return null;
+
+  const { data, error } = await supabase
+    .from('donations')
+    .update({ status })
+    .eq('code', code)
+    .select();
+
+  if (error) {
+    console.error('Error updating donation status:', error);
+    throw new Error(`فشل تحديث حالة التبرع: ${error.message}`);
+  }
+
+  return data?.[0] || null;
 }
 
 export async function createRecurringDonation(recurring: {
@@ -343,6 +383,7 @@ export async function getDonationsByEmail(email: string, limit = 20) {
     amount: d.amount,
     method: d.method,
     code: d.code,
+    status: d.status || 'pending',
     createdAt: d.created_at
   }));
 }
@@ -375,6 +416,7 @@ export async function getDonationStatsByEmails(emails: string[]) {
     const { data, error } = await supabase
       .from('donations')
       .select('email, amount')
+      .eq('status', 'completed')
       .in('email', chunk);
 
     if (error) {
@@ -408,10 +450,12 @@ export async function getPublicDonationStats() {
   const [{ count: donationsCount }, { data, error }] = await Promise.all([
     supabase
       .from('donations')
-      .select('*', { count: 'exact', head: true }),
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'completed'),
     supabase
       .from('donations')
       .select('amount, email')
+      .eq('status', 'completed')
   ]);
 
   if (error) {

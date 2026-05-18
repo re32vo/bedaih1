@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { useLocation } from "wouter";
-import { ShoppingCart, Trash2, Plus, Minus, Heart } from "lucide-react";
+import { ShoppingCart, Trash2, Plus, Minus, Heart, Landmark, CreditCard, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
 import { motion } from "framer-motion";
@@ -7,6 +8,13 @@ import { motion } from "framer-motion";
 export default function Cart() {
   const [, setLocation] = useLocation();
   const { items, removeItem, updateQuantity, clearCart, getTotalAmount, getTotalItems } = useCart();
+  const [paymentMethod, setPaymentMethod] = useState<number>(1);
+
+  const paymentMethods = [
+    { id: 1, title: 'تحويل بنكي', icon: Landmark },
+    { id: 2, title: 'بطاقة بنكية', icon: CreditCard },
+    { id: 3, title: 'Apple Pay', icon: Smartphone },
+  ];
 
   if (items.length === 0) {
     return (
@@ -127,7 +135,11 @@ export default function Cart() {
             <div className="bg-white rounded-xl border border-slate-200 p-6 sticky top-6">
               <h2 className="text-xl font-extrabold text-slate-800 mb-4">ملخص السلة</h2>
               
-              <div className="space-y-3 mb-6">
+              <div className="space-y-3 mb-5">
+                <div className="flex justify-between text-slate-700">
+                  <span>نوع التبرع:</span>
+                  <span className="font-bold">{items[0] ? donationTypeLabels[items[0].donationType] : 'تبرع سريع'}</span>
+                </div>
                 <div className="flex justify-between text-slate-700">
                   <span>عدد المنتجات:</span>
                   <span className="font-bold">{getTotalItems()}</span>
@@ -137,7 +149,32 @@ export default function Cart() {
                   <span className="text-2xl font-black text-emerald-600">{getTotalAmount()} ر.س</span>
                 </div>
               </div>
-
+              <div className="mb-6">
+                <p className="mb-3 text-sm font-bold text-slate-700">اختر طريقة الدفع</p>
+                <div className="flex flex-row-reverse items-center justify-between gap-2">
+                  {paymentMethods.map((method) => {
+                    const Icon = method.icon;
+                    return (
+                      <button
+                        key={method.id}
+                        type="button"
+                        onClick={() => setPaymentMethod(method.id)}
+                        className={`flex-1 rounded-2xl border p-3 text-sm font-bold transition ${
+                          paymentMethod === method.id
+                            ? 'border-[#26a1d0] bg-[#26a1d0]/10 text-[#0d6b82]'
+                            : 'border-slate-200 bg-white text-slate-700 hover:border-[#26a1d0]/50'
+                        }`}
+                      >
+                        <div className="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm text-[#0d6b82]">
+                          <Icon className="h-5 w-5" />
+                        </div>
+                        <span>{method.title}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+              {/* تفاصيل الحساب البنكي تم نقلها إلى صفحة الدفع (Checkout) */}
               <div className="space-y-3">
                 <Button 
                   type="button"

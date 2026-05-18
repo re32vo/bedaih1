@@ -22,7 +22,7 @@ export default function About() {
               <span className="text-black text-sm font-medium">نبذة عن الجمعية</span>
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-black leading-tight">
-              جمعية بداية لعلاج ورعاية وتأهيل مرضى الإدمان وأسرهم
+              جمعية بداية لعلاج ورعاية مرضى الإدمان وأسرهم
             </h1>
             <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-black max-w-3xl mx-auto">
               نبني الأمل ونصنع الفرق في حياة المستفيدين

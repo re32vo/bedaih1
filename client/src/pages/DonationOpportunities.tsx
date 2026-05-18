@@ -60,6 +60,50 @@ export default function DonationOpportunities() {
     });
   };
 
+  const getShareData = (project: (typeof donationProjects)[number]) => {
+    const url = `${window.location.origin}/donate/opportunities/${project.id}`;
+    const text = `ادعم ${project.title} الآن عبر موقعنا: ${url}`;
+    return { url, text };
+  };
+
+  const handleShare = async (project: (typeof donationProjects)[number]) => {
+    const { url, text } = getShareData(project);
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: project.title, text, url });
+        return;
+      } catch (error) {
+        // إلغاء المستخدم أو خطأ بسيط
+      }
+    }
+
+    await navigator.clipboard.writeText(url);
+    toast({
+      title: "تم نسخ الرابط",
+      description: "يمكنك الآن لصق الرابط في أي تطبيق مشاركة.",
+    });
+  };
+
+  const handleShareWhatsApp = (project: (typeof donationProjects)[number]) => {
+    const { text } = getShareData(project);
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, "_blank");
+  };
+
+  const handleShareFacebook = (project: (typeof donationProjects)[number]) => {
+    const { url } = getShareData(project);
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, "_blank");
+  };
+
+  const handleCopyLink = async (project: (typeof donationProjects)[number]) => {
+    const { url } = getShareData(project);
+    await navigator.clipboard.writeText(url);
+    toast({
+      title: "تم نسخ الرابط",
+      description: "يمكنك لصق الرابط ومشاركته في أي تطبيق.",
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 py-6 md:py-10" dir="rtl">
       <div className="container mx-auto px-4">
@@ -88,16 +132,32 @@ export default function DonationOpportunities() {
 
               {/* أيقونات المشاركة */}
               <div className="flex items-center justify-center gap-2 bg-slate-100 py-2">
-                <button className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600 transition hover:bg-slate-400">
+                <button
+                  type="button"
+                  onClick={() => handleCopyLink(project)}
+                  className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600 transition hover:bg-slate-400"
+                >
                   <Instagram className="h-4 w-4" />
                 </button>
-                <button className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600 transition hover:bg-slate-400">
+                <button
+                  type="button"
+                  onClick={() => handleShareWhatsApp(project)}
+                  className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600 transition hover:bg-slate-400"
+                >
                   <MessageCircle className="h-4 w-4" />
                 </button>
-                <button className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600 transition hover:bg-slate-400">
+                <button
+                  type="button"
+                  onClick={() => handleShare(project)}
+                  className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600 transition hover:bg-slate-400"
+                >
                   <Share2 className="h-4 w-4" />
                 </button>
-                <button className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600 transition hover:bg-slate-400">
+                <button
+                  type="button"
+                  onClick={() => handleShareFacebook(project)}
+                  className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-300 text-slate-600 transition hover:bg-slate-400"
+                >
                   <Facebook className="h-4 w-4" />
                 </button>
               </div>

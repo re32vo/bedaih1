@@ -101,23 +101,63 @@ export default function Donate() {
     }, 100);
   };
 
+  const handleBankTransferConfirmation = async () => {
+    if (!finalAmount || finalAmount <= 0) {
+      alert('الرجاء اختيار مبلغ صحيح');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/donors/donation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(sessionStorage.getItem('donorToken') ? { Authorization: `Bearer ${sessionStorage.getItem('donorToken')}` } : {}),
+        },
+        body: JSON.stringify({
+          amount: finalAmount,
+          method: 'bank',
+          status: 'under_review',
+          email: donorEmail || undefined,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || 'خطأ عند تسجيل التبرع');
+      }
+
+      setShowPaymentMethods(false);
+      setSelectedMethod(null);
+      setSelectedAmount(null);
+      setCustomAmount('');
+
+      toast({
+        title: 'تم تسجيل التبرع',
+        description: 'تم تسجيل طلب التحويل البنكي وسيتم مراجعته من قبل الإدارة.',
+      });
+    } catch (error) {
+      toast({
+        title: 'خطأ',
+        description: error instanceof Error ? error.message : 'حدث خطأ أثناء تسجيل التبرع',
+        variant: 'destructive',
+      });
+    }
+  };
+
   const handleCompletePayment = async () => {
     if (!selectedMethod) return;
+
+    if (selectedMethod === 1) {
+      await handleBankTransferConfirmation();
+      return;
+    }
 
     await processDonation();
   };
 
   const processDonation = async () => {
     const method = donationMethods.find(m => m.id === selectedMethod);
-
-    // التحويل البنكي يبقى يدوي، بدون تحويل لبوابة ميسر
-    if (selectedMethod === 1) {
-      toast({
-        title: "التحويل البنكي",
-        description: "انسخ بيانات الحساب البنكي وأكمل التحويل.",
-      });
-      return;
-    }
 
     try {
       await startMoyasarPayment({
@@ -368,7 +408,7 @@ export default function Donate() {
                 className="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white"
               >
                 <Heart className="w-4 h-4 ml-2" />
-                تأكيد التبرع
+                {selectedMethod === 1 ? "تم التحويل" : "تأكيد التبرع"}
               </Button>
             </div>
           </motion.div>

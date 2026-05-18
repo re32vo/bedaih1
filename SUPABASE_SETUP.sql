@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS donations (
   amount NUMERIC NOT NULL,
   method TEXT NOT NULL,
   code TEXT UNIQUE NOT NULL,
+  status TEXT DEFAULT 'pending',
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 

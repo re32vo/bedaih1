@@ -82,6 +82,16 @@ interface BeneficiaryClientRequest {
   status: RequestStatus;
 }
 
+interface Donation {
+  id: number | string;
+  code: string;
+  email: string;
+  amount: number;
+  method: string;
+  status: string;
+  created_at: string;
+}
+
 type RequestDetailsState =
   | {
       requestType: "volunteer";
@@ -102,6 +112,8 @@ type RequestDetailsState =
 export default function DonorsManagement() {
   const [donors, setDonors] = useState<Donor[]>([]);
   const [filteredDonors, setFilteredDonors] = useState<Donor[]>([]);
+  const [donations, setDonations] = useState<Donation[]>([]);
+  const [filteredDonations, setFilteredDonations] = useState<Donation[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [editingDonor, setEditingDonor] = useState<Donor | null>(null);
@@ -111,11 +123,12 @@ export default function DonorsManagement() {
   const [editForm, setEditForm] = useState({ name: "", phone: "", email: "" });
   const [verificationMode, setVerificationMode] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
-  const [activeTab, setActiveTab] = useState<"donors" | "volunteers" | "beneficiaries">("donors");
-  const [loadedTabs, setLoadedTabs] = useState({ donors: false, volunteers: false, beneficiaries: false });
+  const [activeTab, setActiveTab] = useState<"donors" | "donations" | "volunteers" | "beneficiaries">("donors");
+  const [loadedTabs, setLoadedTabs] = useState({ donors: false, volunteers: false, beneficiaries: false, donations: false });
   const [volunteerRequests, setVolunteerRequests] = useState<VolunteerClientRequest[]>([]);
   const [beneficiaryRequests, setBeneficiaryRequests] = useState<BeneficiaryClientRequest[]>([]);
   const [updatingStatusKey, setUpdatingStatusKey] = useState<string | null>(null);
+  const [updatingDonationStatus, setUpdatingDonationStatus] = useState<string | null>(null);
   const [requestDetails, setRequestDetails] = useState<RequestDetailsState>(null);
   const { toast } = useToast();
 
@@ -182,14 +195,26 @@ export default function DonorsManagement() {
   };
 
   useEffect(() => {
-    const filtered = donors.filter(
-      (d) =>
-        String(d.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-        String(d.email || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-        String(d.phone || "").includes(searchTerm)
-    );
-    setFilteredDonors(filtered);
-  }, [searchTerm, donors]);
+    if (activeTab === "donors") {
+      const filtered = donors.filter(
+        (d) =>
+          String(d.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+          String(d.email || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+          String(d.phone || "").includes(searchTerm)
+      );
+      setFilteredDonors(filtered);
+    }
+
+    if (activeTab === "donations") {
+      const filtered = donations.filter(
+        (d) =>
+          String(d.code || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+          String(d.email || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+          String(d.method || "").toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredDonations(filtered);
+    }
+  }, [searchTerm, donors, donations, activeTab]);
 
   useEffect(() => {
     if (activeTab === "volunteers" && !loadedTabs.volunteers) {
@@ -199,10 +224,54 @@ export default function DonorsManagement() {
     if (activeTab === "beneficiaries" && !loadedTabs.beneficiaries) {
       fetchClientRequests({ includeDonors: false, includeVolunteers: false, includeBeneficiaries: true });
     }
-  }, [activeTab, loadedTabs.volunteers, loadedTabs.beneficiaries]);
+
+    if (activeTab === "donations" && !loadedTabs.donations) {
+      fetchDonations();
+    }
+  }, [activeTab, loadedTabs.volunteers, loadedTabs.beneficiaries, loadedTabs.donations]);
+
+  const normalizeDonation = (raw: any): Donation => ({
+    id: raw?.id ?? raw?.code ?? "",
+    code: String(raw?.code || "").trim(),
+    email: String(raw?.email || "").trim(),
+    amount: Number(raw?.amount) || 0,
+    method: String(raw?.method || "").trim(),
+    status: String(raw?.status || "pending").trim(),
+    created_at: String(raw?.created_at || raw?.createdAt || new Date().toISOString()),
+  });
 
   const fetchDonors = async () => {
     await fetchClientRequests({ includeDonors: true, includeVolunteers: false, includeBeneficiaries: false });
+  };
+
+  const fetchDonations = async () => {
+    try {
+      const token = sessionStorage.getItem("authToken");
+      const res = await fetch("/api/admin/donations", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || "فشل جلب التبرعات");
+      }
+
+      const data = await res.json();
+      const incomingDonations = Array.isArray(data.donations) ? data.donations.map(normalizeDonation) : [];
+      setDonations(incomingDonations);
+      setFilteredDonations(incomingDonations);
+      setLoadedTabs((prev) => ({ ...prev, donations: true }));
+    } catch (error) {
+      toast({
+        title: "خطأ",
+        description: error instanceof Error ? error.message : "فشل تحميل التبرعات",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fetchClientRequests = async (options?: {
@@ -252,6 +321,7 @@ export default function DonorsManagement() {
         donors: prev.donors || includeDonors,
         volunteers: prev.volunteers || includeVolunteers,
         beneficiaries: prev.beneficiaries || includeBeneficiaries,
+        donations: prev.donations,
       }));
     } catch (error) {
       toast({
@@ -311,6 +381,45 @@ export default function DonorsManagement() {
       });
     } finally {
       setUpdatingStatusKey(null);
+    }
+  };
+
+  const handleUpdateDonationStatus = async (donation: Donation, status: "rejected" | "completed") => {
+    const token = sessionStorage.getItem("authToken");
+    const key = `donation:${donation.code}`;
+
+    try {
+      setUpdatingDonationStatus(key);
+      const res = await fetch(`/api/admin/donations/${encodeURIComponent(donation.code)}/status`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ status }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || "فشل تحديث حالة التبرع");
+      }
+
+      toast({
+        title: "تم تحديث حالة التبرع",
+        description: `تم تغيير الحالة إلى ${status === "completed" ? "مكتمل" : "مرفوض"}`,
+      });
+
+      const updatedDonation = normalizeDonation(data.donation || donation);
+      setDonations((prev) => prev.map((item) => item.code === donation.code ? updatedDonation : item));
+      setFilteredDonations((prev) => prev.map((item) => item.code === donation.code ? updatedDonation : item));
+    } catch (error) {
+      toast({
+        title: "خطأ",
+        description: error instanceof Error ? error.message : "فشل تحديث حالة التبرع",
+        variant: "destructive",
+      });
+    } finally {
+      setUpdatingDonationStatus(null);
     }
   };
 
@@ -580,6 +689,12 @@ export default function DonorsManagement() {
           المتبرعين
         </Button>
         <Button
+          onClick={() => setActiveTab("donations")}
+          className={activeTab === "donations" ? "bg-black text-white hover:bg-gray-800" : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"}
+        >
+          التبرعات
+        </Button>
+        <Button
           onClick={() => setActiveTab("volunteers")}
           className={activeTab === "volunteers" ? "bg-black text-white hover:bg-gray-800" : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-50"}
         >
@@ -594,7 +709,7 @@ export default function DonorsManagement() {
       </div>
 
       {/* Search */}
-      <div className={`mb-6 ${activeTab !== "donors" ? "hidden" : ""}`}>
+      <div className={`mb-6 ${activeTab !== "donors" && activeTab !== "donations" ? "hidden" : ""}`}>
         <div className="relative">
           <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
           <input
@@ -663,6 +778,81 @@ export default function DonorsManagement() {
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
+                        </div>
+                      </td>
+                    </motion.tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {activeTab === "donations" && (
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-slate-100 border-b border-slate-200">
+                <tr>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">رقم المرجع</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">البريد الإلكتروني</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">المبلغ</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">الطريقة</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">الحالة</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">تاريخ التبرع</th>
+                  <th className="px-4 py-3 text-center text-sm font-semibold text-slate-700">الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                {filteredDonations.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="px-4 py-8 text-center text-slate-500">
+                      لا توجد بيانات تبرعات
+                    </td>
+                  </tr>
+                ) : (
+                  filteredDonations.map((donation) => (
+                    <motion.tr
+                      key={donation.id}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="hover:bg-slate-50 transition-colors"
+                    >
+                      <td className="px-4 py-3 text-sm text-slate-900">{donation.code || "-"}</td>
+                      <td className="px-4 py-3 text-sm text-slate-600">{donation.email || "-"}</td>
+                      <td className="px-4 py-3 text-sm font-semibold text-green-600">{donation.amount.toLocaleString()} ر.س</td>
+                      <td className="px-4 py-3 text-sm text-slate-700">{donation.method || "-"}</td>
+                      <td className="px-4 py-3 text-sm text-slate-700">
+                        <span className={`inline-flex rounded-full px-2 py-1 text-xs font-bold ${donation.status === "completed" ? "bg-blue-100 text-blue-700" : donation.status === "rejected" ? "bg-red-100 text-red-700" : donation.status === "under_review" ? "bg-amber-100 text-amber-700" : "bg-slate-100 text-slate-700"}`}>
+                          {donation.status === "completed" ? "مكتمل" : donation.status === "rejected" ? "مرفوض" : donation.status === "under_review" ? "تحت المراجعة" : donation.status}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-slate-600">{new Date(donation.created_at).toLocaleDateString("ar-SA")}</td>
+                      <td className="px-4 py-3 text-center">
+                        <div className="flex flex-wrap items-center justify-center gap-2">
+                          {donation.status !== "completed" && (
+                            <>
+                              <Button
+                                onClick={() => handleUpdateDonationStatus(donation, "completed")}
+                                className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                                disabled={updatingDonationStatus === `donation:${donation.code}`}
+                              >
+                                {updatingDonationStatus === `donation:${donation.code}` ? "جارٍ..." : "مكتمل"}
+                              </Button>
+                              <Button
+                                variant="outline"
+                                onClick={() => handleUpdateDonationStatus(donation, "rejected")}
+                                disabled={updatingDonationStatus === `donation:${donation.code}`}
+                                className="border-red-300 text-red-600 hover:bg-red-50"
+                              >
+                                مرفوض
+                              </Button>
+                            </>
+                          )}
+                          {donation.status === "completed" && (
+                            <span className="text-slate-500 text-sm">لا إجراءات إضافية</span>
+                          )}
                         </div>
                       </td>
                     </motion.tr>

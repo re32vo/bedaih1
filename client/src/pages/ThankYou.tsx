@@ -8,9 +8,14 @@ import { useToast } from "@/hooks/use-toast";
 export default function ThankYou() {
   const search = useSearch();
   const { toast } = useToast();
-  const isLoggedIn = new URLSearchParams(search).get('login') === 'true';
-  const isRegistered = new URLSearchParams(search).get('registered') === 'true';
-  const initialEmail = new URLSearchParams(search).get('email') || localStorage.getItem('donorEmail') || '';
+  const params = new URLSearchParams(search);
+  const isLoggedIn = params.get('login') === 'true';
+  const isRegistered = params.get('registered') === 'true';
+  const initialEmail = params.get('email') || localStorage.getItem('donorEmail') || '';
+  const donationStatus = params.get('status');
+  const isUnderReview = donationStatus === 'under_review';
+  const isBankTransfer = params.get('bank') === '1';
+  const donationType = params.get('donationType');
 
   const [rating, setRating] = useState(0);
   const [name, setName] = useState('');
@@ -187,18 +192,21 @@ export default function ThankYou() {
           className="space-y-6 mb-12"
         >
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900 font-heading">
-            شكراً لك من القلب
+            {isUnderReview ? 'تم استلام طلب التحويل البنكي' : 'شكراً لك من القلب'}
             <Heart className="inline-block w-10 h-10 sm:w-12 sm:h-12 text-red-500 fill-current mx-2" />
           </h1>
           
           <p className="text-xl sm:text-2xl text-slate-700 leading-relaxed">
-            تبرعك يعني الكثير لنا وللمحتاجين
+            {isUnderReview
+              ? 'طلبك تحت المراجعة حالياً وسيتم التحقق منه من قبل فريق الإدارة قبل إكمال التبرع وإرسال الإيصال.'
+              : 'تبرعك يعني الكثير لنا وللمحتاجين'}
           </p>
 
           <div className="card-elevated max-w-lg mx-auto p-8">
             <p className="text-lg text-slate-600 leading-relaxed">
-              بفضل تبرعك السخي، نستطيع الوصول إلى المزيد من الأسر المحتاجة وتقديم الدعم الذي يستحقونه. 
-              كل ريال يساهم في صنع فرق حقيقي في حياة الناس.
+              {isUnderReview
+                ? 'سنرسل لك إشعارًا وإيصالًا بمجرد اعتماد التحويل البنكي. شكراً لصبرك ودعمك.'
+                : 'بفضل تبرعك السخي، نستطيع الوصول إلى المزيد من الأسر المحتاجة وتقديم الدعم الذي يستحقونه. كل ريال يساهم في صنع فرق حقيقي في حياة الناس.'}
             </p>
           </div>
         </motion.div>

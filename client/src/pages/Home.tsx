@@ -368,7 +368,7 @@ export default function Home() {
               <div className="flex flex-col items-center mb-5 gap-2">
                 <img src={logoImg} alt="شعار جمعية بداية" className="w-32 h-32 sm:w-40 sm:h-40 object-contain drop-shadow-md" />
                 <div className="inline-flex items-center rounded-full border border-sky-100 bg-sky-50 px-4 py-2 text-sm font-bold text-sky-700">
-                  جمعية بداية لعلاج ورعاية وتأهيل مرضى الإدمان وأسرهم
+                  جمعية بداية لعلاج ورعاية مرضى الإدمان وأسرهم
                 </div>
               </div>
               <div className="mx-auto max-w-3xl">

@@ -12,6 +12,7 @@ interface Donation {
   date: string;
   method: string;
   code: string;
+  status?: string;
 }
 
 interface DonorProfile {
@@ -173,6 +174,16 @@ export default function DonorDashboard() {
     approved: "bg-emerald-100 text-emerald-700",
     rejected: "bg-red-100 text-red-700",
     completed: "bg-blue-100 text-blue-700",
+    cancelled: "bg-red-50 text-red-700"
+  };
+
+  const statusLabelMap: Record<string, string> = {
+    pending: 'قيد الانتظار',
+    under_review: 'قيد المراجعة',
+    approved: 'تمت الموافقة',
+    rejected: 'مرفوض',
+    completed: 'مكتمل',
+    cancelled: 'ملغى'
   };
 
   const sectionTitle =
@@ -499,22 +510,64 @@ export default function DonorDashboard() {
                             </div>
                           </div>
 
-                          <div className="bg-slate-100 rounded-lg p-3 flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm font-mono text-slate-800">{donation.code}</span>
-                              <span className="text-xs text-slate-600">كود التبرع</span>
-                            </div>
-                            <button
-                              onClick={() => copyToClipboard(donation.code)}
-                              className="p-2 hover:bg-slate-200 rounded transition-colors"
-                            >
-                              {copiedCode === donation.code ? (
-                                <Check className="w-4 h-4 text-green-600" />
-                              ) : (
-                                <Copy className="w-4 h-4 text-slate-600" />
-                              )}
-                            </button>
-                          </div>
+                              <div className="bg-slate-100 rounded-lg p-3 flex items-center justify-between gap-3">
+                                <div className="flex items-center gap-3">
+                                  <div>
+                                    <p className="text-sm font-mono text-slate-800">{donation.code}</p>
+                                    <p className="text-xs text-slate-600">كود التبرع</p>
+                                  </div>
+                                  <div>
+                                    <span className={`px-2 py-1 text-xs font-bold rounded-full ${statusClassMap[donation.status || 'pending'] || 'bg-slate-100 text-slate-700'}`}>
+                                      {statusLabelMap[donation.status || 'pending'] || (donation.status || 'pending')}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center gap-2">
+                                  {copiedCode === donation.code ? (
+                                    <button className="p-2 rounded text-green-600">تم النسخ</button>
+                                  ) : (
+                                    <button onClick={() => copyToClipboard(donation.code)} className="p-2 hover:bg-slate-200 rounded transition-colors">
+                                      <Copy className="w-4 h-4 text-slate-600" />
+                                    </button>
+                                  )}
+
+                                  { ((donation.method || '').toLowerCase().includes('bank') || (donation.method || '').toLowerCase().includes('تحويل')) && (
+                                    <select
+                                      value={donation.status || 'pending'}
+                                      onChange={async (e) => {
+                                        const newStatus = e.target.value;
+                                        try {
+                                          const token = sessionStorage.getItem('donorToken');
+                                          const res = await fetch('/api/donors/donation/status', {
+                                            method: 'PUT',
+                                            headers: {
+                                              'Content-Type': 'application/json',
+                                              'Authorization': `Bearer ${token}`
+                                            },
+                                            body: JSON.stringify({ code: donation.code, status: newStatus })
+                                          });
+                                          if (!res.ok) {
+                                            const err = await res.json().catch(() => ({}));
+                                            throw new Error(err.message || 'فشل تحديث الحالة');
+                                          }
+
+                                          // تحديث الحالة محلياً
+                                          setDonations(prev => prev.map(d => d.code === donation.code ? { ...d, status: newStatus } : d));
+                                          toast({ title: 'تم التحديث', description: 'تم تحديث حالة التبرع' });
+                                        } catch (err) {
+                                          toast({ title: 'خطأ', description: err instanceof Error ? err.message : 'فشل تحديث الحالة', variant: 'destructive' });
+                                        }
+                                      }}
+                                      className="rounded-md border px-2 py-1 text-sm"
+                                    >
+                                      <option value="under_review">قيد المراجعة</option>
+                                      <option value="completed">مكتمل</option>
+                                      <option value="cancelled">ملغى</option>
+                                    </select>
+                                  )}
+                                </div>
+                              </div>
                         </motion.div>
                       ))
                     ) : (

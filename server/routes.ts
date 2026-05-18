@@ -24,6 +24,8 @@ import {
   upsertDonor,
   createDonation,
   getDonationByCode,
+  getAllDonations,
+  updateDonationStatus,
   createRecurringDonation,
   getDonationsByEmail,
   getDonationStatsByEmails,
@@ -2069,10 +2071,10 @@ export async function registerRoutes(
   app.post("/api/donors/donation", async (req, res) => {
     try {
       const token = req.headers.authorization?.split(' ')[1];
-      const { email, amount, method, code, name } = req.body;
+      const { email, amount, method, code, name, status } = req.body;
 
       // Verify token if provided (for logged in donors)
-      let donorEmail = email;
+      let donorEmail = typeof email === 'string' && email.trim() ? email.trim() : "guest@donation.local";
       let donorName = (typeof name === 'string' && name.trim()) ? name.trim() : "متبرع";
       
       if (token) {
@@ -2113,6 +2115,7 @@ export async function registerRoutes(
         amount: Number(amount) || 0,
         method: method || "unknown",
         code,
+        status: status || "pending",
       });
       
       // Log the donation in audit log
@@ -2128,6 +2131,7 @@ export async function registerRoutes(
           amount: Number(amount) || 0,
           method,
           code,
+          status: status || "pending",
         },
       });
 
@@ -2168,6 +2172,54 @@ export async function registerRoutes(
     } catch (err) {
       logger.error("Donation save error", err);
       res.status(500).json({ message: "خطأ في تسجيل التبرع" });
+    }
+  });
+
+  // Allow donor to update status of their own donation (bank transfers only)
+  app.put("/api/donors/donation/status", async (req, res) => {
+    try {
+      const token = req.headers.authorization?.split(' ')[1];
+      if (!token) return res.status(401).json({ message: 'غير مصرح' });
+
+      const email = verifyToken(token) || await verifyTokenAsync(token);
+      if (!email) return res.status(401).json({ message: 'رمز غير صالح' });
+
+      const { code, status } = req.body;
+      if (!code || typeof code !== 'string') return res.status(400).json({ message: 'كود التبرع مطلوب' });
+      if (!status || typeof status !== 'string') return res.status(400).json({ message: 'الحالة المطلوبة غير صحيحة' });
+
+      const donation = await getDonationByCode(code);
+      if (!donation) return res.status(404).json({ message: 'التبرع غير موجود' });
+
+      // Only allow updating bank transfer donations via donor dashboard
+      if ((donation.method || '').toLowerCase() !== 'bank' && (donation.method || '').toLowerCase() !== 'تحويل بنكي') {
+        return res.status(403).json({ message: 'التحديث مسموح لتبرعات التحويل البنكي فقط' });
+      }
+
+      if (String(donation.email || '').toLowerCase() !== String(email || '').toLowerCase()) {
+        return res.status(403).json({ message: 'لا تملك صلاحية تعديل هذا التبرع' });
+      }
+
+      // Accept only certain statuses from donor-facing update
+      const allowed = ['under_review', 'completed', 'cancelled', 'rejected', 'pending'];
+      if (!allowed.includes(status)) return res.status(400).json({ message: 'حالة غير مدعومة' });
+
+      const updated = await updateDonationStatus(code, status);
+
+      // Audit log
+      logSystemAudit(req, {
+        actor: `متبرع: ${email}`,
+        action: 'donation_status_update',
+        entityType: 'donation',
+        entityId: String(code),
+        eventCategory: 'client_action',
+        afterData: { status }
+      });
+
+      res.json({ success: true, donation: updated });
+    } catch (err) {
+      logger.error('Error updating donation status', err);
+      res.status(500).json({ message: 'فشل تحديث حالة التبرع' });
     }
   });
 
@@ -2330,7 +2382,8 @@ export async function registerRoutes(
           amount: d.amount,
           date: d.createdAt ? (typeof d.createdAt === 'string' ? d.createdAt.split('T')[0] : new Date(d.createdAt).toISOString().split('T')[0]) : new Date().toISOString().split('T')[0],
           method: d.method,
-          code: d.code
+          code: d.code,
+          status: d.status || 'pending'
         })),
         stats: {
           totalDonations: donations.reduce((sum: number, d: any) => sum + d.amount, 0),
@@ -2809,6 +2862,131 @@ export async function registerRoutes(
       }
       logger.error("Update client request status error", err);
       res.status(500).json({ message: "خطأ في تحديث الحالة" });
+    }
+  });
+
+  app.get("/api/admin/donations", async (req, res) => {
+    try {
+      const token = req.headers.authorization?.split(' ')[1];
+      if (!token) {
+        return res.status(401).json({ message: "غير مصرح" });
+      }
+
+      let empEmail = verifyToken(token);
+      if (!empEmail) {
+        empEmail = await verifyTokenAsync(token);
+      }
+      if (!empEmail) {
+        return res.status(401).json({ message: "رمز غير صالح" });
+      }
+
+      const employee = await getEmployeeByEmail(empEmail);
+      if (!employee || !employee.active) {
+        return res.status(403).json({ message: "غير مصرح" });
+      }
+
+      const hasPermission = employee.role === "president" ||
+        (employee.permissions && employee.permissions.includes('manage_donors'));
+
+      if (!hasPermission) {
+        return res.status(403).json({ message: "ليس لديك صلاحية إدارة التبرعات" });
+      }
+
+      const donations = await getAllDonations();
+      res.json({ donations });
+    } catch (err) {
+      logger.error("Get donations error", err);
+      res.status(500).json({ message: "خطأ في جلب التبرعات" });
+    }
+  });
+
+  app.put("/api/admin/donations/:code/status", async (req, res) => {
+    try {
+      const token = req.headers.authorization?.split(' ')[1];
+      if (!token) {
+        return res.status(401).json({ message: "غير مصرح" });
+      }
+
+      let empEmail = verifyToken(token);
+      if (!empEmail) {
+        empEmail = await verifyTokenAsync(token);
+      }
+      if (!empEmail) {
+        return res.status(401).json({ message: "رمز غير صالح" });
+      }
+
+      const employee = await getEmployeeByEmail(empEmail);
+      if (!employee || !employee.active) {
+        return res.status(403).json({ message: "غير مصرح" });
+      }
+
+      const hasPermission = employee.role === "president" ||
+        (employee.permissions && employee.permissions.includes('manage_donors'));
+
+      if (!hasPermission) {
+        return res.status(403).json({ message: "ليس لديك صلاحية إدارة التبرعات" });
+      }
+
+      const schema = z.object({
+        status: z.enum(["pending", "under_review", "rejected", "completed"]),
+      });
+
+      const input = schema.parse(req.body);
+      const donationCode = String(req.params.code || "");
+      const existingDonation = await getDonationByCode(donationCode);
+
+      if (!existingDonation) {
+        return res.status(404).json({ message: "التبرع غير موجود" });
+      }
+
+      const beforeStatus = existingDonation.status || "pending";
+      const updatedDonation = await updateDonationStatus(donationCode, input.status);
+
+      logSystemAudit(req, {
+        actor: `موظف: ${employee.name} (${empEmail})`,
+        action: "donation_status_update",
+        eventCategory: "client_data",
+        entityType: "donation",
+        entityId: donationCode,
+        actorRole: employee.role || "employee",
+        beforeData: {
+          status: beforeStatus,
+        },
+        afterData: {
+          status: input.status,
+        },
+        details: {
+          donationCode,
+          status: input.status,
+          updatedBy: empEmail,
+          updatedByName: employee.name,
+        },
+      });
+
+      if (input.status === "completed" && existingDonation?.status !== "completed") {
+        try {
+          await sendDonationReceipt(
+            existingDonation.email,
+            existingDonation.name || "متبرع",
+            Number(existingDonation.amount),
+            existingDonation.method || "bank",
+            donationCode
+          );
+        } catch (emailError) {
+          logger.error("Failed to send donation receipt after status update", emailError);
+        }
+      }
+
+      res.json({
+        success: true,
+        donation: updatedDonation,
+      });
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({ message: err.errors[0]?.message || "بيانات غير صحيحة" });
+      }
+      logger.error("Update donation status error", err);
+      res.status(500).json({ message: "خطأ في تحديث حالة التبرع" });
     }
   });
 
@@ -3470,6 +3648,7 @@ export async function registerRoutes(
       amount: amountInRiyal,
       method,
       code: payment.id,
+      status: "completed",
     });
 
     logSystemAudit(req, {
@@ -3484,7 +3663,7 @@ export async function registerRoutes(
         amount: amountInRiyal,
         method,
         paymentId: payment.id,
-        status: payment.status,
+        status: "completed",
       },
     });
 
