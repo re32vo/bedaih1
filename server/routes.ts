@@ -2073,6 +2073,17 @@ export async function registerRoutes(
       const token = req.headers.authorization?.split(' ')[1];
       const { email, amount, method, code, name, status } = req.body;
 
+      const donationAmount = Number(amount);
+      if (!donationAmount || donationAmount <= 0) {
+        return res.status(400).json({ message: 'المبلغ غير صالح للتبرع' });
+      }
+
+      const donationMethod = typeof method === 'string' && method.trim() ? method.trim() : 'bank';
+      const donationStatus = typeof status === 'string' && status.trim() ? status.trim() : 'pending';
+      const donationCode = typeof code === 'string' && code.trim()
+        ? code.trim()
+        : `bank-${Date.now()}-${randomBytes(4).toString('hex')}`;
+
       // Verify token if provided (for logged in donors)
       let donorEmail = typeof email === 'string' && email.trim() ? email.trim() : "guest@donation.local";
       let donorName = (typeof name === 'string' && name.trim()) ? name.trim() : "متبرع";
@@ -2120,10 +2131,10 @@ export async function registerRoutes(
       // Save to Supabase
       await createDonation({
         email: donorEmail,
-        amount: Number(amount) || 0,
-        method: method || "unknown",
-        code,
-        status: status || "pending",
+        amount: donationAmount,
+        method: donationMethod,
+        code: donationCode,
+        status: donationStatus,
       });
       
       // Log the donation in audit log
@@ -2132,21 +2143,21 @@ export async function registerRoutes(
         action: "donation_create",
         eventCategory: "client_data",
         entityType: "donation",
-        entityId: String(code || ""),
+        entityId: donationCode,
         actorRole: "client",
         afterData: {
           email: donorEmail,
-          amount: Number(amount) || 0,
-          method,
-          code,
-          status: status || "pending",
+          amount: donationAmount,
+          method: donationMethod,
+          code: donationCode,
+          status: donationStatus,
         },
       });
 
       // Send receipt email if not anonymous donation
       if (!isAnonymousDonation) {
         try {
-          await sendDonationReceipt(donorEmail, donorName, Number(amount), method, code);
+          await sendDonationReceipt(donorEmail, donorName, donationAmount, donationMethod, donationCode);
         } catch (emailErr) {
           logger.error("Failed to send donation receipt", emailErr);
           // Log but don't fail the donation
@@ -2154,8 +2165,9 @@ export async function registerRoutes(
             actor: `متبرع: ${donorEmail}`,
             action: "تجاهل خطأ إرسال إيصال التبرع",
             details: {
-              amount,
-              method,
+              amount: donationAmount,
+              method: donationMethod,
+              code: donationCode,
               error: emailErr instanceof Error ? emailErr.message : String(emailErr)
             }
           });
@@ -2175,11 +2187,15 @@ export async function registerRoutes(
 
       res.status(201).json({ 
         success: true,
-        message: "تم تسجيل التبرع بنجاح"
+        message: "تم تسجيل التبرع بنجاح",
+        code: donationCode,
       });
     } catch (err) {
       logger.error("Donation save error", err);
-      res.status(500).json({ message: "خطأ في تسجيل التبرع" });
+      // During development allow returning the real error message to help debugging.
+      const showDetail = process.env.DEBUG_ERRORS === 'true' || process.env.NODE_ENV !== 'production';
+      const errorMessage = showDetail ? (err instanceof Error ? err.message : String(err)) : 'خطأ في تسجيل التبرع';
+      res.status(500).json({ message: errorMessage });
     }
   });
 

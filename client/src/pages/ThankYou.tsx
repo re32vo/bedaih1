@@ -16,6 +16,7 @@ export default function ThankYou() {
   const isUnderReview = donationStatus === 'under_review';
   const isBankTransfer = params.get('bank') === '1';
   const donationType = params.get('donationType');
+  const donationCode = params.get('code');
 
   const [rating, setRating] = useState(0);
   const [name, setName] = useState('');
@@ -209,6 +210,14 @@ export default function ThankYou() {
                 : 'بفضل تبرعك السخي، نستطيع الوصول إلى المزيد من الأسر المحتاجة وتقديم الدعم الذي يستحقونه. كل ريال يساهم في صنع فرق حقيقي في حياة الناس.'}
             </p>
           </div>
+
+          {isBankTransfer && donationCode && (
+            <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 text-right mx-auto max-w-lg">
+              <p className="font-semibold text-slate-900">رقم مرجع التحويل البنكي</p>
+              <p className="mt-2 text-base text-slate-700 break-all">{donationCode}</p>
+              <p className="mt-3 text-sm text-slate-600">احتفظ برقم المرجع عند التواصل مع الإدارة أو لمراجعة حالة التبرع.</p>
+            </div>
+          )}
         </motion.div>
 
         {/* What's Next - Only for logged in users */}

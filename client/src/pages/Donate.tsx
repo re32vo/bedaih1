@@ -132,10 +132,14 @@ export default function Donate() {
       setSelectedAmount(null);
       setCustomAmount('');
 
-      toast({
-        title: 'تم تسجيل التبرع',
-        description: 'تم تسجيل طلب التحويل البنكي وسيتم مراجعته من قبل الإدارة.',
-      });
+      const query = new URLSearchParams();
+      query.set('status', 'under_review');
+      query.set('bank', '1');
+      if (data.code) {
+        query.set('code', data.code);
+      }
+
+      setLocation(`/thank-you?${query.toString()}`);
     } catch (error) {
       toast({
         title: 'خطأ',

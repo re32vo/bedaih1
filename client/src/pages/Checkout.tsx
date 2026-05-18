@@ -144,6 +144,7 @@ export default function Checkout() {
     const query = new URLSearchParams();
     query.set('status', 'under_review');
     query.set('bank', '1');
+    query.set('code', data.code || '');
     if (!isQuick) {
       query.set('donationType', 'regular');
     }
