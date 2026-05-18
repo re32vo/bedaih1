@@ -11,7 +11,7 @@ export default function ThankYou() {
   const params = new URLSearchParams(search);
   const isLoggedIn = params.get('login') === 'true';
   const isRegistered = params.get('registered') === 'true';
-  const initialEmail = params.get('email') || localStorage.getItem('donorEmail') || '';
+  const initialEmail = params.get('email') || '';
   const donationStatus = params.get('status');
   const isUnderReview = donationStatus === 'under_review';
   const isBankTransfer = params.get('bank') === '1';

@@ -238,7 +238,6 @@ export default function Checkout() {
 
       if (data.token) {
         sessionStorage.setItem("donorToken", data.token);
-        localStorage.setItem("donorEmail", authEmail.trim().toLowerCase());
       }
 
       setShowAuthModal(false);
@@ -268,8 +267,7 @@ export default function Checkout() {
 
     setShowAuthModal(true);
     setAuthStage("email");
-    const savedEmail = localStorage.getItem("donorEmail") || "";
-    setAuthEmail(savedEmail);
+    setAuthEmail("");
   };
 
   if (checkoutItems.length === 0) {

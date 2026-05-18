@@ -156,7 +156,6 @@ export default function DonorLogin() {
       // Store token if provided
       if (data.token) {
         sessionStorage.setItem("donorToken", data.token);
-        localStorage.setItem("donorEmail", formData.email.trim().toLowerCase());
       }
 
       setLocation('/donor-dashboard?login=true');

@@ -1134,3 +1134,133 @@ export async function ensurePresidentExists() {
 
   console.log(`✅ تم إنشاء حساب الرئيس: ${presidentEmail}`);
 }
+
+// ============================================
+// Bank Transfers Functions
+// ============================================
+
+export async function createBankTransfer(transfer: {
+  email: string;
+  donorName: string;
+  phone: string;
+  amount: number;
+  transferDate: string;
+  receiptUrl: string;
+  code: string;
+}) {
+  if (!supabase) {
+    throw new Error('Supabase client غير مهيأ');
+  }
+
+  const { data, error } = await supabase
+    .from('bank_transfers')
+    .insert({
+      email: normalizeEmail(transfer.email),
+      donor_name: transfer.donorName,
+      phone: transfer.phone,
+      amount: Number(transfer.amount) || 0,
+      transfer_date: transfer.transferDate,
+      receipt_url: transfer.receiptUrl,
+      code: transfer.code,
+      status: 'under_review',
+    })
+    .select();
+
+  if (error) {
+    console.error('Error creating bank transfer:', error);
+    throw new Error(`فشل حفظ طلب التحويل: ${error.message}`);
+  }
+
+  return data?.[0] || null;
+}
+
+export async function getBankTransferByCode(code: string) {
+  if (!supabase || !code) return null;
+
+  const { data } = await supabase
+    .from('bank_transfers')
+    .select('*')
+    .eq('code', code)
+    .maybeSingle();
+
+  return data || null;
+}
+
+export async function getAllBankTransfers(limit = 1000) {
+  if (!supabase) return [];
+
+  const { data, error } = await supabase
+    .from('bank_transfers')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error('Error fetching bank transfers:', error);
+    return [];
+  }
+
+  return data || [];
+}
+
+export async function getBankTransfersByStatus(status: string, limit = 100) {
+  if (!supabase) return [];
+
+  const { data, error } = await supabase
+    .from('bank_transfers')
+    .select('*')
+    .eq('status', status)
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error('Error fetching bank transfers by status:', error);
+    return [];
+  }
+
+  return data || [];
+}
+
+export async function updateBankTransferStatus(code: string, status: string, adminNotes?: string) {
+  if (!supabase) return null;
+
+  const updateData: any = {
+    status,
+    updated_at: new Date().toISOString(),
+  };
+
+  if (adminNotes) {
+    updateData.admin_notes = adminNotes;
+  }
+
+  const { data, error } = await supabase
+    .from('bank_transfers')
+    .update(updateData)
+    .eq('code', code)
+    .select();
+
+  if (error) {
+    console.error('Error updating bank transfer status:', error);
+    throw new Error(`فشل تحديث حالة التحويل: ${error.message}`);
+  }
+
+  return data?.[0] || null;
+}
+
+export async function getBankTransfersByEmail(email: string, limit = 20) {
+  if (!supabase) return [];
+
+  const { data, error } = await supabase
+    .from('bank_transfers')
+    .select('*')
+    .eq('email', normalizeEmail(email))
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error('Error fetching bank transfers by email:', error);
+    return [];
+  }
+
+  return data || [];
+}

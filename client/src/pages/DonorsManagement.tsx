@@ -384,7 +384,7 @@ export default function DonorsManagement() {
     }
   };
 
-  const handleUpdateDonationStatus = async (donation: Donation, status: "rejected" | "completed") => {
+  const handleUpdateDonationStatus = async (donation: Donation, status: "rejected" | "completed" | "cancelled") => {
     const token = sessionStorage.getItem("authToken");
     const key = `donation:${donation.code}`;
 
@@ -824,14 +824,14 @@ export default function DonorsManagement() {
                       <td className="px-4 py-3 text-sm font-semibold text-green-600">{donation.amount.toLocaleString()} ر.س</td>
                       <td className="px-4 py-3 text-sm text-slate-700">{donation.method || "-"}</td>
                       <td className="px-4 py-3 text-sm text-slate-700">
-                        <span className={`inline-flex rounded-full px-2 py-1 text-xs font-bold ${donation.status === "completed" ? "bg-blue-100 text-blue-700" : donation.status === "rejected" ? "bg-red-100 text-red-700" : donation.status === "under_review" ? "bg-amber-100 text-amber-700" : "bg-slate-100 text-slate-700"}`}>
-                          {donation.status === "completed" ? "مكتمل" : donation.status === "rejected" ? "مرفوض" : donation.status === "under_review" ? "تحت المراجعة" : donation.status}
+                        <span className={`inline-flex rounded-full px-2 py-1 text-xs font-bold ${donation.status === "completed" ? "bg-blue-100 text-blue-700" : donation.status === "rejected" ? "bg-red-100 text-red-700" : donation.status === "cancelled" ? "bg-red-100 text-red-700" : donation.status === "under_review" ? "bg-amber-100 text-amber-700" : "bg-slate-100 text-slate-700"}`}>
+                          {donation.status === "completed" ? "مكتمل" : donation.status === "rejected" ? "مرفوض" : donation.status === "cancelled" ? "ملغى" : donation.status === "under_review" ? "تحت المراجعة" : donation.status}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-sm text-slate-600">{new Date(donation.created_at).toLocaleDateString("ar-SA")}</td>
                       <td className="px-4 py-3 text-center">
                         <div className="flex flex-wrap items-center justify-center gap-2">
-                          {donation.status !== "completed" && (
+                          {donation.status !== "completed" && donation.status !== "cancelled" && (
                             <>
                               <Button
                                 onClick={() => handleUpdateDonationStatus(donation, "completed")}
@@ -848,9 +848,17 @@ export default function DonorsManagement() {
                               >
                                 مرفوض
                               </Button>
+                              <Button
+                                variant="outline"
+                                onClick={() => handleUpdateDonationStatus(donation, "cancelled")}
+                                disabled={updatingDonationStatus === `donation:${donation.code}`}
+                                className="border-slate-300 text-slate-700 hover:bg-slate-50"
+                              >
+                                ملغى
+                              </Button>
                             </>
                           )}
-                          {donation.status === "completed" && (
+                          {(donation.status === "completed" || donation.status === "cancelled") && (
                             <span className="text-slate-500 text-sm">لا إجراءات إضافية</span>
                           )}
                         </div>

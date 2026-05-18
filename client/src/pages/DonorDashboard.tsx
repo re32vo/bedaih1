@@ -128,7 +128,6 @@ export default function DonorDashboard() {
 
   const handleLogout = () => {
     sessionStorage.removeItem('donorToken');
-    localStorage.removeItem('donorEmail');
     setLocation('/');
   };
 
@@ -152,7 +151,6 @@ export default function DonorDashboard() {
         });
         
         sessionStorage.removeItem('donorToken');
-        localStorage.removeItem('donorEmail');
         
         setTimeout(() => {
           setLocation('/');
@@ -259,7 +257,6 @@ export default function DonorDashboard() {
         // تحديث الـ token بالجديد
         if (verifyData.token) {
           sessionStorage.setItem('donorToken', verifyData.token);
-          localStorage.setItem('donorEmail', currentEmail);
         }
 
         // تحديث البيانات المحلية فوراً

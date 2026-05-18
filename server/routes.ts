@@ -14,6 +14,7 @@ import {
   getAdminNotificationEmail,
   sendDonationReceipt,
   sendDonationReviewRequest,
+  sendDonationStatusUpdateEmail,
   escapeHtml,
 } from "./email";
 import { logAuditEntry, getAuditEntries } from "./audit";
@@ -2157,13 +2158,13 @@ export async function registerRoutes(
         },
       });
 
-      // Send receipt email if not anonymous donation
-      if (!isAnonymousDonation) {
+      // Send receipt email only for completed donations.
+      // Bank transfers stay تحت المراجعة until الإدارة توافق عليها.
+      if (!isAnonymousDonation && donationStatus === 'completed') {
         try {
           await sendDonationReceipt(donorEmail, donorName, donationAmount, donationMethod, donationCode);
         } catch (emailErr) {
           logger.error("Failed to send donation receipt", emailErr);
-          // Log but don't fail the donation
           logAuditEntry({
             actor: `متبرع: ${donorEmail}`,
             action: "تجاهل خطأ إرسال إيصال التبرع",
@@ -2955,7 +2956,7 @@ export async function registerRoutes(
       }
 
       const schema = z.object({
-        status: z.enum(["pending", "under_review", "rejected", "completed"]),
+        status: z.enum(["pending", "under_review", "rejected", "completed", "cancelled"]),
       });
 
       const input = schema.parse(req.body);
@@ -3001,6 +3002,19 @@ export async function registerRoutes(
           );
         } catch (emailError) {
           logger.error("Failed to send donation receipt after status update", emailError);
+        }
+      }
+
+      if ((input.status === "rejected" || input.status === "cancelled") && !String(existingDonation.email || "").endsWith("@donation.local")) {
+        try {
+          await sendDonationStatusUpdateEmail(
+            existingDonation.email,
+            existingDonation.name || "متبرع",
+            donationCode,
+            input.status
+          );
+        } catch (emailError) {
+          logger.error("Failed to send donation status update email", emailError);
         }
       }
 

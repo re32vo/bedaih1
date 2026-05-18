@@ -27,6 +27,22 @@ CREATE TABLE IF NOT EXISTS donations (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- جدول التحويلات البنكية (طلبات التبرع عبر التحويل)
+CREATE TABLE IF NOT EXISTS bank_transfers (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email TEXT NOT NULL,
+  donor_name TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  amount NUMERIC NOT NULL,
+  transfer_date TEXT NOT NULL,
+  receipt_url TEXT,
+  code TEXT UNIQUE NOT NULL,
+  status TEXT DEFAULT 'under_review',
+  admin_notes TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- جدول المستفيدين
 -- ملاحظة: national_id بدون UNIQUE لأن نفس الشخص يقدر يقدم طلبات بأنواع مختلفة
 CREATE TABLE IF NOT EXISTS beneficiaries (
@@ -163,6 +179,11 @@ CREATE INDEX IF NOT EXISTS idx_donors_email ON donors(email);
 CREATE INDEX IF NOT EXISTS idx_donations_email ON donations(email);
 CREATE INDEX IF NOT EXISTS idx_donations_created_at ON donations(created_at DESC);
 
+-- bank_transfers
+CREATE INDEX IF NOT EXISTS idx_bank_transfers_email ON bank_transfers(email);
+CREATE INDEX IF NOT EXISTS idx_bank_transfers_status ON bank_transfers(status, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_bank_transfers_created_at ON bank_transfers(created_at DESC);
+
 -- beneficiaries
 CREATE INDEX IF NOT EXISTS idx_beneficiaries_email ON beneficiaries(email);
 CREATE INDEX IF NOT EXISTS idx_beneficiaries_created_at ON beneficiaries(created_at DESC);
@@ -207,6 +228,7 @@ CREATE INDEX IF NOT EXISTS idx_recurring_donations_status ON recurring_donations
 
 ALTER TABLE donors DISABLE ROW LEVEL SECURITY;
 ALTER TABLE donations DISABLE ROW LEVEL SECURITY;
+ALTER TABLE bank_transfers DISABLE ROW LEVEL SECURITY;
 ALTER TABLE beneficiaries DISABLE ROW LEVEL SECURITY;
 ALTER TABLE job_applications DISABLE ROW LEVEL SECURITY;
 ALTER TABLE contact_messages DISABLE ROW LEVEL SECURITY;
@@ -295,6 +317,8 @@ $$;
 -- ضمان defaults الأساسية للأعمدة الزمنية
 ALTER TABLE donors ALTER COLUMN created_at SET DEFAULT NOW();
 ALTER TABLE donations ALTER COLUMN created_at SET DEFAULT NOW();
+ALTER TABLE bank_transfers ALTER COLUMN created_at SET DEFAULT NOW();
+ALTER TABLE bank_transfers ALTER COLUMN updated_at SET DEFAULT NOW();
 ALTER TABLE beneficiaries ALTER COLUMN created_at SET DEFAULT NOW();
 ALTER TABLE job_applications ALTER COLUMN created_at SET DEFAULT NOW();
 ALTER TABLE contact_messages ALTER COLUMN created_at SET DEFAULT NOW();

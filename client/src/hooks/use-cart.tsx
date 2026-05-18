@@ -24,35 +24,7 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>(() => {
-    const saved = localStorage.getItem('bedaih-cart');
-    if (!saved) return [];
-    
-    const loadedItems: CartItem[] = JSON.parse(saved);
-    
-    // دمج العناصر المتشابهة
-    const mergedItems: CartItem[] = [];
-    loadedItems.forEach(item => {
-      const existingIndex = mergedItems.findIndex(
-        existing => 
-          existing.id === item.id && 
-          existing.amount === item.amount && 
-          existing.donationType === item.donationType
-      );
-      
-      if (existingIndex > -1) {
-        mergedItems[existingIndex].quantity += item.quantity;
-      } else {
-        mergedItems.push({ ...item });
-      }
-    });
-    
-    return mergedItems;
-  });
-
-  useEffect(() => {
-    localStorage.setItem('bedaih-cart', JSON.stringify(items));
-  }, [items]);
+  const [items, setItems] = useState<CartItem[]>([]);
 
   const addItem = (newItem: Omit<CartItem, 'quantity'>) => {
     setItems((currentItems) => {

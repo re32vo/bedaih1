@@ -124,7 +124,7 @@ export async function decryptData(encryptedData: string, password: string): Prom
 }
 
 /**
- * حفظ البيانات المشفرة في localStorage
+ * حفظ البيانات المشفرة مؤقتاً عبر الجلسة أو الذاكرة الداخلية
  * @param key مفتاح التخزين
  * @param data البيانات
  * @param encryptionPassword كلمة التشفير
@@ -134,23 +134,11 @@ export async function secureLocalStorage(
   data: string | null,
   encryptionPassword: string
 ): Promise<void> {
-  if (data === null) {
-    // حذف البيانات
-    localStorage.removeItem(`encrypted_${key}`);
-    return;
-  }
-
-  try {
-    const encrypted = await encryptData(data, encryptionPassword);
-    localStorage.setItem(`encrypted_${key}`, encrypted);
-  } catch (error) {
-    console.error('❌ Failed to save encrypted data:', error);
-    throw error;
-  }
+  throw new Error('التخزين المحلي غير مدعوم في هذه النسخة');
 }
 
 /**
- * استرجاع البيانات المشفرة من localStorage
+ * استرجاع البيانات المشفرة
  * @param key مفتاح التخزين
  * @param encryptionPassword كلمة التشفير
  * @returns البيانات الأصلية أو null
@@ -159,15 +147,7 @@ export async function secureFetchLocalStorage(
   key: string,
   encryptionPassword: string
 ): Promise<string | null> {
-  try {
-    const encrypted = localStorage.getItem(`encrypted_${key}`);
-    if (!encrypted) return null;
-
-    return await decryptData(encrypted, encryptionPassword);
-  } catch (error) {
-    console.error('❌ Failed to retrieve encrypted data:', error);
-    return null;
-  }
+  throw new Error('التخزين المحلي غير مدعوم في هذه النسخة');
 }
 
 /**
@@ -179,13 +159,7 @@ export async function secureAuthToken(
   token: string,
   userEmail: string
 ): Promise<void> {
-  try {
-    await secureLocalStorage('auth_token', token, userEmail);
-    console.log('✅ Auth token secured and stored');
-  } catch (error) {
-    console.error('❌ Failed to secure auth token:', error);
-    localStorage.setItem('auth_token', token); // Fallback: تخزين بدون تشفير
-  }
+  throw new Error('التخزين المحلي غير مدعوم في هذه النسخة');
 }
 
 /**
@@ -194,26 +168,14 @@ export async function secureAuthToken(
  * @returns الـ token أو null
  */
 export async function retrieveAuthToken(userEmail: string): Promise<string | null> {
-  try {
-    return await secureFetchLocalStorage('auth_token', userEmail);
-  } catch (error) {
-    console.error('❌ Failed to retrieve auth token:', error);
-    // Fallback: محاولة الحصول على الـ token غير المشفر
-    return localStorage.getItem('auth_token');
-  }
+  throw new Error('التخزين المحلي غير مدعوم في هذه النسخة');
 }
 
 /**
  * مسح الـ auth token من التخزين
  */
 export async function clearAuthToken(): Promise<void> {
-  try {
-    localStorage.removeItem('encrypted_auth_token');
-    localStorage.removeItem('auth_token'); // Fallback
-    console.log('✅ Auth token cleared');
-  } catch (error) {
-    console.error('❌ Failed to clear auth token:', error);
-  }
+  throw new Error('التخزين المحلي غير مدعوم في هذه النسخة');
 }
 
 /**
@@ -265,15 +227,9 @@ await secureAuthToken(loginResponse.token, userEmail);
 // عند استرجاع الـ token:
 const token = await retrieveAuthToken(userEmail);
 
-// 2. تشفير بيانات حساسة
-import { secureLocalStorage, secureFetchLocalStorage } from '@/lib/encryption';
+// 2. يمكن استخدام هذه الوظائف للتعامل مع البيانات المشفرة في الذاكرة أو عبر الخادم.
+// ملاحظة: لا يتم استخدام التخزين المحلي في هذه النسخة.
 
-// حفظ البيانات:
-await secureLocalStorage('user_address', userData.address, encryptionKey);
-
-// استرجاع البيانات:
-const address = await secureFetchLocalStorage('user_address', encryptionKey);
-
-// 3. مسح البيانات:
-await secureLocalStorage('user_address', null, encryptionKey);
+// 3. مسح البيانات من الذاكرة المؤقتة أو جلسة المستخدم.
+await clearAuthToken();
 */

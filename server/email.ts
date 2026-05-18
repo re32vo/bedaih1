@@ -280,6 +280,47 @@ export async function sendDonationReceipt(
   await sendEmail(donorEmail, "إيصال تبرع - جمعية بداية الخيرية", receiptHtml);
 }
 
+export async function sendDonationStatusUpdateEmail(
+  donorEmail: string,
+  donorName: string,
+  code: string,
+  status: "cancelled" | "rejected"
+) {
+  const safeName = escapeHtml(donorName || "متبرع");
+  const safeCode = escapeHtml(code);
+  const safeStatus = status === "cancelled" ? "ملغى" : "مرفوض";
+
+  const html = `
+    <!DOCTYPE html>
+    <html dir="rtl" lang="ar">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>تحديث حالة التبرع</title>
+    </head>
+    <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f5f5; padding: 20px; margin: 0;">
+      <div style="max-width: 600px; margin: 0 auto; background-color: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+        <div style="background: linear-gradient(135deg, #ef4444cc, #dc2626cc); padding: 30px 20px; text-align: center; color: white;">
+          <h1 style="margin: 0; font-size: 26px;">تحديث حالة التبرع</h1>
+        </div>
+        <div style="padding: 30px 25px; color: #1f2937;">
+          <p style="font-size: 16px; margin: 0 0 16px;">مرحباً ${safeName}</p>
+          <p style="font-size: 15px; margin: 0 0 12px;">تم تغيير حالة تبرعك برقم المرجع التالي:</p>
+          <p style="font-size: 15px; font-weight: bold; margin: 0 0 20px;">${safeCode}</p>
+          <p style="font-size: 15px; margin: 0 0 20px;">الحالة الجديدة: <strong>${safeStatus}</strong></p>
+          <p style="font-size: 14px; color: #475569; margin: 0 0 20px;">إذا كنت بحاجة إلى أي مساعدة إضافية أو لديك أي استفسار حول حالة التبرع، يرجى التواصل معنا.</p>
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px;">
+            <p style="margin: 0; font-size: 13px; color: #64748b;">شكراً لدعمك وتفهمك. فريق جمعية بداية الخيرية.</p>
+          </div>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  await sendEmail(donorEmail, `تحديث حالة التبرع - ${safeStatus}`, html);
+}
+
 export async function sendDonationReviewRequest(
   donorEmail: string,
   donorName: string,

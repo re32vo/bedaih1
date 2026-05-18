@@ -21,12 +21,14 @@ const ThemeProviderContext = createContext<ThemeProviderState | undefined>(
 export function ThemeProvider({
   children,
   defaultTheme = "dark",
-  storageKey = "bedaih-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-  );
+  const [theme, setCurrentTheme] = useState<Theme>(() => {
+    if (typeof window !== "undefined" && window.matchMedia?.("(prefers-color-scheme: dark)").matches) {
+      return "dark";
+    }
+    return defaultTheme;
+  });
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -37,13 +39,11 @@ export function ThemeProvider({
   const value = {
     theme,
     setTheme: (t: Theme) => {
-      localStorage.setItem(storageKey, t);
-      setTheme(t);
+      setCurrentTheme(t);
     },
     toggleTheme: () => {
       const newTheme = theme === "dark" ? "light" : "dark";
-      localStorage.setItem(storageKey, newTheme);
-      setTheme(newTheme);
+      setCurrentTheme(newTheme);
     },
   };
 
