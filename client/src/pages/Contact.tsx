@@ -76,7 +76,7 @@ export default function Contact() {
                   </div>
                   <div className="text-sm sm:text-base">
                     <h4 className="font-bold text-black">الهاتف</h4>
-                    <p className="text-black text-xs sm:text-sm" dir="ltr">0595955800</p>
+                    <p className="text-black text-xs sm:text-sm" dir="ltr">0596282033</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3 sm:gap-4">
@@ -85,7 +85,7 @@ export default function Contact() {
                   </div>
                   <div className="text-sm sm:text-base">
                     <h4 className="font-bold text-black">البريد الإلكتروني</h4>
-                    <p className="text-black text-xs sm:text-sm">albaladone@hotmail.com</p>
+                    <p className="text-black text-xs sm:text-sm">bedaya.org.sa@gmail.com</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3 sm:gap-4">

@@ -2130,13 +2130,19 @@ export async function registerRoutes(
       }
 
       // Save to Supabase
-      const donationRecord = await createDonation({
-        email: donorEmail,
-        amount: donationAmount,
-        method: donationMethod,
-        code: donationCode,
-        status: donationStatus,
-      });
+      let donationRecord;
+      try {
+        donationRecord = await createDonation({
+          email: donorEmail,
+          amount: donationAmount,
+          method: donationMethod,
+          code: donationCode,
+          status: donationStatus,
+        });
+      } catch (dbError) {
+        logger.error("Database error creating donation:", dbError instanceof Error ? dbError.message : String(dbError));
+        throw new Error(`خطأ قاعدة بيانات: ${dbError instanceof Error ? dbError.message : 'خطأ غير معروف'}`);
+      }
       if (!donationRecord) {
         throw new Error('فشل حفظ التبرع في قاعدة البيانات');
       }

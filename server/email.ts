@@ -261,7 +261,7 @@ export async function sendDonationReceipt(
           <div style="border-top: 1px solid #e5e7eb; padding-top: 20px; text-align: center;">
             <p style="color: #6b7280; font-size: 14px; margin: 5px 0;">للاستفسارات، يرجى التواصل معنا:</p>
             <p style="color: #1f2937; font-size: 14px; margin: 5px 0;">
-              📧 info@bedaih.org | 📱 0533170903
+              📧 bedaya.org.sa@gmail.com | 📱 0596282033
             </p>
           </div>
         </div>

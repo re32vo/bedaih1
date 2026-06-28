@@ -255,7 +255,7 @@ export default function Login() {
 
             <div className="mt-8 pt-6 border-t border-gray-300 text-center text-sm text-black">
               <p className="text-black">هل واجهت مشكلة؟</p>
-              <a href="mailto:admin@charity.com" className="text-blue-600 hover:underline font-semibold">
+              <a href="mailto:bedaya.org.sa@gmail.com" className="text-blue-600 hover:underline font-semibold">
                 تواصل مع المسؤول
               </a>
             </div>

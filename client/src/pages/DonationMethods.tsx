@@ -71,7 +71,7 @@ export default function DonationMethods() {
               <strong>الإيصالات:</strong> ستتلقى إيصال رسمي لكل تبرع لأغراض الضرائب والسجلات.
             </p>
             <p>
-              <strong>الدعم:</strong> إذا واجهت أي مشاكل، تواصل معنا على support@bedaya.org
+              <strong>الدعم:</strong> إذا واجهت أي مشاكل، تواصل معنا على bedaya.org.sa@gmail.com
             </p>
           </CardContent>
         </Card>
